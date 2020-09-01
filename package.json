@@ -1,0 +1,36 @@
+{
+  "name": "@newrelic/apollo-server-plugin",
+  "version": "0.1.0",
+  "description": "Apollo Server plugin that adds New Relic Node.js agent instrumentation.",
+  "main": "/src/index.js",
+  "scripts": {
+    "lint": "eslint *.js lib tests",
+    "test": "npm run unit",
+    "unit": "tap --test-regex='(\\/|^tests\\/unit\\/.*\\.test\\.js)$' --no-coverage"
+  },
+  "files": [
+    "index.js",
+    "lib/*.js"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/newrelic/newrelic-node-apollo-server-plugin.git"
+  },
+  "author": "New Relic Node.js agent team <nodejs@newrelic.com>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/newrelic/newrelic-node-apollo-server-plugin/issues"
+  },
+  "homepage": "https://github.com/newrelic/newrelic-node-apollo-server-plugin#readme",
+  "engines": {
+    "node": ">=10.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.8.1",
+    "newrelic": "^6.13.0",
+    "tap": "^14.10.8"
+  },
+  "peerDependencies": {
+    "newrelic": ">=6.13.0"
+  }
+}
