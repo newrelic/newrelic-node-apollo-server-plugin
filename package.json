@@ -8,6 +8,10 @@
     "test": "npm run unit",
     "unit": "tap --test-regex='(\\/|^tests\\/unit\\/.*\\.test\\.js)$' --no-coverage"
   },
+  "files": [
+    "index.js",
+    "lib/*.js"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/newrelic/newrelic-node-apollo-server-plugin.git"
