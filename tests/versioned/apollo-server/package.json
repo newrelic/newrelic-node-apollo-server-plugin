@@ -1,0 +1,19 @@
+{
+  "name": "apollo-server-tests",
+  "version": "0.0.0",
+  "private": true,
+  "tests": [
+    {
+      "engines": {
+        "node": ">=10"
+      },
+      "dependencies": {
+        "apollo-server": ">=2.14.0"
+      },
+      "files": [
+        "transaction-naming.test.js"
+      ]
+    }
+  ],
+  "dependencies": {}
+}
