@@ -6,16 +6,17 @@
 'use strict'
 
 const tap = require('tap')
-const { ApolloServer, gql } = require('apollo-server')
+const { ApolloServer, gql } = require('apollo-server-express')
 
 const utils = require('@newrelic/test-utilities')
 const { getTypeDefs, resolvers } = require('../data-definitions')
 const { createTransactionTests } = require('../transaction-tests')
 
-tap.test('apollo-server', (t) => {
+tap.test('apollo-server-express', (t) => {
   t.autoend()
 
   let server = null
+  let expressServer = null
   let serverUrl = null
   let helper = null
 
@@ -28,14 +29,19 @@ tap.test('apollo-server', (t) => {
     // TODO: eventually use proper function for instrumenting and not .shim
     const plugin = createPlugin(nrApi.shim)
 
+    const express = require('express')
+
     server = new ApolloServer({
       typeDefs: getTypeDefs(gql),
       resolvers,
       plugins: [plugin]
     })
 
-    server.listen().then(({ url }) => {
-      serverUrl = url
+    const app = express()
+    server.applyMiddleware({ app })
+
+    expressServer = app.listen(0, () => {
+      serverUrl = `http://localhost:${expressServer.address().port}${server.graphqlPath}`
 
       t.context.helper = helper
       t.context.serverUrl = serverUrl
@@ -44,6 +50,7 @@ tap.test('apollo-server', (t) => {
   })
 
   t.afterEach((done) => {
+    expressServer.close()
     server.stop()
 
     helper.unload()

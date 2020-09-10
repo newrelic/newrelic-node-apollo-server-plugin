@@ -28,7 +28,6 @@
   },
   "devDependencies": {
     "@newrelic/test-utilities": "^4.1.0",
-    "apollo-server": "^2.17.0",
     "eslint": "^7.8.1",
     "newrelic": "^6.13.0",
     "tap": "^14.10.8"

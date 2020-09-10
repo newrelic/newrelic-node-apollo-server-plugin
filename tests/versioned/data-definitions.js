@@ -5,8 +5,6 @@
 
 'use strict'
 
-const { gql } = require('apollo-server')
-
 const libraries = [
   {
     branch: 'downtown'
@@ -31,34 +29,37 @@ const books = [
   }
 ]
 
-const typeDefs = gql`
-  type Library {
-    branch: String!
-    books: [Book!]
-  }
+function getTypeDefs(gql) {
+  const typeDefs = gql`
+    type Library {
+      branch: String!
+      books: [Book!]
+    }
 
-  type Book {
-    title: String
-    isbn: String
-    author: Author!
-  }
+    type Book {
+      title: String
+      isbn: String
+      author: Author!
+    }
 
-  type Author {
-    name: String!
-  }
+    type Author {
+      name: String!
+    }
 
-  type Query {
-    books: [Book]
-    hello: String
-    paramQuery(blah: String!, blee: String): String!
-    libraries: [Library]
-    library(branch: String!): [Library]
-  }
+    type Query {
+      books: [Book]
+      hello: String
+      paramQuery(blah: String!, blee: String): String!
+      libraries: [Library]
+      library(branch: String!): [Library]
+    }
 
-  type Mutation {
-    addThing(name: String!) : String!
-  }
-`
+    type Mutation {
+      addThing(name: String!) : String!
+    }
+  `
+  return typeDefs
+}
 
 const resolvers = {
   Query: {
@@ -95,6 +96,6 @@ const resolvers = {
 }
 
 module.exports = {
-  typeDefs,
+  getTypeDefs,
   resolvers
 }
