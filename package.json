@@ -6,7 +6,8 @@
   "scripts": {
     "lint": "eslint *.js lib tests",
     "test": "npm run unit",
-    "unit": "tap --test-regex='(\\/|^tests\\/unit\\/.*\\.test\\.js)$' --no-coverage"
+    "unit": "tap --test-regex='(\\/|^tests\\/unit\\/.*\\.test\\.js)$' --no-coverage",
+    "versioned": "versioned-tests --minor -i 2 'tests/versioned/*'"
   },
   "files": [
     "index.js",
@@ -26,6 +27,7 @@
     "node": ">=10.0.0"
   },
   "devDependencies": {
+    "@newrelic/test-utilities": "^4.1.0",
     "eslint": "^7.8.1",
     "newrelic": "^6.13.0",
     "tap": "^14.10.8"

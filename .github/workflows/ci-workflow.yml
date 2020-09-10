@@ -17,7 +17,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - name: Install Dependencies
-      run: npm install
+      run: npm ci
     - name: Run Linting
       run: npm run lint
 
@@ -35,6 +35,24 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - name: Install Dependencies
-      run: npm install
+      run: npm ci
     - name: Run Unit Tests
       run: npm run unit
+
+  versioned:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [10.x, 12.x, 14.x]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Install Dependencies
+      run: npm ci
+    - name: Run Versioned Tests
+      run: npm run versioned
