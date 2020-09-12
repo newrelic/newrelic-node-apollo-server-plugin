@@ -1,3 +1,4 @@
+'use strict'
 const tap = require('tap')
 
 const ErrorHelper = require('../../lib/error-helper')
@@ -6,7 +7,7 @@ class MockedInstrumentationApi {
   constructor() {
     this.mockedCollectedErrors = []
 
-    const parentThis = this;
+    const parentThis = this
     this.logger = {
       trace: () => {
       }
@@ -27,11 +28,11 @@ class MockedInstrumentationApi {
   }
 }
 
-const mockInstrumentationApi = new MockedInstrumentationApi;
+const mockInstrumentationApi = new MockedInstrumentationApi
 
 
 tap.test('ErrorHelper tests', (t) => {
-  const errorHelper = new ErrorHelper;
+  const errorHelper = new ErrorHelper
 
   const fixture1 = false
   t.equals(
@@ -49,7 +50,7 @@ tap.test('ErrorHelper tests', (t) => {
   )
 
   const fixture3 = {
-    errors:null
+    errors: null
   }
   t.equals(
     false,
@@ -58,7 +59,7 @@ tap.test('ErrorHelper tests', (t) => {
   )
 
   const fixture4 = {
-    errors:[(new Error),(new Error)]
+    errors: [(new Error),(new Error)]
   }
   t.equals(
     true,
