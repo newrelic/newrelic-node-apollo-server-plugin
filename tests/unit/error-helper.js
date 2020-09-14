@@ -6,10 +6,11 @@ const ErrorHelper = require('../../lib/error-helper')
 class MockedInstrumentationApi {
   constructor() {
     this.mockedCollectedErrors = []
-
+    this.mockedLogsTrace = []
     const parentThis = this
     this.logger = {
-      trace: () => {
+      trace: (message) => {
+        this.mockedLogsTrace.push(message)
       }
     }
 
@@ -75,6 +76,12 @@ tap.test('ErrorHelper tests', (t) => {
     mockInstrumentationApi.mockedCollectedErrors.length,
     2,
     'captures only valid errors'
+  )
+
+  t.equals(
+    mockInstrumentationApi.mockedLogsTrace.length,
+    6,
+    'six invaid calls mean six trace log messages'
   )
 
   t.end()
