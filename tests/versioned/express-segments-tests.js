@@ -253,9 +253,15 @@ function createSegmentsTests(t) {
             name: 'Nodejs/Middleware/Expressjs/<anonymous>',
             children: [{
               name: operationPart,
-              children: [
-                { name: 'resolve: addThing' }
-              ]
+              children: [{
+                name: 'resolve: addThing',
+                children: [{
+                  name: 'timers.setTimeout',
+                  children: [{
+                    name: 'Callback: namedCallback'
+                  }]
+                }]
+              }]
             }]
           }]
         }]
@@ -290,9 +296,15 @@ function createSegmentsTests(t) {
             name: 'Nodejs/Middleware/Expressjs/<anonymous>',
             children: [{
               name: operationPart,
-              children: [
-                { name: 'resolve: addThing' }
-              ]
+              children: [{
+                name: 'resolve: addThing',
+                children: [{
+                  name: 'timers.setTimeout',
+                  children: [{
+                    name: 'Callback: namedCallback'
+                  }]
+                }]
+              }]
             }]
           }]
         }]
@@ -410,7 +422,15 @@ function createSegmentsTests(t) {
             children: [{
               name: operationPart,
               children: [
-                { name: 'resolve: library' },
+                {
+                  name: 'resolve: library',
+                  children: [{
+                    name: 'timers.setTimeout',
+                    children: [{
+                      name: 'Callback: <anonymous>'
+                    }]
+                  }]
+                },
                 { name: 'resolve: library.books' },
                 { name: 'resolve: library.books.title'},
                 { name: 'resolve: library.books.author' },
@@ -473,7 +493,15 @@ function createSegmentsTests(t) {
               {
                 name: operationPart1,
                 children: [
-                  { name: 'resolve: library' },
+                  {
+                    name: 'resolve: library',
+                    children: [{
+                      name: 'timers.setTimeout',
+                      children: [{
+                        name: 'Callback: <anonymous>'
+                      }]
+                    }]
+                  },
                   { name: 'resolve: library.books' },
                   { name: 'resolve: library.books.title'},
                   { name: 'resolve: library.books.author' },
@@ -482,9 +510,15 @@ function createSegmentsTests(t) {
               },
               {
                 name: operationPart2,
-                children: [
-                  { name: 'resolve: addThing' }
-                ]
+                children: [{
+                  name: 'resolve: addThing',
+                  children: [{
+                    name: 'timers.setTimeout',
+                    children: [{
+                      name: 'Callback: namedCallback'
+                    }]
+                  }]
+                }]
               }
             ]
           }]
