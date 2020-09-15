@@ -8,13 +8,16 @@
 const tap = require('tap')
 
 const utils = require('@newrelic/test-utilities')
-const { getTypeDefs, resolvers } = require('../data-definitions')
-const { createTransactionTests } = require('../transaction-tests')
+utils.assert.extendTap(tap)
 
-tap.test('apollo-server: transaction naming', (t) => {
+const { getTypeDefs, resolvers } = require('../data-definitions')
+const { createSegmentsTests } = require('../express-segments-tests')
+
+tap.test('apollo-server-express: segments', (t) => {
   t.autoend()
 
   let server = null
+  let expressServer = null
   let serverUrl = null
   let helper = null
 
@@ -27,16 +30,21 @@ tap.test('apollo-server: transaction naming', (t) => {
     // TODO: eventually use proper function for instrumenting and not .shim
     const plugin = createPlugin(nrApi.shim)
 
+    const express = require('express')
+
     // Do after instrumentation to ensure express isn't loaded too soon.
-    const { ApolloServer, gql } = require('apollo-server')
+    const { ApolloServer, gql } = require('apollo-server-express')
     server = new ApolloServer({
       typeDefs: getTypeDefs(gql),
       resolvers,
       plugins: [plugin]
     })
 
-    server.listen().then(({ url }) => {
-      serverUrl = url
+    const app = express()
+    server.applyMiddleware({ app })
+
+    expressServer = app.listen(0, () => {
+      serverUrl = `http://localhost:${expressServer.address().port}${server.graphqlPath}`
 
       t.context.helper = helper
       t.context.serverUrl = serverUrl
@@ -45,19 +53,20 @@ tap.test('apollo-server: transaction naming', (t) => {
   })
 
   t.afterEach((done) => {
-    server.stop()
+    expressServer && expressServer.close()
+    server && server.stop()
 
     helper.unload()
     server = null
     serverUrl = null
     helper = null
 
-    clearCachedModules(['express', 'apollo-server'], () => {
+    clearCachedModules(['express', 'apollo-server-express'], () => {
       done()
     })
   })
 
-  createTransactionTests(t)
+  createSegmentsTests(t)
 })
 
 function clearCachedModules(modules, callback) {

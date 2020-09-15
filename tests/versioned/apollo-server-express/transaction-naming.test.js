@@ -6,13 +6,12 @@
 'use strict'
 
 const tap = require('tap')
-const { ApolloServer, gql } = require('apollo-server-express')
 
 const utils = require('@newrelic/test-utilities')
 const { getTypeDefs, resolvers } = require('../data-definitions')
 const { createTransactionTests } = require('../transaction-tests')
 
-tap.test('apollo-server-express', (t) => {
+tap.test('apollo-server-express: transaction naming', (t) => {
   t.autoend()
 
   let server = null
@@ -31,6 +30,8 @@ tap.test('apollo-server-express', (t) => {
 
     const express = require('express')
 
+    // Do after instrumentation to ensure express isn't loaded too soon.
+    const { ApolloServer, gql } = require('apollo-server-express')
     server = new ApolloServer({
       typeDefs: getTypeDefs(gql),
       resolvers,
@@ -50,16 +51,27 @@ tap.test('apollo-server-express', (t) => {
   })
 
   t.afterEach((done) => {
-    expressServer.close()
-    server.stop()
+    expressServer && expressServer.close()
+    server && server.stop()
 
     helper.unload()
     server = null
     serverUrl = null
     helper = null
 
-    done()
+    clearCachedModules(['express', 'apollo-server-express'], () => {
+      done()
+    })
   })
 
   createTransactionTests(t)
 })
+
+function clearCachedModules(modules, callback) {
+  modules.forEach((moduleName) => {
+    const requirePath = require.resolve(moduleName)
+    delete require.cache[requirePath]
+  })
+
+  callback()
+}
