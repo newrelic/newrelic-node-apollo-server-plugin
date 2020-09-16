@@ -4,8 +4,9 @@
   "description": "Apollo Server plugin that adds New Relic Node.js agent instrumentation.",
   "main": "/src/index.js",
   "scripts": {
+    "integration": "rm -f newrelic_agent.log && time tap --test-regex='(\\/|^tests\\/integration\\/.*\\.test\\.js)$' --no-coverage",
     "lint": "eslint *.js lib tests",
-    "test": "npm run unit",
+    "test": "npm run unit && npm run integration && npm run versioned",
     "unit": "tap --test-regex='(\\/|^tests\\/unit\\/.*\\.test\\.js)$' --no-coverage",
     "versioned": "versioned-tests --minor -i 2 'tests/versioned/*'"
   },
@@ -34,5 +35,6 @@
   },
   "peerDependencies": {
     "newrelic": ">=6.13.0"
-  }
+  },
+  "dependencies": {}
 }
