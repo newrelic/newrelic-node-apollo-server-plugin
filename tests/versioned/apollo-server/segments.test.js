@@ -8,10 +8,12 @@
 const tap = require('tap')
 
 const utils = require('@newrelic/test-utilities')
-const { getTypeDefs, resolvers } = require('../data-definitions')
-const { createTransactionTests } = require('../transaction-tests')
+utils.assert.extendTap(tap)
 
-tap.test('apollo-server: transaction naming', (t) => {
+const { getTypeDefs, resolvers } = require('../data-definitions')
+const { createSegmentsTests } = require('../express-segments-tests')
+
+tap.test('apollo-server: segments', (t) => {
   t.autoend()
 
   let server = null
@@ -57,7 +59,7 @@ tap.test('apollo-server: transaction naming', (t) => {
     })
   })
 
-  createTransactionTests(t)
+  createSegmentsTests(t)
 })
 
 function clearCachedModules(modules, callback) {

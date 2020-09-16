@@ -73,12 +73,25 @@ const resolvers = {
       return libraries
     },
     library: (_, {branch}) => {
-      return libraries.filter(library => library.branch === branch)
+      const promise = new Promise((resolve) => {
+        setTimeout(() => {
+          const filtered = libraries.filter(library => library.branch === branch)
+          resolve(filtered)
+        }, 0)
+      })
+
+      return promise
     }
   },
   Mutation: {
-    addThing: (_, {name}) => {
-      return name
+    addThing: async (_, {name}) => {
+      const promise = new Promise((resolve) => {
+        setTimeout(function namedCallback() {
+          resolve(name)
+        }, 1)
+      })
+      const result = await promise
+      return result
     }
   },
   Library: {
