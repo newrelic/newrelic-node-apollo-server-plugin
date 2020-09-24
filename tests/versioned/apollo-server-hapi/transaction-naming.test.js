@@ -17,8 +17,8 @@ tap.test('apollo-server-hapi: transaction naming', (t) => {
   let server = null
   let hapiServer = null
   let serverUrl = null
-	let helper = null
-	
+  let helper = null
+  
   t.beforeEach(async () => {
     // load default instrumentation. hapi being critical
     helper = utils.TestAgent.makeInstrumented()
@@ -28,9 +28,9 @@ tap.test('apollo-server-hapi: transaction naming', (t) => {
     // TODO: eventually use proper function for instrumenting and not .shim
     const plugin = createPlugin(nrApi.shim)
 
-		const Hapi = require('@hapi/hapi')
-		
-		const graphqlPath = '/gql'
+    const Hapi = require('@hapi/hapi')
+    
+    const graphqlPath = '/gql'
 
     // Do after instrumentation to ensure hapi isn't loaded too soon.
     const { ApolloServer, gql } = require('apollo-server-hapi')
@@ -43,7 +43,7 @@ tap.test('apollo-server-hapi: transaction naming', (t) => {
     hapiServer = Hapi.server({
       host: 'localhost',
       port: 5000
-		})
+    })
 
     await server.applyMiddleware({ app: hapiServer, path: graphqlPath })
 
