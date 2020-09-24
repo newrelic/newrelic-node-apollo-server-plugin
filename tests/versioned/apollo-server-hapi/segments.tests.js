@@ -57,8 +57,6 @@ tap.test('apollo-server-hapi: segments', (t) => {
     await hapiServer.start()
 
     serverUrl = `http://localhost:${hapiServer.settings.port}${graphqlPath}`
-    t.context.helper = helper
-    t.context.serverUrl = serverUrl
   })
 
   t.afterEach((done) => {
@@ -76,8 +74,6 @@ tap.test('apollo-server-hapi: segments', (t) => {
   })
 
   t.test('anonymous query, single level', (t) => {
-    const { helper, serverUrl } = t.context
-
     const query = `query {
       hello
     }`
@@ -108,8 +104,6 @@ tap.test('apollo-server-hapi: segments', (t) => {
   })
 
   t.test('named query, single level', (t) => {
-    const { helper, serverUrl } = t.context
-
     const expectedName = 'HeyThere'
     const query = `query ${expectedName} {
       hello
@@ -142,8 +136,6 @@ tap.test('apollo-server-hapi: segments', (t) => {
   })
 
   t.test('anonymous query, multi-level', (t) => {
-    const { helper, serverUrl } = t.context
-
     const query = `query {
       libraries {
         books {
@@ -187,8 +179,6 @@ tap.test('apollo-server-hapi: segments', (t) => {
   })
 
   t.test('named query, multi-level should return longest path', (t) => {
-    const { helper, serverUrl } = t.context
-
     const expectedName = 'GetBooksByLibrary'
     const query = `query ${expectedName} {
       libraries {
@@ -234,8 +224,6 @@ tap.test('apollo-server-hapi: segments', (t) => {
   })
 
   t.test('named query, multi-level, should choose *first* deepest-path', (t) => {
-    const { helper, serverUrl } = t.context
-
     const expectedName = 'GetBooksByLibrary'
     const query = `query ${expectedName} {
       libraries {
@@ -279,8 +267,6 @@ tap.test('apollo-server-hapi: segments', (t) => {
   })
 
   t.test('anonymous mutation, single level', (t) => {
-    const { helper, serverUrl } = t.context
-
     const query = `mutation {
       addThing(name: "added thing!")
     }`
@@ -318,8 +304,6 @@ tap.test('apollo-server-hapi: segments', (t) => {
   })
 
   t.test('named mutation, single level, should use mutation name', (t) => {
-    const { helper, serverUrl } = t.context
-
     const expectedName = 'AddThing'
     const query = `mutation ${expectedName} {
       addThing(name: "added thing!")
@@ -358,8 +342,6 @@ tap.test('apollo-server-hapi: segments', (t) => {
   })
 
   t.test('anonymous query, with params', (t) => {
-    const { helper, serverUrl } = t.context
-
     const query = `query {
       paramQuery(blah: "blah", blee: "blee")
     }`
@@ -391,8 +373,6 @@ tap.test('apollo-server-hapi: segments', (t) => {
   })
 
   t.test('named query, with params', (t) => {
-    const { helper, serverUrl } = t.context
-
     const expectedName = 'BlahQuery'
     const query = `query ${expectedName} {
       paramQuery(blah: "blah")
@@ -425,8 +405,6 @@ tap.test('apollo-server-hapi: segments', (t) => {
   })
 
   t.test('named query, with params, multi-level', (t) => {
-    const { helper, serverUrl } = t.context
-
     const expectedName = 'GetBookForLibrary'
     const query = `query ${expectedName} {
       library(branch: "downtown") {
@@ -480,8 +458,6 @@ tap.test('apollo-server-hapi: segments', (t) => {
   })
 
   t.test('batch query should include segments for nested queries', (t) => {
-    const { helper, serverUrl } = t.context
-
     const expectedName1 = 'GetBookForLibrary'
     const query1 = `query ${expectedName1} {
       library(branch: "downtown") {
@@ -564,8 +540,6 @@ tap.test('apollo-server-hapi: segments', (t) => {
 
   // there will be no document/AST nor resolved operation
   t.test('when the query cannot be parsed, should have operation placeholder', (t) => {
-    const { helper, serverUrl } = t.context
-
     const invalidQuery = `query {
       libraries {
         books {
@@ -613,8 +587,6 @@ tap.test('apollo-server-hapi: segments', (t) => {
   // if parse succeeds but validation fails, there will not be a resolved operation
   // but the document/AST can still be leveraged for what was intended.
   t.test('when cannot validate, should include operation segment', (t) => {
-    const { helper, serverUrl } = t.context
-
     const invalidQuery = `query {
       libraries {
         books {
