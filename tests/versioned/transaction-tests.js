@@ -357,7 +357,7 @@ function createTransactionTests(t) {
 
   // if parse succeeds but validation fails, there will not be a resolved operation
   // but the document/AST can still be leveraged for what was intended.
-  t.test('if cannot validate, should use document/AST for intended longest path', (t) => {
+  t.test('anonymous query, when cant validate, should use document/AST', (t) => {
     const { helper, serverUrl } = t.context
 
     const invalidQuery = `query {
@@ -377,6 +377,46 @@ function createTransactionTests(t) {
       t.equal(
         transaction.name,
         `WebTransaction/apollo-server/query ${ANON_PLACEHOLDER} ${longestPath}`
+      )
+    })
+
+    executeQuery(serverUrl, invalidQuery, (err, result) => {
+      t.error(err)
+
+      t.ok(result)
+      t.ok(result.errors)
+      t.equal(result.errors.length, 1) // should have one parsing error
+
+      const [parseError] = result.errors
+      t.equal(parseError.extensions.code, 'GRAPHQL_VALIDATION_FAILED')
+
+      t.end()
+    })
+  })
+
+  // if parse succeeds but validation fails, there will not be a resolved operation
+  // but the document/AST can still be leveraged for what was intended.
+  t.test('named query, when cant validate, should use document/AST', (t) => {
+    const { helper, serverUrl } = t.context
+
+    const expectedName = 'FailsToValidate'
+    const invalidQuery = `query ${expectedName} {
+      libraries {
+        books {
+          title
+          doesnotexist {
+            name
+          }
+        }
+      }
+    }`
+
+    const longestPath = 'libraries.books.doesnotexist.name'
+
+    helper.agent.on('transactionFinished', (transaction) => {
+      t.equal(
+        transaction.name,
+        `WebTransaction/apollo-server/query ${expectedName} ${longestPath}`
       )
     })
 
