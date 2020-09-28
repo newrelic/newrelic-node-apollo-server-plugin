@@ -13,7 +13,8 @@
       },
       "files": [
         "transaction-naming.test.js",
-        "segments.test.js"
+        "segments.test.js",
+        "errors.test.js"
       ]
     }
   ],
