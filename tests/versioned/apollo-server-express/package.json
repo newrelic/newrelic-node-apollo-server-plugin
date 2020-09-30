@@ -14,7 +14,8 @@
       "files": [
         "transaction-naming.test.js",
         "segments.test.js",
-        "errors.test.js"
+        "errors.test.js",
+        "attributes.test.js"
       ]
     }
   ],
