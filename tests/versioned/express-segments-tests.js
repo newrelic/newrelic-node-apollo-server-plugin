@@ -11,8 +11,8 @@ const ANON_PLACEHOLDER = '<anonymous>'
 const UNKNOWN_OPERATION_PLACEHOLDER = '<operation unknown>'
 
 /**
- * Creates a set of standard transction tests to run against various
- * apollo-server libraries.
+ * Creates a set of standard segment naming and nesting tests to run
+ * against express-based apollo-server libraries.
  * It is required that t.context.helper and t.context.serverUrl are set.
  * @param {*} t a tap test instance
  */

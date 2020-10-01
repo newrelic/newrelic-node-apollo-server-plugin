@@ -34,6 +34,7 @@ function getTypeDefs(gql) {
     type Library {
       branch: String!
       books: [Book!]
+      boom: String
     }
 
     type Book {
@@ -49,6 +50,7 @@ function getTypeDefs(gql) {
     type Query {
       books: [Book]
       hello: String
+      boom: String
       paramQuery(blah: String!, blee: String): String!
       libraries: [Library]
       library(branch: String!): [Library]
@@ -65,6 +67,9 @@ const resolvers = {
   Query: {
     hello: () => {
       return 'hello world'
+    },
+    boom: () => {
+      throw new Error('Boom goes the dynamite!')
     },
     paramQuery: (_, {blah, blee}) => {
       return blah + blee
