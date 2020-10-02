@@ -181,5 +181,6 @@ function createErrorTests(t) {
 
 
 module.exports = {
-  createErrorTests
+  suiteName: 'errors',
+  createTests: createErrorTests
 }

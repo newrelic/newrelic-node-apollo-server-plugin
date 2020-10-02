@@ -452,5 +452,6 @@ function checkResult(t, result, callback) {
 }
 
 module.exports = {
-  createTransactionTests
+  suiteName: 'transaction naming',
+  createTests: createTransactionTests
 }

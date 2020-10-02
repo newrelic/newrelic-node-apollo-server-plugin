@@ -364,5 +364,6 @@ function createAttributesTests(t) {
 }
 
 module.exports = {
-  createAttributesTests
+  suiteName: 'attributes',
+  createTests: createAttributesTests
 }

@@ -5,75 +5,22 @@
 
 'use strict'
 
-const tap = require('tap')
-
-const utils = require('@newrelic/test-utilities')
-utils.assert.extendTap(tap)
-
-const { getTypeDefs, resolvers } = require('../data-definitions')
 const { executeQuery, executeQueryBatch } = require('../test-client')
 
 const ANON_PLACEHOLDER = '<anonymous>'
 const UNKNOWN_OPERATION_PLACEHOLDER = '<operation unknown>'
 
-tap.test('apollo-server-hapi: segments', (t) => {
-  t.autoend()
+const { setupApolloServerHapiTests } = require('./apollo-server-hapi-setup')
 
-  let server = null
-  let hapiServer = null
-  let serverUrl = null
-  let helper = null
+setupApolloServerHapiTests({
+  suiteName: 'hapi segments',
+  createTests: createHapiSegmentsTests
+})
 
-  t.beforeEach(async () => {
-    // load default instrumentation. hapi being critical
-    helper = utils.TestAgent.makeInstrumented()
-    const createPlugin = require('../../../lib/create-plugin')
-    const nrApi = helper.getAgentApi()
-
-    // TODO: eventually use proper function for instrumenting and not .shim
-    const plugin = createPlugin(nrApi.shim)
-
-    const Hapi = require('@hapi/hapi')
-
-    const graphqlPath = '/gql'
-
-    // Do after instrumentation to ensure hapi isn't loaded too soon.
-    const { ApolloServer, gql } = require('apollo-server-hapi')
-    server = new ApolloServer({
-      typeDefs: getTypeDefs(gql),
-      resolvers,
-      plugins: [plugin]
-    })
-
-    hapiServer = Hapi.server({
-      host: 'localhost',
-      port: 5000
-    })
-
-    await server.applyMiddleware({ app: hapiServer, path: graphqlPath })
-
-    await server.installSubscriptionHandlers(hapiServer.listener)
-
-    await hapiServer.start()
-
-    serverUrl = `http://localhost:${hapiServer.settings.port}${graphqlPath}`
-  })
-
-  t.afterEach((done) => {
-    hapiServer && hapiServer.stop()
-    server && server.stop()
-
-    helper.unload()
-    server = null
-    serverUrl = null
-    helper = null
-
-    clearCachedModules(['@hapi/hapi', 'apollo-server-hapi'], () => {
-      done()
-    })
-  })
-
+function createHapiSegmentsTests(t) {
   t.test('anonymous query, single level', (t) => {
+    const { helper, serverUrl } = t.context
+
     const query = `query {
       hello
     }`
@@ -104,6 +51,8 @@ tap.test('apollo-server-hapi: segments', (t) => {
   })
 
   t.test('named query, single level', (t) => {
+    const { helper, serverUrl } = t.context
+
     const expectedName = 'HeyThere'
     const query = `query ${expectedName} {
       hello
@@ -136,6 +85,8 @@ tap.test('apollo-server-hapi: segments', (t) => {
   })
 
   t.test('anonymous query, multi-level', (t) => {
+    const { helper, serverUrl } = t.context
+
     const query = `query {
       libraries {
         books {
@@ -179,6 +130,8 @@ tap.test('apollo-server-hapi: segments', (t) => {
   })
 
   t.test('named query, multi-level should return deepest path', (t) => {
+    const { helper, serverUrl } = t.context
+
     const expectedName = 'GetBooksByLibrary'
     const query = `query ${expectedName} {
       libraries {
@@ -224,6 +177,8 @@ tap.test('apollo-server-hapi: segments', (t) => {
   })
 
   t.test('named query, multi-level, should choose *first* deepest-path', (t) => {
+    const { helper, serverUrl } = t.context
+
     const expectedName = 'GetBooksByLibrary'
     const query = `query ${expectedName} {
       libraries {
@@ -267,6 +222,8 @@ tap.test('apollo-server-hapi: segments', (t) => {
   })
 
   t.test('anonymous mutation, single level', (t) => {
+    const { helper, serverUrl } = t.context
+
     const query = `mutation {
       addThing(name: "added thing!")
     }`
@@ -304,6 +261,8 @@ tap.test('apollo-server-hapi: segments', (t) => {
   })
 
   t.test('named mutation, single level, should use mutation name', (t) => {
+    const { helper, serverUrl } = t.context
+
     const expectedName = 'AddThing'
     const query = `mutation ${expectedName} {
       addThing(name: "added thing!")
@@ -342,6 +301,8 @@ tap.test('apollo-server-hapi: segments', (t) => {
   })
 
   t.test('anonymous query, with params', (t) => {
+    const { helper, serverUrl } = t.context
+
     const query = `query {
       paramQuery(blah: "blah", blee: "blee")
     }`
@@ -373,6 +334,8 @@ tap.test('apollo-server-hapi: segments', (t) => {
   })
 
   t.test('named query, with params', (t) => {
+    const { helper, serverUrl } = t.context
+
     const expectedName = 'BlahQuery'
     const query = `query ${expectedName} {
       paramQuery(blah: "blah")
@@ -405,6 +368,8 @@ tap.test('apollo-server-hapi: segments', (t) => {
   })
 
   t.test('named query, with params, multi-level', (t) => {
+    const { helper, serverUrl } = t.context
+
     const expectedName = 'GetBookForLibrary'
     const query = `query ${expectedName} {
       library(branch: "downtown") {
@@ -458,6 +423,8 @@ tap.test('apollo-server-hapi: segments', (t) => {
   })
 
   t.test('batch query should include segments for nested queries', (t) => {
+    const { helper, serverUrl } = t.context
+
     const expectedName1 = 'GetBookForLibrary'
     const query1 = `query ${expectedName1} {
       library(branch: "downtown") {
@@ -540,6 +507,8 @@ tap.test('apollo-server-hapi: segments', (t) => {
 
   // there will be no document/AST nor resolved operation
   t.test('when the query cannot be parsed, should have operation placeholder', (t) => {
+    const { helper, serverUrl } = t.context
+
     const invalidQuery = `query {
       libraries {
         books {
@@ -587,6 +556,8 @@ tap.test('apollo-server-hapi: segments', (t) => {
   // if parse succeeds but validation fails, there will not be a resolved operation
   // but the document/AST can still be leveraged for what was intended.
   t.test('when cannot validate, should include operation segment', (t) => {
+    const { helper, serverUrl } = t.context
+
     const invalidQuery = `query {
       libraries {
         books {
@@ -628,7 +599,7 @@ tap.test('apollo-server-hapi: segments', (t) => {
       t.end()
     })
   })
-})
+}
 
 /**
  * Verify we didn't break anything outright and
@@ -644,13 +615,4 @@ function checkResult(t, result, callback) {
   }
 
   setImmediate(callback)
-}
-
-function clearCachedModules(modules, callback) {
-  modules.forEach((moduleName) => {
-    const requirePath = require.resolve(moduleName)
-    delete require.cache[requirePath]
-  })
-
-  callback()
 }
