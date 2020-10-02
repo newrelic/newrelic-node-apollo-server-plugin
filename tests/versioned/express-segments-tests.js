@@ -138,7 +138,7 @@ function createSegmentsTests(t) {
     })
   })
 
-  t.test('named query, multi-level should return longest path', (t) => {
+  t.test('named query, multi-level should return deepest path', (t) => {
     const { helper, serverUrl } = t.context
 
     const expectedName = 'GetBooksByLibrary'
@@ -153,12 +153,12 @@ function createSegmentsTests(t) {
       }
     }`
 
-    const longestPath = 'libraries.books.author.name'
+    const deepestPath = 'libraries.books.author.name'
 
     helper.agent.on('transactionFinished', (transaction) => {
       const operationPart = `query ${expectedName}`
       const expectedSegments = [{
-        name: `WebTransaction/apollo-server/${operationPart} ${longestPath}`,
+        name: `WebTransaction/apollo-server/${operationPart} ${deepestPath}`,
         children: [{
           name: 'Expressjs/Router: /',
           children: [{

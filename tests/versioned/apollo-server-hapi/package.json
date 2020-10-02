@@ -12,9 +12,10 @@
         "@hapi/hapi": "18.4.1"
       },
       "files": [
-        "segments.tests.js",
+        "segments.test.js",
         "transaction-naming.test.js",
-        "errors.test.js"
+        "errors.test.js",
+        "attributes.test.js"
       ]
     }
   ],

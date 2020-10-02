@@ -31,8 +31,25 @@ function findSpanById(agent, spanId) {
   return matchingSpan
 }
 
+function findSegmentByName(root, name) {
+  if (root.name === name) {
+    return root
+  } else if (root.children && root.children.length) {
+    for (let i = 0; i < root.children.length; i++) {
+      const child = root.children[i]
+      const found = findSegmentByName(child, name)
+      if (found) {
+        return found
+      }
+    }
+  }
+
+  return null
+}
+
 module.exports = {
   getErrorTraces,
   getSpanEvents,
-  findSpanById
+  findSpanById,
+  findSegmentByName
 }
