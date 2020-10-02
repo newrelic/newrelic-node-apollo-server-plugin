@@ -26,8 +26,17 @@ function executeQueryBatch(url, queries, callback) {
  * Data will be sent up in form { query: <input> }
  */
 function executeQuery(url, query, callback) {
-  let postData = JSON.stringify({ query })
+  const postData = JSON.stringify({ query })
 
+  makeRequest(url, postData, callback)
+}
+
+/**
+ * Execute a GraphQL POST request with the given JSON.
+ * Data will not be modified other than stringifying.
+ */
+function executeJson(url, json, callback) {
+  const postData = JSON.stringify(json)
   makeRequest(url, postData, callback)
 }
 
@@ -63,6 +72,7 @@ function makeRequest(url, postData, callback) {
 }
 
 module.exports = {
+  executeJson,
   executeQuery,
   executeQueryBatch
 }
