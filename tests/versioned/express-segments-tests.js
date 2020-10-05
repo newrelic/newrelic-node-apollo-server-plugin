@@ -657,5 +657,6 @@ function checkResult(t, result, callback) {
 }
 
 module.exports = {
-  createSegmentsTests
+  testSuite: 'express segments',
+  createTests: createSegmentsTests
 }

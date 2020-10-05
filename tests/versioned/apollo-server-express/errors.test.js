@@ -5,77 +5,9 @@
 
 'use strict'
 
-const tap = require('tap')
+const { setupApolloServerExpressTests } = require('./apollo-server-express-setup')
+const errorsTests = require('../errors-tests')
 
-const utils = require('@newrelic/test-utilities')
-utils.assert.extendTap(tap)
-
-const { getTypeDefs, resolvers } = require('../data-definitions')
-const { createErrorTests } = require('../errors-tests')
-
-tap.test('apollo-server-express: errors', (t) => {
-  t.autoend()
-
-  let server = null
-  let expressServer = null
-  let serverUrl = null
-  let helper = null
-
-  t.beforeEach((done) => {
-    // load default instrumentation. express being critical
-    helper = utils.TestAgent.makeInstrumented({
-      distributed_tracing: { enabled: true } // enable span testing
-    })
-    const createPlugin = require('../../../lib/create-plugin')
-    const nrApi = helper.getAgentApi()
-
-    // TODO: eventually use proper function for instrumenting and not .shim
-    const plugin = createPlugin(nrApi.shim)
-
-    const express = require('express')
-
-    // Do after instrumentation to ensure express isn't loaded too soon.
-    const { ApolloServer, gql } = require('apollo-server-express')
-    server = new ApolloServer({
-      typeDefs: getTypeDefs(gql),
-      resolvers,
-      plugins: [plugin]
-    })
-
-    const app = express()
-    server.applyMiddleware({ app })
-
-    expressServer = app.listen(0, () => {
-      serverUrl = `http://localhost:${expressServer.address().port}${server.graphqlPath}`
-
-      t.context.helper = helper
-      t.context.serverUrl = serverUrl
-      done()
-    })
-  })
-
-  t.afterEach((done) => {
-    expressServer && expressServer.close()
-    server && server.stop()
-
-    helper.unload()
-    server = null
-    serverUrl = null
-    helper = null
-
-    clearCachedModules(['express', 'apollo-server-express'], () => {
-      done()
-    })
-  })
-
-  createErrorTests(t)
+setupApolloServerExpressTests(errorsTests, {
+  distributed_tracing: { enabled: true } // enable span testing
 })
-
-function clearCachedModules(modules, callback) {
-  modules.forEach((moduleName) => {
-    const requirePath = require.resolve(moduleName)
-    delete require.cache[requirePath]
-  })
-
-  callback()
-}
