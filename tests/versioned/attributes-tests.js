@@ -83,7 +83,8 @@ function createAttributesTests(t) {
       const expectedOperationAttributes = {
         'graphql.operation.type': 'query',
         'graphql.operation.name': expectedName,
-        'graphql.operation.deepestPath': 'hello'
+        'graphql.operation.deepestPath': 'hello',
+        'graphql.operation.query': `query ${expectedName} { hello }`
       }
 
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
@@ -354,6 +355,51 @@ function createAttributesTests(t) {
       }
       const resolveAttributes = resolveHelloSegment.attributes.get(SEGMENT_DESTINATION)
       t.matches(resolveAttributes, expectedArgAttributes)
+    })
+
+    executeJson(serverUrl, queryJson, (err) => {
+      t.error(err)
+      t.end()
+    })
+  })
+
+  t.test('query with args should have args obfuscated in raw query attribute', (t) => {
+    const { helper, serverUrl } = t.context
+
+    helper.agent.config.attributes.include = ['graphql.field.args.*']
+    helper.agent.config.emit('attributes.include')
+
+    const expectedName = 'ParamQueryWithArgs'
+    const query = `query ${expectedName}($arg1: String!, $arg2: String) {
+      paramQuery(blah: $arg1, blee: $arg2)
+    }`
+
+    const queryJson = {
+      operationName: expectedName,
+      query: query,
+      variables: {
+        arg1: 'first',
+        arg2: 'second'
+      }
+    }
+
+    helper.agent.on('transactionFinished', (transaction) => {
+      const operationPart = `query ${expectedName}`
+
+      const operationSegment = findSegmentByName(transaction.trace.root, operationPart)
+
+      const expectedOperationAttributes = {
+        'graphql.operation.query': 
+          'query ParamQueryWithArgs($arg1:***, $arg2:***)' + 
+          ' { paramQuery(blah:***, blee:***) }'
+      }
+
+      const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
+      t.matches(
+        operationAttributes,
+        expectedOperationAttributes,
+        'should have operation attributes'
+      )
     })
 
     executeJson(serverUrl, queryJson, (err) => {
