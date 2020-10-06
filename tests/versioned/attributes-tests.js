@@ -83,8 +83,7 @@ function createAttributesTests(t) {
       const expectedOperationAttributes = {
         'graphql.operation.type': 'query',
         'graphql.operation.name': expectedName,
-        'graphql.operation.deepestPath': 'hello',
-        'graphql.operation.query': query
+        'graphql.operation.deepestPath': 'hello'
       }
 
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
@@ -363,10 +362,44 @@ function createAttributesTests(t) {
     })
   })
 
+  t.test('should capture query when added to include list', (t) => {
+    const { helper, serverUrl } = t.context
+
+    helper.agent.config.attributes.include = ['graphql.operation.query']
+    helper.agent.config.emit('attributes.include')
+
+    const expectedName = 'Greetings'
+    const query = `query ${expectedName} {
+      ciao
+    }`
+
+    helper.agent.on('transactionFinished', (transaction) => {
+      const operationPart = `query ${expectedName}`
+      const operationSegment = findSegmentByName(transaction.trace.root, operationPart)
+
+      const expectedOperationAttributes = {
+        'graphql.operation.query': query
+      }
+
+      const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
+
+      t.matches(
+        operationAttributes,
+        expectedOperationAttributes,
+        'should have operation attributes'
+      )
+    })
+
+    executeQuery(serverUrl, query, (err) => {
+      t.error(err)
+      t.end()
+    })
+  })
+
   t.test('query with args should have args obfuscated in raw query attribute', (t) => {
     const { helper, serverUrl } = t.context
 
-    helper.agent.config.attributes.include = ['graphql.field.args.*']
+    helper.agent.config.attributes.include = ['graphql.operation.query']
     helper.agent.config.emit('attributes.include')
 
     const expectedName = 'ParamQueryWithArgs'
