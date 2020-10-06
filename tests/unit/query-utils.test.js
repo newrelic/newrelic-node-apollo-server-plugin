@@ -43,8 +43,8 @@ tap.test('Obfuscate GraphQL query args tests', (t) => {
   
     t.notOk(newQuery.includes('yes'))
     t.notOk(newQuery.includes('0'))
-    t.ok('eggs:***')
-    t.ok('yolk:***', 'subquery args')
+    t.ok('chickens(***)')
+    t.ok('eggs(***)', 'subquery args')
 
     t.end()
   })
@@ -59,8 +59,7 @@ tap.test('Obfuscate GraphQL query args tests', (t) => {
     const newQuery = cleanQuery(query)
 
     t.ok(newQuery.includes('pony: horse'), 'alias is intact')
-    t.ok(newQuery.includes('horseId:***'))
-    t.ok(newQuery.includes('color:***'))
+    t.ok(newQuery.includes('horse(***)'))
 
     t.end()
   })
@@ -73,8 +72,7 @@ tap.test('Obfuscate GraphQL query args tests', (t) => {
 
     const newQuery = cleanQuery(query)
 
-    t.ok(newQuery.includes('husky:***'))
-    t.ok(newQuery.includes('id:***'))
+    t.ok(newQuery.includes('corn(***)'))
   
     t.end()
   })
@@ -86,8 +84,8 @@ tap.test('Obfuscate GraphQL query args tests', (t) => {
 
     const newQuery = cleanQuery(query)
 
-    t.ok(newQuery.includes('$arg1:***'))
-    t.ok(newQuery.includes('blah:***'))
+    t.ok(newQuery.includes('ParamQueryWithArgs(***)'))
+    t.ok(newQuery.includes('paramQuery(***)'))
 
     t.end()
   })

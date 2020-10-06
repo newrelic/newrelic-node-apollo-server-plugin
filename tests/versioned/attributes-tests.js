@@ -417,10 +417,9 @@ function createAttributesTests(t) {
 
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
 
-      t.ok(operationAttributes['graphql.operation.query'].includes('$arg1:***'))
-      t.ok(operationAttributes['graphql.operation.query'].includes('$arg2:***'))
-      t.ok(operationAttributes['graphql.operation.query'].includes('blah:***'))
-      t.ok(operationAttributes['graphql.operation.query'].includes('blee:***'))
+      t.ok(operationAttributes['graphql.operation.query']
+        .includes(`${expectedName}(***)`))
+      t.ok(operationAttributes['graphql.operation.query'].includes('paramQuery(***)'))
     })
 
     executeJson(serverUrl, queryJson, (err) => {
