@@ -362,11 +362,8 @@ function createAttributesTests(t) {
     })
   })
 
-  t.test('should capture query when added to include list', (t) => {
+  t.test('should capture query in operation segment attributes', (t) => {
     const { helper, serverUrl } = t.context
-
-    helper.agent.config.attributes.include = ['graphql.operation.query']
-    helper.agent.config.emit('attributes.include')
 
     const expectedName = 'Greetings'
     const query = `query ${expectedName} {
@@ -398,9 +395,6 @@ function createAttributesTests(t) {
 
   t.test('query with args should have args obfuscated in raw query attribute', (t) => {
     const { helper, serverUrl } = t.context
-
-    helper.agent.config.attributes.include = ['graphql.operation.query']
-    helper.agent.config.emit('attributes.include')
 
     const expectedName = 'ParamQueryWithArgs'
     const query = `query ${expectedName}($arg1: String!, $arg2: String) {
