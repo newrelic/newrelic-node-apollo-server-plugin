@@ -1,0 +1,62 @@
+{
+  "lastUpdated": "Tue Oct 06 2020 09:40:26 GMT-0700 (Pacific Daylight Time)",
+  "projectName": "New Relic Node Apollo Server Plugin",
+  "projectUrl": "https://github.com/newrelic/newrelic-node-apollo-server-plugin/",
+  "includeDev": true,
+  "dependencies": {},
+  "devDependencies": {
+    "@newrelic/test-utilities@4.1.2": {
+      "name": "@newrelic/test-utilities",
+      "version": "4.1.2",
+      "range": "^4.1.2",
+      "licenses": "Apache-2.0",
+      "repoUrl": "https://github.com/newrelic/node-test-utilities",
+      "versionedRepoUrl": "https://github.com/newrelic/node-test-utilities/tree/v4.1.2",
+      "licenseFile": "node_modules/@newrelic/test-utilities/LICENSE",
+      "licenseUrl": "https://github.com/newrelic/node-test-utilities/blob/v4.1.2/LICENSE",
+      "licenseTextSource": "file",
+      "publisher": "New Relic Node.js agent team",
+      "email": "nodejs@newrelic.com"
+    },
+    "eslint@7.8.1": {
+      "name": "eslint",
+      "version": "7.8.1",
+      "range": "^7.8.1",
+      "licenses": "MIT",
+      "repoUrl": "https://github.com/eslint/eslint",
+      "versionedRepoUrl": "https://github.com/eslint/eslint/tree/v7.8.1",
+      "licenseFile": "node_modules/eslint/LICENSE",
+      "licenseUrl": "https://github.com/eslint/eslint/blob/v7.8.1/LICENSE",
+      "licenseTextSource": "file",
+      "publisher": "Nicholas C. Zakas",
+      "email": "nicholas+npm@nczconsulting.com"
+    },
+    "newrelic@6.13.0": {
+      "name": "newrelic",
+      "version": "6.13.0",
+      "range": "^6.13.0",
+      "licenses": "Apache-2.0",
+      "repoUrl": "https://github.com/newrelic/node-newrelic",
+      "versionedRepoUrl": "https://github.com/newrelic/node-newrelic/tree/v6.13.0",
+      "licenseFile": "node_modules/newrelic/LICENSE",
+      "licenseUrl": "https://github.com/newrelic/node-newrelic/blob/v6.13.0/LICENSE",
+      "licenseTextSource": "file",
+      "publisher": "New Relic Node.js agent team",
+      "email": "nodejs@newrelic.com"
+    },
+    "tap@14.10.8": {
+      "name": "tap",
+      "version": "14.10.8",
+      "range": "^14.10.8",
+      "licenses": "ISC",
+      "repoUrl": "https://github.com/tapjs/node-tap",
+      "versionedRepoUrl": "https://github.com/tapjs/node-tap/tree/v14.10.8",
+      "licenseFile": "node_modules/tap/LICENSE",
+      "licenseUrl": "https://github.com/tapjs/node-tap/blob/v14.10.8/LICENSE",
+      "licenseTextSource": "file",
+      "publisher": "Isaac Z. Schlueter",
+      "email": "i@izs.me",
+      "url": "http://blog.izs.me"
+    }
+  }
+}
