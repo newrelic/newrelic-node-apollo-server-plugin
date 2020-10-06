@@ -84,7 +84,7 @@ function createAttributesTests(t) {
         'graphql.operation.type': 'query',
         'graphql.operation.name': expectedName,
         'graphql.operation.deepestPath': 'hello',
-        'graphql.operation.query': `query ${expectedName} { hello }`
+        'graphql.operation.query': query
       }
 
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
@@ -388,18 +388,12 @@ function createAttributesTests(t) {
 
       const operationSegment = findSegmentByName(transaction.trace.root, operationPart)
 
-      const expectedOperationAttributes = {
-        'graphql.operation.query': 
-          'query ParamQueryWithArgs($arg1:***, $arg2:***)' + 
-          ' { paramQuery(blah:***, blee:***) }'
-      }
-
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
-      t.matches(
-        operationAttributes,
-        expectedOperationAttributes,
-        'should have operation attributes'
-      )
+
+      t.ok(operationAttributes['graphql.operation.query'].includes('$arg1:***'))
+      t.ok(operationAttributes['graphql.operation.query'].includes('$arg2:***'))
+      t.ok(operationAttributes['graphql.operation.query'].includes('blah:***'))
+      t.ok(operationAttributes['graphql.operation.query'].includes('blee:***'))
     })
 
     executeJson(serverUrl, queryJson, (err) => {

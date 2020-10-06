@@ -79,6 +79,19 @@ tap.test('Obfuscate GraphQL query args tests', (t) => {
     t.end()
   })
 
+  t.test('Should obfuscate variable placeholders', (t) => {
+    const query = `query ParamQueryWithArgs($arg1: String!, $arg2: String) {
+      paramQuery(blah: $arg1, blee: $arg2)
+    }`
+
+    const newQuery = cleanQuery(query)
+
+    t.ok(newQuery.includes('$arg1:***'))
+    t.ok(newQuery.includes('blah:***'))
+
+    t.end()
+  })
+
   t.end()
 })
 
