@@ -10,6 +10,9 @@ const { executeQuery, executeQueryBatch } = require('../test-client')
 const ANON_PLACEHOLDER = '<anonymous>'
 const UNKNOWN_OPERATION_PLACEHOLDER = '<operation unknown>'
 
+const OPERATION_PREFIX = 'GraphQL/operation/ApolloServer'
+const RESOLVE_PREFIX = 'GraphQL/resolve/ApolloServer'
+
 const { setupApolloServerHapiTests } = require('./apollo-server-hapi-setup')
 
 setupApolloServerHapiTests({
@@ -17,7 +20,9 @@ setupApolloServerHapiTests({
   createTests: createHapiSegmentsTests
 })
 
-function createHapiSegmentsTests(t) {
+function createHapiSegmentsTests(t, frameworkName) {
+  const TRANSACTION_PREFIX = `WebTransaction/${frameworkName}/POST`
+
   t.test('anonymous query, single level', (t) => {
     const { helper, serverUrl } = t.context
 
@@ -26,15 +31,15 @@ function createHapiSegmentsTests(t) {
     }`
 
     helper.agent.on('transactionFinished', (transaction) => {
-      const operationPart = `query ${ANON_PLACEHOLDER}`
+      const operationPart = `query/${ANON_PLACEHOLDER}`
       const expectedSegments = [{
-        name: `WebTransaction/apollo-server/${operationPart} hello`,
+        name: `${TRANSACTION_PREFIX}//${operationPart}/hello`,
         children: [{
           name: 'Nodejs/Middleware/Hapi/handler//gql',
           children: [{
-            name: operationPart,
+            name: `${OPERATION_PREFIX}/${operationPart}`,
             children: [{
-              name: 'resolve: hello'
+              name: `${RESOLVE_PREFIX}/hello`
             }]
           }]
         }]
@@ -59,15 +64,15 @@ function createHapiSegmentsTests(t) {
     }`
 
     helper.agent.on('transactionFinished', (transaction) => {
-      const operationPart = `query ${expectedName}`
+      const operationPart = `query/${expectedName}`
       const expectedSegments = [{
-        name: `WebTransaction/apollo-server/${operationPart} hello`,
+        name: `${TRANSACTION_PREFIX}//${operationPart}/hello`,
         children: [{
           name: 'Nodejs/Middleware/Hapi/handler//gql',
           children: [{
-            name: operationPart,
+            name: `${OPERATION_PREFIX}/${operationPart}`,
             children: [{
-              name: 'resolve: hello'
+              name: `${RESOLVE_PREFIX}/hello`
             }]
           }]
         }]
@@ -101,18 +106,18 @@ function createHapiSegmentsTests(t) {
     const longestPath = 'libraries.books.author.name'
 
     helper.agent.on('transactionFinished', (transaction) => {
-      const operationPart = `query ${ANON_PLACEHOLDER}`
+      const operationPart = `query/${ANON_PLACEHOLDER}`
       const expectedSegments = [{
-        name: `WebTransaction/apollo-server/${operationPart} ${longestPath}`,
+        name: `${TRANSACTION_PREFIX}//${operationPart}/${longestPath}`,
         children: [{
           name: 'Nodejs/Middleware/Hapi/handler//gql',
           children: [{
-            name: operationPart,
+            name: `${OPERATION_PREFIX}/${operationPart}`,
             children: [
-              { name: 'resolve: libraries' },
-              { name: 'resolve: libraries.books' },
-              { name: 'resolve: libraries.books.author' },
-              { name: 'resolve: libraries.books.author.name' }
+              { name: `${RESOLVE_PREFIX}/libraries` },
+              { name: `${RESOLVE_PREFIX}/libraries.books` },
+              { name: `${RESOLVE_PREFIX}/libraries.books.author` },
+              { name: `${RESOLVE_PREFIX}/libraries.books.author.name` }
             ]
           }]
         }]
@@ -147,19 +152,19 @@ function createHapiSegmentsTests(t) {
     const deepestPath = 'libraries.books.author.name'
 
     helper.agent.on('transactionFinished', (transaction) => {
-      const operationPart = `query ${expectedName}`
+      const operationPart = `query/${expectedName}`
       const expectedSegments = [{
-        name: `WebTransaction/apollo-server/${operationPart} ${deepestPath}`,
+        name: `${TRANSACTION_PREFIX}//${operationPart}/${deepestPath}`,
         children: [{
           name: 'Nodejs/Middleware/Hapi/handler//gql',
           children: [{
-            name: operationPart,
+            name: `${OPERATION_PREFIX}/${operationPart}`,
             children: [
-              { name: 'resolve: libraries' },
-              { name: 'resolve: libraries.books' },
-              { name: 'resolve: libraries.books.title'},
-              { name: 'resolve: libraries.books.author' },
-              { name: 'resolve: libraries.books.author.name' }
+              { name: `${RESOLVE_PREFIX}/libraries` },
+              { name: `${RESOLVE_PREFIX}/libraries.books` },
+              { name: `${RESOLVE_PREFIX}/libraries.books.title` },
+              { name: `${RESOLVE_PREFIX}/libraries.books.author` },
+              { name: `${RESOLVE_PREFIX}/libraries.books.author.name` }
             ]
           }]
         }]
@@ -193,18 +198,18 @@ function createHapiSegmentsTests(t) {
     const firstLongestPath = 'libraries.books.title'
 
     helper.agent.on('transactionFinished', (transaction) => {
-      const operationPart = `query ${expectedName}`
+      const operationPart = `query/${expectedName}`
       const expectedSegments = [{
-        name: `WebTransaction/apollo-server/${operationPart} ${firstLongestPath}`,
+        name: `${TRANSACTION_PREFIX}//${operationPart}/${firstLongestPath}`,
         children: [{
           name: 'Nodejs/Middleware/Hapi/handler//gql',
             children: [{
-              name: operationPart,
+              name: `${OPERATION_PREFIX}/${operationPart}`,
               children: [
-                { name: 'resolve: libraries' },
-                { name: 'resolve: libraries.books' },
-                { name: 'resolve: libraries.books.title' },
-                { name: 'resolve: libraries.books.isbn' }
+                { name: `${RESOLVE_PREFIX}/libraries` },
+                { name: `${RESOLVE_PREFIX}/libraries.books` },
+                { name: `${RESOLVE_PREFIX}/libraries.books.title` },
+                { name: `${RESOLVE_PREFIX}/libraries.books.isbn` }
               ]
             }]
         }]
@@ -229,15 +234,15 @@ function createHapiSegmentsTests(t) {
     }`
 
     helper.agent.on('transactionFinished', (transaction) => {
-      const operationPart = `mutation ${ANON_PLACEHOLDER}`
+      const operationPart = `mutation/${ANON_PLACEHOLDER}`
       const expectedSegments = [{
-        name: `WebTransaction/apollo-server/${operationPart} addThing`,
+        name: `${TRANSACTION_PREFIX}//${operationPart}/addThing`,
         children: [{
           name: 'Nodejs/Middleware/Hapi/handler//gql',
           children: [{
-            name: operationPart,
+            name: `${OPERATION_PREFIX}/${operationPart}`,
             children: [{
-              name: 'resolve: addThing',
+              name: `${RESOLVE_PREFIX}/addThing`,
               children: [{
                 name: 'timers.setTimeout',
                 children: [{
@@ -269,15 +274,15 @@ function createHapiSegmentsTests(t) {
     }`
 
     helper.agent.on('transactionFinished', (transaction) => {
-      const operationPart = `mutation ${expectedName}`
+      const operationPart = `mutation/${expectedName}`
       const expectedSegments = [{
-        name: `WebTransaction/apollo-server/${operationPart} addThing`,
+        name: `${TRANSACTION_PREFIX}//${operationPart}/addThing`,
         children: [{
           name: 'Nodejs/Middleware/Hapi/handler//gql',
           children: [{
-            name: operationPart,
+            name: `${OPERATION_PREFIX}/${operationPart}`,
             children: [{
-              name: 'resolve: addThing',
+              name: `${RESOLVE_PREFIX}/addThing`,
               children: [{
                 name: 'timers.setTimeout',
                 children: [{
@@ -308,15 +313,15 @@ function createHapiSegmentsTests(t) {
     }`
 
     helper.agent.on('transactionFinished', (transaction) => {
-      const operationPart = `query ${ANON_PLACEHOLDER}`
+      const operationPart = `query/${ANON_PLACEHOLDER}`
       const expectedSegments = [{
-        name: `WebTransaction/apollo-server/${operationPart} paramQuery`,
+        name: `${TRANSACTION_PREFIX}//${operationPart}/paramQuery`,
         children: [{
           name: 'Nodejs/Middleware/Hapi/handler//gql',
           children: [{
-            name: operationPart,
+            name: `${OPERATION_PREFIX}/${operationPart}`,
             children: [
-              { name: 'resolve: paramQuery' }
+              { name: `${RESOLVE_PREFIX}/paramQuery` }
             ]
           }]
         }]
@@ -342,15 +347,15 @@ function createHapiSegmentsTests(t) {
     }`
 
     helper.agent.on('transactionFinished', (transaction) => {
-      const operationPart = `query ${expectedName}`
+      const operationPart = `query/${expectedName}`
       const expectedSegments = [{
-        name: `WebTransaction/apollo-server/${operationPart} paramQuery`,
+        name: `${TRANSACTION_PREFIX}//${operationPart}/paramQuery`,
         children: [{
           name: 'Nodejs/Middleware/Hapi/handler//gql',
           children: [{
-            name: operationPart,
+            name: `${OPERATION_PREFIX}/${operationPart}`,
             children: [
-              { name: 'resolve: paramQuery' }
+              { name: `${RESOLVE_PREFIX}/paramQuery` }
             ]
           }]
         }]
@@ -385,16 +390,16 @@ function createHapiSegmentsTests(t) {
     const longestPath = 'library.books.author.name'
 
     helper.agent.on('transactionFinished', (transaction) => {
-      const operationPart = `query ${expectedName}`
+      const operationPart = `query/${expectedName}`
       const expectedSegments = [{
-        name: `WebTransaction/apollo-server/${operationPart} ${longestPath}`,
+        name: `${TRANSACTION_PREFIX}//${operationPart}/${longestPath}`,
         children: [{
           name: 'Nodejs/Middleware/Hapi/handler//gql',
           children: [{
-            name: operationPart,
+            name: `${OPERATION_PREFIX}/${operationPart}`,
             children: [
               {
-                name: 'resolve: library',
+                name: `${RESOLVE_PREFIX}/library`,
                 children: [{
                   name: 'timers.setTimeout',
                   children: [{
@@ -402,10 +407,10 @@ function createHapiSegmentsTests(t) {
                   }]
                 }]
               },
-              { name: 'resolve: library.books' },
-              { name: 'resolve: library.books.title'},
-              { name: 'resolve: library.books.author' },
-              { name: 'resolve: library.books.author.name' }
+              { name: `${RESOLVE_PREFIX}/library.books` },
+              { name: `${RESOLVE_PREFIX}/library.books.title` },
+              { name: `${RESOLVE_PREFIX}/library.books.author` },
+              { name: `${RESOLVE_PREFIX}/library.books.author.name` }
             ]
           }]
         }]
@@ -446,12 +451,12 @@ function createHapiSegmentsTests(t) {
     const queries = [query1, query2]
 
     helper.agent.on('transactionFinished', (transaction) => {
-      const operationPart1 = `query ${expectedName1}`
-      const expectedQuery1Name = `${operationPart1} ${longestPath1}`
-      const operationPart2 = `mutation ${ANON_PLACEHOLDER}`
-      const expectedQuery2Name = `${operationPart2} addThing`
+      const operationPart1 = `query/${expectedName1}`
+      const expectedQuery1Name = `${operationPart1}/${longestPath1}`
+      const operationPart2 = `mutation/${ANON_PLACEHOLDER}`
+      const expectedQuery2Name = `${operationPart2}/addThing`
 
-      const batchTransactionPrefix = 'WebTransaction/apollo-server/batch'
+      const batchTransactionPrefix = `${TRANSACTION_PREFIX}//batch`
 
       const expectedSegments = [{
         name: `${batchTransactionPrefix}/${expectedQuery1Name}/${expectedQuery2Name}`,
@@ -459,10 +464,10 @@ function createHapiSegmentsTests(t) {
           name: 'Nodejs/Middleware/Hapi/handler//gql',
           children: [
             {
-              name: operationPart1,
+              name: `${OPERATION_PREFIX}/${operationPart1}`,
               children: [
                 {
-                  name: 'resolve: library',
+                  name: `${RESOLVE_PREFIX}/library`,
                   children: [{
                     name: 'timers.setTimeout',
                     children: [{
@@ -470,16 +475,16 @@ function createHapiSegmentsTests(t) {
                     }]
                   }]
                 },
-                { name: 'resolve: library.books' },
-                { name: 'resolve: library.books.title'},
-                { name: 'resolve: library.books.author' },
-                { name: 'resolve: library.books.author.name' }
+                { name: `${RESOLVE_PREFIX}/library.books` },
+                { name: `${RESOLVE_PREFIX}/library.books.title` },
+                { name: `${RESOLVE_PREFIX}/library.books.author` },
+                { name: `${RESOLVE_PREFIX}/library.books.author.name` }
               ]
             },
             {
-              name: operationPart2,
+              name: `${OPERATION_PREFIX}/${operationPart2}`,
               children: [{
-                name: 'resolve: addThing',
+                name: `${RESOLVE_PREFIX}/addThing`,
                 children: [{
                   name: 'timers.setTimeout',
                   children: [{
@@ -521,13 +526,8 @@ function createHapiSegmentsTests(t) {
     ` // missing closing }
 
     helper.agent.on('transactionFinished', (transaction) => {
-      t.equal(
-        transaction.name,
-        'WebTransaction/apollo-server/*'
-      )
-
       const expectedSegments = [{
-        name: 'WebTransaction/apollo-server/*',
+        name: `${TRANSACTION_PREFIX}//*`,
         children: [{
           name: 'Nodejs/Middleware/Hapi/handler//gql',
           children: [{
@@ -572,13 +572,13 @@ function createHapiSegmentsTests(t) {
     const longestPath = 'libraries.books.doesnotexist.name'
 
     helper.agent.on('transactionFinished', (transaction) => {
-      const operationPart = `query ${ANON_PLACEHOLDER}`
+      const operationPart = `query/${ANON_PLACEHOLDER}`
       const expectedSegments = [{
-        name: `WebTransaction/apollo-server/${operationPart} ${longestPath}`,
+        name: `${TRANSACTION_PREFIX}//${operationPart}/${longestPath}`,
         children: [{
           name: 'Nodejs/Middleware/Hapi/handler//gql',
           children: [{
-            name: operationPart
+            name: `${OPERATION_PREFIX}/${operationPart}`
           }]
         }]
       }]
