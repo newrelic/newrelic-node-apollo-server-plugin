@@ -17,7 +17,7 @@ tap.test('Obfuscate GraphQL query args tests', (t) => {
 
     const newQuery = cleanQuery(query)
 
-    t.equal(newQuery, 'query { runner }')
+    t.equal(newQuery, query)
 
     t.end()
   })
@@ -73,7 +73,8 @@ tap.test('Obfuscate GraphQL query args tests', (t) => {
 
     const newQuery = cleanQuery(query)
 
-    t.ok(newQuery.includes('husks:***'))
+    t.ok(newQuery.includes('husky:***'))
+    t.ok(newQuery.includes('id:***'))
   
     t.end()
   })
