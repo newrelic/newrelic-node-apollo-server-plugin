@@ -363,6 +363,73 @@ function createAttributesTests(t) {
       t.end()
     })
   })
+
+  t.test('should capture query in operation segment attributes', (t) => {
+    const { helper, serverUrl } = t.context
+
+    const expectedName = 'Greetings'
+    const query = `query ${expectedName} {
+      ciao
+    }`
+
+    helper.agent.on('transactionFinished', (transaction) => {
+      const operationName = `${OPERATION_PREFIX}/query/${expectedName}`
+
+      const operationSegment = findSegmentByName(transaction.trace.root, operationName)
+
+      const expectedOperationAttributes = {
+        'graphql.operation.query': query
+      }
+
+      const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
+
+      t.matches(
+        operationAttributes,
+        expectedOperationAttributes,
+        'should have operation attributes'
+      )
+    })
+
+    executeQuery(serverUrl, query, (err) => {
+      t.error(err)
+      t.end()
+    })
+  })
+
+  t.test('query with args should have args obfuscated in raw query attribute', (t) => {
+    const { helper, serverUrl } = t.context
+
+    const expectedName = 'ParamQueryWithArgs'
+    const query = `query ${expectedName}($arg1: String!, $arg2: String) {
+      paramQuery(blah: $arg1, blee: $arg2)
+    }`
+
+    const queryJson = {
+      operationName: expectedName,
+      query: query,
+      variables: {
+        arg1: 'first',
+        arg2: 'second'
+      }
+    }
+
+    helper.agent.on('transactionFinished', (transaction) => {
+      const operationName = `${OPERATION_PREFIX}/query/${expectedName}`
+
+      const operationSegment = findSegmentByName(transaction.trace.root, operationName)
+
+      const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
+
+      t.ok(operationAttributes['graphql.operation.query']
+        .includes(`${expectedName}(***)`))
+      t.ok(operationAttributes['graphql.operation.query'].includes('paramQuery(***)'))
+    })
+
+    executeJson(serverUrl, queryJson, (err) => {
+      t.error(err)
+      t.end()
+    })
+  })
 }
 
 module.exports = {
