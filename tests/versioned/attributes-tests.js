@@ -373,8 +373,9 @@ function createAttributesTests(t) {
     }`
 
     helper.agent.on('transactionFinished', (transaction) => {
-      const operationPart = `query ${expectedName}`
-      const operationSegment = findSegmentByName(transaction.trace.root, operationPart)
+      const operationName = `${OPERATION_PREFIX}/query/${expectedName}`
+
+      const operationSegment = findSegmentByName(transaction.trace.root, operationName)
 
       const expectedOperationAttributes = {
         'graphql.operation.query': query
@@ -413,9 +414,9 @@ function createAttributesTests(t) {
     }
 
     helper.agent.on('transactionFinished', (transaction) => {
-      const operationPart = `query ${expectedName}`
+      const operationName = `${OPERATION_PREFIX}/query/${expectedName}`
 
-      const operationSegment = findSegmentByName(transaction.trace.root, operationPart)
+      const operationSegment = findSegmentByName(transaction.trace.root, operationName)
 
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
 
