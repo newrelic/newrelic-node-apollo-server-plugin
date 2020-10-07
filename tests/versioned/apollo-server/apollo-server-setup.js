@@ -12,6 +12,8 @@ utils.assert.extendTap(tap)
 
 const { getTypeDefs, resolvers } = require('../data-definitions')
 
+const WEB_FRAMEWORK = 'Expressjs'
+
 function setupApolloServerTests({suiteName, createTests}, config) {
   tap.test(`apollo-server: ${suiteName}`, (t) => {
     t.autoend()
@@ -58,7 +60,7 @@ function setupApolloServerTests({suiteName, createTests}, config) {
       })
     })
 
-    createTests(t)
+    createTests(t, WEB_FRAMEWORK)
   })
 }
 

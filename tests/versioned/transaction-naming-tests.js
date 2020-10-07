@@ -15,7 +15,9 @@ const ANON_PLACEHOLDER = '<anonymous>'
  * It is required that t.context.helper and t.context.serverUrl are set.
  * @param {*} t a tap test instance
  */
-function createTransactionTests(t) {
+function createTransactionTests(t, frameworkName) {
+  const EXPECTED_PREFIX = `WebTransaction/${frameworkName}/POST`
+
   t.test('anonymous query, single level, should use anonymous placeholder', (t) => {
     const { helper, serverUrl } = t.context
 
@@ -26,7 +28,7 @@ function createTransactionTests(t) {
     helper.agent.on('transactionFinished', (transaction) => {
       t.equal(
         transaction.name,
-        `WebTransaction/apollo-server/query ${ANON_PLACEHOLDER} hello`
+        `${EXPECTED_PREFIX}//query/${ANON_PLACEHOLDER}/hello`
       )
     })
 
@@ -49,7 +51,7 @@ function createTransactionTests(t) {
     helper.agent.on('transactionFinished', (transaction) => {
       t.equal(
         transaction.name,
-        `WebTransaction/apollo-server/query ${expectedName} hello`
+        `${EXPECTED_PREFIX}//query/${expectedName}/hello`
       )
     })
 
@@ -80,7 +82,7 @@ function createTransactionTests(t) {
     helper.agent.on('transactionFinished', (transaction) => {
       t.equal(
         transaction.name,
-        `WebTransaction/apollo-server/query ${ANON_PLACEHOLDER} ${deepestPath}`
+        `${EXPECTED_PREFIX}//query/${ANON_PLACEHOLDER}/${deepestPath}`
       )
     })
 
@@ -112,7 +114,7 @@ function createTransactionTests(t) {
     helper.agent.on('transactionFinished', (transaction) => {
       t.equal(
         transaction.name,
-        `WebTransaction/apollo-server/query ${expectedName} ${deepestPath}`
+        `${EXPECTED_PREFIX}//query/${expectedName}/${deepestPath}`
       )
     })
 
@@ -143,7 +145,7 @@ function createTransactionTests(t) {
     helper.agent.on('transactionFinished', (transaction) => {
       t.equal(
         transaction.name,
-        `WebTransaction/apollo-server/query ${expectedName} ${firstLongestPath}`
+        `${EXPECTED_PREFIX}//query/${expectedName}/${firstLongestPath}`
       )
     })
 
@@ -165,7 +167,7 @@ function createTransactionTests(t) {
     helper.agent.on('transactionFinished', (transaction) => {
       t.equal(
         transaction.name,
-        `WebTransaction/apollo-server/mutation ${ANON_PLACEHOLDER} addThing`
+        `${EXPECTED_PREFIX}//mutation/${ANON_PLACEHOLDER}/addThing`
       )
     })
 
@@ -188,7 +190,7 @@ function createTransactionTests(t) {
     helper.agent.on('transactionFinished', (transaction) => {
       t.equal(
         transaction.name,
-        `WebTransaction/apollo-server/mutation ${expectedName} addThing`
+        `${EXPECTED_PREFIX}//mutation/${expectedName}/addThing`
       )
     })
 
@@ -210,7 +212,7 @@ function createTransactionTests(t) {
     helper.agent.on('transactionFinished', (transaction) => {
       t.equal(
         transaction.name,
-        `WebTransaction/apollo-server/query ${ANON_PLACEHOLDER} paramQuery`
+        `${EXPECTED_PREFIX}//query/${ANON_PLACEHOLDER}/paramQuery`
       )
     })
 
@@ -233,7 +235,7 @@ function createTransactionTests(t) {
     helper.agent.on('transactionFinished', (transaction) => {
       t.equal(
         transaction.name,
-        `WebTransaction/apollo-server/query ${expectedName} paramQuery`
+        `${EXPECTED_PREFIX}//query/${expectedName}/paramQuery`
       )
     })
 
@@ -265,7 +267,7 @@ function createTransactionTests(t) {
     helper.agent.on('transactionFinished', (transaction) => {
       t.equal(
         transaction.name,
-        `WebTransaction/apollo-server/query ${expectedName} ${deepestPath}`
+        `${EXPECTED_PREFIX}//query/${expectedName}/${deepestPath}`
       )
     })
 
@@ -301,11 +303,11 @@ function createTransactionTests(t) {
     const queries = [query1, query2]
 
     helper.agent.on('transactionFinished', (transaction) => {
-      const expectedQuery1Name = `query ${expectedName1} ${longestPath1}`
-      const expectedQuery2Name = `mutation ${ANON_PLACEHOLDER} addThing`
+      const expectedQuery1Name = `query/${expectedName1}/${longestPath1}`
+      const expectedQuery2Name = `mutation/${ANON_PLACEHOLDER}/addThing`
       t.equal(
         transaction.name,
-        `WebTransaction/apollo-server/batch/${expectedQuery1Name}/${expectedQuery2Name}`
+        `${EXPECTED_PREFIX}//batch/${expectedQuery1Name}/${expectedQuery2Name}`
       )
     })
 
@@ -335,10 +337,7 @@ function createTransactionTests(t) {
     ` // missing closing }
 
     helper.agent.on('transactionFinished', (transaction) => {
-      t.equal(
-        transaction.name,
-        'WebTransaction/apollo-server/*'
-      )
+      t.equal(transaction.name, `${EXPECTED_PREFIX}//*`)
     })
 
     executeQuery(serverUrl, invalidQuery, (err, result) => {
@@ -376,7 +375,7 @@ function createTransactionTests(t) {
     helper.agent.on('transactionFinished', (transaction) => {
       t.equal(
         transaction.name,
-        `WebTransaction/apollo-server/query ${ANON_PLACEHOLDER} ${longestPath}`
+        `${EXPECTED_PREFIX}//query/${ANON_PLACEHOLDER}/${longestPath}`
       )
     })
 
@@ -416,7 +415,7 @@ function createTransactionTests(t) {
     helper.agent.on('transactionFinished', (transaction) => {
       t.equal(
         transaction.name,
-        `WebTransaction/apollo-server/query ${expectedName} ${longestPath}`
+        `${EXPECTED_PREFIX}//query/${expectedName}/${longestPath}`
       )
     })
 

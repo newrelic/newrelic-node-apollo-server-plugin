@@ -12,6 +12,8 @@ const SEGMENT_DESTINATION = 0x20
 
 const ANON_PLACEHOLDER = '<anonymous>'
 
+const OPERATION_PREFIX = 'GraphQL/operation/ApolloServer'
+
 /**
  * Creates a set of standard attribute tests to run against various
  * apollo-server libraries.
@@ -27,8 +29,8 @@ function createAttributesTests(t) {
     }`
 
     helper.agent.on('transactionFinished', (transaction) => {
-      const operationPart = `query ${ANON_PLACEHOLDER}`
-      const operationSegment = findSegmentByName(transaction.trace.root, operationPart)
+      const operationName = `${OPERATION_PREFIX}/query/${ANON_PLACEHOLDER}`
+      const operationSegment = findSegmentByName(transaction.trace.root, operationName)
 
       const expectedOperationAttributes = {
         'graphql.operation.type': 'query',
@@ -77,8 +79,8 @@ function createAttributesTests(t) {
     }`
 
     helper.agent.on('transactionFinished', (transaction) => {
-      const operationPart = `query ${expectedName}`
-      const operationSegment = findSegmentByName(transaction.trace.root, operationPart)
+      const operationName = `${OPERATION_PREFIX}/query/${expectedName}`
+      const operationSegment = findSegmentByName(transaction.trace.root, operationName)
 
       const expectedOperationAttributes = {
         'graphql.operation.type': 'query',
@@ -134,8 +136,8 @@ function createAttributesTests(t) {
     const deepestPath = 'libraries.books.author.name'
 
     helper.agent.on('transactionFinished', (transaction) => {
-      const operationPart = `query ${expectedName}`
-      const operationSegment = findSegmentByName(transaction.trace.root, operationPart)
+      const operationName = `${OPERATION_PREFIX}/query/${expectedName}`
+      const operationSegment = findSegmentByName(transaction.trace.root, operationName)
 
       const expectedOperationAttributes = {
         'graphql.operation.type': 'query',
@@ -198,9 +200,9 @@ function createAttributesTests(t) {
     }`
 
     helper.agent.on('transactionFinished', (transaction) => {
-      const operationPart = `mutation ${expectedName}`
+      const operationName = `${OPERATION_PREFIX}/mutation/${expectedName}`
 
-      const operationSegment = findSegmentByName(transaction.trace.root, operationPart)
+      const operationSegment = findSegmentByName(transaction.trace.root, operationName)
 
       const expectedOperationAttributes = {
         'graphql.operation.type': 'mutation',
@@ -247,9 +249,9 @@ function createAttributesTests(t) {
     }`
 
     helper.agent.on('transactionFinished', (transaction) => {
-      const operationPart = `mutation ${expectedName}`
+      const operationName = `${OPERATION_PREFIX}/mutation/${expectedName}`
 
-      const operationSegment = findSegmentByName(transaction.trace.root, operationPart)
+      const operationSegment = findSegmentByName(transaction.trace.root, operationName)
       const resolveHelloSegment = operationSegment.children[0]
 
       const resolveAttributes = resolveHelloSegment.attributes.get(SEGMENT_DESTINATION)
@@ -276,9 +278,9 @@ function createAttributesTests(t) {
     }`
 
     helper.agent.on('transactionFinished', (transaction) => {
-      const operationPart = `mutation ${expectedName}`
+      const operationName = `${OPERATION_PREFIX}/mutation/${expectedName}`
 
-      const operationSegment = findSegmentByName(transaction.trace.root, operationPart)
+      const operationSegment = findSegmentByName(transaction.trace.root, operationName)
       const resolveHelloSegment = operationSegment.children[0]
 
       const resolveAttributes = resolveHelloSegment.attributes.get(SEGMENT_DESTINATION)
@@ -303,9 +305,9 @@ function createAttributesTests(t) {
     }`
 
     helper.agent.on('transactionFinished', (transaction) => {
-      const operationPart = `query ${expectedName}`
+      const operationName = `${OPERATION_PREFIX}/query/${expectedName}`
 
-      const operationSegment = findSegmentByName(transaction.trace.root, operationPart)
+      const operationSegment = findSegmentByName(transaction.trace.root, operationName)
       const resolveHelloSegment = operationSegment.children[0]
 
       const expectedArgAttributes = {
@@ -343,9 +345,9 @@ function createAttributesTests(t) {
     }
 
     helper.agent.on('transactionFinished', (transaction) => {
-      const operationPart = `query ${expectedName}`
+      const operationName = `${OPERATION_PREFIX}/query/${expectedName}`
 
-      const operationSegment = findSegmentByName(transaction.trace.root, operationPart)
+      const operationSegment = findSegmentByName(transaction.trace.root, operationName)
       const resolveHelloSegment = operationSegment.children[0]
 
       const expectedArgAttributes = {

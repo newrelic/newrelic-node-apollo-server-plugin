@@ -11,6 +11,9 @@ const agentTesting = require('./agent-testing')
 const ANON_PLACEHOLDER = '<anonymous>'
 const UNKNOWN_OPERATION_PLACEHOLDER = '<operation unknown>'
 
+const OPERATION_PREFIX = 'GraphQL/operation/ApolloServer'
+const RESOLVE_PREFIX = 'GraphQL/resolve/ApolloServer'
+
 /**
  * Creates a set of standard error capture tests to run against various
  * apollo-server libraries.
@@ -53,7 +56,7 @@ function createErrorTests(t) {
       const matchingSpan = agentTesting.findSpanById(helper.agent, agentAttributes.spanId)
 
       const {attributes, intrinsics} = matchingSpan
-      t.equal(intrinsics.name, UNKNOWN_OPERATION_PLACEHOLDER)
+      t.equal(intrinsics.name, `${OPERATION_PREFIX}/${UNKNOWN_OPERATION_PLACEHOLDER}`)
       t.equal(attributes['error.message'], expectedErrorMessage)
       t.equal(attributes['error.class'], expectedErrorType)
     })
@@ -89,7 +92,7 @@ function createErrorTests(t) {
       }
     }`
 
-    const expectedOperationName = `query ${ANON_PLACEHOLDER}`
+    const expectedOperationName = `${OPERATION_PREFIX}/query/${ANON_PLACEHOLDER}`
 
     helper.agent.on('transactionFinished', (transaction) => {
       const errorTraces = agentTesting.getErrorTraces(helper.agent)
@@ -139,7 +142,7 @@ function createErrorTests(t) {
       boom
     }`
 
-    const expectedResolveName = 'resolve: boom'
+    const expectedResolveName = `${RESOLVE_PREFIX}/boom`
 
     helper.agent.on('transactionFinished', (transaction) => {
       const errorTraces = agentTesting.getErrorTraces(helper.agent)
