@@ -47,9 +47,31 @@ function findSegmentByName(root, name) {
   return null
 }
 
+function temporarySetEnv(t, key, value) {
+  const existing = process.env[key]
+  process.env[key] = value
+
+  t.tearDown(() => {
+    if (existing === undefined) {
+      delete process.env[key]
+      return
+    }
+
+    process.env[key] = existing
+  })
+}
+
+function setupEnvConfig(t, enabled = true, appName = 'test app') {
+  temporarySetEnv(t, 'NEW_RELIC_NO_CONFIG_FILE', true)
+  temporarySetEnv(t, 'NEW_RELIC_ENABLED', enabled)
+  temporarySetEnv(t, 'NEW_RELIC_APP_NAME', appName)
+}
+
 module.exports = {
   getErrorTraces,
   getSpanEvents,
   findSpanById,
-  findSegmentByName
+  findSegmentByName,
+  temporarySetEnv,
+  setupEnvConfig
 }

@@ -5,7 +5,7 @@
 
 'use strict'
 
-const { executeQuery, executeQueryBatch } = require('./test-client')
+const { executeQuery, executeQueryBatch } = require('../test-client')
 
 const ANON_PLACEHOLDER = '<anonymous>'
 
@@ -140,12 +140,12 @@ function createTransactionTests(t, frameworkName) {
     }`
 
     // .isbn is the same length but title will be first so that path should be used
-    const firstLongestPath = 'libraries.books.title'
+    const firstDeepestPath = 'libraries.books.title'
 
     helper.agent.on('transactionFinished', (transaction) => {
       t.equal(
         transaction.name,
-        `${EXPECTED_PREFIX}//query/${expectedName}/${firstLongestPath}`
+        `${EXPECTED_PREFIX}//query/${expectedName}/${firstDeepestPath}`
       )
     })
 
@@ -298,12 +298,12 @@ function createTransactionTests(t, frameworkName) {
       addThing(name: "added thing!")
     }`
 
-    const longestPath1 = 'library.books.author.name'
+    const DeepestPath1 = 'library.books.author.name'
 
     const queries = [query1, query2]
 
     helper.agent.on('transactionFinished', (transaction) => {
-      const expectedQuery1Name = `query/${expectedName1}/${longestPath1}`
+      const expectedQuery1Name = `query/${expectedName1}/${DeepestPath1}`
       const expectedQuery2Name = `mutation/${ANON_PLACEHOLDER}/addThing`
       t.equal(
         transaction.name,
@@ -370,12 +370,12 @@ function createTransactionTests(t, frameworkName) {
       }
     }`
 
-    const longestPath = 'libraries.books.doesnotexist.name'
+    const DeepestPath = 'libraries.books.doesnotexist.name'
 
     helper.agent.on('transactionFinished', (transaction) => {
       t.equal(
         transaction.name,
-        `${EXPECTED_PREFIX}//query/${ANON_PLACEHOLDER}/${longestPath}`
+        `${EXPECTED_PREFIX}//query/${ANON_PLACEHOLDER}/${DeepestPath}`
       )
     })
 
@@ -410,12 +410,12 @@ function createTransactionTests(t, frameworkName) {
       }
     }`
 
-    const longestPath = 'libraries.books.doesnotexist.name'
+    const DeepestPath = 'libraries.books.doesnotexist.name'
 
     helper.agent.on('transactionFinished', (transaction) => {
       t.equal(
         transaction.name,
-        `${EXPECTED_PREFIX}//query/${expectedName}/${longestPath}`
+        `${EXPECTED_PREFIX}//query/${expectedName}/${DeepestPath}`
       )
     })
 

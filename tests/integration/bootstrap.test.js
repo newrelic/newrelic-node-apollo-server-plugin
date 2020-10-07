@@ -7,6 +7,8 @@
 
 const tap = require('tap')
 
+const { setupEnvConfig } = require('../agent-testing')
+
 const INDEX_PATH = '../..'
 
 tap.test('Should export plugin when loaded', (t) => {
@@ -31,9 +33,7 @@ tap.test('should export noop plugin when agent disabled', (t) => {
 })
 
 tap.test('should export full plugin when agent enabled', (t) => {
-  temporarySetEnv(t, 'NEW_RELIC_NO_CONFIG_FILE', true)
-  temporarySetEnv(t, 'NEW_RELIC_ENABLED', true)
-  temporarySetEnv(t, 'NEW_RELIC_APP_NAME', 'P L U G I N')
+  setupEnvConfig(t)
 
   const plugin = require('../..')
   t.ok(plugin)
@@ -43,20 +43,6 @@ tap.test('should export full plugin when agent enabled', (t) => {
     t.end()
   })
 })
-
-function temporarySetEnv(t, key, value) {
-  const existing = process.env[key]
-  process.env[key] = value
-
-  t.tearDown(() => {
-    if (existing === undefined) {
-      delete process.env[key]
-      return
-    }
-
-    process.env[key] = existing
-  })
-}
 
 function resetModuleCache(callback) {
   const indexPath = require.resolve(INDEX_PATH)
