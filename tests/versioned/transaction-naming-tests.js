@@ -370,12 +370,12 @@ function createTransactionTests(t, frameworkName) {
       }
     }`
 
-    const DeepestPath = 'libraries.books.doesnotexist.name'
+    const deepestPath = 'libraries.books.doesnotexist.name'
 
     helper.agent.on('transactionFinished', (transaction) => {
       t.equal(
         transaction.name,
-        `${EXPECTED_PREFIX}//query/${ANON_PLACEHOLDER}/${DeepestPath}`
+        `${EXPECTED_PREFIX}//query/${ANON_PLACEHOLDER}/${deepestPath}`
       )
     })
 
@@ -410,12 +410,12 @@ function createTransactionTests(t, frameworkName) {
       }
     }`
 
-    const DeepestPath = 'libraries.books.doesnotexist.name'
+    const deepestPath = 'libraries.books.doesnotexist.name'
 
     helper.agent.on('transactionFinished', (transaction) => {
       t.equal(
         transaction.name,
-        `${EXPECTED_PREFIX}//query/${expectedName}/${DeepestPath}`
+        `${EXPECTED_PREFIX}//query/${expectedName}/${deepestPath}`
       )
     })
 
