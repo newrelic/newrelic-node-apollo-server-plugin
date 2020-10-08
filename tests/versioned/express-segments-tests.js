@@ -5,10 +5,10 @@
 
 'use strict'
 
-const { executeQuery, executeQueryBatch } = require('./test-client')
+const { executeQuery, executeQueryBatch } = require('../test-client')
 
 const ANON_PLACEHOLDER = '<anonymous>'
-const UNKNOWN_OPERATION_PLACEHOLDER = '<operation unknown>'
+const UNKNOWN_OPERATION = '<unknown>'
 
 const OPERATION_PREFIX = 'GraphQL/operation/ApolloServer'
 const RESOLVE_PREFIX = 'GraphQL/resolve/ApolloServer'
@@ -30,9 +30,9 @@ function createSegmentsTests(t, frameworkName) {
     }`
 
     helper.agent.on('transactionFinished', (transaction) => {
-      const operationPart = `query/${ANON_PLACEHOLDER}`
+      const operationPart = `query/${ANON_PLACEHOLDER}/hello`
       const expectedSegments = [{
-        name: `${TRANSACTION_PREFIX}//${operationPart}/hello`,
+        name: `${TRANSACTION_PREFIX}//${operationPart}`,
         children: [{
           name: 'Expressjs/Router: /',
           children: [{
@@ -67,9 +67,9 @@ function createSegmentsTests(t, frameworkName) {
     }`
 
     helper.agent.on('transactionFinished', (transaction) => {
-      const operationPart = `query/${expectedName}`
+      const operationPart = `query/${expectedName}/hello`
       const expectedSegments = [{
-        name: `${TRANSACTION_PREFIX}//${operationPart}/hello`,
+        name: `${TRANSACTION_PREFIX}//${operationPart}`,
         children: [{
           name: 'Expressjs/Router: /',
           children: [{
@@ -109,12 +109,12 @@ function createSegmentsTests(t, frameworkName) {
       }
     }`
 
-    const longestPath = 'libraries.books.author.name'
+    const deepestPath = 'libraries.books.author.name'
 
     helper.agent.on('transactionFinished', (transaction) => {
-      const operationPart = `query/${ANON_PLACEHOLDER}`
+      const operationPart = `query/${ANON_PLACEHOLDER}/${deepestPath}`
       const expectedSegments = [{
-        name: `${TRANSACTION_PREFIX}//${operationPart}/${longestPath}`,
+        name: `${TRANSACTION_PREFIX}//${operationPart}`,
         children: [{
           name: 'Expressjs/Router: /',
           children: [{
@@ -161,9 +161,9 @@ function createSegmentsTests(t, frameworkName) {
     const deepestPath = 'libraries.books.author.name'
 
     helper.agent.on('transactionFinished', (transaction) => {
-      const operationPart = `query/${expectedName}`
+      const operationPart = `query/${expectedName}/${deepestPath}`
       const expectedSegments = [{
-        name: `${TRANSACTION_PREFIX}//${operationPart}/${deepestPath}`,
+        name: `${TRANSACTION_PREFIX}//${operationPart}`,
         children: [{
           name: 'Expressjs/Router: /',
           children: [{
@@ -207,12 +207,12 @@ function createSegmentsTests(t, frameworkName) {
     }`
 
     // .isbn is the same length but title will be first so that path should be used
-    const firstLongestPath = 'libraries.books.title'
+    const firstDeepestPath = 'libraries.books.title'
 
     helper.agent.on('transactionFinished', (transaction) => {
-      const operationPart = `query/${expectedName}`
+      const operationPart = `query/${expectedName}/${firstDeepestPath}`
       const expectedSegments = [{
-        name: `${TRANSACTION_PREFIX}//${operationPart}/${firstLongestPath}`,
+        name: `${TRANSACTION_PREFIX}//${operationPart}`,
         children: [{
           name: 'Expressjs/Router: /',
           children: [{
@@ -249,9 +249,9 @@ function createSegmentsTests(t, frameworkName) {
     }`
 
     helper.agent.on('transactionFinished', (transaction) => {
-      const operationPart = `mutation/${ANON_PLACEHOLDER}`
+      const operationPart = `mutation/${ANON_PLACEHOLDER}/addThing`
       const expectedSegments = [{
-        name: `${TRANSACTION_PREFIX}//${operationPart}/addThing`,
+        name: `${TRANSACTION_PREFIX}//${operationPart}`,
         children: [{
           name: 'Expressjs/Router: /',
           children: [{
@@ -292,9 +292,9 @@ function createSegmentsTests(t, frameworkName) {
     }`
 
     helper.agent.on('transactionFinished', (transaction) => {
-      const operationPart = `mutation/${expectedName}`
+      const operationPart = `mutation/${expectedName}/addThing`
       const expectedSegments = [{
-        name: `${TRANSACTION_PREFIX}//${operationPart}/addThing`,
+        name: `${TRANSACTION_PREFIX}//${operationPart}`,
         children: [{
           name: 'Expressjs/Router: /',
           children: [{
@@ -334,9 +334,9 @@ function createSegmentsTests(t, frameworkName) {
     }`
 
     helper.agent.on('transactionFinished', (transaction) => {
-      const operationPart = `query/${ANON_PLACEHOLDER}`
+      const operationPart = `query/${ANON_PLACEHOLDER}/paramQuery`
       const expectedSegments = [{
-        name: `${TRANSACTION_PREFIX}//${operationPart}/paramQuery`,
+        name: `${TRANSACTION_PREFIX}//${operationPart}`,
         children: [{
           name: 'Expressjs/Router: /',
           children: [{
@@ -371,9 +371,9 @@ function createSegmentsTests(t, frameworkName) {
     }`
 
     helper.agent.on('transactionFinished', (transaction) => {
-      const operationPart = `query/${expectedName}`
+      const operationPart = `query/${expectedName}/paramQuery`
       const expectedSegments = [{
-        name: `${TRANSACTION_PREFIX}//${operationPart}/paramQuery`,
+        name: `${TRANSACTION_PREFIX}//${operationPart}`,
         children: [{
           name: 'Expressjs/Router: /',
           children: [{
@@ -414,12 +414,12 @@ function createSegmentsTests(t, frameworkName) {
       }
     }`
 
-    const longestPath = 'library.books.author.name'
+    const deepestPath = 'library.books.author.name'
 
     helper.agent.on('transactionFinished', (transaction) => {
-      const operationPart = `query/${expectedName}`
+      const operationPart = `query/${expectedName}/${deepestPath}`
       const expectedSegments = [{
-        name: `${TRANSACTION_PREFIX}//${operationPart}/${longestPath}`,
+        name: `${TRANSACTION_PREFIX}//${operationPart}`,
         children: [{
           name: 'Expressjs/Router: /',
           children: [{
@@ -476,15 +476,15 @@ function createSegmentsTests(t, frameworkName) {
       addThing(name: "added thing!")
     }`
 
-    const longestPath1 = 'library.books.author.name'
+    const deepestPath1 = 'library.books.author.name'
 
     const queries = [query1, query2]
 
     helper.agent.on('transactionFinished', (transaction) => {
-      const operationPart1 = `query/${expectedName1}`
-      const expectedQuery1Name = `${operationPart1}/${longestPath1}`
-      const operationPart2 = `mutation/${ANON_PLACEHOLDER}`
-      const expectedQuery2Name = `${operationPart2}/addThing`
+      const operationPart1 = `query/${expectedName1}/${deepestPath1}`
+      const expectedQuery1Name = `${operationPart1}`
+      const operationPart2 = `mutation/${ANON_PLACEHOLDER}/addThing`
+      const expectedQuery2Name = `${operationPart2}`
 
       const batchTransactionPrefix = `${TRANSACTION_PREFIX}//batch`
 
@@ -559,11 +559,6 @@ function createSegmentsTests(t, frameworkName) {
     ` // missing closing }
 
     helper.agent.on('transactionFinished', (transaction) => {
-      t.equal(
-        transaction.name,
-        `${TRANSACTION_PREFIX}//*`
-      )
-
       const expectedSegments = [{
         name: `${TRANSACTION_PREFIX}//*`,
         children: [{
@@ -571,7 +566,7 @@ function createSegmentsTests(t, frameworkName) {
           children: [{
             name: 'Nodejs/Middleware/Expressjs/<anonymous>',
             children: [{
-              name: UNKNOWN_OPERATION_PLACEHOLDER
+              name: `${OPERATION_PREFIX}/${UNKNOWN_OPERATION}`
             }]
           }]
         }]
@@ -610,12 +605,12 @@ function createSegmentsTests(t, frameworkName) {
       }
     }`
 
-    const longestPath = 'libraries.books.doesnotexist.name'
+    const deepestPath = 'libraries.books.doesnotexist.name'
 
     helper.agent.on('transactionFinished', (transaction) => {
-      const operationPart = `query/${ANON_PLACEHOLDER}`
+      const operationPart = `query/${ANON_PLACEHOLDER}/${deepestPath}`
       const expectedSegments = [{
-        name: `${TRANSACTION_PREFIX}//${operationPart}/${longestPath}`,
+        name: `${TRANSACTION_PREFIX}//${operationPart}`,
         children: [{
           name: 'Expressjs/Router: /',
           children: [{

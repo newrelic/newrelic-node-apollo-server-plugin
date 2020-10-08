@@ -5,7 +5,7 @@
 
 'use strict'
 
-const { setupApolloServerTests } = require('./apollo-server-setup')
+const { setupApolloServerTests } = require('../../apollo-server-setup')
 const transactionNamingTests = require('../transaction-naming-tests')
 
 setupApolloServerTests(transactionNamingTests)

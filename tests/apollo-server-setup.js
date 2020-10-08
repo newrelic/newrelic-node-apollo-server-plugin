@@ -10,7 +10,7 @@ const tap = require('tap')
 const utils = require('@newrelic/test-utilities')
 utils.assert.extendTap(tap)
 
-const { getTypeDefs, resolvers } = require('../data-definitions')
+const { getTypeDefs, resolvers } = require('./data-definitions')
 
 const WEB_FRAMEWORK = 'Expressjs'
 
@@ -25,7 +25,7 @@ function setupApolloServerTests({suiteName, createTests}, config) {
     t.beforeEach((done) => {
       // load default instrumentation. express being critical
       helper = utils.TestAgent.makeInstrumented(config)
-      const createPlugin = require('../../../lib/create-plugin')
+      const createPlugin = require('../lib/create-plugin')
       const nrApi = helper.getAgentApi()
 
       const plugin = createPlugin(nrApi.shim)

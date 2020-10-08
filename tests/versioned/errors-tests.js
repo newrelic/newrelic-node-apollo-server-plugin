@@ -5,11 +5,11 @@
 
 'use strict'
 
-const { executeQuery } = require('./test-client')
-const agentTesting = require('./agent-testing')
+const { executeQuery } = require('../test-client')
+const agentTesting = require('../agent-testing')
 
 const ANON_PLACEHOLDER = '<anonymous>'
-const UNKNOWN_OPERATION_PLACEHOLDER = '<operation unknown>'
+const UNKNOWN_OPERATION = '<unknown>'
 
 const OPERATION_PREFIX = 'GraphQL/operation/ApolloServer'
 const RESOLVE_PREFIX = 'GraphQL/resolve/ApolloServer'
@@ -56,7 +56,7 @@ function createErrorTests(t) {
       const matchingSpan = agentTesting.findSpanById(helper.agent, agentAttributes.spanId)
 
       const {attributes, intrinsics} = matchingSpan
-      t.equal(intrinsics.name, `${OPERATION_PREFIX}/${UNKNOWN_OPERATION_PLACEHOLDER}`)
+      t.equal(intrinsics.name, `${OPERATION_PREFIX}/${UNKNOWN_OPERATION}`)
       t.equal(attributes['error.message'], expectedErrorMessage)
       t.equal(attributes['error.class'], expectedErrorType)
     })
@@ -92,7 +92,9 @@ function createErrorTests(t) {
       }
     }`
 
-    const expectedOperationName = `${OPERATION_PREFIX}/query/${ANON_PLACEHOLDER}`
+    const deepestPath = 'libraries.books.doesnotexist.name'
+    const expectedOperationName
+      = `${OPERATION_PREFIX}/query/${ANON_PLACEHOLDER}/${deepestPath}`
 
     helper.agent.on('transactionFinished', (transaction) => {
       const errorTraces = agentTesting.getErrorTraces(helper.agent)

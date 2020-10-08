@@ -8,9 +8,11 @@
 const tap = require('tap')
 const { ApolloServer, gql } = require('apollo-server')
 
-const { getTypeDefs, resolvers } = require('../data-definitions')
-const { executeQuery } = require('../test-client')
+const { getTypeDefs, resolvers } = require('../../data-definitions')
+const { executeQuery } = require('../../test-client')
 
+// This is a versioned test to ensure this approach continues to
+// work with future versions of Apollo Server's plugin execution.
 tap.test('Agent disabled', (t) => {
   t.autoend()
 
