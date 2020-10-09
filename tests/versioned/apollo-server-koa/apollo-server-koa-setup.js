@@ -24,7 +24,7 @@ function setupApolloServerKoaTests({suiteName, createTests}, config) {
     let serverUrl = null
     let helper = null
 
-    t.beforeEach(async (done) => {
+    t.beforeEach((done) => {
       // load default instrumentation
       helper = utils.TestAgent.makeInstrumented(config)
       const createPlugin = require('../../../lib/create-plugin')
