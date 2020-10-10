@@ -1,0 +1,23 @@
+{
+  "name": "apollo-server-tests",
+  "version": "0.0.0",
+  "private": true,
+  "tests": [
+    {
+      "engines": {
+        "node": ">=10"
+      },
+      "dependencies": {
+        "apollo-server-fastify": ">=2.14.0",
+        "fastify": ">=3.5.0"
+      },
+      "files": [
+        "segments.test.js",
+        "transaction-naming.test.js",
+        "errors.test.js",
+        "attributes.test.js"
+      ]
+    }
+  ],
+  "dependencies": {}
+}
