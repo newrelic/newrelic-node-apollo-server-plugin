@@ -11,20 +11,22 @@ const { setupEnvConfig } = require('../agent-testing')
 
 const INDEX_PATH = '../..'
 
-tap.test('Should export plugin when loaded', (t) => {
-  const plugin = require(INDEX_PATH)
-  t.ok(plugin)
+tap.test('Should export createPlugin when loaded', (t) => {
+  const createPlugin = require(INDEX_PATH)
+  t.ok(createPlugin)
 
   resetModuleCache(() => {
     t.end()
   })
 })
 
-tap.test('should export noop plugin when agent disabled', (t) => {
+tap.test('should create noop plugin when agent disabled', (t) => {
   // w/o a config file the agent will be disabled by default
-  const plugin = require('../..')
-  t.ok(plugin)
+  const createPlugin = require('../..')
+  t.ok(createPlugin)
 
+  const plugin = createPlugin()
+  t.ok(plugin)
   t.notOk(plugin.requestDidStart)
 
   resetModuleCache(() => {
@@ -32,10 +34,13 @@ tap.test('should export noop plugin when agent disabled', (t) => {
   })
 })
 
-tap.test('should export full plugin when agent enabled', (t) => {
+tap.test('should create full plugin when agent enabled', (t) => {
   setupEnvConfig(t)
 
-  const plugin = require('../..')
+  const createPlugin = require('../..')
+  t.ok(createPlugin)
+
+  const plugin = createPlugin()
   t.ok(plugin)
   t.ok(plugin.requestDidStart)
 

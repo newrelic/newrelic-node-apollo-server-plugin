@@ -91,8 +91,7 @@ function createMetricsTests(t) {
         `${OPERATION_PREFIX}/${operationPart}`,
         `${RESOLVE_PREFIX}/libraries`,
         `${RESOLVE_PREFIX}/books`,
-        `${RESOLVE_PREFIX}/author`,
-        `${RESOLVE_PREFIX}/name`
+        `${RESOLVE_PREFIX}/author`
       ])
     })
 
@@ -133,9 +132,7 @@ function createMetricsTests(t) {
         `${OPERATION_PREFIX}/${operationPart1}`,
         `${RESOLVE_PREFIX}/library`,
         `${RESOLVE_PREFIX}/books`,
-        `${RESOLVE_PREFIX}/title`,
-        `${RESOLVE_PREFIX}/author`,
-        `${RESOLVE_PREFIX}/name`
+        `${RESOLVE_PREFIX}/author`
       ]
 
       const operationMetrics2 = [
