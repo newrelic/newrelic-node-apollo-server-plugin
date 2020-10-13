@@ -14,7 +14,7 @@ const { getTypeDefs, resolvers } = require('./data-definitions')
 
 const WEB_FRAMEWORK = 'Expressjs'
 
-function setupApolloServerTests({suiteName, createTests}, config) {
+function setupApolloServerTests({suiteName, createTests, pluginConfig}, agentConfig) {
   tap.test(`apollo-server: ${suiteName}`, (t) => {
     t.autoend()
 
@@ -24,11 +24,11 @@ function setupApolloServerTests({suiteName, createTests}, config) {
 
     t.beforeEach((done) => {
       // load default instrumentation. express being critical
-      helper = utils.TestAgent.makeInstrumented(config)
+      helper = utils.TestAgent.makeInstrumented(agentConfig)
       const createPlugin = require('../lib/create-plugin')
       const nrApi = helper.getAgentApi()
 
-      const plugin = createPlugin(nrApi.shim)
+      const plugin = createPlugin(nrApi.shim, pluginConfig)
 
       // Do after instrumentation to ensure express isn't loaded too soon.
       const { ApolloServer, gql } = require('apollo-server')
@@ -38,7 +38,7 @@ function setupApolloServerTests({suiteName, createTests}, config) {
         plugins: [plugin]
       })
 
-      server.listen().then(({ url }) => {
+      server.listen({port: 0}).then(({ url }) => {
         serverUrl = url
 
         t.context.helper = helper

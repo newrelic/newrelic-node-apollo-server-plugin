@@ -14,7 +14,7 @@ const { getTypeDefs, resolvers } = require('../../data-definitions')
 
 const WEB_FRAMEWORK = 'WebFrameworkUri/Koa'
 
-function setupApolloServerKoaTests({suiteName, createTests}, config) {
+function setupApolloServerKoaTests({suiteName, createTests, pluginConfig}, config) {
   tap.test(`apollo-server-koa: ${suiteName}`, (t) => {
     t.autoend()
 
@@ -35,7 +35,7 @@ function setupApolloServerKoaTests({suiteName, createTests}, config) {
       app = new Koa()
 
       // TODO: eventually use proper function for instrumenting and not .shim
-      const plugin = createPlugin(nrApi.shim)
+      const plugin = createPlugin(nrApi.shim, pluginConfig)
 
       const graphqlPath = '/gql'
 

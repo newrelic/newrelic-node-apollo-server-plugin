@@ -17,7 +17,10 @@ const { setupApolloServerFastifyTests } = require('./apollo-server-fastify-setup
 
 setupApolloServerFastifyTests({
   suiteName: 'fastify segments',
-  createTests: createFastifySegmentsTests
+  createTests: createFastifySegmentsTests,
+  pluginConfig: {
+    captureScalars: true
+  }
 })
 
 function createFastifySegmentsTests(t, frameworkName) {

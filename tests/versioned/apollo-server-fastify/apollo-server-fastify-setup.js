@@ -14,7 +14,7 @@ const { getTypeDefs, resolvers } = require('../../data-definitions')
 
 const WEB_FRAMEWORK = 'Nodejs'
 
-function setupApolloServerFastifyTests({suiteName, createTests}, config) {
+function setupApolloServerFastifyTests({suiteName, createTests, pluginConfig}, config) {
   tap.test(`apollo-server-fastify: ${suiteName}`, (t) => {
     t.autoend()
 
@@ -32,7 +32,7 @@ function setupApolloServerFastifyTests({suiteName, createTests}, config) {
       app = require('fastify')()
 
       // TODO: eventually use proper function for instrumenting and not .shim
-      const plugin = createPlugin(nrApi.shim)
+      const plugin = createPlugin(nrApi.shim, pluginConfig)
 
       // Do after instrumentation to ensure hapi isn't loaded too soon.
       const { ApolloServer, gql } = require('apollo-server-fastify')

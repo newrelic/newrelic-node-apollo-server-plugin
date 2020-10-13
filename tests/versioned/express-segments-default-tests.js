@@ -124,8 +124,7 @@ function createSegmentsTests(t, frameworkName) {
               children: [
                 { name: `${RESOLVE_PREFIX}/libraries` },
                 { name: `${RESOLVE_PREFIX}/libraries.books` },
-                { name: `${RESOLVE_PREFIX}/libraries.books.author` },
-                { name: `${RESOLVE_PREFIX}/libraries.books.author.name` }
+                { name: `${RESOLVE_PREFIX}/libraries.books.author` }
               ]
             }]
           }]
@@ -173,9 +172,7 @@ function createSegmentsTests(t, frameworkName) {
               children: [
                 { name: `${RESOLVE_PREFIX}/libraries` },
                 { name: `${RESOLVE_PREFIX}/libraries.books` },
-                { name: `${RESOLVE_PREFIX}/libraries.books.title` },
-                { name: `${RESOLVE_PREFIX}/libraries.books.author` },
-                { name: `${RESOLVE_PREFIX}/libraries.books.author.name` }
+                { name: `${RESOLVE_PREFIX}/libraries.books.author` }
               ]
             }]
           }]
@@ -221,9 +218,7 @@ function createSegmentsTests(t, frameworkName) {
               name: `${OPERATION_PREFIX}/${operationPart}`,
               children: [
                 { name: `${RESOLVE_PREFIX}/libraries` },
-                { name: `${RESOLVE_PREFIX}/libraries.books` },
-                { name: `${RESOLVE_PREFIX}/libraries.books.title` },
-                { name: `${RESOLVE_PREFIX}/libraries.books.isbn` }
+                { name: `${RESOLVE_PREFIX}/libraries.books` }
               ]
             }]
           }]
@@ -437,9 +432,7 @@ function createSegmentsTests(t, frameworkName) {
                   }]
                 },
                 { name: `${RESOLVE_PREFIX}/library.books` },
-                { name: `${RESOLVE_PREFIX}/library.books.title` },
-                { name: `${RESOLVE_PREFIX}/library.books.author` },
-                { name: `${RESOLVE_PREFIX}/library.books.author.name` }
+                { name: `${RESOLVE_PREFIX}/library.books.author` }
               ]
             }]
           }]
@@ -508,9 +501,7 @@ function createSegmentsTests(t, frameworkName) {
                     }]
                   },
                   { name: `${RESOLVE_PREFIX}/library.books` },
-                  { name: `${RESOLVE_PREFIX}/library.books.title`},
-                  { name: `${RESOLVE_PREFIX}/library.books.author` },
-                  { name: `${RESOLVE_PREFIX}/library.books.author.name` }
+                  { name: `${RESOLVE_PREFIX}/library.books.author` }
                 ]
               },
               {
@@ -657,6 +648,6 @@ function checkResult(t, result, callback) {
 }
 
 module.exports = {
-  testSuite: 'express segments',
+  suiteName: 'express segments default configuration',
   createTests: createSegmentsTests
 }

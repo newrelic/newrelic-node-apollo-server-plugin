@@ -17,7 +17,10 @@ const { setupApolloServerHapiTests } = require('./apollo-server-hapi-setup')
 
 setupApolloServerHapiTests({
   suiteName: 'hapi segments',
-  createTests: createHapiSegmentsTests
+  createTests: createHapiSegmentsTests,
+  pluginConfig: {
+    captureScalars: true
+  }
 })
 
 function createHapiSegmentsTests(t, frameworkName) {

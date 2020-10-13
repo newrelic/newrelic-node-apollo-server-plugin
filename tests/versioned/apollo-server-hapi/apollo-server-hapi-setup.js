@@ -14,7 +14,7 @@ const { getTypeDefs, resolvers } = require('../../data-definitions')
 
 const WEB_FRAMEWORK = 'Hapi'
 
-function setupApolloServerHapiTests({suiteName, createTests}, config) {
+function setupApolloServerHapiTests({suiteName, createTests, pluginConfig}, config) {
   tap.test(`apollo-server-hapi: ${suiteName}`, (t) => {
     t.autoend()
 
@@ -30,7 +30,7 @@ function setupApolloServerHapiTests({suiteName, createTests}, config) {
       const nrApi = helper.getAgentApi()
 
       // TODO: eventually use proper function for instrumenting and not .shim
-      const plugin = createPlugin(nrApi.shim)
+      const plugin = createPlugin(nrApi.shim, pluginConfig)
 
       const Hapi = require('@hapi/hapi')
 

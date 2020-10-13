@@ -26,6 +26,31 @@ const books = [
     isbn: 'a-second-fake-isbn',
     author: 'Faux Hawk',
     branch: 'downtown'
+  },
+  {
+    title: '[Redacted]',
+    isbn: 'a-third-fake-isbn',
+    author: 'Closed Telemetry',
+    branch: 'riverside'
+  },
+  {
+    title: 'Be a hero: fixing the things you broke',
+    isbn: 'a-fourth-fake-isbn',
+    author: '10x Developer',
+    branch: 'downtown'
+  }
+]
+
+const magazines = [
+  {
+    title: 'Reli Updates Weekly',
+    issue: 1,
+    branch: 'riverside'
+  },
+  {
+    title: 'Reli Updates Weekly',
+    issue: 2,
+    branch: 'downtown'
   }
 ]
 
@@ -34,7 +59,7 @@ function getTypeDefs(gql) {
     type Library {
       branch: String!
       books: [Book!]
-      boom: String
+      magazines: [Magazine]
     }
 
     type Book {
@@ -47,13 +72,18 @@ function getTypeDefs(gql) {
       name: String!
     }
 
+    type Magazine {
+      title: String!
+      issue: Int
+    }
+
     type Query {
       books: [Book]
       hello: String
       boom: String
       paramQuery(blah: String!, blee: String): String!
       libraries: [Library]
-      library(branch: String!): [Library]
+      library(branch: String!): Library
     }
 
     type Mutation {
@@ -80,7 +110,7 @@ const resolvers = {
     library: (_, {branch}) => {
       const promise = new Promise((resolve) => {
         setTimeout(() => {
-          const filtered = libraries.filter(library => library.branch === branch)
+          const filtered = libraries.find(library => library.branch === branch)
           resolve(filtered)
         }, 0)
       })
@@ -102,6 +132,9 @@ const resolvers = {
   Library: {
     books(parent) {
       return books.filter(book => book.branch === parent.branch)
+    },
+    magazines(parent) {
+      return magazines.filter(magazine => magazine.branch === parent.branch)
     }
   },
   Book: {

@@ -6,6 +6,8 @@
 'use strict'
 
 const { setupApolloServerTests } = require('../../apollo-server-setup')
-const expressSegmentsTests = require('../express-segments-tests')
+const expressSegmentsDefaultTests = require('../express-segments-default-tests')
+const expressSegmentsScalarTests = require('../express-segments-scalar-tests')
 
-setupApolloServerTests(expressSegmentsTests)
+setupApolloServerTests(expressSegmentsDefaultTests)
+setupApolloServerTests(expressSegmentsScalarTests)

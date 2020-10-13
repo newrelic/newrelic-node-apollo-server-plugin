@@ -14,7 +14,7 @@ const { getTypeDefs, resolvers } = require('../../data-definitions')
 
 const WEB_FRAMEWORK = 'Expressjs'
 
-function setupApolloServerExpressTests({suiteName, createTests}, config) {
+function setupApolloServerExpressTests({suiteName, createTests, pluginConfig}, config) {
   tap.test(`apollo-server-express: ${suiteName}`, (t) => {
     t.autoend()
 
@@ -30,7 +30,7 @@ function setupApolloServerExpressTests({suiteName, createTests}, config) {
       const nrApi = helper.getAgentApi()
 
       // TODO: eventually use proper function for instrumenting and not .shim
-      const plugin = createPlugin(nrApi.shim)
+      const plugin = createPlugin(nrApi.shim, pluginConfig)
 
       const express = require('express')
 

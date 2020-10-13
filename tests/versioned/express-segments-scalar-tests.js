@@ -5,7 +5,7 @@
 
 'use strict'
 
-const { executeQuery, executeQueryBatch } = require('../../test-client')
+const { executeQuery, executeQueryBatch } = require('../test-client')
 
 const ANON_PLACEHOLDER = '<anonymous>'
 const UNKNOWN_OPERATION = '<unknown>'
@@ -13,17 +13,13 @@ const UNKNOWN_OPERATION = '<unknown>'
 const OPERATION_PREFIX = 'GraphQL/operation/ApolloServer'
 const RESOLVE_PREFIX = 'GraphQL/resolve/ApolloServer'
 
-const { setupApolloServerKoaTests } = require('./apollo-server-koa-setup')
-
-setupApolloServerKoaTests({
-  suiteName: 'koa segments',
-  createTests: createKoaSegmentsTests,
-  pluginConfig: {
-    captureScalars: true
-  }
-})
-
-function createKoaSegmentsTests(t, frameworkName) {
+/**
+ * Creates a set of standard segment naming and nesting tests to run
+ * against express-based apollo-server libraries.
+ * It is required that t.context.helper and t.context.serverUrl are set.
+ * @param {*} t a tap test instance
+ */
+function createSegmentsTests(t, frameworkName) {
   const TRANSACTION_PREFIX = `WebTransaction/${frameworkName}/POST`
 
   t.test('anonymous query, single level', (t) => {
@@ -38,15 +34,19 @@ function createKoaSegmentsTests(t, frameworkName) {
       const expectedSegments = [{
         name: `${TRANSACTION_PREFIX}//${operationPart}`,
         children: [{
-          name: 'Nodejs/Middleware/Koa',
+          name: 'Expressjs/Router: /',
           children: [{
-            name: `${OPERATION_PREFIX}/${operationPart}`,
+            name: 'Nodejs/Middleware/Expressjs/<anonymous>',
             children: [{
-              name: `${RESOLVE_PREFIX}/hello`
+              name: `${OPERATION_PREFIX}/${operationPart}`,
+              children: [{
+                name: `${RESOLVE_PREFIX}/hello`
+              }]
             }]
           }]
         }]
       }]
+
       t.segments(transaction.trace.root, expectedSegments)
     })
 
@@ -71,11 +71,14 @@ function createKoaSegmentsTests(t, frameworkName) {
       const expectedSegments = [{
         name: `${TRANSACTION_PREFIX}//${operationPart}`,
         children: [{
-          name: 'Nodejs/Middleware/Koa',
+          name: 'Expressjs/Router: /',
           children: [{
-            name: `${OPERATION_PREFIX}/${operationPart}`,
+            name: 'Nodejs/Middleware/Expressjs/<anonymous>',
             children: [{
-              name: `${RESOLVE_PREFIX}/hello`
+              name: `${OPERATION_PREFIX}/${operationPart}`,
+              children: [{
+                name: `${RESOLVE_PREFIX}/hello`
+              }]
             }]
           }]
         }]
@@ -113,15 +116,18 @@ function createKoaSegmentsTests(t, frameworkName) {
       const expectedSegments = [{
         name: `${TRANSACTION_PREFIX}//${operationPart}`,
         children: [{
-          name: 'Nodejs/Middleware/Koa',
+          name: 'Expressjs/Router: /',
           children: [{
-            name: `${OPERATION_PREFIX}/${operationPart}`,
-            children: [
-              { name: `${RESOLVE_PREFIX}/libraries` },
-              { name: `${RESOLVE_PREFIX}/libraries.books` },
-              { name: `${RESOLVE_PREFIX}/libraries.books.author` },
-              { name: `${RESOLVE_PREFIX}/libraries.books.author.name` }
-            ]
+            name: 'Nodejs/Middleware/Expressjs/<anonymous>',
+            children: [{
+              name: `${OPERATION_PREFIX}/${operationPart}`,
+              children: [
+                { name: `${RESOLVE_PREFIX}/libraries` },
+                { name: `${RESOLVE_PREFIX}/libraries.books` },
+                { name: `${RESOLVE_PREFIX}/libraries.books.author` },
+                { name: `${RESOLVE_PREFIX}/libraries.books.author.name` }
+              ]
+            }]
           }]
         }]
       }]
@@ -159,16 +165,19 @@ function createKoaSegmentsTests(t, frameworkName) {
       const expectedSegments = [{
         name: `${TRANSACTION_PREFIX}//${operationPart}`,
         children: [{
-          name: 'Nodejs/Middleware/Koa',
+          name: 'Expressjs/Router: /',
           children: [{
-            name: `${OPERATION_PREFIX}/${operationPart}`,
-            children: [
-              { name: `${RESOLVE_PREFIX}/libraries` },
-              { name: `${RESOLVE_PREFIX}/libraries.books` },
-              { name: `${RESOLVE_PREFIX}/libraries.books.title` },
-              { name: `${RESOLVE_PREFIX}/libraries.books.author` },
-              { name: `${RESOLVE_PREFIX}/libraries.books.author.name` }
-            ]
+            name: 'Nodejs/Middleware/Expressjs/<anonymous>',
+            children: [{
+              name: `${OPERATION_PREFIX}/${operationPart}`,
+              children: [
+                { name: `${RESOLVE_PREFIX}/libraries` },
+                { name: `${RESOLVE_PREFIX}/libraries.books` },
+                { name: `${RESOLVE_PREFIX}/libraries.books.title` },
+                { name: `${RESOLVE_PREFIX}/libraries.books.author` },
+                { name: `${RESOLVE_PREFIX}/libraries.books.author.name` }
+              ]
+            }]
           }]
         }]
       }]
@@ -205,7 +214,9 @@ function createKoaSegmentsTests(t, frameworkName) {
       const expectedSegments = [{
         name: `${TRANSACTION_PREFIX}//${operationPart}`,
         children: [{
-          name: 'Nodejs/Middleware/Koa',
+          name: 'Expressjs/Router: /',
+          children: [{
+            name: 'Nodejs/Middleware/Expressjs/<anonymous>',
             children: [{
               name: `${OPERATION_PREFIX}/${operationPart}`,
               children: [
@@ -215,6 +226,7 @@ function createKoaSegmentsTests(t, frameworkName) {
                 { name: `${RESOLVE_PREFIX}/libraries.books.isbn` }
               ]
             }]
+          }]
         }]
       }]
 
@@ -241,15 +253,18 @@ function createKoaSegmentsTests(t, frameworkName) {
       const expectedSegments = [{
         name: `${TRANSACTION_PREFIX}//${operationPart}`,
         children: [{
-          name: 'Nodejs/Middleware/Koa',
+          name: 'Expressjs/Router: /',
           children: [{
-            name: `${OPERATION_PREFIX}/${operationPart}`,
+            name: 'Nodejs/Middleware/Expressjs/<anonymous>',
             children: [{
-              name: `${RESOLVE_PREFIX}/addThing`,
+              name: `${OPERATION_PREFIX}/${operationPart}`,
               children: [{
-                name: 'timers.setTimeout',
+                name: `${RESOLVE_PREFIX}/addThing`,
                 children: [{
-                  name: 'Callback: namedCallback'
+                  name: 'timers.setTimeout',
+                  children: [{
+                    name: 'Callback: namedCallback'
+                  }]
                 }]
               }]
             }]
@@ -281,15 +296,18 @@ function createKoaSegmentsTests(t, frameworkName) {
       const expectedSegments = [{
         name: `${TRANSACTION_PREFIX}//${operationPart}`,
         children: [{
-          name: 'Nodejs/Middleware/Koa',
+          name: 'Expressjs/Router: /',
           children: [{
-            name: `${OPERATION_PREFIX}/${operationPart}`,
+            name: 'Nodejs/Middleware/Expressjs/<anonymous>',
             children: [{
-              name: `${RESOLVE_PREFIX}/addThing`,
+              name: `${OPERATION_PREFIX}/${operationPart}`,
               children: [{
-                name: 'timers.setTimeout',
+                name: `${RESOLVE_PREFIX}/addThing`,
                 children: [{
-                  name: 'Callback: namedCallback'
+                  name: 'timers.setTimeout',
+                  children: [{
+                    name: 'Callback: namedCallback'
+                  }]
                 }]
               }]
             }]
@@ -320,12 +338,15 @@ function createKoaSegmentsTests(t, frameworkName) {
       const expectedSegments = [{
         name: `${TRANSACTION_PREFIX}//${operationPart}`,
         children: [{
-          name: 'Nodejs/Middleware/Koa',
+          name: 'Expressjs/Router: /',
           children: [{
-            name: `${OPERATION_PREFIX}/${operationPart}`,
-            children: [
-              { name: `${RESOLVE_PREFIX}/paramQuery` }
-            ]
+            name: 'Nodejs/Middleware/Expressjs/<anonymous>',
+            children: [{
+              name: `${OPERATION_PREFIX}/${operationPart}`,
+              children: [
+                { name: `${RESOLVE_PREFIX}/paramQuery` }
+              ]
+            }]
           }]
         }]
       }]
@@ -354,12 +375,15 @@ function createKoaSegmentsTests(t, frameworkName) {
       const expectedSegments = [{
         name: `${TRANSACTION_PREFIX}//${operationPart}`,
         children: [{
-          name: 'Nodejs/Middleware/Koa',
+          name: 'Expressjs/Router: /',
           children: [{
-            name: `${OPERATION_PREFIX}/${operationPart}`,
-            children: [
-              { name: `${RESOLVE_PREFIX}/paramQuery` }
-            ]
+            name: 'Nodejs/Middleware/Expressjs/<anonymous>',
+            children: [{
+              name: `${OPERATION_PREFIX}/${operationPart}`,
+              children: [
+                { name: `${RESOLVE_PREFIX}/paramQuery` }
+              ]
+            }]
           }]
         }]
       }]
@@ -397,24 +421,27 @@ function createKoaSegmentsTests(t, frameworkName) {
       const expectedSegments = [{
         name: `${TRANSACTION_PREFIX}//${operationPart}`,
         children: [{
-          name: 'Nodejs/Middleware/Koa',
+          name: 'Expressjs/Router: /',
           children: [{
-            name: `${OPERATION_PREFIX}/${operationPart}`,
-            children: [
-              {
-                name: `${RESOLVE_PREFIX}/library`,
-                children: [{
-                  name: 'timers.setTimeout',
+            name: 'Nodejs/Middleware/Expressjs/<anonymous>',
+            children: [{
+              name: `${OPERATION_PREFIX}/${operationPart}`,
+              children: [
+                {
+                  name: `${RESOLVE_PREFIX}/library`,
                   children: [{
-                    name: 'Callback: <anonymous>'
+                    name: 'timers.setTimeout',
+                    children: [{
+                      name: 'Callback: <anonymous>'
+                    }]
                   }]
-                }]
-              },
-              { name: `${RESOLVE_PREFIX}/library.books` },
-              { name: `${RESOLVE_PREFIX}/library.books.title` },
-              { name: `${RESOLVE_PREFIX}/library.books.author` },
-              { name: `${RESOLVE_PREFIX}/library.books.author.name` }
-            ]
+                },
+                { name: `${RESOLVE_PREFIX}/library.books` },
+                { name: `${RESOLVE_PREFIX}/library.books.title` },
+                { name: `${RESOLVE_PREFIX}/library.books.author` },
+                { name: `${RESOLVE_PREFIX}/library.books.author.name` }
+              ]
+            }]
           }]
         }]
       }]
@@ -464,39 +491,42 @@ function createKoaSegmentsTests(t, frameworkName) {
       const expectedSegments = [{
         name: `${batchTransactionPrefix}/${expectedQuery1Name}/${expectedQuery2Name}`,
         children: [{
-          name: 'Nodejs/Middleware/Koa',
-          children: [
-            {
-              name: `${OPERATION_PREFIX}/${operationPart1}`,
-              children: [
-                {
-                  name: `${RESOLVE_PREFIX}/library`,
+          name: 'Expressjs/Router: /',
+          children: [{
+            name: 'Nodejs/Middleware/Expressjs/<anonymous>',
+            children: [
+              {
+                name: `${OPERATION_PREFIX}/${operationPart1}`,
+                children: [
+                  {
+                    name: `${RESOLVE_PREFIX}/library`,
+                    children: [{
+                      name: 'timers.setTimeout',
+                      children: [{
+                        name: 'Callback: <anonymous>'
+                      }]
+                    }]
+                  },
+                  { name: `${RESOLVE_PREFIX}/library.books` },
+                  { name: `${RESOLVE_PREFIX}/library.books.title`},
+                  { name: `${RESOLVE_PREFIX}/library.books.author` },
+                  { name: `${RESOLVE_PREFIX}/library.books.author.name` }
+                ]
+              },
+              {
+                name: `${OPERATION_PREFIX}/${operationPart2}`,
+                children: [{
+                  name: `${RESOLVE_PREFIX}/addThing`,
                   children: [{
                     name: 'timers.setTimeout',
                     children: [{
-                      name: 'Callback: <anonymous>'
+                      name: 'Callback: namedCallback'
                     }]
                   }]
-                },
-                { name: `${RESOLVE_PREFIX}/library.books` },
-                { name: `${RESOLVE_PREFIX}/library.books.title` },
-                { name: `${RESOLVE_PREFIX}/library.books.author` },
-                { name: `${RESOLVE_PREFIX}/library.books.author.name` }
-              ]
-            },
-            {
-              name: `${OPERATION_PREFIX}/${operationPart2}`,
-              children: [{
-                name: `${RESOLVE_PREFIX}/addThing`,
-                children: [{
-                  name: 'timers.setTimeout',
-                  children: [{
-                    name: 'Callback: namedCallback'
-                  }]
                 }]
-              }]
-            }
-          ]
+              }
+            ]
+          }]
         }]
       }]
 
@@ -532,9 +562,12 @@ function createKoaSegmentsTests(t, frameworkName) {
       const expectedSegments = [{
         name: `${TRANSACTION_PREFIX}//*`,
         children: [{
-          name: 'Nodejs/Middleware/Koa',
+          name: 'Expressjs/Router: /',
           children: [{
-            name: `${OPERATION_PREFIX}/${UNKNOWN_OPERATION}`
+            name: 'Nodejs/Middleware/Expressjs/<anonymous>',
+            children: [{
+              name: `${OPERATION_PREFIX}/${UNKNOWN_OPERATION}`
+            }]
           }]
         }]
       }]
@@ -579,9 +612,12 @@ function createKoaSegmentsTests(t, frameworkName) {
       const expectedSegments = [{
         name: `${TRANSACTION_PREFIX}//${operationPart}`,
         children: [{
-          name: 'Nodejs/Middleware/Koa',
+          name: 'Expressjs/Router: /',
           children: [{
-            name: `${OPERATION_PREFIX}/${operationPart}`
+            name: 'Nodejs/Middleware/Expressjs/<anonymous>',
+            children: [{
+              name: `${OPERATION_PREFIX}/${operationPart}`
+            }]
           }]
         }]
       }]
@@ -618,4 +654,10 @@ function checkResult(t, result, callback) {
   }
 
   setImmediate(callback)
+}
+
+module.exports = {
+  suiteName: 'express segments with scalars',
+  createTests: createSegmentsTests,
+  pluginConfig: { captureScalars: true }
 }
