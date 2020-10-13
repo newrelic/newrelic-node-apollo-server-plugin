@@ -17,7 +17,10 @@ const { setupApolloServerKoaTests } = require('./apollo-server-koa-setup')
 
 setupApolloServerKoaTests({
   suiteName: 'koa segments',
-  createTests: createKoaSegmentsTests
+  createTests: createKoaSegmentsTests,
+  pluginConfig: {
+    captureScalars: true
+  }
 })
 
 function createKoaSegmentsTests(t, frameworkName) {
