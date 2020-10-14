@@ -20,12 +20,6 @@ setupApolloServerLambdaTests({
   }
 })
 
-/**
- * Creates a set of standard transction tests to run against various
- * apollo-server libraries.
- * It is required that t.context.helper and t.context.serverUrl are set.
- * @param {*} t a tap test instance
- */
 function createTransactionTests(t, frameworkName) {
   const EXPECTED_PREFIX = `WebTransaction/${frameworkName}`
 
@@ -493,9 +487,4 @@ function checkResult(t, result, callback) {
   }
 
   setImmediate(callback)
-}
-
-module.exports = {
-  suiteName: 'transaction naming',
-  createTests: createTransactionTests
 }

@@ -14,7 +14,7 @@ const { getTypeDefs, resolvers } = require('../../data-definitions')
 
 const WEB_FRAMEWORK = 'WebFrameworkUri'
 
-function setupApolloServerLambdaTests({suiteName, createTests, pluginConfig}) {
+function setupApolloServerLambdaTests({suiteName, createTests, pluginConfig}, config) {
   tap.test(`apollo-server-lambda: ${suiteName}`, (t) => {
     t.autoend()
 
@@ -25,18 +25,20 @@ function setupApolloServerLambdaTests({suiteName, createTests, pluginConfig}) {
     let stubContext = null
 
     t.beforeEach(async () => {
-      const config = {
-        allow_all_headers: true,
-        attributes: {
-          exclude: [
-            'request.headers.x*',
-            'response.headers.x*'
-          ]
-        },
-        serverless_mode: {
-          enabled: true
-        }
-      }
+      // const config = {
+      //   allow_all_headers: true,
+      //   attributes: {
+      //     exclude: [
+      //       'request.headers.x*',
+      //       'response.headers.x*'
+      //     ]
+      //   },
+      //   serverless_mode: {
+      //     enabled: true
+      //   }
+      // }
+
+      const { ApolloServer, gql } = require('apollo-server-lambda')
 
       helper = utils.TestAgent.makeInstrumented(config)
       const createPlugin = require('../../../lib/create-plugin')
@@ -44,9 +46,6 @@ function setupApolloServerLambdaTests({suiteName, createTests, pluginConfig}) {
 
       // TODO: eventually use proper function for instrumenting and not .shim
       const plugin = createPlugin(nrApi.shim, pluginConfig)
-
-      // Do after instrumentation to ensure lambda server isn't loaded too soon.
-      const { ApolloServer, gql } = require('apollo-server-lambda')
 
       stubContext = {
         done: () => {},

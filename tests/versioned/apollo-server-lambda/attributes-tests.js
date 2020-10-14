@@ -17,19 +17,13 @@ const OPERATION_PREFIX = 'GraphQL/operation/ApolloServer'
 const { setupApolloServerLambdaTests } = require('./apollo-server-lambda-setup')
 
 setupApolloServerLambdaTests({
-  suiteName: 'lambda segments',
+  suiteName: 'lambda attributes',
   createTests: createAttributesTests,
   pluginConfig: {
     captureScalars: true
   }
 })
 
-/**
- * Creates a set of standard attribute tests to run against various
- * apollo-server libraries.
- * It is required that t.context.helper and t.context.serverUrl are set.
- * @param {*} t a tap test instance
- */
 function createAttributesTests(t) {
   t.test('anon query should capture standard attributes except operation name', (t) => {
     const { helper, patchedHandler, stubContext } = t.context
@@ -440,9 +434,4 @@ function createAttributesTests(t) {
       t.end()
     })
   })
-}
-
-module.exports = {
-  suiteName: 'attributes',
-  createTests: createAttributesTests
 }

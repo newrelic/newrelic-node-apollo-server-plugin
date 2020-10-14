@@ -16,20 +16,7 @@ const RESOLVE_PREFIX = 'GraphQL/resolve/ApolloServer'
 
 const { setupApolloServerLambdaTests } = require('./apollo-server-lambda-setup')
 
-setupApolloServerLambdaTests({
-  suiteName: 'lambda errors',
-  createTests: createErrorTests,
-  pluginConfig: {
-    captureScalars: true
-  }
-})
 
-/**
- * Creates a set of standard error capture tests to run against various
- * apollo-server libraries.
- * It is required that t.context.helper and t.context.serverUrl are set.
- * @param {*} t a tap test instance
- */
 function createErrorTests(t) {
   t.test('parsing error should be noticed and assigned to operation span', (t) => {
     const { helper, patchedHandler, stubContext } = t.context
@@ -214,8 +201,10 @@ function createErrorTests(t) {
   })
 }
 
-
-module.exports = {
-  suiteName: 'errors',
-  createTests: createErrorTests
-}
+setupApolloServerLambdaTests({
+  suiteName: 'lambda errors',
+  createTests: createErrorTests,
+  pluginConfig: {
+    captureScalars: true
+  }
+})
