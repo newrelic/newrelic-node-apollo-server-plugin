@@ -2,7 +2,9 @@
 * Copyright 2020 New Relic Corporation. All rights reserved.
 * SPDX-License-Identifier: Apache-2.0
 */
+
 'use strict'
+
 function executeQueryWithLambdaHandler(handler, query, context, callback) {
   const jsonQuery = JSON.stringify({ query })
   const event = createApiEvent(jsonQuery)

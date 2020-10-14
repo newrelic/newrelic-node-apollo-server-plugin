@@ -25,19 +25,6 @@ function setupApolloServerLambdaTests({suiteName, createTests, pluginConfig}, co
     let stubContext = null
 
     t.beforeEach(async () => {
-      // const config = {
-      //   allow_all_headers: true,
-      //   attributes: {
-      //     exclude: [
-      //       'request.headers.x*',
-      //       'response.headers.x*'
-      //     ]
-      //   },
-      //   serverless_mode: {
-      //     enabled: true
-      //   }
-      // }
-
       const { ApolloServer, gql } = require('apollo-server-lambda')
 
       helper = utils.TestAgent.makeInstrumented(config)
