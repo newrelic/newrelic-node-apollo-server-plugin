@@ -19,7 +19,6 @@ function setupApolloServerLambdaTests({suiteName, createTests, pluginConfig}) {
     t.autoend()
 
     let server = null
-    let hapiServer = null
     let serverUrl = null
     let helper = null
     let handler = null
