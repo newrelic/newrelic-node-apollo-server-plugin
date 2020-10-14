@@ -19,7 +19,6 @@ function setupApolloServerLambdaTests({suiteName, createTests, pluginConfig}) {
     t.autoend()
 
     let server = null
-    let serverUrl = null
     let helper = null
     let handler = null
     let patchedHandler = null
@@ -50,7 +49,6 @@ function setupApolloServerLambdaTests({suiteName, createTests, pluginConfig}) {
       // Do after instrumentation to ensure lambda server isn't loaded too soon.
       const { ApolloServer, gql } = require('apollo-server-lambda')
 
-      stubEvent = {}
       stubContext = {
         done: () => {},
         succeed: () => {},
@@ -74,16 +72,12 @@ function setupApolloServerLambdaTests({suiteName, createTests, pluginConfig}) {
         })
       })
 
-      serverUrl = 'doodoo'
-
       handler = server.createHandler()
 
       patchedHandler = nrApi.setLambdaHandler(handler)
 
       t.context.helper = helper
-      t.context.serverUrl = serverUrl
       t.context.patchedHandler = patchedHandler
-      t.context.stubEvent = stubEvent
       t.context.stubContext = stubContext
     })
 
@@ -92,11 +86,9 @@ function setupApolloServerLambdaTests({suiteName, createTests, pluginConfig}) {
 
       helper.unload()
       server = null
-      serverUrl = null
       helper = null
       handler = null
       patchedHandler = null
-      stubEvent = null
       stubContext = null
 
       clearCachedModules(['apollo-server-lambda'], () => {
