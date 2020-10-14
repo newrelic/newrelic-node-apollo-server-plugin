@@ -22,7 +22,6 @@ function setupApolloServerLambdaTests({suiteName, createTests, pluginConfig}) {
     let helper = null
     let handler = null
     let patchedHandler = null
-    let stubEvent = null
     let stubContext = null
 
     t.beforeEach(async () => {
