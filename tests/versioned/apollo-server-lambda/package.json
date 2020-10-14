@@ -11,8 +11,10 @@
         "apollo-server-lambda": ">=2.14.0"
       },
       "files": [
+        "transaction-naming.test.js",
         "segments.test.js",
-        "transaction-naming-tests.js"
+        "errors.test.js",
+        "attributes.test.js"
       ]
     }
   ],
