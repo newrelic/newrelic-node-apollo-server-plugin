@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "Tue Oct 06 2020 09:40:26 GMT-0700 (Pacific Daylight Time)",
+  "lastUpdated": "Wed Oct 14 2020 12:02:16 GMT-0700 (Pacific Daylight Time)",
   "projectName": "New Relic Node Apollo Server Plugin",
   "projectUrl": "https://github.com/newrelic/newrelic-node-apollo-server-plugin/",
   "includeDev": true,
@@ -17,6 +17,19 @@
       "licenseTextSource": "file",
       "publisher": "New Relic Node.js agent team",
       "email": "nodejs@newrelic.com"
+    },
+    "apollo-server@2.18.2": {
+      "name": "apollo-server",
+      "version": "2.18.2",
+      "range": "^2.18.2",
+      "licenses": "MIT",
+      "repoUrl": "https://github.com/apollographql/apollo-server",
+      "versionedRepoUrl": "https://github.com/apollographql/apollo-server/tree/v2.18.2",
+      "licenseFile": "node_modules/apollo-server/LICENSE",
+      "licenseUrl": "https://github.com/apollographql/apollo-server/blob/v2.18.2/LICENSE",
+      "licenseTextSource": "file",
+      "publisher": "Apollo",
+      "email": "opensource@apollographql.com"
     },
     "eslint@7.8.1": {
       "name": "eslint",
