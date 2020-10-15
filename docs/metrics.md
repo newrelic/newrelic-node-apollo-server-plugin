@@ -1,0 +1,83 @@
+# Metrics
+
+Two new metrics have been introduced to understand the behavior of your GraphQL operations within and across transactions. Read more on those below or jump down to the [Visualizations](#visualizations) section to see some recommended ways to use this data.
+
+For more information on querying metrics and creating charts, see the [Resources](#resources) section.
+
+## Operation Metrics
+
+`/GraphQL/operation/ApolloServer/[operation-type]/[operation-name]/[deepest-path]`
+
+Operation metrics include the operation type, operation name and deepest-path. These metrics represent the durations of the individual queries or mutations and can be used to compare outside of the context of individual transactions which may have multiple queries.
+
+**Operation Type:** Indicates if the operation was a query or a mutation.
+
+**Operation Name:** The operation name when provided or `<anonymous>`.
+
+**Deepest Path:** The deepest path resolved (or attempted in the case of a validation error). Since operation names may be reused, this helps further determine uniqueness of a given operation.
+
+## Field Resolve Metrics
+
+`/GraphQL/resolve/ApolloServer/[field-name]`
+
+Resolve metrics capture the duration spent resolving a particular piece of requested GraphQL data. These can be useful to find specific resolvers that may contribute to slowing down incoming queries.
+
+These differ slightly in naming from their segment/span counterparts. Be better visualize relationships, the full path to a field is represented in segments/spans (i.e. libraries.books.title). To understand the duration aggregated across all usages and transactions, the metric uses the field name without the full path.
+
+## Visualizations
+
+Here is a collection of useful queries that leverage these new metrics to better understand the behaviors of your Apollo GraphQL applications.
+
+### Top 10 Operations
+
+If you would like to have a list of the top 10 slowest operations, the following query can be used to pull the data on demand or as a part of a dashboard.
+
+```
+FROM Metric SELECT average(newrelic.timeslice.value) * 1000 WHERE appName = '[YOUR APP NAME]' WITH METRIC_FORMAT 'GraphQL/operation/ApolloServer/{operation}' FACET operation LIMIT 10
+```
+
+The 'Bar' chart type makes a nice visualization similar to the transaction overview you may be used to.
+
+A 'Table' chart type may also be useful showing a breakdown of operations. For this scenario, we recommend leveraging the METRIC_FORMAT to give further sorting and visualization flexibility. The following query will generate columns of operation type, operation name, deepest-path and 'AVG Duration (MS)' to sort and examine as you wish.
+
+```
+FROM Metric SELECT average(newrelic.timeslice.value) * 1000 as 'AVG Duration (MS)' WHERE appName = '[YOUR APP NAME]' WITH METRIC_FORMAT 'GraphQL/operation/ApolloServer/{type}/{name}/{deepest-path}' FACET type, name, `deepest-path` LIMIT 20
+```
+
+### Average Operation Time
+
+You may also wish to track the average duration over time for operations. To do this, a very similar query may be used leveraging `TIMESERIES`.
+
+```
+FROM Metric SELECT average(newrelic.timeslice.value) WHERE appName = '[YOUR APP NAME]' WITH METRIC_FORMAT 'GraphQL/operation/ApolloServer/{operation}' TIMESERIES FACET operation
+```
+
+This is best viewed with the 'Line' chart type which allows for viewing all operations or toggling visualization of individual operations.
+
+### Top 10 Resolvers
+
+If you would like to have a list of the top 10 slowest resolves, the following query can be used to pull the data on demand or as a part of a dashboard.
+
+```
+FROM Metric
+SELECT average(newrelic.timeslice.value) * 1000 as 'Average Duration (MS)' WHERE appName = '[YOUR APP NAME]' WITH METRIC_FORMAT 'GraphQL/resolve/ApolloServer/{field}' FACET field LIMIT 20
+```
+
+The 'Bar' chart type makes a nice visualization similar to the transaction overview you may be used to. The 'Table' chart type may also be useful showing a breakdown of field and 'Average Duration (MS)' in a table.
+
+### Average Resolver Time
+
+You may also wish to track the average duration over time for resolvers. To do this, a very similar query may be used leveraging `TIMESERIES`.
+
+```
+FROM Metric
+SELECT average(newrelic.timeslice.value) * 1000 as 'Average Duration (MS)' TIMESERIES WHERE appName = '[YOUR APP NAME]' WITH METRIC_FORMAT 'GraphQL/resolve/ApolloServer/{field}' FACET field
+```
+
+This is best viewed with the 'Line' chart type which allows for viewing all operations or toggling visualization of individual operations.
+
+## Resources
+
+* [Query APM metric timeslice data with NRQL](https://docs.newrelic.com/docs/query-your-data/nrql-new-relic-query-language/nrql-query-tutorials/query-apm-metric-timeslice-data-nrql)
+
+* [Add and customize metric charts](https://docs.newrelic.com/docs/insights/use-insights-ui/manage-dashboards/add-customize-metric-charts)
