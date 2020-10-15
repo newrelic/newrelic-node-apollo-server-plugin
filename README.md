@@ -4,9 +4,12 @@
 
 New Relic's official Apollo Server plugin for use with the [Node.js agent](https://github.com/newrelic/node-newrelic).
 
+This plugin expects the Node.js agent [newrelic npm package](https://www.npmjs.com/package/newrelic) has already been installed in your application.
+
 ## Installation
 
 ```
+npm install newrelic
 npm install @newrelic/apollo-server-plugin
 ```
 
@@ -89,7 +92,7 @@ const plugin = createPlugin({
 
 ### Transactions
 
-[Transaction Documentation](../docs/transactions.md)
+[Transaction Documentation](./docs/transactions.md)
 
 Transactions are captured as web transactions, associated with the underlying framework (Express, Koa, etc.), and named based on the GraphQL operations executed.
 
@@ -110,11 +113,11 @@ query {
 
 `post /query/<anonymous>/libraries.books.author.name`
 
-For more information on how transactions are named, including how query errors may impact naming, please see the [transaction documentation](../docs/transactions.md).
+For more information on how transactions are named, including how query errors may impact naming, please see the [transaction documentation](./docs/transactions.md).
 
 ### Metrics
 
-[Metrics Documentation](../docs/metrics.md)
+[Metrics Documentation](./docs/metrics.md)
 
 Two new metrics have been introduced to understand the behavior of your GraphQL operations within and across transactions.
 
@@ -143,11 +146,11 @@ FROM Metric
 SELECT average(newrelic.timeslice.value) * 1000 WHERE appName = '[YOUR APP NAME]' WITH METRIC_FORMAT 'GraphQL/resolve/ApolloServer/{field}' FACET field LIMIT 10
 ```
 
-For more information on metrics and some recommended visualizations, please see the [metrics documentation](../docs/metrics.md).
+For more information on metrics and some recommended visualizations, please see the [metrics documentation](./docs/metrics.md).
 
 ### Segments and Spans
 
-[Segments and Spans](./segments-and-spans.md)
+[Segments and Spans](./docs/segments-and-spans.md)
 
 Segments and spans (when Distributed Tracing enabled) are captured for GraphQL operations, field resolution and additional work (when instrumented) that occurs as a part of field resolution such as making a query to a database.
 
@@ -159,7 +162,7 @@ Operation segments/spans include the operation type, operation name and deepest-
 
 The operation type, operation name and deepest-path are captured as attributes on a segment or span as well as the query with obfuscated arguments.
 
-For more information on collected attributes, see the [segments and spans documentation](./segments-and-spans.md)
+For more information on collected attributes, see the [segments and spans documentation](./docs/segments-and-spans.md)
 
 #### Field Resolve Segments/Spans
 
@@ -169,7 +172,7 @@ Resolve segments/spans leverage the resolution path of the individual field to b
 
 The field name, return type, parent type, path and arguments (disabled by default) are all captured as attributes.
 
-For more information on collected attributes, including enabling args capture, see the [segments and spans documentation](./segments-and-spans.md)
+For more information on collected attributes, including enabling args capture, see the [segments and spans documentation](./docs/segments-and-spans.md)
 
 ### Errors
 
