@@ -25,10 +25,14 @@ function setupApolloServerLambdaTests({suiteName, createTests, pluginConfig}, co
     let patchedHandler = null
     let stubContext = null
 
-    t.beforeEach(async () => {
-      const { ApolloServer, gql } = require('apollo-server-lambda')
+    /**
+     * Account ID is required for serverless in order to enable
+     * distributed tracing.
+     */
+    agentTesting.temporarySetEnv(t, 'NEW_RELIC_ACCOUNT_ID', 'eeeeee')
 
-      agentTesting.temporarySetEnv(t, 'NEW_RELIC_ACCOUNT_ID', 'eeeeee')
+    t.beforeEach((done, t) => {
+      const { ApolloServer, gql } = require('apollo-server-lambda')
 
       helper = utils.TestAgent.makeInstrumented(config)
 
@@ -68,6 +72,8 @@ function setupApolloServerLambdaTests({suiteName, createTests, pluginConfig}, co
       t.context.helper = helper
       t.context.patchedHandler = patchedHandler
       t.context.stubContext = stubContext
+
+      done()
     })
 
     t.afterEach((done) => {
