@@ -7,6 +7,7 @@
 
 const tap = require('tap')
 
+const agentTesting = require('../../agent-testing')
 const utils = require('@newrelic/test-utilities')
 utils.assert.extendTap(tap)
 
@@ -27,7 +28,10 @@ function setupApolloServerLambdaTests({suiteName, createTests, pluginConfig}, co
     t.beforeEach(async () => {
       const { ApolloServer, gql } = require('apollo-server-lambda')
 
+      agentTesting.temporarySetEnv(t, 'NEW_RELIC_ACCOUNT_ID', 'eeeeee')
+
       helper = utils.TestAgent.makeInstrumented(config)
+
       const createPlugin = require('../../../lib/create-plugin')
       const nrApi = helper.getAgentApi()
 

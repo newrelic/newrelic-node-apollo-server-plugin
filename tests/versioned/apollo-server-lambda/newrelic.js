@@ -23,5 +23,8 @@ exports.config = {
   },
   serverless_mode: {
     enabled: true
+  },
+  distributed_tracing: {
+    enabled: true
   }
 }

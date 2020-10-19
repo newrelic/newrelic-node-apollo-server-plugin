@@ -50,14 +50,12 @@ function createErrorTests(t) {
 
       t.ok(agentAttributes.spanId)
 
-      const segment = agentTesting.findSegmentByName(
-        transaction.trace.root,
-        `${OPERATION_PREFIX}/${UNKNOWN_OPERATION}`)
-      t.ok(segment)
+      const matchingSpan = agentTesting.findSpanById(helper.agent, agentAttributes.spanId)
 
-      const { attributes } = segment.attributes
-      t.equal(attributes['error.message'].value, expectedErrorMessage)
-      t.equal(attributes['error.class'].value, expectedErrorType)
+      const {attributes, intrinsics} = matchingSpan
+      t.equal(intrinsics.name, `${OPERATION_PREFIX}/${UNKNOWN_OPERATION}`)
+      t.equal(attributes['error.message'], expectedErrorMessage)
+      t.equal(attributes['error.class'], expectedErrorType)
     })
 
     executeQueryWithLambdaHandler
@@ -116,14 +114,12 @@ function createErrorTests(t) {
 
       t.ok(agentAttributes.spanId)
 
-      const segment = agentTesting.findSegmentByName(
-        transaction.trace.root,
-        expectedOperationName)
-      t.ok(segment)
+      const matchingSpan = agentTesting.findSpanById(helper.agent, agentAttributes.spanId)
 
-      const { attributes } = segment.attributes
-      t.equal(attributes['error.message'].value, expectedErrorMessage)
-      t.equal(attributes['error.class'].value, expectedErrorType)
+      const {attributes, intrinsics} = matchingSpan
+      t.equal(intrinsics.name, expectedOperationName)
+      t.equal(attributes['error.message'], expectedErrorMessage)
+      t.equal(attributes['error.class'], expectedErrorType)
     })
 
     executeQueryWithLambdaHandler
@@ -165,19 +161,21 @@ function createErrorTests(t) {
 
       const errorTrace = errorTraces[0]
 
-      const [, transactionName, errorMessage, errorType] = errorTrace
+      const [, transactionName, errorMessage, errorType, params] = errorTrace
       t.equal(transactionName, transaction.name)
       t.equal(errorMessage, expectedErrorMessage)
       t.equal(errorType, expectedErrorType)
 
-      const segment = agentTesting.findSegmentByName(
-        transaction.trace.root,
-        expectedResolveName)
-      t.ok(segment)
+      const { agentAttributes } = params
 
-      const { attributes } = segment.attributes
-      t.equal(attributes['error.message'].value, expectedErrorMessage)
-      t.equal(attributes['error.class'].value, expectedErrorType)
+      t.ok(agentAttributes.spanId)
+
+      const matchingSpan = agentTesting.findSpanById(helper.agent, agentAttributes.spanId)
+
+      const {attributes, intrinsics} = matchingSpan
+      t.equal(intrinsics.name, expectedResolveName)
+      t.equal(attributes['error.message'], expectedErrorMessage)
+      t.equal(attributes['error.class'], expectedErrorType)
     })
 
     executeQueryWithLambdaHandler
