@@ -201,7 +201,7 @@ npm run versioned
 
 ## Support
 
-Should you need assistance with New Relic products, you are in good hands with several support channels.
+Should you need assistance with New Relic products, you are in good hands with several support diagnostic tools and support channels.
 
 This [troubleshooting framework](https://discuss.newrelic.com/t/troubleshooting-frameworks/108787) steps you through common troubleshooting questions.
 
