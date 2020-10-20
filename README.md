@@ -74,6 +74,21 @@ Note: Because fastify is not fully instrumented in the Node.js Agent, transactio
 
 Other plugins may work, depending on their underlying implementation, but have not been verified.
 
+### Interaction with other Apollo Plugins
+
+Transaction and segment/span timings may be affected by other plugins used in the Apollo Server setup. In order to get more accurate resolver timings, it is recommended to add the New Relic plugin last.
+
+
+```
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  plugins: [
+    other_plugin,
+    newrelic_plugin
+  ]
+})
+```
 ### Configuration
 
 Configuration may be passed into the `createPlugin` function to override specific values. The configuration object and all properties are optional.
