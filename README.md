@@ -77,6 +77,7 @@ Other plugins may work, depending on their underlying implementation, but have n
 ### Interaction with other Apollo Plugins
 
 Transaction and segment/span timings may be affected by other plugins used in the Apollo Server setup. In order to get more accurate resolver timings, it is recommended to add the New Relic plugin last.
+
 ```
 const server = new ApolloServer({
   typeDefs,
