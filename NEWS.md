@@ -1,3 +1,9 @@
+## 0.1.1 (10/29/2020)
+
+* Fixed error when no query string is provided when using Automatic Persisted Queries
+
+  Thank you to @MightySCollins for the contribution!
+
 ## 0.1.0 (10/23/2020)
 
 * Initial release of the Node.js Apollo Server Plugin.
