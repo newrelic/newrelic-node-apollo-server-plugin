@@ -1,3 +1,7 @@
+## 0.1.2 (11/10/2020)
+
+* Fixed bug that would cause errors if transaction state loss occurred prior to plugin execution.
+
 ## 0.1.1 (10/29/2020)
 
 * Fixed error when no query string is provided when using Automatic Persisted Queries
