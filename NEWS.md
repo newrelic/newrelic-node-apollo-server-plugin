@@ -1,3 +1,8 @@
+## 0.1.3 (02/24/2021)
+
+* Fixed issue where state loss introduced through another module could result in the plugin causing a query to error while trying to set the transaction name.
+* Remove unused changelog file.
+
 ## 0.1.2 (11/10/2020)
 
 * Fixed bug that would cause errors if transaction state loss occurred prior to plugin execution.
