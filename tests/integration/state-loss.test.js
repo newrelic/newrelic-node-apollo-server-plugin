@@ -27,7 +27,7 @@ function createStateLossTests(t) {
     done()
   })
 
-  t.test('should should not error when state loss prior to query', (t) => {
+  t.test('should not error when state loss prior to query', (t) => {
     stateLossTester.triggerOnRequestDidStart()
 
     const { serverUrl } = t.context
@@ -64,7 +64,7 @@ function createStateLossTests(t) {
     })
   })
 
-  t.test('should should not error when state loss just before sending response', (t) => {
+  t.test('should not error when state loss just before sending response', (t) => {
     stateLossTester.tiggerOnWillSendResponse()
 
     const { serverUrl } = t.context
