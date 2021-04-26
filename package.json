@@ -36,5 +36,6 @@
   },
   "peerDependencies": {
     "newrelic": ">=7.3.1"
-  }
+  },
+  "dependencies": {}
 }
