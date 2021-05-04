@@ -28,10 +28,10 @@
     "node": ">=10.0.0"
   },
   "devDependencies": {
-    "@newrelic/test-utilities": "^4.1.2",
+    "@newrelic/test-utilities": "^5.0.0",
     "apollo-server": "^2.24.0",
     "eslint": "^7.25.0",
-    "newrelic": "^6.13.0",
+    "newrelic": "^7.3.1",
     "tap": "^15.0.6"
   },
   "peerDependencies": {
