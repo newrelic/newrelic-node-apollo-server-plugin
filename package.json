@@ -2,7 +2,7 @@
   "name": "@newrelic/apollo-server-plugin",
   "version": "0.1.3",
   "description": "Apollo Server plugin that adds New Relic Node.js agent instrumentation.",
-  "main": "/src/index.js",
+  "main": "./index.js",
   "scripts": {
     "integration": "rm -f newrelic_agent.log && time tap --test-regex='(\\/|^tests\\/integration\\/.*\\.test\\.js)$' --no-coverage",
     "lint": "eslint *.js lib tests",
