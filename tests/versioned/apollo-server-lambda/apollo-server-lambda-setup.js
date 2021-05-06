@@ -72,7 +72,6 @@ function setupApolloServerLambdaTests({suiteName, createTests, pluginConfig}, co
       t.context.helper = helper
       t.context.patchedHandler = patchedHandler
       t.context.stubContext = stubContext
-
     })
 
     t.afterEach(() => {

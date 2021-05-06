@@ -23,7 +23,7 @@ function setupApolloServerFastifyTests({suiteName, createTests, pluginConfig}, c
     let serverUrl = null
     let helper = null
 
-    t.beforeEach((done) => {
+    t.beforeEach(() => {
       // load default instrumentation
       helper = utils.TestAgent.makeInstrumented(config)
       const createPlugin = require('../../../lib/create-plugin')
@@ -46,7 +46,7 @@ function setupApolloServerFastifyTests({suiteName, createTests, pluginConfig}, c
 
       return new Promise((resolve, reject) => {
         app.listen(0, (err, address) => {
-          if (err) reject(err)
+          if (err) {reject(err)}
           serverUrl = `${address}${server.graphqlPath}`
 
           t.context.helper = helper
@@ -78,7 +78,6 @@ function clearCachedModules(modules) {
     const requirePath = require.resolve(moduleName)
     delete require.cache[requirePath]
   })
-
 }
 
 module.exports = {

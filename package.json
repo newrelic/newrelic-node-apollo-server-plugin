@@ -33,6 +33,8 @@
     "@newrelic/test-utilities": "^5.1.0",
     "apollo-server": "^2.18.2",
     "eslint": "^7.8.1",
+    "husky": "^6.0.0",
+    "lint-staged": "^10.5.4",
     "newrelic": "^6.13.0",
     "tap": "^15.0.6"
   },

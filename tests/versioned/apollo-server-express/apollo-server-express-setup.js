@@ -47,18 +47,18 @@ function setupApolloServerExpressTests({suiteName, createTests, pluginConfig}, c
 
       return new Promise((resolve, reject) => {
         expressServer = app.listen(0, (err) => {
-          if(err) reject(err)
+          if (err) {reject(err)}
 
           serverUrl = `http://localhost:${expressServer.address().port}${server.graphqlPath}`
 
           t.context.helper = helper
           t.context.serverUrl = serverUrl
-          resolve();
+          resolve()
         })
       })
     })
 
-    t.afterEach((done) => {
+    t.afterEach(() => {
       expressServer && expressServer.close()
       server && server.stop()
 
@@ -79,7 +79,6 @@ function clearCachedModules(modules) {
     const requirePath = require.resolve(moduleName)
     delete require.cache[requirePath]
   })
-
 }
 
 module.exports = {

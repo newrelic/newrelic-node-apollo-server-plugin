@@ -81,7 +81,6 @@ function clearCachedModules(modules) {
     const requirePath = require.resolve(moduleName)
     delete require.cache[requirePath]
   })
-
 }
 
 module.exports = {

@@ -51,12 +51,12 @@ function setupApolloServerKoaTests({suiteName, createTests, pluginConfig}, confi
 
       return new Promise((resolve, reject) => {
         koaServer = app.listen(0, (err) => {
-          if (err) reject(err)
+          if (err) {reject(err)}
           serverUrl = `http://localhost:${koaServer.address().port}${server.graphqlPath}`
 
           t.context.helper = helper
           t.context.serverUrl = serverUrl
-          resolve();
+          resolve()
         })
       })
     })
