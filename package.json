@@ -34,7 +34,7 @@
     "apollo-server": "^2.18.2",
     "eslint": "^7.8.1",
     "newrelic": "^6.13.0",
-    "tap": "^14.10.8"
+    "tap": "^15.0.6"
   },
   "peerDependencies": {
     "newrelic": ">=6.13.0"
