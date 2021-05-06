@@ -22,9 +22,8 @@ setupApolloServerTests({
 function createStateLossTests(t) {
   setupEnvConfig(t)
 
-  t.afterEach((done) => {
+  t.afterEach(() => {
     stateLossTester.clearStateLoss()
-    done()
   })
 
   t.test('should not error when state loss prior to query', (t) => {

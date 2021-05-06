@@ -24,7 +24,7 @@ function setupApolloServerKoaTests({suiteName, createTests, pluginConfig}, confi
     let serverUrl = null
     let helper = null
 
-    t.beforeEach((done) => {
+    t.beforeEach(() => {
       // load default instrumentation
       helper = utils.TestAgent.makeInstrumented(config)
       const createPlugin = require('../../../lib/create-plugin')
@@ -49,16 +49,19 @@ function setupApolloServerKoaTests({suiteName, createTests, pluginConfig}, confi
 
       server.applyMiddleware({ app, path: graphqlPath })
 
-      koaServer = app.listen(0, () => {
-        serverUrl = `http://localhost:${koaServer.address().port}${server.graphqlPath}`
+      return new Promise((resolve, reject) => {
+        koaServer = app.listen(0, (err) => {
+          if (err) reject(err)
+          serverUrl = `http://localhost:${koaServer.address().port}${server.graphqlPath}`
 
-        t.context.helper = helper
-        t.context.serverUrl = serverUrl
-        done()
+          t.context.helper = helper
+          t.context.serverUrl = serverUrl
+          resolve();
+        })
       })
     })
 
-    t.afterEach((done) => {
+    t.afterEach(() => {
       server && server.stop()
       koaServer && koaServer.close()
 
@@ -68,22 +71,18 @@ function setupApolloServerKoaTests({suiteName, createTests, pluginConfig}, confi
       serverUrl = null
       helper = null
 
-      clearCachedModules(['koa', 'apollo-server-koa'], () => {
-        done()
-      })
+      clearCachedModules(['koa', 'apollo-server-koa'])
     })
 
     createTests(t, WEB_FRAMEWORK)
   })
 }
 
-function clearCachedModules(modules, callback) {
+function clearCachedModules(modules) {
   modules.forEach((moduleName) => {
     const requirePath = require.resolve(moduleName)
     delete require.cache[requirePath]
   })
-
-  callback()
 }
 
 module.exports = {

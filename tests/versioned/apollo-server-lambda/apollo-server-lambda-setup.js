@@ -31,7 +31,7 @@ function setupApolloServerLambdaTests({suiteName, createTests, pluginConfig}, co
      */
     agentTesting.temporarySetEnv(t, 'NEW_RELIC_ACCOUNT_ID', 'eeeeee')
 
-    t.beforeEach((done, t) => {
+    t.beforeEach((t) => {
       const { ApolloServer, gql } = require('apollo-server-lambda')
 
       helper = utils.TestAgent.makeInstrumented(config)
@@ -73,10 +73,9 @@ function setupApolloServerLambdaTests({suiteName, createTests, pluginConfig}, co
       t.context.patchedHandler = patchedHandler
       t.context.stubContext = stubContext
 
-      done()
     })
 
-    t.afterEach((done) => {
+    t.afterEach(() => {
       server && server.stop()
 
       helper.unload()
@@ -86,22 +85,18 @@ function setupApolloServerLambdaTests({suiteName, createTests, pluginConfig}, co
       patchedHandler = null
       stubContext = null
 
-      clearCachedModules(['apollo-server-lambda'], () => {
-        done()
-      })
+      clearCachedModules(['apollo-server-lambda'])
     })
 
     createTests(t, WEB_FRAMEWORK)
   })
 }
 
-function clearCachedModules(modules, callback) {
+function clearCachedModules(modules) {
   modules.forEach((moduleName) => {
     const requirePath = require.resolve(moduleName)
     delete require.cache[requirePath]
   })
-
-  callback()
 }
 
 module.exports = {

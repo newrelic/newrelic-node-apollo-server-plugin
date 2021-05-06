@@ -19,7 +19,7 @@ tap.test('Agent disabled', (t) => {
   let server = null
   let serverUrl = null
 
-  t.beforeEach((done) => {
+  t.beforeEach(() => {
     const createPlugin = require('../../../lib/create-plugin')
 
     // when the agent is disabled, the agent API will be a no-op API
@@ -31,20 +31,16 @@ tap.test('Agent disabled', (t) => {
       plugins: [plugin]
     })
 
-    server.listen().then(({ url }) => {
+    return server.listen().then(({ url }) => {
       serverUrl = url
-
-      done()
     })
   })
 
-  t.afterEach((done) => {
+  t.afterEach(() => {
     server.stop()
 
     server = null
     serverUrl = null
-
-    done()
   })
 
 

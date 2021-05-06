@@ -44,16 +44,19 @@ function setupApolloServerFastifyTests({suiteName, createTests, pluginConfig}, c
 
       app.register(server.createHandler())
 
-      app.listen(0, (err, address) => {
-        serverUrl = `${address}${server.graphqlPath}`
+      return new Promise((resolve, reject) => {
+        app.listen(0, (err, address) => {
+          if (err) reject(err)
+          serverUrl = `${address}${server.graphqlPath}`
 
-        t.context.helper = helper
-        t.context.serverUrl = serverUrl
-        done()
+          t.context.helper = helper
+          t.context.serverUrl = serverUrl
+          resolve()
+        })
       })
     })
 
-    t.afterEach((done) => {
+    t.afterEach(() => {
       server && server.stop()
       app && app.close()
 
@@ -63,22 +66,19 @@ function setupApolloServerFastifyTests({suiteName, createTests, pluginConfig}, c
       serverUrl = null
       helper = null
 
-      clearCachedModules(['fastify', 'apollo-server-fastify'], () => {
-        done()
-      })
+      clearCachedModules(['fastify', 'apollo-server-fastify'])
     })
 
     createTests(t, WEB_FRAMEWORK)
   })
 }
 
-function clearCachedModules(modules, callback) {
+function clearCachedModules(modules) {
   modules.forEach((moduleName) => {
     const requirePath = require.resolve(moduleName)
     delete require.cache[requirePath]
   })
 
-  callback()
 }
 
 module.exports = {
