@@ -35,7 +35,7 @@
     "eslint": "^7.8.1",
     "husky": "^6.0.0",
     "lint-staged": "^10.5.4",
-    "newrelic": "^6.13.0",
+    "newrelic": "^7.3.1",
     "tap": "^15.0.6"
   },
   "peerDependencies": {
