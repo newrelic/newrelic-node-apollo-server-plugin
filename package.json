@@ -28,7 +28,7 @@
     "node": ">=10.0.0"
   },
   "devDependencies": {
-    "@newrelic/test-utilities": "^4.1.2",
+    "@newrelic/test-utilities": "^5.1.0",
     "apollo-server": "^2.18.2",
     "eslint": "^7.8.1",
     "newrelic": "^6.13.0",
