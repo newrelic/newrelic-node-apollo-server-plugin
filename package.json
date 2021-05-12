@@ -8,7 +8,9 @@
     "lint": "eslint *.js lib tests",
     "test": "npm run unit && npm run integration && npm run versioned",
     "unit": "tap --test-regex='(\\/|^tests\\/unit\\/.*\\.test\\.js)$' --no-coverage",
-    "versioned": "versioned-tests --minor -i 2 'tests/versioned/*'"
+    "versioned": "npm run versioned:npm6",
+    "versioned:npm6": "versioned-tests --minor -i 2 'tests/versioned/*'",
+    "versioned:npm7": "versioned-tests --minor --all -i 2 'tests/versioned/*'"
   },
   "files": [
     "index.js",
@@ -28,7 +30,7 @@
     "node": ">=10.0.0"
   },
   "devDependencies": {
-    "@newrelic/test-utilities": "^4.1.2",
+    "@newrelic/test-utilities": "^5.1.0",
     "apollo-server": "^2.18.2",
     "eslint": "^7.8.1",
     "newrelic": "^6.13.0",
