@@ -60,7 +60,7 @@ function setupApolloServerHapiTests({suiteName, createTests, pluginConfig}, conf
       t.context.serverUrl = serverUrl
     })
 
-    t.afterEach((done) => {
+    t.afterEach(() => {
       hapiServer && hapiServer.stop()
       server && server.stop()
 
@@ -69,22 +69,18 @@ function setupApolloServerHapiTests({suiteName, createTests, pluginConfig}, conf
       serverUrl = null
       helper = null
 
-      clearCachedModules(['@hapi/hapi', 'apollo-server-hapi'], () => {
-        done()
-      })
+      clearCachedModules(['@hapi/hapi', 'apollo-server-hapi'])
     })
 
     createTests(t, WEB_FRAMEWORK)
   })
 }
 
-function clearCachedModules(modules, callback) {
+function clearCachedModules(modules) {
   modules.forEach((moduleName) => {
     const requirePath = require.resolve(moduleName)
     delete require.cache[requirePath]
   })
-
-  callback()
 }
 
 module.exports = {

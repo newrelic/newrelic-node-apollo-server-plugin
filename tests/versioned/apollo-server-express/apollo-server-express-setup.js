@@ -23,7 +23,7 @@ function setupApolloServerExpressTests({suiteName, createTests, pluginConfig}, c
     let serverUrl = null
     let helper = null
 
-    t.beforeEach((done) => {
+    t.beforeEach(() => {
       // load default instrumentation. express being critical
       helper = utils.TestAgent.makeInstrumented(config)
       const createPlugin = require('../../../lib/create-plugin')
@@ -45,16 +45,20 @@ function setupApolloServerExpressTests({suiteName, createTests, pluginConfig}, c
       const app = express()
       server.applyMiddleware({ app })
 
-      expressServer = app.listen(0, () => {
-        serverUrl = `http://localhost:${expressServer.address().port}${server.graphqlPath}`
+      return new Promise((resolve, reject) => {
+        expressServer = app.listen(0, (err) => {
+          if (err) {reject(err)}
 
-        t.context.helper = helper
-        t.context.serverUrl = serverUrl
-        done()
+          serverUrl = `http://localhost:${expressServer.address().port}${server.graphqlPath}`
+
+          t.context.helper = helper
+          t.context.serverUrl = serverUrl
+          resolve()
+        })
       })
     })
 
-    t.afterEach((done) => {
+    t.afterEach(() => {
       expressServer && expressServer.close()
       server && server.stop()
 
@@ -63,22 +67,18 @@ function setupApolloServerExpressTests({suiteName, createTests, pluginConfig}, c
       serverUrl = null
       helper = null
 
-      clearCachedModules(['express', 'apollo-server-express'], () => {
-        done()
-      })
+      clearCachedModules(['express', 'apollo-server-express'])
     })
 
     createTests(t, WEB_FRAMEWORK)
   })
 }
 
-function clearCachedModules(modules, callback) {
+function clearCachedModules(modules) {
   modules.forEach((moduleName) => {
     const requirePath = require.resolve(moduleName)
     delete require.cache[requirePath]
   })
-
-  callback()
 }
 
 module.exports = {

@@ -52,9 +52,13 @@ tap.test('should create full plugin when agent enabled', (t) => {
 function resetModuleCache(callback) {
   const indexPath = require.resolve(INDEX_PATH)
   const newrelicPath = require.resolve('newrelic')
+  const newrelicLogger = require.resolve('newrelic/lib/logger')
+  const newrelicConfig = require.resolve('newrelic/lib/config')
 
   delete require.cache[indexPath]
   delete require.cache[newrelicPath]
+  delete require.cache[newrelicLogger]
+  delete require.cache[newrelicConfig]
   delete require.cache.__NR_cache
 
   callback()

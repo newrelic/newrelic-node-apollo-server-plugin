@@ -28,7 +28,7 @@ function setupApolloServerTests(options, agentConfig) {
     let serverUrl = null
     let helper = null
 
-    t.beforeEach((done) => {
+    t.beforeEach(() => {
       // load default instrumentation. express being critical
       helper = utils.TestAgent.makeInstrumented(agentConfig)
       const createPlugin = require('../lib/create-plugin')
@@ -46,16 +46,15 @@ function setupApolloServerTests(options, agentConfig) {
         plugins: [...startingPlugins, instrumentationPlugin]
       })
 
-      server.listen({port: 0}).then(({ url }) => {
+      return server.listen({port: 0}).then(({ url }) => {
         serverUrl = url
 
         t.context.helper = helper
         t.context.serverUrl = serverUrl
-        done()
       })
     })
 
-    t.afterEach((done) => {
+    t.afterEach(() => {
       server.stop()
 
       helper.unload()
@@ -63,22 +62,18 @@ function setupApolloServerTests(options, agentConfig) {
       serverUrl = null
       helper = null
 
-      clearCachedModules(['express', 'apollo-server'], () => {
-        done()
-      })
+      clearCachedModules(['express', 'apollo-server'])
     })
 
     createTests(t, WEB_FRAMEWORK)
   })
 }
 
-function clearCachedModules(modules, callback) {
+function clearCachedModules(modules) {
   modules.forEach((moduleName) => {
     const requirePath = require.resolve(moduleName)
     delete require.cache[requirePath]
   })
-
-  callback()
 }
 
 function initializePlugins(instrumentationApi, plugins) {
