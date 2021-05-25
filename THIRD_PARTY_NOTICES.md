@@ -20,6 +20,8 @@ code, the source code can be found at [https://github.com/newrelic/newrelic-node
 * [@newrelic/test-utilities](#newrelictest-utilities)
 * [apollo-server](#apollo-server)
 * [eslint](#eslint)
+* [husky](#husky)
+* [lint-staged](#lint-staged)
 * [newrelic](#newrelic)
 * [tap](#tap)
 
@@ -31,7 +33,7 @@ code, the source code can be found at [https://github.com/newrelic/newrelic-node
 
 ### @newrelic/test-utilities
 
-This product includes source derived from [@newrelic/test-utilities](https://github.com/newrelic/node-test-utilities) ([v4.1.2](https://github.com/newrelic/node-test-utilities/tree/v4.1.2)), distributed under the [Apache-2.0 License](https://github.com/newrelic/node-test-utilities/blob/v4.1.2/LICENSE):
+This product includes source derived from [@newrelic/test-utilities](https://github.com/newrelic/node-test-utilities) ([v5.1.0](https://github.com/newrelic/node-test-utilities/tree/v5.1.0)), distributed under the [Apache-2.0 License](https://github.com/newrelic/node-test-utilities/blob/v5.1.0/LICENSE):
 
 ```
                                  Apache License
@@ -294,9 +296,67 @@ THE SOFTWARE.
 
 ```
 
+### husky
+
+This product includes source derived from [husky](https://github.com/typicode/husky) ([v6.0.0](https://github.com/typicode/husky/tree/v6.0.0)), distributed under the [MIT License](https://github.com/typicode/husky/blob/v6.0.0/LICENSE):
+
+```
+MIT License
+
+Copyright (c) 2021 typicode
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+```
+
+### lint-staged
+
+This product includes source derived from [lint-staged](https://github.com/okonet/lint-staged) ([v10.5.4](https://github.com/okonet/lint-staged/tree/v10.5.4)), distributed under the [MIT License](https://github.com/okonet/lint-staged/blob/v10.5.4/LICENSE):
+
+```
+The MIT License (MIT)
+
+Copyright (c) 2016 Andrey Okonetchnikov
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+```
+
 ### newrelic
 
-This product includes source derived from [newrelic](https://github.com/newrelic/node-newrelic) ([v6.13.0](https://github.com/newrelic/node-newrelic/tree/v6.13.0)), distributed under the [Apache-2.0 License](https://github.com/newrelic/node-newrelic/blob/v6.13.0/LICENSE):
+This product includes source derived from [newrelic](https://github.com/newrelic/node-newrelic) ([v7.3.1](https://github.com/newrelic/node-newrelic/tree/v7.3.1)), distributed under the [Apache-2.0 License](https://github.com/newrelic/node-newrelic/blob/v7.3.1/LICENSE):
 
 ```
                                  Apache License
@@ -504,7 +564,7 @@ This product includes source derived from [newrelic](https://github.com/newrelic
 
 ### tap
 
-This product includes source derived from [tap](https://github.com/tapjs/node-tap) ([v14.10.8](https://github.com/tapjs/node-tap/tree/v14.10.8)), distributed under the [ISC License](https://github.com/tapjs/node-tap/blob/v14.10.8/LICENSE):
+This product includes source derived from [tap](https://github.com/tapjs/node-tap) ([v15.0.6](https://github.com/tapjs/node-tap/tree/v15.0.6)), distributed under the [ISC License](https://github.com/tapjs/node-tap/blob/v15.0.6/LICENSE):
 
 ```
 The ISC License
@@ -525,9 +585,3 @@ IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 ```
 
------
-
-Portions copyright Node.js contributors. Depending on your existing libraries and package management settings,
-your systems may call externally maintained libraries in addition to those listed above.
-See [here](https://nodejs.org/en/docs/meta/topics/dependencies/) and [here](https://github.com/nodejs/node/blob/v4.3.1/LICENSE)
-for additional details regarding externally maintained libraries and certain related licenses and notices.”
