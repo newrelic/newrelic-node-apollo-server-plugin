@@ -42,11 +42,15 @@ function executeJson(url, json, callback) {
 
 function makeRequest(url, postData, callback) {
   const options = {
-    method: 'POST',
+    method: 'GET',
     headers: {
-      'Content-Type': 'application/json',
-      'Content-Length': Buffer.byteLength(postData)
+      'Content-Type': 'application/json'
     }
+  }
+
+  if (postData) {
+    options.method = 'POST'
+    options.headers['Content-Length'] = Buffer.byteLength(postData)
   }
 
   const req = http.request(url, options, (res) => {
@@ -67,12 +71,15 @@ function makeRequest(url, postData, callback) {
     callback(e)
   })
 
-  req.write(postData)
+  if (postData) {
+    req.write(postData)
+  }
   req.end()
 }
 
 module.exports = {
   executeJson,
   executeQuery,
-  executeQueryBatch
+  executeQueryBatch,
+  makeRequest
 }
