@@ -5,7 +5,8 @@
 
 'use strict'
 
-const { executeQuery, executeQueryBatch } = require('../test-client')
+const crypto = require('crypto')
+const { executeQuery, executeQueryBatch, makeRequest } = require('../test-client')
 const { setupEnvConfig } = require('../agent-testing')
 
 const ANON_PLACEHOLDER = '<anonymous>'
@@ -146,6 +147,41 @@ function createMetricsTests(t) {
     executeQueryBatch(serverUrl, queries, (err) => {
       t.error(err)
       t.end()
+    })
+  })
+
+  t.test('should use the context.source when executing a persisted query', (t) => {
+    const { helper, serverUrl } = t.context
+
+    const query = '{ libraries { books { title author { name } } } }'
+    const deepestPath = 'libraries.books.author.name'
+    const querySha = crypto.createHash('sha256').update(query).digest('hex')
+    const withQuery = `${serverUrl}?extensions={"persistedQuery":{"version":1,
+      "sha256Hash":"${querySha}"}}&query=${query}`
+    const persistedQuery = `${serverUrl}?extensions={"persistedQuery":{"version":1,
+      "sha256Hash":"${querySha}"}}`
+
+    helper.agent.on('transactionFinished', () => {
+      const operationPart = `query/${ANON_PLACEHOLDER}/${deepestPath}`
+
+      t.metrics([
+        `${OPERATION_PREFIX}/${operationPart}`,
+        `${RESOLVE_PREFIX}/libraries`,
+        `${RESOLVE_PREFIX}/books`,
+        `${RESOLVE_PREFIX}/author`
+      ])
+    })
+
+    // first make a request with persistedQuery extension enabled and the query to persist
+    makeRequest(withQuery, null, (err) => {
+      t.error(err)
+
+      // lastly, make a request with persistedQuery extension enabled
+      // and without the query it should properly pull from query cache
+      makeRequest(persistedQuery, null, (err) => {
+        t.error(err)
+        t.end()
+      })
     })
   })
 

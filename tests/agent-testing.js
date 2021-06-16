@@ -51,7 +51,7 @@ function temporarySetEnv(t, key, value) {
   const existing = process.env[key]
   process.env[key] = value
 
-  t.tearDown(() => {
+  t.teardown(() => {
     if (existing === undefined) {
       delete process.env[key]
       return
