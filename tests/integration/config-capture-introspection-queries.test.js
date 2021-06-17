@@ -7,11 +7,6 @@
 
 const { executeQuery } = require('../test-client')
 const { setupEnvConfig } = require('../agent-testing')
-
-const OPERATION_PREFIX = 'GraphQL/operation/ApolloServer'
-const RESOLVE_PREFIX = 'GraphQL/resolve/ApolloServer'
-const TRANSACTION_PREFIX = 'WebTransaction/Expressjs/POST'
-
 const { setupApolloServerTests } = require('../apollo-server-setup')
 const queries = [
   `{
@@ -58,12 +53,18 @@ function createCaptureIntrospectionTests(ignore, t) {
   setupEnvConfig(t)
 
   queries.forEach((query) => {
-    t.test(`should ${ignore ? '' : 'not '}ignore transaction when captureIntrospectionQuery is ${!ignore} and query contains introspection types`, (t) => {
+    t.test(`should ${ignore ? '' : 'not '}ignore transaction when
+captureIntrospectionQuery is ${!ignore} and query contains
+introspection types`, (t) => {
       const { helper, serverUrl } = t.context
 
 
       helper.agent.on('transactionFinished', (transaction) => {
-        t.equal(transaction.ignore, ignore, `should set transaction.ignore to ${ignore}`)
+        t.equal(
+          transaction.ignore,
+          ignore,
+          `should set transaction.ignore to ${ignore}`
+        )
       })
 
       executeQuery(serverUrl, query, (err) => {
@@ -73,12 +74,17 @@ function createCaptureIntrospectionTests(ignore, t) {
     })
   })
 
-  t.test(`should not ignore transaction when captureIntrospectionQuery is ${!ignore} and query does not contain an introspection type`, (t) => {
+  t.test(`should not ignore transaction when
+captureIntrospectionQuery is ${!ignore} and query
+does not contain an introspection type`, (t) => {
       const { helper, serverUrl } = t.context
 
 
       helper.agent.on('transactionFinished', (transaction) => {
-        t.notOk(transaction.ignore, 'should set transaction.ignore to false when not an introspection type')
+        t.notOk(
+          transaction.ignore,
+          'should set transaction.ignore to false when not an introspection type'
+        )
       })
 
       const query = `query GetAllForLibrary {
