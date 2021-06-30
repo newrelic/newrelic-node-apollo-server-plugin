@@ -1,0 +1,35 @@
+{
+  "name": "apollo-server-tests",
+  "version": "0.0.0",
+  "private": true,
+  "tests": [
+    {
+      "engines": {
+        "node": ">=12.13.0"
+      },
+      "dependencies": {
+        "@apollo/federation": ">=0.25.2",
+        "@apollo/gateway": ">=0.25.2 <0.31.0",
+        "apollo-server": "2.25.1"
+      },
+      "files": [
+        "segments.test.js"
+      ]
+    },
+    {
+      "engines": {
+        "node": ">=12.13.0"
+      },
+      "dependencies": {
+        "@apollo/federation": ">=0.25.2",
+        "@apollo/gateway": ">=0.31.0",
+        "@opentelemetry/api": "1.0.1",
+        "apollo-server": "2.25.1"
+      },
+      "files": [
+        "segments.test.js"
+      ]
+    }
+  ],
+  "dependencies": {}
+}

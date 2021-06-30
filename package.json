@@ -10,6 +10,7 @@
     "test": "npm run unit && npm run integration && npm run versioned",
     "unit": "tap --test-regex='(\\/|^tests\\/unit\\/.*\\.test\\.js)$' --no-coverage",
     "versioned": "npm run versioned:npm6",
+    "versioned:folder": "versioned-tests --minor -i 2",
     "versioned:npm6": "versioned-tests --minor -i 2 'tests/versioned/*'",
     "versioned:npm7": "versioned-tests --minor --all -i 2 'tests/versioned/*'"
   },
