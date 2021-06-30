@@ -46,7 +46,7 @@ function createFederatedSegmentsTests(t, frameworkName) {
     }`
 
     helper.agent.on('transactionFinished', (transaction) => {
-      if (transaction.forceIgnore) {
+      if (shouldSkipTransaction(transaction)) {
         return
       }
 
@@ -117,7 +117,7 @@ function createFederatedSegmentsTests(t, frameworkName) {
     const magazineExternal = formatExternalSegment(t.context.magazineUrl)
 
     helper.agent.on('transactionFinished', (transaction) => {
-      if (transaction.forceIgnore) {
+      if (shouldSkipTransaction(transaction)) {
         return
       }
 
@@ -182,6 +182,18 @@ function createFederatedSegmentsTests(t, frameworkName) {
   }
 
   setImmediate(callback)
+}
+
+/**
+ * Sub-graph transactions are flagged as ignore via 'createIgnoreTransactionPlugin'
+ * to indicate we are not intending to check data for those in these tests.
+ */
+function shouldSkipTransaction(transaction) {
+  if (transaction.forceIgnore) {
+    return true
+  }
+
+  return false
 }
 
 function formatExternalSegment(url) {

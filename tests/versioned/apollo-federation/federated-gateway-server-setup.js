@@ -44,6 +44,9 @@ function setupFederatedGatewayServerTests(options, agentConfig) {
       // Do after instrumentation to ensure express isn't loaded too soon.
       const apollo = require('apollo-server')
 
+      // Sub-graph services are currently auto-instrumented via express.
+      // Ignore transaction plugin will prevent creation of standard data and indicate
+      // to tests we do not intend to assert on these transactions.
       const ignoreTransactionPlugin = createIgnoreTransactionPlugin(nrApi)
       const subGraphPlugins = [ ignoreTransactionPlugin ]
 
