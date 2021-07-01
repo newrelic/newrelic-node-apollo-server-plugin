@@ -8,13 +8,11 @@
 const { executeQuery, executeQueryBatch } = require('../../test-client')
 
 const ANON_PLACEHOLDER = '<anonymous>'
-const OPERATION_PREFIX = 'GraphQL/operation/ApolloServer'
-const EXTERNAL_PREFIX = 'External'
 
 const { setupFederatedGatewayServerTests } = require('./federated-gateway-server-setup')
 
 setupFederatedGatewayServerTests({
-  suiteName: 'federated egments',
+  suiteName: 'federated transaction names',
   createTests: createFederatedSegmentsTests
 })
 
@@ -27,7 +25,7 @@ setupFederatedGatewayServerTests({
 function createFederatedSegmentsTests(t, frameworkName) {
   const TRANSACTION_PREFIX = `WebTransaction/${frameworkName}/POST`
 
-  t.test('should nest sub graphs under operation', (t) => {
+  t.test('should properly name transaction when an anonymous federated query', (t) => {
     const { helper, serverUrl } = t.context
 
     const query = `query {
@@ -50,30 +48,9 @@ function createFederatedSegmentsTests(t, frameworkName) {
         return
       }
 
-      const libraryExternal = formatExternalSegment(t.context.libraryUrl)
-      const bookExternal = formatExternalSegment(t.context.bookUrl)
-      const magazineExternal = formatExternalSegment(t.context.magazineUrl)
-
       const operationPart = `query/${ANON_PLACEHOLDER}/libraries.booksInStock.isbn`
-      const expectedSegments = [{
-        name: `${TRANSACTION_PREFIX}//${operationPart}`,
-        children: [{
-          name: 'Expressjs/Router: /',
-          children: [{
-            name: 'Nodejs/Middleware/Expressjs/<anonymous>',
-            children: [{
-              name: `${OPERATION_PREFIX}/${operationPart}`,
-              children: [
-                { name: libraryExternal },
-                { name: bookExternal },
-                { name: magazineExternal }
-              ]
-            }]
-          }]
-        }]
-      }]
-
-      t.segments(transaction.trace.root, expectedSegments)
+      t.equal(transaction.name,
+      `${TRANSACTION_PREFIX}//${operationPart}`)
     })
 
     executeQuery(serverUrl, query, (err, result) => {
@@ -84,7 +61,38 @@ function createFederatedSegmentsTests(t, frameworkName) {
     })
   })
 
-  t.test('batch query should nest sub graphs under appropriate operations', (t) => {
+  t.test('should properly name transaction when a named, federated query', (t) => {
+    const { helper, serverUrl } = t.context
+
+    const query = `query booksInStock {
+      libraries {
+        branch
+        booksInStock {
+          title,
+          author
+        }
+      }
+    }`
+
+    helper.agent.on('transactionFinished', (transaction) => {
+      if (shouldSkipTransaction(transaction)) {
+        return
+      }
+
+      const operationPart = 'query/booksInStock/libraries.booksInStock.title'
+      t.equal(transaction.name,
+      `${TRANSACTION_PREFIX}//${operationPart}`)
+    })
+
+    executeQuery(serverUrl, query, (err, result) => {
+      t.error(err)
+      checkResult(t, result, () => {
+        t.end()
+      })
+    })
+  })
+
+  t.test('should properly name transaction when a named, batch federated query', (t) => {
     const { helper, serverUrl } = t.context
 
     const booksQueryName = 'GetBooksForLibraries'
@@ -112,49 +120,18 @@ function createFederatedSegmentsTests(t, frameworkName) {
 
     const queries = [booksQuery, magazineQuery]
 
-    const libraryExternal = formatExternalSegment(t.context.libraryUrl)
-    const bookExternal = formatExternalSegment(t.context.bookUrl)
-    const magazineExternal = formatExternalSegment(t.context.magazineUrl)
-
     helper.agent.on('transactionFinished', (transaction) => {
       if (shouldSkipTransaction(transaction)) {
         return
       }
-
       const operationPart1 = `query/${booksQueryName}/libraries.booksInStock.isbn`
-      const expectedQuery1Name = `${operationPart1}`
       const operationPart2 = `query/${magazineQueryName}/libraries.magazinesInStock.issue`
-      const expectedQuery2Name = `${operationPart2}`
 
       const batchTransactionPrefix = `${TRANSACTION_PREFIX}//batch`
 
-      const expectedSegments = [{
-        name: `${batchTransactionPrefix}/${expectedQuery1Name}/${expectedQuery2Name}`,
-        children: [{
-          name: 'Expressjs/Router: /',
-          children: [{
-            name: 'Nodejs/Middleware/Expressjs/<anonymous>',
-            children: [
-              {
-                name: `${OPERATION_PREFIX}/${operationPart1}`,
-                children: [
-                  { name: libraryExternal },
-                  { name: bookExternal }
-                ]
-              },
-              {
-                name: `${OPERATION_PREFIX}/${operationPart2}`,
-                children: [
-                  { name: libraryExternal },
-                  { name: magazineExternal }
-                ]
-              }
-            ]
-          }]
-        }]
-      }]
-
-      t.segments(transaction.trace.root, expectedSegments)
+      t.equal(transaction.name,
+        `${batchTransactionPrefix}/${operationPart1}/${operationPart2}`
+      )
     })
 
     executeQueryBatch(serverUrl, queries, (err, result) => {
@@ -196,9 +173,3 @@ function shouldSkipTransaction(transaction) {
   return false
 }
 
-function formatExternalSegment(url) {
-  const hostAndPort = url.replace('http://', '')
-  const name = `${EXTERNAL_PREFIX}/${hostAndPort}`
-
-  return name
-}
