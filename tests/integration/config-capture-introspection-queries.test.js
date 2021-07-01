@@ -29,7 +29,7 @@ const queries = [
 
 setupApolloServerTests({
   suiteName: 'default',
-  createTests: createCaptureIntrospectionTests.bind(null, false)
+  createTests: createCaptureIntrospectionTests.bind(null, true)
 })
 
 setupApolloServerTests({
