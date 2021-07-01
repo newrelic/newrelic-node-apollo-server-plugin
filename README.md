@@ -50,7 +50,7 @@ To override configuration, invoke the `createPlugin` function prior to passing t
 const createPlugin = require('@newrelic/apollo-server-plugin')
 const plugin = createPlugin({
   captureScalars: false,
-  captureIntrospectionQueries: true
+  captureIntrospectionQueries: false
 })
 
 // imported from supported module
@@ -97,7 +97,7 @@ Configuration may be passed into the `createPlugin` function to override specifi
 ```js
 const plugin = createPlugin({
   captureScalars: true,
-  captureIntrospectionQueries: false
+  captureIntrospectionQueries: true
 })
 ```
 
@@ -108,7 +108,7 @@ const plugin = createPlugin({
 
   **NOTE:** query/mutation resolvers will always be captured even if returning a scalar type.
 
-* `[captureIntrospectionQueries = true]` Enable capture of timings for an [IntrospectionQuery](https://graphql.org/graphql-js/utilities/#introspectionquery).
+* `[captureIntrospectionQueries = false]` Enable capture of timings for an [IntrospectionQuery](https://graphql.org/graphql-js/utilities/#introspectionquery).
 
 ### Transactions
 
