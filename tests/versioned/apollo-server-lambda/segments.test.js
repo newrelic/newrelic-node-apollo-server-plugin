@@ -15,6 +15,7 @@ const OPERATION_PREFIX = 'GraphQL/operation/ApolloServer'
 const RESOLVE_PREFIX = 'GraphQL/resolve/ApolloServer'
 
 const { setupApolloServerLambdaTests } = require('./apollo-server-lambda-setup')
+const { checkResult } = require('../common')
 
 setupApolloServerLambdaTests({
   suiteName: 'lambda segments',
@@ -588,18 +589,3 @@ function createLambdaSegmentsTests(t, frameworkName) {
   })
 }
 
-/**
- * Verify we didn't break anything outright and
- * test is setup correctly for functioning calls.
- */
-function checkResult(t, result, callback) {
-  t.ok(result)
-
-  if (result.errors) {
-    result.errors.forEach((error) => {
-      t.error(error)
-    })
-  }
-
-  setImmediate(callback)
-}

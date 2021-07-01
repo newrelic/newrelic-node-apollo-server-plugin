@@ -12,9 +12,10 @@ const OPERATION_PREFIX = 'GraphQL/operation/ApolloServer'
 const EXTERNAL_PREFIX = 'External'
 
 const { setupFederatedGatewayServerTests } = require('./federated-gateway-server-setup')
+const { checkResult, shouldSkipTransaction } = require('../common')
 
 setupFederatedGatewayServerTests({
-  suiteName: 'federated egments',
+  suiteName: 'federated segments',
   createTests: createFederatedSegmentsTests
 })
 
@@ -166,34 +167,6 @@ function createFederatedSegmentsTests(t, frameworkName) {
       })
     })
   })
-}
-
-/**
- * Verify we didn't break anything outright and
- * test is setup correctly for functioning calls.
- */
- function checkResult(t, result, callback) {
-  t.ok(result)
-
-  if (result.errors) {
-    result.errors.forEach((error) => {
-      t.error(error)
-    })
-  }
-
-  setImmediate(callback)
-}
-
-/**
- * Sub-graph transactions are flagged as ignore via 'createIgnoreTransactionPlugin'
- * to indicate we are not intending to check data for those in these tests.
- */
-function shouldSkipTransaction(transaction) {
-  if (transaction.forceIgnore) {
-    return true
-  }
-
-  return false
 }
 
 function formatExternalSegment(url) {

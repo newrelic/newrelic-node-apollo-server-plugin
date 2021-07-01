@@ -10,19 +10,20 @@ const { executeQuery, executeQueryBatch } = require('../../test-client')
 const ANON_PLACEHOLDER = '<anonymous>'
 
 const { setupFederatedGatewayServerTests } = require('./federated-gateway-server-setup')
+const { checkResult, shouldSkipTransaction } = require('../common')
 
 setupFederatedGatewayServerTests({
   suiteName: 'federated transaction names',
-  createTests: createFederatedSegmentsTests
+  createTests: createFederatedTransactionNamingTests
 })
 
 /**
- * Creates a set of standard segment naming and nesting tests to run
+ * Creates a set of standard transaction naming tests to run
  * against express-based apollo-server libraries.
  * It is required that t.context.helper and t.context.serverUrl are set.
  * @param {*} t a tap test instance
  */
-function createFederatedSegmentsTests(t, frameworkName) {
+function createFederatedTransactionNamingTests(t, frameworkName) {
   const TRANSACTION_PREFIX = `WebTransaction/${frameworkName}/POST`
 
   t.test('should properly name transaction when an anonymous federated query', (t) => {
@@ -143,33 +144,5 @@ function createFederatedSegmentsTests(t, frameworkName) {
       })
     })
   })
-}
-
-/**
- * Verify we didn't break anything outright and
- * test is setup correctly for functioning calls.
- */
- function checkResult(t, result, callback) {
-  t.ok(result)
-
-  if (result.errors) {
-    result.errors.forEach((error) => {
-      t.error(error)
-    })
-  }
-
-  setImmediate(callback)
-}
-
-/**
- * Sub-graph transactions are flagged as ignore via 'createIgnoreTransactionPlugin'
- * to indicate we are not intending to check data for those in these tests.
- */
-function shouldSkipTransaction(transaction) {
-  if (transaction.forceIgnore) {
-    return true
-  }
-
-  return false
 }
 

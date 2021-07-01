@@ -6,6 +6,7 @@
 'use strict'
 
 const { executeQuery, executeQueryBatch } = require('../test-client')
+const { checkResult } = require('./common')
 
 const ANON_PLACEHOLDER = '<anonymous>'
 const UNKNOWN_OPERATION = '<unknown>'
@@ -629,22 +630,6 @@ function createSegmentsTests(t, frameworkName) {
       t.end()
     })
   })
-}
-
-/**
- * Verify we didn't break anything outright and
- * test is setup correctly for functioning calls.
- */
-function checkResult(t, result, callback) {
-  t.ok(result)
-
-  if (result.errors) {
-    result.errors.forEach((error) => {
-      t.error(error)
-    })
-  }
-
-  setImmediate(callback)
 }
 
 module.exports = {
