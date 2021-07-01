@@ -12,9 +12,10 @@ const OPERATION_PREFIX = 'GraphQL/operation/ApolloServer'
 const EXTERNAL_PREFIX = 'External'
 
 const { setupFederatedGatewayServerTests } = require('./federated-gateway-server-setup')
+const { checkResult, shouldSkipTransaction } = require('../common')
 
 setupFederatedGatewayServerTests({
-  suiteName: 'fastify segments',
+  suiteName: 'federated segments',
   createTests: createFederatedSegmentsTests
 })
 
@@ -54,7 +55,7 @@ function createFederatedSegmentsTests(t, frameworkName) {
       const bookExternal = formatExternalSegment(t.context.bookUrl)
       const magazineExternal = formatExternalSegment(t.context.magazineUrl)
 
-      const operationPart = `query/${ANON_PLACEHOLDER}`
+      const operationPart = `query/${ANON_PLACEHOLDER}/libraries.booksInStock.isbn`
       const expectedSegments = [{
         name: `${TRANSACTION_PREFIX}//${operationPart}`,
         children: [{
@@ -121,9 +122,9 @@ function createFederatedSegmentsTests(t, frameworkName) {
         return
       }
 
-      const operationPart1 = `query/${booksQueryName}`
+      const operationPart1 = `query/${booksQueryName}/libraries.booksInStock.isbn`
       const expectedQuery1Name = `${operationPart1}`
-      const operationPart2 = `query/${magazineQueryName}`
+      const operationPart2 = `query/${magazineQueryName}/libraries.magazinesInStock.issue`
       const expectedQuery2Name = `${operationPart2}`
 
       const batchTransactionPrefix = `${TRANSACTION_PREFIX}//batch`
@@ -166,34 +167,6 @@ function createFederatedSegmentsTests(t, frameworkName) {
       })
     })
   })
-}
-
-/**
- * Verify we didn't break anything outright and
- * test is setup correctly for functioning calls.
- */
- function checkResult(t, result, callback) {
-  t.ok(result)
-
-  if (result.errors) {
-    result.errors.forEach((error) => {
-      t.error(error)
-    })
-  }
-
-  setImmediate(callback)
-}
-
-/**
- * Sub-graph transactions are flagged as ignore via 'createIgnoreTransactionPlugin'
- * to indicate we are not intending to check data for those in these tests.
- */
-function shouldSkipTransaction(transaction) {
-  if (transaction.forceIgnore) {
-    return true
-  }
-
-  return false
 }
 
 function formatExternalSegment(url) {

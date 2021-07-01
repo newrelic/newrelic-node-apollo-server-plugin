@@ -14,6 +14,7 @@ const OPERATION_PREFIX = 'GraphQL/operation/ApolloServer'
 const RESOLVE_PREFIX = 'GraphQL/resolve/ApolloServer'
 
 const { setupApolloServerKoaTests } = require('./apollo-server-koa-setup')
+const { checkResult } = require('../common')
 
 setupApolloServerKoaTests({
   suiteName: 'koa segments',
@@ -602,20 +603,4 @@ function createKoaSegmentsTests(t, frameworkName) {
       t.end()
     })
   })
-}
-
-/**
- * Verify we didn't break anything outright and
- * test is setup correctly for functioning calls.
- */
-function checkResult(t, result, callback) {
-  t.ok(result)
-
-  if (result.errors) {
-    result.errors.forEach((error) => {
-      t.error(error)
-    })
-  }
-
-  setImmediate(callback)
 }
