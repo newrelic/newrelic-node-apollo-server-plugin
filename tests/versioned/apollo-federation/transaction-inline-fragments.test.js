@@ -26,6 +26,33 @@ function createFederatedSegmentsTests(t) {
   t.test('should nest sub graphs under operation', (t) => {
     const { helper, serverUrl } = t.context
 
+    /**
+     * This query gets deconstructed as such
+     * `{libraries{branch __typename id}}`
+     * `query($representations:[_Any!]!){
+     *    _entities(representations:$representations){
+     *      ...on Library{
+     *        booksInStock{
+     *          isbn title author
+     *        }
+     *      }
+     *    }
+     *  }`
+     * `query($representations:[_Any!]!){
+     *   _entities(representations:$representations){
+     *     ...on Library{
+     *       magazinesInStock{
+     *         issue title
+     *       }
+     *     }
+     *   }
+     * }`
+     * The ones with `...on Library` are [InlineFragments](https://graphql.org/learn/queries/#inline-fragments)
+     * which lack name properites on all the selections within document
+     * without the fix in https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/100
+     * they would crash and not properly name the transactions, also the query request
+     * would fail
+     */
     const query = `query SubGraphs {
       libraries {
         branch
