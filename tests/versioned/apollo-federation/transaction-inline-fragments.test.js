@@ -70,10 +70,10 @@ function createFederatedSegmentsTests(t) {
 
     let transactions = []
     const expectedTransactions = [
-      'WebTransaction/Expressjs/POST//query/<anonymous>/libraries.branch',
-      'WebTransaction/Expressjs/POST//query/<anonymous>/_entities.booksInStock.isbn',
-      'WebTransaction/Expressjs/POST//query/<anonymous>/_entities.magazinesInStock.issue',
-      'WebTransaction/Expressjs/POST//query/SubGraphs/libraries.booksInStock.isbn'
+      'WebTransaction/Expressjs/POST//query/<anonymous>/libraries',
+      'WebTransaction/Expressjs/POST//query/<anonymous>/_entities.booksInStock',
+      'WebTransaction/Expressjs/POST//query/<anonymous>/_entities.magazinesInStock',
+      'WebTransaction/Expressjs/POST//query/SubGraphs/libraries'
     ]
 
     helper.agent.on('transactionFinished', (transaction) => {
@@ -82,7 +82,7 @@ function createFederatedSegmentsTests(t) {
 
     executeQuery(serverUrl, query, (err, result) => {
       t.equal(transactions.length, 4, 'should create 4 transactions')
-      t.same(expectedTransactions, transactions, 'should properly name each transaction')
+      t.same(transactions, expectedTransactions, 'should properly name each transaction')
       t.error(err)
       checkResult(t, result, () => {
         t.end()

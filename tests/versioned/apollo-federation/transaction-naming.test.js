@@ -49,7 +49,7 @@ function createFederatedTransactionNamingTests(t, frameworkName) {
         return
       }
 
-      const operationPart = `query/${ANON_PLACEHOLDER}/libraries.booksInStock.isbn`
+      const operationPart = `query/${ANON_PLACEHOLDER}/libraries`
       t.equal(transaction.name,
       `${TRANSACTION_PREFIX}//${operationPart}`)
     })
@@ -80,7 +80,7 @@ function createFederatedTransactionNamingTests(t, frameworkName) {
         return
       }
 
-      const operationPart = 'query/booksInStock/libraries.booksInStock.title'
+      const operationPart = 'query/booksInStock/libraries.booksInStock'
       t.equal(transaction.name,
       `${TRANSACTION_PREFIX}//${operationPart}`)
     })
@@ -125,8 +125,8 @@ function createFederatedTransactionNamingTests(t, frameworkName) {
       if (shouldSkipTransaction(transaction)) {
         return
       }
-      const operationPart1 = `query/${booksQueryName}/libraries.booksInStock.isbn`
-      const operationPart2 = `query/${magazineQueryName}/libraries.magazinesInStock.issue`
+      const operationPart1 = `query/${booksQueryName}/libraries.booksInStock`
+      const operationPart2 = `query/${magazineQueryName}/libraries.magazinesInStock`
 
       const batchTransactionPrefix = `${TRANSACTION_PREFIX}//batch`
 
@@ -145,4 +145,3 @@ function createFederatedTransactionNamingTests(t, frameworkName) {
     })
   })
 }
-
