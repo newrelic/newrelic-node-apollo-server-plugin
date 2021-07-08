@@ -126,8 +126,8 @@ const plugin = require('@newrelic/apollo-server-plugin')
 
 const gateway = new ApolloGateway({
   serviceList: [
-    { name: 'server1', url: 'server1' },
-    { name: 'server2', url: 'server2' }
+    { name: 'server1', url: SERVER_1_URL },
+    { name: 'server2', url: SERVER_2_URL }
   ]
 });
 
