@@ -8,7 +8,7 @@
         "node": ">=10"
       },
       "dependencies": {
-        "apollo-server-fastify": ">=2.14.0",
+        "apollo-server-fastify": ">=2.14.0 <3.0.0",
         "fastify": "3.5.0"
       },
       "files": [
