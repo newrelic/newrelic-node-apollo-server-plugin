@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "Tue May 25 2021 14:35:53 GMT-0400 (Eastern Daylight Time)",
+  "lastUpdated": "Thu Jul 08 2021 14:29:16 GMT-0700 (Pacific Daylight Time)",
   "projectName": "New Relic Node Apollo Server Plugin",
   "projectUrl": "https://github.com/newrelic/newrelic-node-apollo-server-plugin/",
   "includeDev": true,
@@ -57,15 +57,15 @@
       "publisher": "Typicode",
       "email": "typicode@gmail.com"
     },
-    "lint-staged@10.5.4": {
+    "lint-staged@11.0.0": {
       "name": "lint-staged",
-      "version": "10.5.4",
-      "range": "^10.5.4",
+      "version": "11.0.0",
+      "range": "^11.0.0",
       "licenses": "MIT",
       "repoUrl": "https://github.com/okonet/lint-staged",
-      "versionedRepoUrl": "https://github.com/okonet/lint-staged/tree/v10.5.4",
+      "versionedRepoUrl": "https://github.com/okonet/lint-staged/tree/v11.0.0",
       "licenseFile": "node_modules/lint-staged/LICENSE",
-      "licenseUrl": "https://github.com/okonet/lint-staged/blob/v10.5.4/LICENSE",
+      "licenseUrl": "https://github.com/okonet/lint-staged/blob/v11.0.0/LICENSE",
       "licenseTextSource": "file",
       "publisher": "Andrey Okonetchnikov",
       "email": "andrey@okonet.ru"
