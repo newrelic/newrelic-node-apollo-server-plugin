@@ -1,3 +1,16 @@
+## 0.3.0 (07/08/2021)
+* Added Apollo Federation support.
+  * Updated to always use the GraphQL document schema AST to generate the name and deepest path for transactions for a more consistent naming convention between federated gateway and standard Apollo servers.
+  * Fixed segment nesting for Apollo Federation gateway operations.
+* Updated `willSendResponse` hook to always grab the query from context.source.
+* Provided a new config option, `captureIntrospectionQueries`, to ignore transactions for Introspection Queries.
+  * `captureIntrospectionQueries` is defaulted to `false`.
+* Added support for capturing persisted queries.
+* Fixed crash when items lack a `name` property (InlineFragments).
+* Added husky + lint staged to run linting on all staged files as a pre-commit git hook.
+* Added `prepare` script to properly bootstrap husky.
+* Upgraded lint-staged to ^11.0.0.
+
 ## 0.2.0 (05/25/2021)
 * Added Node.js v16 to run CI pipeline steps
 * Fixed the main field in package.json to point to proper location

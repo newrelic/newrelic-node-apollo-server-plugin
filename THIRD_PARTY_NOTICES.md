@@ -327,7 +327,7 @@ SOFTWARE.
 
 ### lint-staged
 
-This product includes source derived from [lint-staged](https://github.com/okonet/lint-staged) ([v10.5.4](https://github.com/okonet/lint-staged/tree/v10.5.4)), distributed under the [MIT License](https://github.com/okonet/lint-staged/blob/v10.5.4/LICENSE):
+This product includes source derived from [lint-staged](https://github.com/okonet/lint-staged) ([v11.0.0](https://github.com/okonet/lint-staged/tree/v11.0.0)), distributed under the [MIT License](https://github.com/okonet/lint-staged/blob/v11.0.0/LICENSE):
 
 ```
 The MIT License (MIT)
