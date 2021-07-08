@@ -63,10 +63,18 @@ const server = new ApolloServer({
 
 ## Apollo Federation Support
 
-The New Relic plugin will work with an Apollo Federated Server out of the box. Just pass the plugin to the Gateway Apollo Server.
+The New Relic plugin will work with an Apollo Federated Server out of the box. Just pass the plugin to the Gateway Apollo Server. With the federated server you will get:
+* Distributed Tracing support
+* Transaction naming
+* Operation naming
+* Metrics
+
+Resolver spans are not supported for the Federated Server. We strongly recommend adding the plugin to your sub-graph servers which will generate all the data you get with the Federated Server as well as resolver spans.
 
 ```js
-// index.js
+// Federated Server index.js
+const plugin = require('@newrelic/apollo-server-plugin')
+
 const gateway = new ApolloGateway({
   serviceList: [
     { name: 'server1', url: 'server1' },
@@ -76,15 +84,24 @@ const gateway = new ApolloGateway({
 
 const server = new ApolloServer({
   gateway,
-  plugins: [ nrPlugin ]
+  plugins: [ plugin ]
 });
 ```
 
-For the best experience, add the plugin to the sub-graph servers as well.
+```js
+// Sub-Graph server index.js
+const plugin = require('@newrelic/apollo-server-plugin')
+
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  plugins: [ plugin ]
+});
+```
+
 
 ### Note:
-* You will see transactions named `/POST//query/GetServiceDefinition/_service.sdl` on the sub-graph servers from the Gateway initialization.
-* Spans/Segments named like `GraphQL/resolve/ApolloServer/_entities` indicate sub-graph query resolution.
+* You will see transactions named `/POST//query/GetServiceDefinition/_service.sdl` on the sub-graph servers from the Federated Gateway Server initialization.
 
 ## Usage
 
