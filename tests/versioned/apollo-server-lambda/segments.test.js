@@ -50,13 +50,14 @@ function createLambdaSegmentsTests(t, frameworkName) {
     })
 
     const result = await executeQueryWithLambdaHandler(patchedHandler, query, stubContext)
+    debugger;
     // TODO: request is failing with 400, invalid post body
     checkResult(t, result, () => {
       t.end()
     })
   })
 
-  t.test('named query, single level', (t) => {
+  t.test('named query, single level', async (t) => {
     const { helper, patchedHandler, stubContext } = t.context
 
     const expectedName = 'HeyThere'
@@ -79,16 +80,14 @@ function createLambdaSegmentsTests(t, frameworkName) {
       t.segments(transaction.trace.root, expectedSegments)
     })
 
-    executeQueryWithLambdaHandler(patchedHandler, query, stubContext, (err, result) => {
-      t.error(err)
+    const result = await executeQueryWithLambdaHandler(patchedHandler, query, stubContext)
 
-      checkResult(t, result, () => {
-        t.end()
-      })
+    checkResult(t, result, () => {
+      t.end()
     })
   })
 
-  t.test('anonymous query, multi-level', (t) => {
+  t.test('anonymous query, multi-level', async (t) => {
     const { helper, patchedHandler, stubContext } = t.context
 
     const query = `query {
@@ -122,16 +121,13 @@ function createLambdaSegmentsTests(t, frameworkName) {
       t.segments(transaction.trace.root, expectedSegments)
     })
 
-    executeQueryWithLambdaHandler(patchedHandler, query, stubContext, (err, result) => {
-      t.error(err)
-
-      checkResult(t, result, () => {
-        t.end()
-      })
+    const result = await executeQueryWithLambdaHandler(patchedHandler, query, stubContext)
+    checkResult(t, result, () => {
+      t.end()
     })
   })
 
-  t.test('named query, multi-level should return deepest path', (t) => {
+  t.test('named query, multi-level should return deepest path', async (t) => {
     const { helper, patchedHandler, stubContext } = t.context
 
     const expectedName = 'GetBooksByLibrary'
@@ -167,16 +163,13 @@ function createLambdaSegmentsTests(t, frameworkName) {
       t.segments(transaction.trace.root, expectedSegments)
     })
 
-    executeQueryWithLambdaHandler(patchedHandler, query, stubContext, (err, result) => {
-      t.error(err)
-
-      checkResult(t, result, () => {
-        t.end()
-      })
+    const result = await executeQueryWithLambdaHandler(patchedHandler, query, stubContext)
+    checkResult(t, result, () => {
+      t.end()
     })
   })
 
-  t.test('named query, multi-level, should choose *first* deepest-path', (t) => {
+  t.test('named query, multi-level, should choose *first* deepest-path', async (t) => {
     const { helper, patchedHandler, stubContext } = t.context
 
     const expectedName = 'GetBooksByLibrary'
@@ -210,16 +203,13 @@ function createLambdaSegmentsTests(t, frameworkName) {
       t.segments(transaction.trace.root, expectedSegments)
     })
 
-    executeQueryWithLambdaHandler(patchedHandler, query, stubContext, (err, result) => {
-      t.error(err)
-
-      checkResult(t, result, () => {
-        t.end()
-      })
+    const result = await executeQueryWithLambdaHandler(patchedHandler, query, stubContext)
+    checkResult(t, result, () => {
+      t.end()
     })
   })
 
-  t.test('anonymous mutation, single level', (t) => {
+  t.test('anonymous mutation, single level', async (t) => {
     const { helper, patchedHandler, stubContext } = t.context
 
     const query = `mutation {
@@ -247,16 +237,14 @@ function createLambdaSegmentsTests(t, frameworkName) {
       t.segments(transaction.trace.root, expectedSegments)
     })
 
-    executeQueryWithLambdaHandler(patchedHandler, query, stubContext, (err, result) => {
-      t.error(err)
+    const result = await executeQueryWithLambdaHandler(patchedHandler, query, stubContext)
 
-      checkResult(t, result, () => {
-        t.end()
-      })
+    checkResult(t, result, () => {
+      t.end()
     })
   })
 
-  t.test('named mutation, single level, should use mutation name', (t) => {
+  t.test('named mutation, single level, should use mutation name', async (t) => {
     const { helper, patchedHandler, stubContext } = t.context
 
     const expectedName = 'AddThing'
@@ -285,16 +273,14 @@ function createLambdaSegmentsTests(t, frameworkName) {
       t.segments(transaction.trace.root, expectedSegments)
     })
 
-    executeQueryWithLambdaHandler(patchedHandler, query, stubContext, (err, result) => {
-      t.error(err)
+    const result = await executeQueryWithLambdaHandler(patchedHandler, query, stubContext)
 
-      checkResult(t, result, () => {
-        t.end()
-      })
+    checkResult(t, result, () => {
+      t.end()
     })
   })
 
-  t.test('anonymous query, with params', (t) => {
+  t.test('anonymous query, with params', async (t) => {
     const { helper, patchedHandler, stubContext } = t.context
 
     const query = `query {
@@ -316,16 +302,14 @@ function createLambdaSegmentsTests(t, frameworkName) {
       t.segments(transaction.trace.root, expectedSegments)
     })
 
-    executeQueryWithLambdaHandler(patchedHandler, query, stubContext, (err, result) => {
-      t.error(err)
+    const result = await executeQueryWithLambdaHandler(patchedHandler, query, stubContext)
 
-      checkResult(t, result, () => {
-        t.end()
-      })
+    checkResult(t, result, () => {
+      t.end()
     })
   })
 
-  t.test('named query, with params', (t) => {
+  t.test('named query, with params', async (t) => {
     const { helper, patchedHandler, stubContext } = t.context
 
     const expectedName = 'BlahQuery'
@@ -348,16 +332,14 @@ function createLambdaSegmentsTests(t, frameworkName) {
       t.segments(transaction.trace.root, expectedSegments)
     })
 
-    executeQueryWithLambdaHandler(patchedHandler, query, stubContext, (err, result) => {
-      t.error(err)
+    const result = await executeQueryWithLambdaHandler(patchedHandler, query, stubContext)
 
-      checkResult(t, result, () => {
-        t.end()
-      })
+    checkResult(t, result, () => {
+      t.end()
     })
   })
 
-  t.test('named query, with params, multi-level', (t) => {
+  t.test('named query, with params, multi-level', async (t) => {
     const { helper, patchedHandler, stubContext } = t.context
 
     const expectedName = 'GetBookForLibrary'
@@ -401,16 +383,14 @@ function createLambdaSegmentsTests(t, frameworkName) {
       t.segments(transaction.trace.root, expectedSegments)
     })
 
-    executeQueryWithLambdaHandler(patchedHandler, query, stubContext, (err, result) => {
-      t.error(err)
+    const result = await executeQueryWithLambdaHandler(patchedHandler, query, stubContext)
 
-      checkResult(t, result, () => {
-        t.end()
-      })
+    checkResult(t, result, () => {
+      t.end()
     })
   })
 
-  t.test('batch query should include segments for nested queries', (t) => {
+  t.test('batch query should include segments for nested queries', async (t) => {
     const { helper, patchedHandler, stubContext } = t.context
 
     const expectedName1 = 'GetBookForLibrary'
@@ -480,18 +460,15 @@ function createLambdaSegmentsTests(t, frameworkName) {
       t.segments(transaction.trace.root, expectedSegments)
     })
 
-    executeBatchQueriesWithLambdaHandler
-    (patchedHandler, queries, stubContext, (err, result) => {
-      t.error(err)
+    const result = await executeBatchQueriesWithLambdaHandler(patchedHandler, queries, stubContext)
 
-      checkResult(t, result, () => {
-        t.end()
-      })
+    checkResult(t, result, () => {
+      t.end()
     })
   })
 
   // there will be no document/AST nor resolved operation
-  t.test('when the query cannot be parsed, should have operation placeholder', (t) => {
+  t.test('when the query cannot be parsed, should have operation placeholder', async (t) => {
     const { helper, patchedHandler, stubContext } = t.context
 
     const invalidQuery = `query {
@@ -516,29 +493,26 @@ function createLambdaSegmentsTests(t, frameworkName) {
       t.segments(transaction.trace.root, expectedSegments)
     })
 
-    executeQueryWithLambdaHandler
-    (patchedHandler, invalidQuery, stubContext, (err, result) => {
-      t.error(err)
+    const result = await executeQueryWithLambdaHandler(patchedHandler, invalidQuery, stubContext)
 
-      t.ok(result.body)
+    t.ok(result.body)
 
-      const jsonResult = JSON.parse(result.body)
+    const jsonResult = JSON.parse(result.body)
 
-      t.ok(jsonResult)
+    t.ok(jsonResult)
 
-      t.ok(jsonResult.errors)
-      t.equal(jsonResult.errors.length, 1) // should have one parsing error
+    t.ok(jsonResult.errors)
+    t.equal(jsonResult.errors.length, 1) // should have one parsing error
 
-      const [parseError] = jsonResult.errors
-      t.equal(parseError.extensions.code, 'GRAPHQL_PARSE_FAILED')
+    const [parseError] = jsonResult.errors
+    t.equal(parseError.extensions.code, 'GRAPHQL_PARSE_FAILED')
 
-      t.end()
-    })
+    t.end()
   })
 
   // if parse succeeds but validation fails, there will not be a resolved operation
   // but the document/AST can still be leveraged for what was intended.
-  t.test('when cannot validate, should include operation segment', (t) => {
+  t.test('when cannot validate, should include operation segment', async (t) => {
     const { helper, patchedHandler, stubContext } = t.context
 
     const invalidQuery = `query {
@@ -566,24 +540,21 @@ function createLambdaSegmentsTests(t, frameworkName) {
       t.segments(transaction.trace.root, expectedSegments)
     })
 
-    executeQueryWithLambdaHandler
-    (patchedHandler, invalidQuery, stubContext, (err, result) => {
-      t.error(err)
+    const result = await executeQueryWithLambdaHandler(patchedHandler, invalidQuery, stubContext)
 
-      t.ok(result.body)
+    t.ok(result.body)
 
-      const jsonResult = JSON.parse(result.body)
+    const jsonResult = JSON.parse(result.body)
 
-      t.ok(jsonResult)
+    t.ok(jsonResult)
 
-      t.ok(jsonResult.errors)
-      t.equal(jsonResult.errors.length, 1) // should have one parsing error
+    t.ok(jsonResult.errors)
+    t.equal(jsonResult.errors.length, 1) // should have one parsing error
 
-      const [parseError] = jsonResult.errors
-      t.equal(parseError.extensions.code, 'GRAPHQL_VALIDATION_FAILED')
+    const [parseError] = jsonResult.errors
+    t.equal(parseError.extensions.code, 'GRAPHQL_VALIDATION_FAILED')
 
-      t.end()
-    })
+    t.end()
   })
 }
 

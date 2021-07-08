@@ -24,7 +24,7 @@ setupApolloServerLambdaTests({
 function createTransactionTests(t, frameworkName) {
   const EXPECTED_PREFIX = `WebTransaction/${frameworkName}`
 
-  t.test('anonymous query, single level, should use anonymous placeholder', (t) => {
+  t.test('anonymous query, single level, should use anonymous placeholder', async (t) => {
     const { helper, patchedHandler, stubContext } = t.context
 
     const query = `query {
@@ -38,16 +38,14 @@ function createTransactionTests(t, frameworkName) {
       )
     })
 
-    executeQueryWithLambdaHandler(patchedHandler, query, stubContext, (err, result) => {
-      t.error(err)
+    const result = await executeQueryWithLambdaHandler(patchedHandler, query, stubContext)
 
-      checkResult(t, result, () => {
-        t.end()
-      })
+    checkResult(t, result, () => {
+      t.end()
     })
   })
 
-  t.test('named query, single level, should use query name', (t) => {
+  t.test('named query, single level, should use query name', async (t) => {
     const { helper, patchedHandler, stubContext } = t.context
 
     const expectedName = 'HeyThere'
@@ -62,16 +60,14 @@ function createTransactionTests(t, frameworkName) {
       )
     })
 
-    executeQueryWithLambdaHandler(patchedHandler, query, stubContext, (err, result) => {
-      t.error(err)
+    const result = await executeQueryWithLambdaHandler(patchedHandler, query, stubContext)
 
-      checkResult(t, result, () => {
-        t.end()
-      })
+    checkResult(t, result, () => {
+      t.end()
     })
   })
 
-  t.test('anonymous query, multi-level should return deepest path', (t) => {
+  t.test('anonymous query, multi-level should return deepest path', async (t) => {
     const { helper, patchedHandler, stubContext } = t.context
 
     const query = `query {
@@ -94,16 +90,14 @@ function createTransactionTests(t, frameworkName) {
       )
     })
 
-    executeQueryWithLambdaHandler(patchedHandler, query, stubContext, (err, result) => {
-      t.error(err)
+    const result = await executeQueryWithLambdaHandler(patchedHandler, query, stubContext)
 
-      checkResult(t, result, () => {
-        t.end()
-      })
+    checkResult(t, result, () => {
+      t.end()
     })
   })
 
-  t.test('named query, multi-level should return deepest path', (t) => {
+  t.test('named query, multi-level should return deepest path', async (t) => {
     const { helper, patchedHandler, stubContext } = t.context
 
     const expectedName = 'GetBooksByLibrary'
@@ -127,16 +121,14 @@ function createTransactionTests(t, frameworkName) {
       )
     })
 
-    executeQueryWithLambdaHandler(patchedHandler, query, stubContext, (err, result) => {
-      t.error(err)
+    const result = await executeQueryWithLambdaHandler(patchedHandler, query, stubContext)
 
-      checkResult(t, result, () => {
-        t.end()
-      })
+    checkResult(t, result, () => {
+      t.end()
     })
   })
 
-  t.test('named query, multi-level, should choose *first* deepest-path', (t) => {
+  t.test('named query, multi-level, should choose *first* deepest-path', async (t) => {
     const { helper, patchedHandler, stubContext } = t.context
 
     const expectedName = 'GetBooksByLibrary'
@@ -159,16 +151,14 @@ function createTransactionTests(t, frameworkName) {
       )
     })
 
-    executeQueryWithLambdaHandler(patchedHandler, query, stubContext, (err, result) => {
-      t.error(err)
+    const result = await executeQueryWithLambdaHandler(patchedHandler, query, stubContext)
 
-      checkResult(t, result, () => {
-        t.end()
-      })
+    checkResult(t, result, () => {
+      t.end()
     })
   })
 
-  t.test('anonymous mutation, single level, should use anonymous placeholder', (t) => {
+  t.test('anonymous mutation, single level, should use anonymous placeholder', async (t) => {
     const { helper, patchedHandler, stubContext } = t.context
 
     const query = `mutation {
@@ -182,16 +172,14 @@ function createTransactionTests(t, frameworkName) {
       )
     })
 
-    executeQueryWithLambdaHandler(patchedHandler, query, stubContext, (err, result) => {
-      t.error(err)
+    const result = await executeQueryWithLambdaHandler(patchedHandler, query, stubContext)
 
-      checkResult(t, result, () => {
-        t.end()
-      })
+    checkResult(t, result, () => {
+      t.end()
     })
   })
 
-  t.test('named mutation, single level, should use mutation name', (t) => {
+  t.test('named mutation, single level, should use mutation name', async (t) => {
     const { helper, patchedHandler, stubContext } = t.context
 
     const expectedName = 'AddThing'
@@ -206,16 +194,14 @@ function createTransactionTests(t, frameworkName) {
       )
     })
 
-    executeQueryWithLambdaHandler(patchedHandler, query, stubContext, (err, result) => {
-      t.error(err)
+    const result = await executeQueryWithLambdaHandler(patchedHandler, query, stubContext)
 
-      checkResult(t, result, () => {
-        t.end()
-      })
+    checkResult(t, result, () => {
+      t.end()
     })
   })
 
-  t.test('anonymous query, with params, should use anonymous placeholder', (t) => {
+  t.test('anonymous query, with params, should use anonymous placeholder', async (t) => {
     const { helper, patchedHandler, stubContext } = t.context
 
     const query = `query {
@@ -229,16 +215,14 @@ function createTransactionTests(t, frameworkName) {
       )
     })
 
-    executeQueryWithLambdaHandler(patchedHandler, query, stubContext, (err, result) => {
-      t.error(err)
+    const result = await executeQueryWithLambdaHandler(patchedHandler, query, stubContext)
 
-      checkResult(t, result, () => {
-        t.end()
-      })
+    checkResult(t, result, () => {
+      t.end()
     })
   })
 
-  t.test('named query, with params, should use query name', (t) => {
+  t.test('named query, with params, should use query name', async (t) => {
     const { helper, patchedHandler, stubContext } = t.context
 
     const expectedName = 'BlahQuery'
@@ -253,16 +237,14 @@ function createTransactionTests(t, frameworkName) {
       )
     })
 
-    executeQueryWithLambdaHandler(patchedHandler, query, stubContext, (err, result) => {
-      t.error(err)
+    const result = await executeQueryWithLambdaHandler(patchedHandler, query, stubContext)
 
-      checkResult(t, result, () => {
-        t.end()
-      })
+    checkResult(t, result, () => {
+      t.end()
     })
   })
 
-  t.test('named query, with params, should return deepest path', (t) => {
+  t.test('named query, with params, should return deepest path', async (t) => {
     const { helper, patchedHandler, stubContext } = t.context
 
     const expectedName = 'GetBookForLibrary'
@@ -286,16 +268,14 @@ function createTransactionTests(t, frameworkName) {
       )
     })
 
-    executeQueryWithLambdaHandler(patchedHandler, query, stubContext, (err, result) => {
-      t.error(err)
+    const result = await executeQueryWithLambdaHandler(patchedHandler, query, stubContext)
 
-      checkResult(t, result, () => {
-        t.end()
-      })
+    checkResult(t, result, () => {
+      t.end()
     })
   })
 
-  t.test('batch query should include "batch" all queries separated by delimeter', (t) => {
+  t.test('batch query should include "batch" all queries separated by delimeter', async (t) => {
     const { helper, patchedHandler, stubContext } = t.context
 
     const expectedName1 = 'GetBookForLibrary'
@@ -327,24 +307,19 @@ function createTransactionTests(t, frameworkName) {
       )
     })
 
-    executeBatchQueriesWithLambdaHandler
-    (patchedHandler, queries, stubContext, (err, result) => {
-      t.error(err)
+    const result = await executeBatchQueriesWithLambdaHandler(patchedHandler, queries, stubContext)
+    t.ok(result.body)
 
-      t.ok(result.body)
+    const jsonResult = JSON.parse(result.body)
+    t.equal(jsonResult.length, 2)
 
-      const jsonResult = JSON.parse(result.body)
-
-      checkResult(t, jsonResult, () => {
-        t.equal(jsonResult.length, 2)
-
-        t.end()
-      })
+    checkResult(t, jsonResult, () => {
+      t.end()
     })
   })
 
   // there will be no document/AST nor resolved operation
-  t.test('if the query cannot be parsed, should be named /*', (t) => {
+  t.test('if the query cannot be parsed, should be named /*', async (t) => {
     const { helper, patchedHandler, stubContext } = t.context
 
     const invalidQuery = `query {
@@ -362,29 +337,26 @@ function createTransactionTests(t, frameworkName) {
       t.equal(transaction.name, `${EXPECTED_PREFIX}//*`)
     })
 
-    executeQueryWithLambdaHandler
-    (patchedHandler, invalidQuery, stubContext, (err, result) => {
-      t.error(err)
+    const result = await executeQueryWithLambdaHandler(patchedHandler, invalidQuery, stubContext)
 
-      t.ok(result.body)
+    t.ok(result.body)
 
-      const jsonResult = JSON.parse(result.body)
+    const jsonResult = JSON.parse(result.body)
 
-      t.ok(jsonResult)
+    t.ok(jsonResult)
 
-      t.ok(jsonResult.errors)
-      t.equal(jsonResult.errors.length, 1) // should have one parsing error
+    t.ok(jsonResult.errors)
+    t.equal(jsonResult.errors.length, 1) // should have one parsing error
 
-      const [parseError] = jsonResult.errors
-      t.equal(parseError.extensions.code, 'GRAPHQL_PARSE_FAILED')
+    const [parseError] = jsonResult.errors
+    t.equal(parseError.extensions.code, 'GRAPHQL_PARSE_FAILED')
 
-      t.end()
-    })
+    t.end()
   })
 
   // if parse succeeds but validation fails, there will not be a resolved operation
   // but the document/AST can still be leveraged for what was intended.
-  t.test('anonymous query, when cant validate, should use document/AST', (t) => {
+  t.test('anonymous query, when cant validate, should use document/AST', async (t) => {
     const { helper, patchedHandler, stubContext } = t.context
 
     const invalidQuery = `query {
@@ -407,29 +379,26 @@ function createTransactionTests(t, frameworkName) {
       )
     })
 
-    executeQueryWithLambdaHandler
-    (patchedHandler, invalidQuery, stubContext, (err, result) => {
-      t.error(err)
+    const result = await executeQueryWithLambdaHandler(patchedHandler, invalidQuery, stubContext)
 
-      t.ok(result.body)
+    t.ok(result.body)
 
-      const jsonResult = JSON.parse(result.body)
+    const jsonResult = JSON.parse(result.body)
 
-      t.ok(jsonResult)
+    t.ok(jsonResult)
 
-      t.ok(jsonResult.errors)
-      t.equal(jsonResult.errors.length, 1) // should have one parsing error
+    t.ok(jsonResult.errors)
+    t.equal(jsonResult.errors.length, 1) // should have one parsing error
 
-      const [parseError] = jsonResult.errors
-      t.equal(parseError.extensions.code, 'GRAPHQL_VALIDATION_FAILED')
+    const [parseError] = jsonResult.errors
+    t.equal(parseError.extensions.code, 'GRAPHQL_VALIDATION_FAILED')
 
-      t.end()
-    })
+    t.end()
   })
 
   // if parse succeeds but validation fails, there will not be a resolved operation
   // but the document/AST can still be leveraged for what was intended.
-  t.test('named query, when cant validate, should use document/AST', (t) => {
+  t.test('named query, when cant validate, should use document/AST', async (t) => {
     const { helper, patchedHandler, stubContext } = t.context
 
     const expectedName = 'FailsToValidate'
@@ -453,24 +422,21 @@ function createTransactionTests(t, frameworkName) {
       )
     })
 
-    executeQueryWithLambdaHandler
-    (patchedHandler, invalidQuery, stubContext, (err, result) => {
-      t.error(err)
+    const result = await executeQueryWithLambdaHandler(patchedHandler, invalidQuery, stubContext)
 
-      t.ok(result.body)
+    t.ok(result.body)
 
-      const jsonResult = JSON.parse(result.body)
+    const jsonResult = JSON.parse(result.body)
 
-      t.ok(jsonResult)
+    t.ok(jsonResult)
 
-      t.ok(jsonResult.errors)
-      t.equal(jsonResult.errors.length, 1) // should have one parsing error
+    t.ok(jsonResult.errors)
+    t.equal(jsonResult.errors.length, 1) // should have one parsing error
 
-      const [parseError] = jsonResult.errors
-      t.equal(parseError.extensions.code, 'GRAPHQL_VALIDATION_FAILED')
+    const [parseError] = jsonResult.errors
+    t.equal(parseError.extensions.code, 'GRAPHQL_VALIDATION_FAILED')
 
-      t.end()
-    })
+    t.end()
   })
 }
 

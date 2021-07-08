@@ -25,7 +25,7 @@ setupApolloServerLambdaTests({
 })
 
 function createAttributesTests(t) {
-  t.test('anon query should capture standard attributes except operation name', (t) => {
+  t.test('anon query should capture standard attributes except operation name', async (t) => {
     const { helper, patchedHandler, stubContext } = t.context
 
     const query = `query {
@@ -68,13 +68,11 @@ function createAttributesTests(t) {
       )
     })
 
-    executeQueryWithLambdaHandler(patchedHandler, query, stubContext, (err) => {
-      t.error(err)
-      t.end()
-    })
+    await executeQueryWithLambdaHandler(patchedHandler, query, stubContext)
+    t.end()
   })
 
-  t.test('named query should capture all standard attributes', (t) => {
+  t.test('named query should capture all standard attributes', async (t) => {
     const { helper, patchedHandler, stubContext } = t.context
 
     const expectedName = 'HeyThere'
@@ -116,13 +114,11 @@ function createAttributesTests(t) {
       )
     })
 
-    executeQueryWithLambdaHandler(patchedHandler, query, stubContext, (err) => {
-      t.error(err)
-      t.end()
-    })
+    await executeQueryWithLambdaHandler(patchedHandler, query, stubContext)
+    t.end()
   })
 
-  t.test('named query, multi-level, should capture deepest path', (t) => {
+  t.test('named query, multi-level, should capture deepest path', async (t) => {
     const { helper, patchedHandler, stubContext } = t.context
 
     const expectedName = 'GetBooksByLibrary'
@@ -189,13 +185,11 @@ function createAttributesTests(t) {
       )
     })
 
-    executeQueryWithLambdaHandler(patchedHandler, query, stubContext, (err) => {
-      t.error(err)
-      t.end()
-    })
+    await executeQueryWithLambdaHandler(patchedHandler, query, stubContext)
+    t.end()
   })
 
-  t.test('named mutation should capture all standard attributes', (t) => {
+  t.test('named mutation should capture all standard attributes', async (t) => {
     const { helper, patchedHandler, stubContext } = t.context
 
     const expectedName = 'AddThing'
@@ -238,13 +232,11 @@ function createAttributesTests(t) {
       )
     })
 
-    executeQueryWithLambdaHandler(patchedHandler, query, stubContext, (err) => {
-      t.error(err)
-      t.end()
-    })
+    await executeQueryWithLambdaHandler(patchedHandler, query, stubContext)
+    t.end()
   })
 
-  t.test('named mutation should not capture args by default', (t) => {
+  t.test('named mutation should not capture args by default', async (t) => {
     const { helper, patchedHandler, stubContext } = t.context
 
     const expectedName = 'AddThing'
@@ -264,13 +256,11 @@ function createAttributesTests(t) {
       t.notOk(hasAttribute('graphql.field.args.name'))
     })
 
-    executeQueryWithLambdaHandler(patchedHandler, query, stubContext, (err) => {
-      t.error(err)
-      t.end()
-    })
+    await executeQueryWithLambdaHandler(patchedHandler, query, stubContext)
+    t.end()
   })
 
-  t.test('named mutation should capture args when added to include list', (t) => {
+  t.test('named mutation should capture args when added to include list', async (t) => {
     const { helper, patchedHandler, stubContext } = t.context
 
     helper.agent.config.attributes.include = ['graphql.field.args.*']
@@ -291,13 +281,11 @@ function createAttributesTests(t) {
       t.matches(resolveAttributes, {'graphql.field.args.name': 'added thing!'})
     })
 
-    executeQueryWithLambdaHandler(patchedHandler, query, stubContext, (err) => {
-      t.error(err)
-      t.end()
-    })
+    await executeQueryWithLambdaHandler(patchedHandler, query, stubContext)
+    t.end()
   })
 
-  t.test('named query should capture args when added to include list', (t) => {
+  t.test('named query should capture args when added to include list', async (t) => {
     const { helper, patchedHandler, stubContext } = t.context
 
     helper.agent.config.attributes.include = ['graphql.field.args.*']
@@ -322,13 +310,11 @@ function createAttributesTests(t) {
       t.matches(resolveAttributes, expectedArgAttributes)
     })
 
-    executeQueryWithLambdaHandler(patchedHandler, query, stubContext, (err) => {
-      t.error(err)
-      t.end()
-    })
+    await executeQueryWithLambdaHandler(patchedHandler, query, stubContext)
+    t.end()
   })
 
-  t.test('query with variables should capture args when added to include list', (t) => {
+  t.test('query with variables should capture args when added to include list', async (t) => {
     const { helper, patchedHandler, stubContext } = t.context
 
     helper.agent.config.attributes.include = ['graphql.field.args.*']
@@ -362,13 +348,11 @@ function createAttributesTests(t) {
       t.matches(resolveAttributes, expectedArgAttributes)
     })
 
-    executeQueryJson(patchedHandler, queryJson, stubContext, (err) => {
-      t.error(err)
-      t.end()
-    })
+    await executeQueryJson(patchedHandler, queryJson, stubContext)
+    t.end()
   })
 
-  t.test('should capture query in operation segment attributes', (t) => {
+  t.test('should capture query in operation segment attributes', async (t) => {
     const { helper, patchedHandler, stubContext } = t.context
 
     const expectedName = 'Greetings'
@@ -394,13 +378,11 @@ function createAttributesTests(t) {
       )
     })
 
-    executeQueryWithLambdaHandler(patchedHandler, query, stubContext, (err) => {
-      t.error(err)
-      t.end()
-    })
+    await executeQueryWithLambdaHandler(patchedHandler, query, stubContext)
+    t.end()
   })
 
-  t.test('query with args should have args obfuscated in raw query attribute', (t) => {
+  t.test('query with args should have args obfuscated in raw query attribute', async (t) => {
     const { helper, patchedHandler, stubContext } = t.context
 
     const expectedName = 'ParamQueryWithArgs'
@@ -429,9 +411,7 @@ function createAttributesTests(t) {
       t.ok(operationAttributes['graphql.operation.query'].includes('paramQuery(***)'))
     })
 
-    executeQueryJson(patchedHandler, queryJson, stubContext, (err) => {
-      t.error(err)
-      t.end()
-    })
+    await executeQueryJson(patchedHandler, queryJson, stubContext)
+    t.end()
   })
 }

@@ -18,7 +18,7 @@ const { setupApolloServerLambdaTests } = require('./apollo-server-lambda-setup')
 
 
 function createErrorTests(t) {
-  t.test('parsing error should be noticed and assigned to operation span', (t) => {
+  t.test('parsing error should be noticed and assigned to operation span', async (t) => {
     const { helper, patchedHandler, stubContext } = t.context
 
     const expectedErrorMessage = 'Syntax Error: Expected Name, found <EOF>.'
@@ -58,27 +58,24 @@ function createErrorTests(t) {
       t.equal(attributes['error.class'], expectedErrorType)
     })
 
-    executeQueryWithLambdaHandler
-    (patchedHandler, invalidQuery, stubContext, (err, result) => {
-      t.error(err)
+    const result = await executeQueryWithLambdaHandler(patchedHandler, invalidQuery, stubContext)
 
-      t.ok(result.body)
+    t.ok(result.body)
 
-      const jsonResult = JSON.parse(result.body)
+    const jsonResult = JSON.parse(result.body)
 
-      t.ok(jsonResult)
+    t.ok(jsonResult)
 
-      t.ok(jsonResult.errors)
-      t.equal(jsonResult.errors.length, 1) // should have one parsing error
+    t.ok(jsonResult.errors)
+    t.equal(jsonResult.errors.length, 1) // should have one parsing error
 
-      const [parseError] = jsonResult.errors
-      t.equal(parseError.extensions.code, 'GRAPHQL_PARSE_FAILED')
+    const [parseError] = jsonResult.errors
+    t.equal(parseError.extensions.code, 'GRAPHQL_PARSE_FAILED')
 
-      t.end()
-    })
+    t.end()
   })
 
-  t.test('validation error should be noticed and assigned to operation span', (t) => {
+  t.test('validation error should be noticed and assigned to operation span', async (t) => {
     const { helper, patchedHandler, stubContext } = t.context
 
     const expectedErrorMessage = 'Cannot query field "doesnotexist" on type "Book".'
@@ -122,27 +119,24 @@ function createErrorTests(t) {
       t.equal(attributes['error.class'], expectedErrorType)
     })
 
-    executeQueryWithLambdaHandler
-    (patchedHandler, invalidQuery, stubContext, (err, result) => {
-      t.error(err)
+    const result = await executeQueryWithLambdaHandler(patchedHandler, invalidQuery, stubContext)
 
-      t.ok(result.body)
+    t.ok(result.body)
 
-      const jsonResult = JSON.parse(result.body)
+    const jsonResult = JSON.parse(result.body)
 
-      t.ok(jsonResult)
+    t.ok(jsonResult)
 
-      t.ok(jsonResult.errors)
-      t.equal(jsonResult.errors.length, 1) // should have one parsing error
+    t.ok(jsonResult.errors)
+    t.equal(jsonResult.errors.length, 1) // should have one parsing error
 
-      const [validationError] = jsonResult.errors
-      t.equal(validationError.extensions.code, 'GRAPHQL_VALIDATION_FAILED')
+    const [parseError] = jsonResult.errors
+    t.equal(parseError.extensions.code, 'GRAPHQL_VALIDATION_FAILED')
 
-      t.end()
-    })
+    t.end()
   })
 
-  t.test('resolver error should be noticed and assigned to resolve span', (t) => {
+  t.test('resolver error should be noticed and assigned to resolve span', async (t) => {
     const { helper, patchedHandler, stubContext } = t.context
 
     const expectedErrorMessage = 'Boom goes the dynamite!'
@@ -178,24 +172,21 @@ function createErrorTests(t) {
       t.equal(attributes['error.class'], expectedErrorType)
     })
 
-    executeQueryWithLambdaHandler
-      (patchedHandler, invalidQuery, stubContext, (err, result) => {
-        t.error(err)
+    const result = await executeQueryWithLambdaHandler(patchedHandler, invalidQuery, stubContext)
 
-        t.ok(result.body)
+    t.ok(result.body)
 
-        const jsonResult = JSON.parse(result.body)
+    const jsonResult = JSON.parse(result.body)
 
-        t.ok(jsonResult)
+    t.ok(jsonResult)
 
-        t.ok(jsonResult.errors)
-        t.equal(jsonResult.errors.length, 1) // should have one parsing error
+    t.ok(jsonResult.errors)
+    t.equal(jsonResult.errors.length, 1) // should have one parsing error
 
-        const [resolverError] = jsonResult.errors
-        t.equal(resolverError.extensions.code, 'INTERNAL_SERVER_ERROR')
+    const [parseError] = jsonResult.errors
+    t.equal(parseError.extensions.code, 'INTERNAL_SERVER_ERROR')
 
-        t.end()
-      })
+    t.end()
   })
 }
 

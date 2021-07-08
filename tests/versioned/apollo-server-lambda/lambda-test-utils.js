@@ -5,27 +5,27 @@
 
 'use strict'
 
-function executeQueryWithLambdaHandler(handler, query, context, callback) {
+function executeQueryWithLambdaHandler(handler, query, context) {
   const jsonQuery = JSON.stringify({ query })
   const event = createApiEvent(jsonQuery)
 
   return handler(event, context)
 }
 
-function executeBatchQueriesWithLambdaHandler(handler, queries, context, callback) {
+function executeBatchQueriesWithLambdaHandler(handler, queries, context) {
   const data = queries.map((innerQuery) => {
     return { query: innerQuery }
   })
   const jsonQuery = JSON.stringify(data)
   const event = createApiEvent(jsonQuery)
 
-  handler(event, context, callback)
+  return handler(event, context)
 }
 
-function executeQueryJson(handler, query, context, callback) {
+function executeQueryJson(handler, query, context) {
   const event = createApiEvent(JSON.stringify(query))
 
-  handler(event, context, callback)
+  return handler(event, context)
 }
 
 
@@ -36,6 +36,7 @@ function createApiEvent(query) {
       'Accept': 'application/json',
       'Accept-Encoding': 'gzip, deflate, lzma, sdch, br',
       'Accept-Language': 'en-US,en;q=0.8',
+      'Content-Type': 'application/json',
       'CloudFront-Forwarded-Proto': 'https',
       'CloudFront-Is-Desktop-Viewer': 'true',
       'CloudFront-Is-Mobile-Viewer': 'false',
