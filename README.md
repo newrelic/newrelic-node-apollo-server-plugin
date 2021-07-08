@@ -63,16 +63,16 @@ const server = new ApolloServer({
 
 ## Apollo Federation Support
 
-The New Relic plugin will work with an Apollo Federated Server out of the box. Just pass the plugin to the Gateway Apollo Server. With the federated server you will get:
+The New Relic plugin will work with an Apollo Federated Server out of the box. Just pass the plugin to the Federated Gateway Apollo Server. With the federated server you will get:
 * Distributed Tracing support
 * Transaction naming
 * Operation naming
 * Metrics
 
-Resolver spans are not supported for the Federated Server. We strongly recommend adding the plugin to your sub-graph servers which will generate all the data you get with the Federated Server as well as resolver spans.
+Resolver spans are not supported for the Federated Gateway Server. We strongly recommend adding the plugin to your sub-graph servers which will generate all the data you get with the Federated Server as well as resolver spans.
 
 ```js
-// Federated Server index.js
+// Federated Gateway Server index.js
 const plugin = require('@newrelic/apollo-server-plugin')
 
 const gateway = new ApolloGateway({
