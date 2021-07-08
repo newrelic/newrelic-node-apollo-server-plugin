@@ -8,8 +8,6 @@
 * Added support for capturing persisted queries.
 * Fixed crash when items lack a `name` property (InlineFragments).
 * Added husky + lint staged to run linting on all staged files as a pre-commit git hook.
-* Added `prepare` script to properly bootstrap husky.
-* Upgraded lint-staged to ^11.0.0.
 
 ## 0.2.0 (05/25/2021)
 * Added Node.js v16 to run CI pipeline steps
