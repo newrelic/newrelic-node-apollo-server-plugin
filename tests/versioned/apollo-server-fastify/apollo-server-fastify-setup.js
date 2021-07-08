@@ -23,7 +23,7 @@ function setupApolloServerFastifyTests({suiteName, createTests, pluginConfig}, c
     let serverUrl = null
     let helper = null
 
-    t.beforeEach(() => {
+    t.beforeEach(async () => {
       // load default instrumentation
       helper = utils.TestAgent.makeInstrumented(config)
       const createPlugin = require('../../../lib/create-plugin')
@@ -42,6 +42,7 @@ function setupApolloServerFastifyTests({suiteName, createTests, pluginConfig}, c
         plugins: [plugin]
       })
 
+      await server.start()
       app.register(server.createHandler())
 
       return new Promise((resolve, reject) => {

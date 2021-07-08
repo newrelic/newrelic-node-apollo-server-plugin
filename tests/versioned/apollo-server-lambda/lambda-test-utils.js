@@ -9,7 +9,7 @@ function executeQueryWithLambdaHandler(handler, query, context, callback) {
   const jsonQuery = JSON.stringify({ query })
   const event = createApiEvent(jsonQuery)
 
-  handler(event, context, callback)
+  return handler(event, context)
 }
 
 function executeBatchQueriesWithLambdaHandler(handler, queries, context, callback) {
@@ -18,7 +18,7 @@ function executeBatchQueriesWithLambdaHandler(handler, queries, context, callbac
   })
   const jsonQuery = JSON.stringify(data)
   const event = createApiEvent(jsonQuery)
-  
+
   handler(event, context, callback)
 }
 
