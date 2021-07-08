@@ -148,7 +148,7 @@ const server = new ApolloServer({
 });
 ```
 
-`@apollo/federation` and `@apollo/gateway` are currently 0.x versions and may break with future versions prior to 1.x release. from Apollo.
+**NOTE:** `@apollo/federation` and `@apollo/gateway` are currently 0.x versions and may break with future versions prior to 1.x release from Apollo.
 
 ### Transactions
 
