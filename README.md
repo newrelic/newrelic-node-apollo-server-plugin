@@ -61,7 +61,56 @@ const server = new ApolloServer({
 })
 ```
 
-## Apollo Federation Support
+## Usage
+
+The New Relic plugin is known to work with the following Apollo Server modules:
+* apollo-server
+* apollo-server-express
+* apollo-server-hapi
+* apollo-server-koa
+* apollo-server-fastify
+* apollo-server-lambda
+
+Note: Because fastify is not fully instrumented in the Node.js Agent, transactions will be prefixed with `WebTransaction\Nodejs`.
+
+Other plugins may work, depending on their underlying implementation, but have not been verified.
+
+### Interaction with other Apollo Plugins
+
+Transaction and segment/span timings may be affected by other plugins used in the Apollo Server setup. In order to get more accurate resolver timings, it is recommended to add the New Relic plugin last.
+
+
+```js
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  plugins: [
+    other_plugin,
+    newrelic_plugin
+  ]
+})
+```
+### Configuration
+
+Configuration may be passed into the `createPlugin` function to override specific values. The configuration object and all properties are optional.
+
+```js
+const plugin = createPlugin({
+  captureScalars: true,
+  captureIntrospectionQueries: true
+})
+```
+
+* `[captureScalars = false]` Enable capture of timing of fields resolved with the
+  `GraphQLScalarType` return type. This may be desired when performing time intensive
+  calculations to return a scalar value. This is not recommended for queries that return
+  a large number of pre-calculated scalar fields.
+
+  **NOTE:** query/mutation resolvers will always be captured even if returning a scalar type.
+
+* `[captureIntrospectionQueries = false]` Enable capture of timings for an [IntrospectionQuery](https://graphql.org/graphql-js/utilities/#introspectionquery).
+
+### Apollo Federation Support
 
 The New Relic plugin will work with an Apollo Federated Server out of the box. Just pass the plugin to the Federated Gateway Apollo Server. With the federated server you will get:
 * Distributed Tracing support
@@ -99,58 +148,7 @@ const server = new ApolloServer({
 });
 ```
 
-
-### Note:
-* You will see transactions named `/POST//query/GetServiceDefinition/_service.sdl` on the sub-graph servers from the Federated Gateway Server initialization.
-
-## Usage
-
-The New Relic plugin is known to work with the following Apollo Server modules:
-* apollo-server
-* apollo-server-express
-* apollo-server-hapi
-* apollo-server-koa
-* apollo-server-fastify
-* apollo-server-lambda
-
-Note: Because fastify is not fully instrumented in the Node.js Agent, transactions will be prefixed with `WebTransaction\Nodejs`.
-
-Other plugins may work, depending on their underlying implementation, but have not been verified.
-
-### Interaction with other Apollo Plugins
-
-Transaction and segment/span timings may be affected by other plugins used in the Apollo Server setup. In order to get more accurate resolver timings, it is recommended to add the New Relic plugin last.
-
-
-```
-const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-  plugins: [
-    other_plugin,
-    newrelic_plugin
-  ]
-})
-```
-### Configuration
-
-Configuration may be passed into the `createPlugin` function to override specific values. The configuration object and all properties are optional.
-
-```js
-const plugin = createPlugin({
-  captureScalars: true,
-  captureIntrospectionQueries: true
-})
-```
-
-* `[captureScalars = false]` Enable capture of timing of fields resolved with the
-  `GraphQLScalarType` return type. This may be desired when performing time intensive
-  calculations to return a scalar value. This is not recommended for queries that return
-  a large number of pre-calculated scalar fields.
-
-  **NOTE:** query/mutation resolvers will always be captured even if returning a scalar type.
-
-* `[captureIntrospectionQueries = false]` Enable capture of timings for an [IntrospectionQuery](https://graphql.org/graphql-js/utilities/#introspectionquery).
+`@apollo/federation` and `@apollo/gateway` are currently 0.x versions and may break with future versions prior to 1.x release. from Apollo.
 
 ### Transactions
 
