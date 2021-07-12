@@ -50,8 +50,6 @@ function createLambdaSegmentsTests(t, frameworkName) {
     })
 
     const result = await executeQueryWithLambdaHandler(patchedHandler, query, stubContext)
-    debugger;
-    // TODO: request is failing with 400, invalid post body
     checkResult(t, result, () => {
       t.end()
     })

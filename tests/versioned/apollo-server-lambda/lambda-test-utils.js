@@ -36,7 +36,9 @@ function createApiEvent(query) {
       'Accept': 'application/json',
       'Accept-Encoding': 'gzip, deflate, lzma, sdch, br',
       'Accept-Language': 'en-US,en;q=0.8',
-      'Content-Type': 'application/json',
+      // must be lowercased as this is used in the bodyParser
+      // and assumes the header is lowercased
+      'content-type': 'application/json',
       'CloudFront-Forwarded-Proto': 'https',
       'CloudFront-Is-Desktop-Viewer': 'true',
       'CloudFront-Is-Mobile-Viewer': 'false',
