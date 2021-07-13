@@ -33,8 +33,7 @@ function createAttributesTests(t) {
       const operationSegment = findSegmentByName(transaction.trace.root, operationName)
 
       const expectedOperationAttributes = {
-        'graphql.operation.type': 'query',
-        'graphql.operation.deepestPath': 'hello'
+        'graphql.operation.type': 'query'
       }
 
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
@@ -84,8 +83,7 @@ function createAttributesTests(t) {
 
       const expectedOperationAttributes = {
         'graphql.operation.type': 'query',
-        'graphql.operation.name': expectedName,
-        'graphql.operation.deepestPath': 'hello'
+        'graphql.operation.name': expectedName
       }
 
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
@@ -141,8 +139,7 @@ function createAttributesTests(t) {
 
       const expectedOperationAttributes = {
         'graphql.operation.type': 'query',
-        'graphql.operation.name': expectedName,
-        'graphql.operation.deepestPath': deepestPath
+        'graphql.operation.name': expectedName
       }
 
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
@@ -206,8 +203,7 @@ function createAttributesTests(t) {
 
       const expectedOperationAttributes = {
         'graphql.operation.type': 'mutation',
-        'graphql.operation.name': expectedName,
-        'graphql.operation.deepestPath': 'addThing'
+        'graphql.operation.name': expectedName
       }
 
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
