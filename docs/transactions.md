@@ -72,7 +72,7 @@ query {
 
 We will select a deepest unique path of 'libraries' as we select multiple fields beyond that point. Any resolver executed beyond that point may contribute to the performance characteristics of the transaction.
 
-If they query were to only select one field per resolver, we select the full path as each selection set is unique.
+If the query were to only select one field per resolver, we select the full path as each selection set is unique.
 
 The query:
 
