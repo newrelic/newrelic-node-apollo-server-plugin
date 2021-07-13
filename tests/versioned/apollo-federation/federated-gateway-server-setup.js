@@ -130,7 +130,7 @@ async function loadGateway({ ApolloServer }, services, plugins) {
   // eslint-disable-next-line no-console
   console.log(`${name} ready at ${url}`)
 
-  return { name, url, server }
+  return { name, url, server, gateway }
 }
 
 async function loadLibraries({ ApolloServer, gql }, plugins) {
@@ -196,5 +196,7 @@ function initializePlugins(instrumentationApi, plugins) {
 }
 
 module.exports = {
-  setupFederatedGatewayServerTests
+  setupFederatedGatewayServerTests,
+  loadLibraries,
+  loadGateway
 }
