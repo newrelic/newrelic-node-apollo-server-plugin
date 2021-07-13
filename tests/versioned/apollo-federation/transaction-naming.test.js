@@ -26,7 +26,7 @@ setupFederatedGatewayServerTests({
 function createFederatedTransactionNamingTests(t, frameworkName) {
   const TRANSACTION_PREFIX = `WebTransaction/${frameworkName}/POST`
 
-  t.test('should properly name transaction when an anonymous federated query', (t) => {
+  t.test('anonymous query, multi selections should return deepest unique path', (t) => {
     const { helper, serverUrl } = t.context
 
     const query = `query {
@@ -49,9 +49,8 @@ function createFederatedTransactionNamingTests(t, frameworkName) {
         return
       }
 
-      const operationPart = `query/${ANON_PLACEHOLDER}/libraries.booksInStock.isbn`
-      t.equal(transaction.name,
-      `${TRANSACTION_PREFIX}//${operationPart}`)
+      const operationPart = `query/${ANON_PLACEHOLDER}/libraries`
+      t.equal(transaction.name, `${TRANSACTION_PREFIX}//${operationPart}`)
     })
 
     executeQuery(serverUrl, query, (err, result) => {
@@ -62,7 +61,35 @@ function createFederatedTransactionNamingTests(t, frameworkName) {
     })
   })
 
-  t.test('should properly name transaction when a named, federated query', (t) => {
+  t.test('anonymous query, single selections should return deepest unique path', (t) => {
+    const { helper, serverUrl } = t.context
+
+    const query = `query {
+      libraries {
+        booksInStock {
+          title
+        }
+      }
+    }`
+
+    helper.agent.on('transactionFinished', (transaction) => {
+      if (shouldSkipTransaction(transaction)) {
+        return
+      }
+
+      const operationPart = `query/${ANON_PLACEHOLDER}/libraries.booksInStock.title`
+      t.equal(transaction.name, `${TRANSACTION_PREFIX}//${operationPart}`)
+    })
+
+    executeQuery(serverUrl, query, (err, result) => {
+      t.error(err)
+      checkResult(t, result, () => {
+        t.end()
+      })
+    })
+  })
+
+  t.test('named query, multi selections should return deepest unique path', (t) => {
     const { helper, serverUrl } = t.context
 
     const query = `query booksInStock {
@@ -80,9 +107,36 @@ function createFederatedTransactionNamingTests(t, frameworkName) {
         return
       }
 
+      const operationPart = 'query/booksInStock/libraries'
+      t.equal(transaction.name, `${TRANSACTION_PREFIX}//${operationPart}`)
+    })
+
+    executeQuery(serverUrl, query, (err, result) => {
+      t.error(err)
+      checkResult(t, result, () => {
+        t.end()
+      })
+    })
+  })
+
+  t.test('named query, single selections should return deepest unique path', (t) => {
+    const { helper, serverUrl } = t.context
+
+    const query = `query booksInStock {
+      libraries {
+        booksInStock {
+          title
+        }
+      }
+    }`
+
+    helper.agent.on('transactionFinished', (transaction) => {
+      if (shouldSkipTransaction(transaction)) {
+        return
+      }
+
       const operationPart = 'query/booksInStock/libraries.booksInStock.title'
-      t.equal(transaction.name,
-      `${TRANSACTION_PREFIX}//${operationPart}`)
+      t.equal(transaction.name, `${TRANSACTION_PREFIX}//${operationPart}`)
     })
 
     executeQuery(serverUrl, query, (err, result) => {
@@ -99,7 +153,6 @@ function createFederatedTransactionNamingTests(t, frameworkName) {
     const booksQueryName = 'GetBooksForLibraries'
     const booksQuery = `query ${booksQueryName} {
       libraries {
-        branch
         booksInStock {
           isbn,
           title,
@@ -111,7 +164,6 @@ function createFederatedTransactionNamingTests(t, frameworkName) {
     const magazineQueryName = 'GetMagazinesForLibraries'
     const magazineQuery = `query ${magazineQueryName} {
       libraries {
-        branch
         magazinesInStock {
           issue,
           title
@@ -125,12 +177,13 @@ function createFederatedTransactionNamingTests(t, frameworkName) {
       if (shouldSkipTransaction(transaction)) {
         return
       }
-      const operationPart1 = `query/${booksQueryName}/libraries.booksInStock.isbn`
-      const operationPart2 = `query/${magazineQueryName}/libraries.magazinesInStock.issue`
+      const operationPart1 = `query/${booksQueryName}/libraries.booksInStock`
+      const operationPart2 = `query/${magazineQueryName}/libraries.magazinesInStock`
 
       const batchTransactionPrefix = `${TRANSACTION_PREFIX}//batch`
 
-      t.equal(transaction.name,
+      t.equal(
+        transaction.name,
         `${batchTransactionPrefix}/${operationPart1}/${operationPart2}`
       )
     })
@@ -145,4 +198,3 @@ function createFederatedTransactionNamingTests(t, frameworkName) {
     })
   })
 }
-
