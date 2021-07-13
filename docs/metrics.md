@@ -6,7 +6,7 @@ For more information on querying metrics and creating charts, see the [Resources
 
 ## Operation Metrics
 
-`/GraphQL/operation/ApolloServer/[operation-type]/[operation-name]/[deepest-path]`
+`/GraphQL/operation/ApolloServer/[operation-type]/[operation-name]/[deepest-unique-path]`
 
 Operation metrics include the operation type, operation name and deepest-path. These metrics represent the durations of the individual queries or mutations and can be used to compare outside of the context of individual transactions which may have multiple queries.
 
@@ -14,7 +14,7 @@ Operation metrics include the operation type, operation name and deepest-path. T
 
 **Operation Name:** The operation name when provided or `<anonymous>`.
 
-**Deepest Path:** The deepest path resolved (or attempted in the case of a validation error). Since operation names may be reused, this helps further determine uniqueness of a given operation.
+**Deepest Unique Path:** The deepest path included in the selection set of a query where only one field was selected at each level. Since operation names may be reused, this helps further determine uniqueness of a given operation. See the description on the [transactions](./transactions.md#deepest-unique-path) page for more details.
 
 ## Field Resolve Metrics
 

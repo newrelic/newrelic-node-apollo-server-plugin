@@ -4,9 +4,11 @@ Segments and spans (when Distributed Tracing enabled) are captured for GraphQL o
 
 ## Operation Segments/Spans
 
-`/GraphQL/operation/ApolloServer/[operation-type]/[operation-name]/[deepest-path]`
+`/GraphQL/operation/ApolloServer/[operation-type]/[operation-name]/[deepest-unique-path]`
 
-Operation segments/spans include the operation type, operation name and deepest-path. These represent the individual duration and attributes of a specific invocation within a transaction or trace.
+Operation segments/spans include the operation type, operation name and deepest unique path. These represent the individual duration and attributes of a specific invocation within a transaction or trace.
+
+For more details on the parts, see the [transactions](./transactions.md#details) page.
 
 **Attributes**
 
@@ -14,7 +16,6 @@ Operation segments/spans include the operation type, operation name and deepest-
 | ---------------------- | ---------------- | -------- |
 | graphql.operation.type | query or mutation| included |
 | graphql.operation.name | Name given to the operation or anonymous | included |
-| graphql.operation.deepestPath | Deepest path resolved as the part of an operation | included |
 | graphql.operation.query | The original GraphQL query with arguments obfuscated | included |
 
 To exclude capture of the query attribute (or any attribute), the attribute name will need to be added to the 'attributes' exclude list or segment/span attributes exclude lists individually.

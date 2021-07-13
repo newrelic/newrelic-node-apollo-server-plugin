@@ -13,7 +13,7 @@ query {
 }
 ```
 
-`post /query/<anonymous>/libraries.books.author.name`
+`post /query/<anonymous>/libraries.books`
 
 ---
 
@@ -21,21 +21,88 @@ Transactions are captured as web transactions, associated with the underlying fr
 
 We leverage several details in a transaction name to attempt to mostly group unique query representations: http method, operation type, operation name and the deepest path resolved (the first, if multiple).
 
-The raw representation of a transaction looks like the following: `/WebTransaction/{framework-name}/POST//{operation-type}/{operation-name}/{deepest-path}`
+The raw representation of a transaction looks like the following: `/WebTransaction/{framework-name}/POST//{operation-type}/{operation-name}/{deepest-unique-path}`
 
-For an Express usage of Apollo Server, that may look like: `/WebTransaction/Expressjs/POST//query/<anonymous>/libraries.books.author.name`
+For an Express usage of Apollo Server, that may look like: `/WebTransaction/Expressjs/POST//query/<anonymous>/libraries.books`
 
-The transaction on New Relic One will ultimately display similar to: `post /query/<anonymous>/libraries.books.author.name`.
+The transaction on New Relic One will ultimately display similar to: `post /query/<anonymous>/libraries.books`.
 
 ## Details
 
-**Http Method:** Http method/verb for the web request. Data may be requested via GET or POST and is surfaced to differentiate similar to other web transactions.
+### Http Method
 
-**Operation Type:** Indicates if the operation was a query or a mutation.
+Http method/verb for the web request. Data may be requested via GET or POST and is surfaced to differentiate similar to other web transactions.
 
-**Operation Name:** The operation name when provided or `<anonymous>`.
+### Operation Type
 
-**Deepest Path:** The deepest path resolved (or attempted in the case of a validation error). Since operation names may be reused, this helps further determine uniqueness of a given operation.
+Indicates if the operation was a query or a mutation.
+
+### Operation Name
+
+The operation name when provided or `<anonymous>`.
+
+`query { libraries }` would use the operation name '<anonymous>' because a name was not provided.
+
+A named query such as `query GetLibraries { libraries }` would use the operation name `GetLibraries'.
+
+### Deepest Unique Path
+
+The deepest path included in the selection set of a query where only one field was selected at each level. Since operation names may be reused, this helps further determine uniqueness of a given operation.
+
+We use the deepest unique path (instead of deepest path like prior) to avoid making arbitrary decision in naming, which may imply/hide details of what could cause slowness for an application.
+
+For the query:
+
+```
+query {
+  libraries {
+    branch
+    booksInStock {
+      isbn,
+      title,
+      author
+    }
+    magazinesInStock {
+      issue,
+      title
+    }
+  }
+}
+```
+
+We will select a deepest unique path of 'libraries' as we select multiple fields beyond that point. Any resolver executed beyond that point may contribute to the performance characteristics of the transaction.
+
+If they query were to only select one field per resolver, we select the full path as each selection set is unique.
+
+The query:
+
+```
+query {
+  libraries {
+    booksInStock {
+      title
+    }
+  }
+}
+```
+
+Will result in the deepest unique path: 'libraries.booksInStock.title'.
+
+`id` and `__typename` fields are automatically excluded from the naming decision.
+
+For example, a federated sub graph query:
+
+```
+query {
+  libraries {
+    branch
+    __typename
+    id
+  }
+}
+```
+
+Would result in the deepest unique path of: 'libraries.branch'.
 
 ## Naming on Error
 
@@ -53,7 +120,6 @@ Below is an example of querying for a field that does not exist (`doesnotexist`)
 query GetBooksByLibrary {
   libraries {
     books {
-      title
       doesnotexist {
         name
       }
@@ -91,7 +157,7 @@ In these situations, the `query` attribute on the operation span associated with
 
 Apollo Server allows the sending of batch queries. In these situations, there are multiple operation/queries in play to impact naming.
 
-To continue to best uniquely identify transaction groupings, we aggregate the operation names after an additional `/batch` indicator. These names are likely to be quite long. We are considering dropping the deepest-path from these names but are currently maintaining consistency.
+To continue to best uniquely identify transaction groupings, we aggregate the operation names after an additional `/batch` indicator. These names are likely to be quite long. We are considering dropping the deepest unique path from these names but are currently maintaining consistency.
 
 Below is an example of a batch query and what that may look like in NR One.
 
@@ -117,6 +183,6 @@ Below is an example of a batch query and what that may look like in NR One.
 ]
 ```
 
-`post /batch/query/GetBookForLibrary/library.books.author.name/mutation/<anonymous>/addThing`
+`post /batch/query/GetBookForLibrary/library.books/mutation/<anonymous>/addThing`
 
-Here you see `batch/` followed by `query/GetBookForLibrary/library.books.author.name` and `mutation/<anonymous>/addThing`.
+Here you see `batch/` followed by `query/GetBookForLibrary/library.books` and `mutation/<anonymous>/addThing`.
