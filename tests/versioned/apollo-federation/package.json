@@ -27,7 +27,8 @@
         "apollo-server": "2.25.1"
       },
       "files": [
-        "segments.test.js"
+        "segments.test.js",
+        "service-definition-and-healthcheck-filtering.test.js"
       ]
     }
   ],
