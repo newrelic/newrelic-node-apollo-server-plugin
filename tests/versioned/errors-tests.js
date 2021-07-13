@@ -84,7 +84,6 @@ function createErrorTests(t) {
     const invalidQuery = `query {
       libraries {
         books {
-          title
           doesnotexist {
             name
           }
