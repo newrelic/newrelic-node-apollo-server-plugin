@@ -5,7 +5,9 @@
 
 'use strict'
 
-const { executeQueryWithLambdaHandler } = require('./lambda-test-utils')
+const {
+  executeQueryAssertErrors
+} = require('./lambda-test-utils')
 const agentTesting = require('../../agent-testing')
 
 const ANON_PLACEHOLDER = '<anonymous>'
@@ -18,8 +20,8 @@ const { setupApolloServerLambdaTests } = require('./apollo-server-lambda-setup')
 
 
 function createErrorTests(t) {
-  t.test('parsing error should be noticed and assigned to operation span', async (t) => {
-    const { helper, patchedHandler, stubContext } = t.context
+  t.test('parsing error should be noticed and assigned to operation span', (t) => {
+    const { helper, patchedHandler, stubContext, modVersion } = t.context
 
     const expectedErrorMessage = 'Syntax Error: Expected Name, found <EOF>.'
     const expectedErrorType = 'GraphQLError'
@@ -58,25 +60,18 @@ function createErrorTests(t) {
       t.equal(attributes['error.class'], expectedErrorType)
     })
 
-    const result = await executeQueryWithLambdaHandler(patchedHandler, invalidQuery, stubContext)
-
-    t.ok(result.body)
-
-    const jsonResult = JSON.parse(result.body)
-
-    t.ok(jsonResult)
-
-    t.ok(jsonResult.errors)
-    t.equal(jsonResult.errors.length, 1) // should have one parsing error
-
-    const [parseError] = jsonResult.errors
-    t.equal(parseError.extensions.code, 'GRAPHQL_PARSE_FAILED')
-
-    t.end()
+    executeQueryAssertErrors({
+      handler: patchedHandler,
+      query: invalidQuery,
+      context: stubContext,
+      modVersion,
+      t,
+      code: 'GRAPHQL_PARSE_FAILED'
+    })
   })
 
-  t.test('validation error should be noticed and assigned to operation span', async (t) => {
-    const { helper, patchedHandler, stubContext } = t.context
+  t.test('validation error should be noticed and assigned to operation span', (t) => {
+    const { helper, patchedHandler, stubContext, modVersion } = t.context
 
     const expectedErrorMessage = 'Cannot query field "doesnotexist" on type "Book".'
     const expectedErrorType = 'GraphQLError'
@@ -119,25 +114,18 @@ function createErrorTests(t) {
       t.equal(attributes['error.class'], expectedErrorType)
     })
 
-    const result = await executeQueryWithLambdaHandler(patchedHandler, invalidQuery, stubContext)
-
-    t.ok(result.body)
-
-    const jsonResult = JSON.parse(result.body)
-
-    t.ok(jsonResult)
-
-    t.ok(jsonResult.errors)
-    t.equal(jsonResult.errors.length, 1) // should have one parsing error
-
-    const [parseError] = jsonResult.errors
-    t.equal(parseError.extensions.code, 'GRAPHQL_VALIDATION_FAILED')
-
-    t.end()
+    executeQueryAssertErrors({
+      handler: patchedHandler,
+      query: invalidQuery,
+      context: stubContext,
+      modVersion,
+      t,
+      code: 'GRAPHQL_VALIDATION_FAILED'
+    })
   })
 
-  t.test('resolver error should be noticed and assigned to resolve span', async (t) => {
-    const { helper, patchedHandler, stubContext } = t.context
+  t.test('resolver error should be noticed and assigned to resolve span', (t) => {
+    const { helper, patchedHandler, stubContext, modVersion } = t.context
 
     const expectedErrorMessage = 'Boom goes the dynamite!'
     const expectedErrorType = 'Error'
@@ -172,21 +160,14 @@ function createErrorTests(t) {
       t.equal(attributes['error.class'], expectedErrorType)
     })
 
-    const result = await executeQueryWithLambdaHandler(patchedHandler, invalidQuery, stubContext)
-
-    t.ok(result.body)
-
-    const jsonResult = JSON.parse(result.body)
-
-    t.ok(jsonResult)
-
-    t.ok(jsonResult.errors)
-    t.equal(jsonResult.errors.length, 1) // should have one parsing error
-
-    const [parseError] = jsonResult.errors
-    t.equal(parseError.extensions.code, 'INTERNAL_SERVER_ERROR')
-
-    t.end()
+    executeQueryAssertErrors({
+      handler: patchedHandler,
+      query: invalidQuery,
+      context: stubContext,
+      modVersion,
+      t,
+      code: 'INTERNAL_SERVER_ERROR'
+    })
   })
 }
 
