@@ -48,10 +48,7 @@ To override configuration, invoke the `createPlugin` function prior to passing t
 ```js
 // index.js
 const createPlugin = require('@newrelic/apollo-server-plugin')
-const plugin = createPlugin({
-  captureScalars: false,
-  captureIntrospectionQueries: false
-})
+const plugin = createPlugin()
 
 // imported from supported module
 const server = new ApolloServer({
@@ -114,7 +111,7 @@ const plugin = createPlugin({
 
 * `[captureServiceDefinitionQuery = false]` Enable capture of timings for a [Service Definition query](https://www.apollographql.com/docs/federation/federation-spec/#fetch-service-capabilities) received from an Apollo Federated Gateway Server.
 
-* `[captureHealthCheckQuery = false]` Enable capture of timings for a [Health Check query](https://graphql.org/graphql-js/utilities/#introspectionquery) received from an Apollo Federated Gateway Server.
+* `[captureHealthCheckQuery = false]` Enable capture of timings for a [Health Check query](https://www.apollographql.com/docs/federation/api/apollo-gateway/#servicehealthcheck) received from an Apollo Federated Gateway Server.
 
 ### Apollo Federation Support
 

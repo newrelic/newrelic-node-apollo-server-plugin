@@ -29,7 +29,7 @@ tap.test('Capture/Ignore Service Definition and Health Check ' +
     agentConfig = null
   })
 
-  t.test('Should not ignore Service Definiion query by default', async (t) => {
+  t.test('Should ignore Service Definiion query by default', async (t) => {
     // load default instrumentation. express being critical
     helper = utils.TestAgent.makeInstrumented(agentConfig)
     let ignore = true
@@ -68,7 +68,7 @@ tap.test('Capture/Ignore Service Definition and Health Check ' +
   })
 
   t.test('Should not ignore Service Definition query ' +
-    'when captureServiceDefinitionQuery set to true', async (t) => {
+    'when captureServiceDefinitionQueries set to true', async (t) => {
     // load default instrumentation. express being critical
     helper = utils.TestAgent.makeInstrumented(agentConfig)
     let ignore = false
@@ -82,7 +82,7 @@ tap.test('Capture/Ignore Service Definition and Health Check ' +
     })
 
     const pluginConfig = {
-      captureServiceDefinitionQuery: true
+      captureServiceDefinitionQueries: true
     }
 
     const nrApi = helper.getAgentApi()
@@ -152,7 +152,7 @@ tap.test('Capture/Ignore Service Definition and Health Check ' +
   })
 
   t.test('Should not ignore Health Check query when ' +
-    'captureHealthCheckQuery set to true', async (t) => {
+    'captureHealthCheckQueries set to true', async (t) => {
     // load default instrumentation. express being critical
     helper = utils.TestAgent.makeInstrumented(agentConfig)
     let ignore = false
@@ -168,7 +168,7 @@ tap.test('Capture/Ignore Service Definition and Health Check ' +
     })
 
     const pluginConfig = {
-      captureHealthCheckQuery: true
+      captureHealthCheckQueries: true
     }
 
     const nrApi = helper.getAgentApi()
