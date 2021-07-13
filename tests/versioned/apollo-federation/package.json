@@ -13,7 +13,9 @@
         "apollo-server": ">=2.25.1 <3.0.0"
       },
       "files": [
-        "segments.test.js"
+        "segments.test.js",
+        "transaction-naming.test.js",
+        "transaction-inline-fragments.test.js"
       ]
     },
     {
@@ -27,7 +29,9 @@
         "apollo-server": "2.25.1"
       },
       "files": [
-        "segments.test.js"
+        "segments.test.js",
+        "transaction-naming.test.js",
+        "transaction-inline-fragments.test.js"
       ]
     }
   ],
