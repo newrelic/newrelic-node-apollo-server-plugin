@@ -23,7 +23,7 @@ function setupApolloServerExpressTests({suiteName, createTests, pluginConfig}, c
     let serverUrl = null
     let helper = null
 
-    t.beforeEach(() => {
+    t.beforeEach(async () => {
       // load default instrumentation. express being critical
       helper = utils.TestAgent.makeInstrumented(config)
       const createPlugin = require('../../../lib/create-plugin')
@@ -43,6 +43,7 @@ function setupApolloServerExpressTests({suiteName, createTests, pluginConfig}, c
       })
 
       const app = express()
+      await server.start()
       server.applyMiddleware({ app })
 
       return new Promise((resolve, reject) => {

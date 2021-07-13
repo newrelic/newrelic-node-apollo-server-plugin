@@ -33,6 +33,7 @@ function setupApolloServerLambdaTests({suiteName, createTests, pluginConfig}, co
 
     t.beforeEach((t) => {
       const { ApolloServer, gql } = require('apollo-server-lambda')
+      const { version } = require('apollo-server-lambda/package')
 
       helper = utils.TestAgent.makeInstrumented(config)
 
@@ -69,6 +70,7 @@ function setupApolloServerLambdaTests({suiteName, createTests, pluginConfig}, co
 
       patchedHandler = nrApi.setLambdaHandler(handler)
 
+      t.context.modVersion = version
       t.context.helper = helper
       t.context.patchedHandler = patchedHandler
       t.context.stubContext = stubContext
