@@ -98,7 +98,6 @@ function createLambdaSegmentsTests(t, frameworkName) {
     const query = `query {
       libraries {
         books {
-          title
           author {
             name
           }
@@ -106,10 +105,10 @@ function createLambdaSegmentsTests(t, frameworkName) {
       }
     }`
 
-    const deepestPath = 'libraries.books.author.name'
+    const path = 'libraries.books.author.name'
 
     helper.agent.on('transactionFinished', (transaction) => {
-      const operationPart = `query/${ANON_PLACEHOLDER}/${deepestPath}`
+      const operationPart = `query/${ANON_PLACEHOLDER}/${path}`
       const expectedSegments = [{
         name: `${TRANSACTION_PREFIX}//${operationPart}`,
         children: [{
@@ -135,7 +134,7 @@ function createLambdaSegmentsTests(t, frameworkName) {
     })
   })
 
-  t.test('named query, multi-level should return deepest path', (t) => {
+  t.test('named query, multi-level should return deepest unique path', (t) => {
     const { helper, patchedHandler, stubContext, modVersion } = t.context
 
     const expectedName = 'GetBooksByLibrary'
@@ -150,10 +149,10 @@ function createLambdaSegmentsTests(t, frameworkName) {
       }
     }`
 
-    const deepestPath = 'libraries.books.author.name'
+    const path = 'libraries.books'
 
     helper.agent.on('transactionFinished', (transaction) => {
-      const operationPart = `query/${expectedName}/${deepestPath}`
+      const operationPart = `query/${expectedName}/${path}`
       const expectedSegments = [{
         name: `${TRANSACTION_PREFIX}//${operationPart}`,
         children: [{
@@ -166,49 +165,6 @@ function createLambdaSegmentsTests(t, frameworkName) {
             { name: `${RESOLVE_PREFIX}/libraries.books.author.name` }
           ]
         }]
-      }]
-
-      t.segments(transaction.trace.root, expectedSegments)
-    })
-
-    executeQueryAssertResult({
-      handler: patchedHandler,
-      query,
-      context: stubContext,
-      t,
-      modVersion
-    })
-  })
-
-  t.test('named query, multi-level, should choose *first* deepest-path', (t) => {
-    const { helper, patchedHandler, stubContext, modVersion } = t.context
-
-    const expectedName = 'GetBooksByLibrary'
-    const query = `query ${expectedName} {
-      libraries {
-        books {
-          title
-          isbn
-        }
-      }
-    }`
-
-    // .isbn is the same length but title will be first so that path should be used
-    const firstDeepestPath = 'libraries.books.title'
-
-    helper.agent.on('transactionFinished', (transaction) => {
-      const operationPart = `query/${expectedName}/${firstDeepestPath}`
-      const expectedSegments = [{
-        name: `${TRANSACTION_PREFIX}//${operationPart}`,
-          children: [{
-            name: `${OPERATION_PREFIX}/${operationPart}`,
-            children: [
-              { name: `${RESOLVE_PREFIX}/libraries` },
-              { name: `${RESOLVE_PREFIX}/libraries.books` },
-              { name: `${RESOLVE_PREFIX}/libraries.books.title` },
-              { name: `${RESOLVE_PREFIX}/libraries.books.isbn` }
-            ]
-          }]
       }]
 
       t.segments(transaction.trace.root, expectedSegments)
@@ -376,10 +332,10 @@ function createLambdaSegmentsTests(t, frameworkName) {
       }
     }`
 
-    const deepestPath = 'library.books.author.name'
+    const path = 'library.books'
 
     helper.agent.on('transactionFinished', (transaction) => {
-      const operationPart = `query/${expectedName}/${deepestPath}`
+      const operationPart = `query/${expectedName}/${path}`
       const expectedSegments = [{
         name: `${TRANSACTION_PREFIX}//${operationPart}`,
         children: [{
@@ -433,12 +389,12 @@ function createLambdaSegmentsTests(t, frameworkName) {
       addThing(name: "added thing!")
     }`
 
-    const deepestPath1 = 'library.books.author.name'
+    const path1 = 'library.books'
 
     const queries = [query1, query2]
 
     helper.agent.on('transactionFinished', (transaction) => {
-      const operationPart1 = `query/${expectedName1}/${deepestPath1}`
+      const operationPart1 = `query/${expectedName1}/${path1}`
       const expectedQuery1Name = `${operationPart1}`
       const operationPart2 = `mutation/${ANON_PLACEHOLDER}/addThing`
       const expectedQuery2Name = `${operationPart2}`
@@ -537,7 +493,6 @@ function createLambdaSegmentsTests(t, frameworkName) {
     const invalidQuery = `query {
       libraries {
         books {
-          title
           doesnotexist {
             name
           }
@@ -545,10 +500,10 @@ function createLambdaSegmentsTests(t, frameworkName) {
       }
     }`
 
-    const deepestPath = 'libraries.books.doesnotexist.name'
+    const path = 'libraries.books.doesnotexist.name'
 
     helper.agent.on('transactionFinished', (transaction) => {
-      const operationPart = `query/${ANON_PLACEHOLDER}/${deepestPath}`
+      const operationPart = `query/${ANON_PLACEHOLDER}/${path}`
       const expectedSegments = [{
         name: `${TRANSACTION_PREFIX}//${operationPart}`,
         children: [{
@@ -569,4 +524,3 @@ function createLambdaSegmentsTests(t, frameworkName) {
     })
   })
 }
-

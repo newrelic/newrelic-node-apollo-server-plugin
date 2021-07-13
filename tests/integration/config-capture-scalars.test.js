@@ -57,10 +57,10 @@ function createNoScalarTests(t) {
       }
     }`
 
-    const deepestPath = 'library.books.author.name'
+    const path = 'library'
 
     helper.agent.on('transactionFinished', (transaction) => {
-      const operationPart = `query/${expectedName}/${deepestPath}`
+      const operationPart = `query/${expectedName}/${path}`
       const expectedSegments = [{
         name: `${TRANSACTION_PREFIX}//${operationPart}`,
         children: [
@@ -132,10 +132,10 @@ function createScalarTests(t) {
       }
     }`
 
-    const deepestPath = 'library.books.author.name'
+    const path = 'library'
 
     helper.agent.on('transactionFinished', (transaction) => {
-      const operationPart = `query/${expectedName}/${deepestPath}`
+      const operationPart = `query/${expectedName}/${path}`
       const expectedSegments = [{
         name: `${TRANSACTION_PREFIX}//${operationPart}`,
         children: [
@@ -190,4 +190,3 @@ function createScalarTests(t) {
     })
   })
 }
-

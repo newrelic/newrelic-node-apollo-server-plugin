@@ -131,7 +131,7 @@ function createAttributesTests(t) {
     })
   })
 
-  t.test('named query, multi-level, should capture deepest path', (t) => {
+  t.test('named query, multi-level, should capture deepest unique path', (t) => {
     const { helper, patchedHandler, stubContext, modVersion } = t.context
 
     const expectedName = 'GetBooksByLibrary'
@@ -146,16 +146,16 @@ function createAttributesTests(t) {
       }
     }`
 
-    const deepestPath = 'libraries.books.author.name'
+    const path = 'libraries.books'
 
     helper.agent.on('transactionFinished', (transaction) => {
-      const operationName = `${OPERATION_PREFIX}/query/${expectedName}/${deepestPath}`
+      const operationName = `${OPERATION_PREFIX}/query/${expectedName}/${path}`
       const operationSegment = findSegmentByName(transaction.trace.root, operationName)
 
       const expectedOperationAttributes = {
         'graphql.operation.type': 'query',
         'graphql.operation.name': expectedName,
-        'graphql.operation.deepestPath': deepestPath
+        'graphql.operation.deepestPath': path
       }
 
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)

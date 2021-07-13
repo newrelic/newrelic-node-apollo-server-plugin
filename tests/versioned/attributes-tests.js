@@ -118,7 +118,7 @@ function createAttributesTests(t) {
     })
   })
 
-  t.test('named query, multi-level, should capture deepest path', (t) => {
+  t.test('named query, multi-level, should capture deepest unique path', (t) => {
     const { helper, serverUrl } = t.context
 
     const expectedName = 'GetBooksByLibrary'
@@ -133,7 +133,7 @@ function createAttributesTests(t) {
       }
     }`
 
-    const deepestPath = 'libraries.books.author.name'
+    const deepestPath = 'libraries.books'
 
     helper.agent.on('transactionFinished', (transaction) => {
       const operationName = `${OPERATION_PREFIX}/query/${expectedName}/${deepestPath}`
