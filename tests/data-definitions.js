@@ -56,6 +56,8 @@ const magazines = [
 
 function getTypeDefs(gql) {
   const typeDefs = gql`
+    union SearchResult = Book | Author
+
     type Library {
       branch: String!
       books: [Book!]
@@ -63,7 +65,7 @@ function getTypeDefs(gql) {
     }
 
     type Book {
-      title: String
+      title: String!
       isbn: String
       author: Author!
     }
@@ -78,6 +80,7 @@ function getTypeDefs(gql) {
     }
 
     type Query {
+      search(contains: String): [SearchResult!]
       books: [Book]
       hello: String
       boom: String

@@ -71,8 +71,9 @@ function createFederatedSegmentsTests(t) {
     let transactions = []
     const expectedTransactions = [
       'WebTransaction/Expressjs/POST//query/<anonymous>/libraries.branch',
-      'WebTransaction/Expressjs/POST//query/<anonymous>/_entities.booksInStock',
-      'WebTransaction/Expressjs/POST//query/<anonymous>/_entities.magazinesInStock',
+      'WebTransaction/Expressjs/POST//query/<anonymous>/_entities<Library>.booksInStock',
+      // eslint-disable-next-line max-len
+      'WebTransaction/Expressjs/POST//query/<anonymous>/_entities<Library>.magazinesInStock',
       'WebTransaction/Expressjs/POST//query/SubGraphs/libraries'
     ]
 
