@@ -64,6 +64,28 @@ function createTransactionTests(t, frameworkName) {
     })
   })
 
+  t.test('Federated Server health check query with only __typename ' +
+    'in selection set should omit deepest unique path', (t) => {
+    const { helper, serverUrl } = t.context
+
+    const expectedName = '__ApolloServiceHealthCheck__'
+    const query = `query ${expectedName} { __typename }`
+
+    helper.agent.on('transactionFinished', (transaction) => {
+      t.equal(
+        transaction.name,
+        `${EXPECTED_PREFIX}//query/${expectedName}`
+      )
+    })
+
+    executeQuery(serverUrl, query, (err, result) => {
+      t.error(err)
+      checkResult(t, result, () => {
+        t.end()
+      })
+    })
+  })
+
   t.test('anonymous query, multi-level should return deepest unique path', (t) => {
     const { helper, serverUrl } = t.context
 
