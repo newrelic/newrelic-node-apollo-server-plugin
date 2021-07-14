@@ -49,9 +49,8 @@ function setupApolloServerHapiTests({suiteName, createTests, pluginConfig}, conf
         port: 5000
       })
 
+      await server.start()
       await server.applyMiddleware({ app: hapiServer, path: graphqlPath })
-
-      await server.installSubscriptionHandlers(hapiServer.listener)
 
       await hapiServer.start()
 

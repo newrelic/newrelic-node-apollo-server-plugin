@@ -24,7 +24,7 @@ function setupApolloServerKoaTests({suiteName, createTests, pluginConfig}, confi
     let serverUrl = null
     let helper = null
 
-    t.beforeEach(() => {
+    t.beforeEach(async () => {
       // load default instrumentation
       helper = utils.TestAgent.makeInstrumented(config)
       const createPlugin = require('../../../lib/create-plugin')
@@ -47,6 +47,7 @@ function setupApolloServerKoaTests({suiteName, createTests, pluginConfig}, confi
         plugins: [plugin]
       })
 
+      await server.start()
       server.applyMiddleware({ app, path: graphqlPath })
 
       return new Promise((resolve, reject) => {

@@ -5,7 +5,10 @@
 
 'use strict'
 
-const { executeQueryWithLambdaHandler, executeQueryJson } = require('./lambda-test-utils')
+const {
+  executeQueryJson,
+  executeQueryAssertResult
+} = require('./lambda-test-utils')
 const { findSegmentByName } = require('../../agent-testing')
 
 const SEGMENT_DESTINATION = 0x20
@@ -26,7 +29,7 @@ setupApolloServerLambdaTests({
 
 function createAttributesTests(t) {
   t.test('anon query should capture standard attributes except operation name', (t) => {
-    const { helper, patchedHandler, stubContext } = t.context
+    const { helper, patchedHandler, stubContext, modVersion } = t.context
 
     const query = `query {
       hello
@@ -37,8 +40,7 @@ function createAttributesTests(t) {
       const operationSegment = findSegmentByName(transaction.trace.root, operationName)
 
       const expectedOperationAttributes = {
-        'graphql.operation.type': 'query',
-        'graphql.operation.deepestPath': 'hello'
+        'graphql.operation.type': 'query'
       }
 
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
@@ -68,14 +70,17 @@ function createAttributesTests(t) {
       )
     })
 
-    executeQueryWithLambdaHandler(patchedHandler, query, stubContext, (err) => {
-      t.error(err)
-      t.end()
+    executeQueryAssertResult({
+      handler: patchedHandler,
+      query,
+      context: stubContext,
+      modVersion,
+      t
     })
   })
 
   t.test('named query should capture all standard attributes', (t) => {
-    const { helper, patchedHandler, stubContext } = t.context
+    const { helper, patchedHandler, stubContext, modVersion } = t.context
 
     const expectedName = 'HeyThere'
     const query = `query ${expectedName} {
@@ -88,8 +93,7 @@ function createAttributesTests(t) {
 
       const expectedOperationAttributes = {
         'graphql.operation.type': 'query',
-        'graphql.operation.name': expectedName,
-        'graphql.operation.deepestPath': 'hello'
+        'graphql.operation.name': expectedName
       }
 
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
@@ -116,14 +120,17 @@ function createAttributesTests(t) {
       )
     })
 
-    executeQueryWithLambdaHandler(patchedHandler, query, stubContext, (err) => {
-      t.error(err)
-      t.end()
+    executeQueryAssertResult({
+      handler: patchedHandler,
+      query,
+      context: stubContext,
+      modVersion,
+      t
     })
   })
 
-  t.test('named query, multi-level, should capture deepest path', (t) => {
-    const { helper, patchedHandler, stubContext } = t.context
+  t.test('named query, multi-level, should capture deepest unique path', (t) => {
+    const { helper, patchedHandler, stubContext, modVersion } = t.context
 
     const expectedName = 'GetBooksByLibrary'
     const query = `query ${expectedName} {
@@ -137,16 +144,15 @@ function createAttributesTests(t) {
       }
     }`
 
-    const deepestPath = 'libraries.books.author.name'
+    const path = 'libraries.books'
 
     helper.agent.on('transactionFinished', (transaction) => {
-      const operationName = `${OPERATION_PREFIX}/query/${expectedName}/${deepestPath}`
+      const operationName = `${OPERATION_PREFIX}/query/${expectedName}/${path}`
       const operationSegment = findSegmentByName(transaction.trace.root, operationName)
 
       const expectedOperationAttributes = {
         'graphql.operation.type': 'query',
-        'graphql.operation.name': expectedName,
-        'graphql.operation.deepestPath': deepestPath
+        'graphql.operation.name': expectedName
       }
 
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
@@ -189,14 +195,17 @@ function createAttributesTests(t) {
       )
     })
 
-    executeQueryWithLambdaHandler(patchedHandler, query, stubContext, (err) => {
-      t.error(err)
-      t.end()
+    executeQueryAssertResult({
+      handler: patchedHandler,
+      query,
+      context: stubContext,
+      modVersion,
+      t
     })
   })
 
   t.test('named mutation should capture all standard attributes', (t) => {
-    const { helper, patchedHandler, stubContext } = t.context
+    const { helper, patchedHandler, stubContext, modVersion } = t.context
 
     const expectedName = 'AddThing'
     const query = `mutation ${expectedName} {
@@ -210,8 +219,7 @@ function createAttributesTests(t) {
 
       const expectedOperationAttributes = {
         'graphql.operation.type': 'mutation',
-        'graphql.operation.name': expectedName,
-        'graphql.operation.deepestPath': 'addThing'
+        'graphql.operation.name': expectedName
       }
 
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
@@ -238,14 +246,17 @@ function createAttributesTests(t) {
       )
     })
 
-    executeQueryWithLambdaHandler(patchedHandler, query, stubContext, (err) => {
-      t.error(err)
-      t.end()
+    executeQueryAssertResult({
+      handler: patchedHandler,
+      query,
+      context: stubContext,
+      modVersion,
+      t
     })
   })
 
   t.test('named mutation should not capture args by default', (t) => {
-    const { helper, patchedHandler, stubContext } = t.context
+    const { helper, patchedHandler, stubContext, modVersion } = t.context
 
     const expectedName = 'AddThing'
     const query = `mutation ${expectedName} {
@@ -264,14 +275,17 @@ function createAttributesTests(t) {
       t.notOk(hasAttribute('graphql.field.args.name'))
     })
 
-    executeQueryWithLambdaHandler(patchedHandler, query, stubContext, (err) => {
-      t.error(err)
-      t.end()
+    executeQueryAssertResult({
+      handler: patchedHandler,
+      query,
+      context: stubContext,
+      modVersion,
+      t
     })
   })
 
   t.test('named mutation should capture args when added to include list', (t) => {
-    const { helper, patchedHandler, stubContext } = t.context
+    const { helper, patchedHandler, stubContext, modVersion } = t.context
 
     helper.agent.config.attributes.include = ['graphql.field.args.*']
     helper.agent.config.emit('attributes.include')
@@ -291,14 +305,17 @@ function createAttributesTests(t) {
       t.matches(resolveAttributes, {'graphql.field.args.name': 'added thing!'})
     })
 
-    executeQueryWithLambdaHandler(patchedHandler, query, stubContext, (err) => {
-      t.error(err)
-      t.end()
+    executeQueryAssertResult({
+      handler: patchedHandler,
+      query,
+      context: stubContext,
+      modVersion,
+      t
     })
   })
 
   t.test('named query should capture args when added to include list', (t) => {
-    const { helper, patchedHandler, stubContext } = t.context
+    const { helper, patchedHandler, stubContext, modVersion } = t.context
 
     helper.agent.config.attributes.include = ['graphql.field.args.*']
     helper.agent.config.emit('attributes.include')
@@ -322,14 +339,17 @@ function createAttributesTests(t) {
       t.matches(resolveAttributes, expectedArgAttributes)
     })
 
-    executeQueryWithLambdaHandler(patchedHandler, query, stubContext, (err) => {
-      t.error(err)
-      t.end()
+    executeQueryAssertResult({
+      handler: patchedHandler,
+      query,
+      context: stubContext,
+      modVersion,
+      t
     })
   })
 
   t.test('query with variables should capture args when added to include list', (t) => {
-    const { helper, patchedHandler, stubContext } = t.context
+    const { helper, patchedHandler, stubContext, modVersion } = t.context
 
     helper.agent.config.attributes.include = ['graphql.field.args.*']
     helper.agent.config.emit('attributes.include')
@@ -362,14 +382,17 @@ function createAttributesTests(t) {
       t.matches(resolveAttributes, expectedArgAttributes)
     })
 
-    executeQueryJson(patchedHandler, queryJson, stubContext, (err) => {
-      t.error(err)
-      t.end()
+    executeQueryJson({
+      handler: patchedHandler,
+      query: queryJson,
+      context: stubContext,
+      modVersion,
+      t
     })
   })
 
   t.test('should capture query in operation segment attributes', (t) => {
-    const { helper, patchedHandler, stubContext } = t.context
+    const { helper, patchedHandler, stubContext, modVersion } = t.context
 
     const expectedName = 'Greetings'
     const query = `query ${expectedName} {
@@ -394,14 +417,17 @@ function createAttributesTests(t) {
       )
     })
 
-    executeQueryWithLambdaHandler(patchedHandler, query, stubContext, (err) => {
-      t.error(err)
-      t.end()
+    executeQueryAssertResult({
+      handler: patchedHandler,
+      query,
+      context: stubContext,
+      modVersion,
+      t
     })
   })
 
   t.test('query with args should have args obfuscated in raw query attribute', (t) => {
-    const { helper, patchedHandler, stubContext } = t.context
+    const { helper, patchedHandler, stubContext, modVersion } = t.context
 
     const expectedName = 'ParamQueryWithArgs'
     const query = `query ${expectedName}($arg1: String!, $arg2: String) {
@@ -429,9 +455,12 @@ function createAttributesTests(t) {
       t.ok(operationAttributes['graphql.operation.query'].includes('paramQuery(***)'))
     })
 
-    executeQueryJson(patchedHandler, queryJson, stubContext, (err) => {
-      t.error(err)
-      t.end()
+    executeQueryJson({
+      handler: patchedHandler,
+      query: queryJson,
+      context: stubContext,
+      modVersion,
+      t
     })
   })
 }

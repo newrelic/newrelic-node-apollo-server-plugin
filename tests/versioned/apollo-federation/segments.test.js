@@ -55,7 +55,7 @@ function createFederatedSegmentsTests(t, frameworkName) {
       const bookExternal = formatExternalSegment(t.context.bookUrl)
       const magazineExternal = formatExternalSegment(t.context.magazineUrl)
 
-      const operationPart = `query/${ANON_PLACEHOLDER}/libraries.booksInStock.isbn`
+      const operationPart = `query/${ANON_PLACEHOLDER}/libraries`
       const expectedSegments = [{
         name: `${TRANSACTION_PREFIX}//${operationPart}`,
         children: [{
@@ -91,7 +91,6 @@ function createFederatedSegmentsTests(t, frameworkName) {
     const booksQueryName = 'GetBooksForLibraries'
     const booksQuery = `query ${booksQueryName} {
       libraries {
-        branch
         booksInStock {
           isbn,
           title,
@@ -103,7 +102,6 @@ function createFederatedSegmentsTests(t, frameworkName) {
     const magazineQueryName = 'GetMagazinesForLibraries'
     const magazineQuery = `query ${magazineQueryName} {
       libraries {
-        branch
         magazinesInStock {
           issue,
           title
@@ -122,9 +120,9 @@ function createFederatedSegmentsTests(t, frameworkName) {
         return
       }
 
-      const operationPart1 = `query/${booksQueryName}/libraries.booksInStock.isbn`
+      const operationPart1 = `query/${booksQueryName}/libraries.booksInStock`
       const expectedQuery1Name = `${operationPart1}`
-      const operationPart2 = `query/${magazineQueryName}/libraries.magazinesInStock.issue`
+      const operationPart2 = `query/${magazineQueryName}/libraries.magazinesInStock`
       const expectedQuery2Name = `${operationPart2}`
 
       const batchTransactionPrefix = `${TRANSACTION_PREFIX}//batch`

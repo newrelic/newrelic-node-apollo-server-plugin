@@ -64,7 +64,7 @@ function createTransactionTests(t, frameworkName) {
     })
   })
 
-  t.test('anonymous query, multi-level should return deepest path', (t) => {
+  t.test('anonymous query, multi-level should return deepest unique path', (t) => {
     const { helper, serverUrl } = t.context
 
     const query = `query {
@@ -78,12 +78,12 @@ function createTransactionTests(t, frameworkName) {
       }
     }`
 
-    const deepestPath = 'libraries.books.author.name'
+    const path = 'libraries.books'
 
     helper.agent.on('transactionFinished', (transaction) => {
       t.equal(
         transaction.name,
-        `${EXPECTED_PREFIX}//query/${ANON_PLACEHOLDER}/${deepestPath}`
+        `${EXPECTED_PREFIX}//query/${ANON_PLACEHOLDER}/${path}`
       )
     })
 
@@ -95,7 +95,7 @@ function createTransactionTests(t, frameworkName) {
     })
   })
 
-  t.test('named query, multi-level should return deepest path', (t) => {
+  t.test('named query, multi-level should return deepest unique path', (t) => {
     const { helper, serverUrl } = t.context
 
     const expectedName = 'GetBooksByLibrary'
@@ -110,43 +110,12 @@ function createTransactionTests(t, frameworkName) {
       }
     }`
 
-    const deepestPath = 'libraries.books.author.name'
+    const path = 'libraries.books'
 
     helper.agent.on('transactionFinished', (transaction) => {
       t.equal(
         transaction.name,
-        `${EXPECTED_PREFIX}//query/${expectedName}/${deepestPath}`
-      )
-    })
-
-    executeQuery(serverUrl, query, (err, result) => {
-      t.error(err)
-      checkResult(t, result, () => {
-        t.end()
-      })
-    })
-  })
-
-  t.test('named query, multi-level, should choose *first* deepest-path', (t) => {
-    const { helper, serverUrl } = t.context
-
-    const expectedName = 'GetBooksByLibrary'
-    const query = `query ${expectedName} {
-      libraries {
-        books {
-          title
-          isbn
-        }
-      }
-    }`
-
-    // .isbn is the same length but title will be first so that path should be used
-    const firstDeepestPath = 'libraries.books.title'
-
-    helper.agent.on('transactionFinished', (transaction) => {
-      t.equal(
-        transaction.name,
-        `${EXPECTED_PREFIX}//query/${expectedName}/${firstDeepestPath}`
+        `${EXPECTED_PREFIX}//query/${expectedName}/${path}`
       )
     })
 
@@ -248,7 +217,7 @@ function createTransactionTests(t, frameworkName) {
     })
   })
 
-  t.test('named query, with params, should return deepest path', (t) => {
+  t.test('named query, with params, should return deepest unique path', (t) => {
     const { helper, serverUrl } = t.context
 
     const expectedName = 'GetBookForLibrary'
@@ -263,12 +232,12 @@ function createTransactionTests(t, frameworkName) {
       }
     }`
 
-    const deepestPath = 'library.books.author.name'
+    const path = 'library.books'
 
     helper.agent.on('transactionFinished', (transaction) => {
       t.equal(
         transaction.name,
-        `${EXPECTED_PREFIX}//query/${expectedName}/${deepestPath}`
+        `${EXPECTED_PREFIX}//query/${expectedName}/${path}`
       )
     })
 
@@ -299,12 +268,12 @@ function createTransactionTests(t, frameworkName) {
       addThing(name: "added thing!")
     }`
 
-    const DeepestPath1 = 'library.books.author.name'
+    const path1 = 'library.books'
 
     const queries = [query1, query2]
 
     helper.agent.on('transactionFinished', (transaction) => {
-      const expectedQuery1Name = `query/${expectedName1}/${DeepestPath1}`
+      const expectedQuery1Name = `query/${expectedName1}/${path1}`
       const expectedQuery2Name = `mutation/${ANON_PLACEHOLDER}/addThing`
       t.equal(
         transaction.name,
@@ -363,7 +332,6 @@ function createTransactionTests(t, frameworkName) {
     const invalidQuery = `query {
       libraries {
         books {
-          title
           doesnotexist {
             name
           }
@@ -371,12 +339,12 @@ function createTransactionTests(t, frameworkName) {
       }
     }`
 
-    const deepestPath = 'libraries.books.doesnotexist.name'
+    const path = 'libraries.books.doesnotexist.name'
 
     helper.agent.on('transactionFinished', (transaction) => {
       t.equal(
         transaction.name,
-        `${EXPECTED_PREFIX}//query/${ANON_PLACEHOLDER}/${deepestPath}`
+        `${EXPECTED_PREFIX}//query/${ANON_PLACEHOLDER}/${path}`
       )
     })
 
@@ -403,7 +371,6 @@ function createTransactionTests(t, frameworkName) {
     const invalidQuery = `query ${expectedName} {
       libraries {
         books {
-          title
           doesnotexist {
             name
           }
@@ -411,12 +378,12 @@ function createTransactionTests(t, frameworkName) {
       }
     }`
 
-    const deepestPath = 'libraries.books.doesnotexist.name'
+    const path = 'libraries.books.doesnotexist.name'
 
     helper.agent.on('transactionFinished', (transaction) => {
       t.equal(
         transaction.name,
-        `${EXPECTED_PREFIX}//query/${expectedName}/${deepestPath}`
+        `${EXPECTED_PREFIX}//query/${expectedName}/${path}`
       )
     })
 

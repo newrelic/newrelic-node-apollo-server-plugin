@@ -174,7 +174,7 @@ query {
 }
 ```
 
-`post /query/<anonymous>/libraries.books.author.name`
+`post /query/<anonymous>/libraries.books`
 
 For more information on how transactions are named, including how query errors may impact naming, please see the [transaction documentation](./docs/transactions.md).
 
@@ -186,9 +186,9 @@ Two new metrics have been introduced to understand the behavior of your GraphQL 
 
 #### Operation Metrics
 
-`/GraphQL/operation/ApolloServer/[operation-type]/[operation-name]/[deepest-path]`
+`/GraphQL/operation/ApolloServer/[operation-type]/[operation-name]/[deepest-unique-path]`
 
-Operation metrics are very similar to how transaction names are constructed including the operation type, operation name and deepest-path. These metrics represent the durations of the individual queries or mutations and can be used to compare outside of the context of individual transactions which may have multiple queries.
+Operation metrics are very similar to how transaction names are constructed including the operation type, operation name and deepest unique path. These metrics represent the durations of the individual queries or mutations and can be used to compare outside of the context of individual transactions which may have multiple queries.
 
 If you would like to have a list of the top 10 slowest operations, the following query can be used to pull the data on demand or as a part of a dashboard. The 'Bar' chart type is a recommended visualization for this query.
 
@@ -219,11 +219,11 @@ Segments and spans (when Distributed Tracing enabled) are captured for GraphQL o
 
 #### Operation Segments/Spans
 
-`/GraphQL/operation/ApolloServer/[operation-type]/[operation-name]/[deepest-path]`
+`/GraphQL/operation/ApolloServer/[operation-type]/[operation-name]/[deepest-unique-path]`
 
-Operation segments/spans include the operation type, operation name and deepest-path. These represent the individual duration and attributes of a specific invocation within a transaction or trace.
+Operation segments/spans include the operation type, operation name and deepest unique path. These represent the individual duration and attributes of a specific invocation within a transaction or trace.
 
-The operation type, operation name and deepest-path are captured as attributes on a segment or span as well as the query with obfuscated arguments.
+The operation type and operation name are captured as attributes on a segment or span as well as the query with obfuscated arguments.
 
 For more information on collected attributes, see the [segments and spans documentation](./docs/segments-and-spans.md)
 

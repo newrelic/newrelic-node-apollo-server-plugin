@@ -83,10 +83,10 @@ function createMetricsTests(t) {
       }
     }`
 
-    const deepestPath = 'libraries.books.author.name'
+    const path = 'libraries.books'
 
     helper.agent.on('transactionFinished', () => {
-      const operationPart = `query/${ANON_PLACEHOLDER}/${deepestPath}`
+      const operationPart = `query/${ANON_PLACEHOLDER}/${path}`
 
       t.metrics([
         `${OPERATION_PREFIX}/${operationPart}`,
@@ -121,12 +121,12 @@ function createMetricsTests(t) {
       addThing(name: "added thing!")
     }`
 
-    const deepestPath1 = 'library.books.author.name'
+    const path1 = 'library.books'
 
     const queries = [query1, query2]
 
     helper.agent.on('transactionFinished', () => {
-      const operationPart1 = `query/${expectedName1}/${deepestPath1}`
+      const operationPart1 = `query/${expectedName1}/${path1}`
       const operationPart2 = `mutation/${ANON_PLACEHOLDER}/addThing`
 
       const operationMetrics1 = [
@@ -154,7 +154,7 @@ function createMetricsTests(t) {
     const { helper, serverUrl } = t.context
 
     const query = '{ libraries { books { title author { name } } } }'
-    const deepestPath = 'libraries.books.author.name'
+    const path = 'libraries.books'
     const querySha = crypto.createHash('sha256').update(query).digest('hex')
     const withQuery = `${serverUrl}?extensions={"persistedQuery":{"version":1,
       "sha256Hash":"${querySha}"}}&query=${query}`
@@ -162,7 +162,7 @@ function createMetricsTests(t) {
       "sha256Hash":"${querySha}"}}`
 
     helper.agent.on('transactionFinished', () => {
-      const operationPart = `query/${ANON_PLACEHOLDER}/${deepestPath}`
+      const operationPart = `query/${ANON_PLACEHOLDER}/${path}`
 
       t.metrics([
         `${OPERATION_PREFIX}/${operationPart}`,
