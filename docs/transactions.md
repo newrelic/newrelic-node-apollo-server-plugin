@@ -104,6 +104,64 @@ query {
 
 Would result in the deepest unique path of: 'libraries.branch'.
 
+## Union Types and Inline Fragments
+
+For Union types which utilize Inline Fragments, the transaction name will use `< ... >` brackets to indicate the underlying type returned by the Union query if only one result is specified in the query.
+
+For the following schema:
+```
+union SearchResult = Book | Author
+
+type Book {
+  title: String!
+}
+
+type Author {
+  name: String!
+}
+
+type Query {
+  search(contains: String): [SearchResult!]
+}
+```
+
+and the following query:
+
+```
+query example {
+  search(contains: "author") {
+    __typename
+    ... on Author {
+      name
+    }
+  }
+}
+```
+
+Would result in the following transaction name:
+
+`post /query/example/search<Author>.name`
+
+However, if the query is returning both Book and Author:
+
+```
+query example {
+  search(contains: "author") {
+    __typename
+    ... on Author {
+      name
+    }
+    ... on Book {
+      title
+    }
+  }
+}
+```
+
+The resulting transaction name would be:
+
+`post /query/example/search`
+
 ## Naming on Error
 
 Errors parsing or validating a GraphQL request can impact transaction naming.
