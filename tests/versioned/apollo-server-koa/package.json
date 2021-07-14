@@ -8,7 +8,7 @@
         "node": ">=12"
       },
       "dependencies": {
-        "apollo-server-koa": ">=2.14.0 <3.0.0",
+        "apollo-server-koa": ">=2.14.0",
         "koa": ">=2.13.0"
       },
       "files": [
