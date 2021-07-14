@@ -8,7 +8,7 @@
         "node": ">=12 <16"
       },
       "dependencies": {
-        "apollo-server-hapi": ">=2.14.0 <3.0.0",
+        "apollo-server-hapi": ">=2.14.0",
         "@hapi/hapi": "18.4.1"
       },
       "files": [

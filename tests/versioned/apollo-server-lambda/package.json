@@ -8,7 +8,7 @@
         "node": ">=12"
       },
       "dependencies": {
-        "apollo-server-lambda": ">=2.14.0 <3.0.0"
+        "apollo-server-lambda": ">=2.14.0"
       },
       "files": [
         "segments.test.js",
