@@ -95,8 +95,8 @@ Configuration may be passed into the `createPlugin` function to override specifi
 const plugin = createPlugin({
   captureScalars: true,
   captureIntrospectionQueries: true,
-  captureServiceDefinitionQuery: true,
-  captureHealthCheckQuery: true
+  captureServiceDefinitionQueries: true,
+  captureHealthCheckQueries: true
 })
 ```
 
@@ -109,9 +109,9 @@ const plugin = createPlugin({
 
 * `[captureIntrospectionQueries = false]` Enable capture of timings for an [IntrospectionQuery](https://graphql.org/graphql-js/utilities/#introspectionquery).
 
-* `[captureServiceDefinitionQuery = false]` Enable capture of timings for a [Service Definition query](https://www.apollographql.com/docs/federation/federation-spec/#fetch-service-capabilities) received from an Apollo Federated Gateway Server.
+* `[captureServiceDefinitionQueries = false]` Enable capture of timings for a [Service Definition query](https://www.apollographql.com/docs/federation/federation-spec/#fetch-service-capabilities) received from an Apollo Federated Gateway Server.
 
-* `[captureHealthCheckQuery = false]` Enable capture of timings for a [Health Check query](https://www.apollographql.com/docs/federation/api/apollo-gateway/#servicehealthcheck) received from an Apollo Federated Gateway Server.
+* `[captureHealthCheckQueries = false]` Enable capture of timings for a [Health Check query](https://www.apollographql.com/docs/federation/api/apollo-gateway/#servicehealthcheck) received from an Apollo Federated Gateway Server.
 
 ### Apollo Federation Support
 
