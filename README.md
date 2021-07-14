@@ -43,24 +43,6 @@ const server = new ApolloServer({
 })
 ```
 
-To override configuration, invoke the `createPlugin` function prior to passing to Apollo Server:
-
-```js
-// index.js
-const createPlugin = require('@newrelic/apollo-server-plugin')
-const plugin = createPlugin({
-  captureScalars: false,
-  captureIntrospectionQueries: false
-})
-
-// imported from supported module
-const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-  plugins: [plugin]
-})
-```
-
 ## Usage
 
 The New Relic plugin is known to work with the following Apollo Server modules:
@@ -92,12 +74,14 @@ const server = new ApolloServer({
 ```
 ### Configuration
 
-Configuration may be passed into the `createPlugin` function to override specific values. The configuration object and all properties are optional.
+Configuration may be passed into the `createPlugin` function to override specific values. To override configuration, invoke the `createPlugin` function prior to passing to Apollo Server. The configuration object and all properties are optional.
 
 ```js
 const plugin = createPlugin({
   captureScalars: true,
-  captureIntrospectionQueries: true
+  captureIntrospectionQueries: true,
+  captureServiceDefinitionQueries: true,
+  captureHealthCheckQueries: true
 })
 ```
 
@@ -109,6 +93,10 @@ const plugin = createPlugin({
   **NOTE:** query/mutation resolvers will always be captured even if returning a scalar type.
 
 * `[captureIntrospectionQueries = false]` Enable capture of timings for an [IntrospectionQuery](https://graphql.org/graphql-js/utilities/#introspectionquery).
+
+* `[captureServiceDefinitionQueries = false]` Enable capture of timings for a [Service Definition query](https://www.apollographql.com/docs/federation/federation-spec/#fetch-service-capabilities) received from an Apollo Federated Gateway Server.
+
+* `[captureHealthCheckQueries = false]` Enable capture of timings for a [Health Check query](https://www.apollographql.com/docs/federation/api/apollo-gateway/#servicehealthcheck) received from an Apollo Federated Gateway Server.
 
 ### Apollo Federation Support
 
