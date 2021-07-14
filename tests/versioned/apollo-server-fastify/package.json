@@ -9,7 +9,7 @@
       },
       "dependencies": {
         "apollo-server-fastify": ">=2.14.0",
-        "fastify": "3.5.0"
+        "fastify": "3.17.0"
       },
       "files": [
         "segments.test.js",
