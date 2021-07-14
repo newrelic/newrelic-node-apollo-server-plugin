@@ -304,11 +304,71 @@ function createTransactionTests(t, frameworkName) {
       modVersion,
       t
     })
-    // TODO: should i add to all?
-    // t.ok(result.body)
+  })
 
-    // const jsonResult = JSON.parse(result.body)
-    // t.equal(jsonResult.length, 2)
+  t.test('union, should return deepest unique path', (t) => {
+    const { helper, patchedHandler, stubContext, modVersion } = t.context
+
+    const expectedName = 'GetSearchResults'
+    const query = `query ${expectedName} {
+      search(contains: "10x") {
+        __typename
+        ... on Author {
+          name
+        }
+      }
+    }`
+
+
+    const deepestPath = 'search<Author>.name'
+    helper.agent.on('transactionFinished', (transaction) => {
+      t.equal(
+        transaction.name,
+        `${EXPECTED_PREFIX}//query/${expectedName}/${deepestPath}`
+      )
+    })
+
+    executeQueryAssertResult({
+      handler: patchedHandler,
+      query,
+      context: stubContext,
+      modVersion,
+      t
+    })
+  })
+
+  t.test('union, multiple inline fragments, should return deepest unique path', (t) => {
+    const { helper, patchedHandler, stubContext, modVersion } = t.context
+
+    const expectedName = 'GetSearchResults'
+    const query = `query ${expectedName} {
+      search(contains: "10x") {
+        __typename
+        ... on Author {
+          name
+        }
+        ... on Book {
+          title
+        }
+      }
+    }`
+
+
+    const deepestPath = 'search'
+    helper.agent.on('transactionFinished', (transaction) => {
+      t.equal(
+        transaction.name,
+        `${EXPECTED_PREFIX}//query/${expectedName}/${deepestPath}`
+      )
+    })
+
+    executeQueryAssertResult({
+      handler: patchedHandler,
+      query,
+      context: stubContext,
+      modVersion,
+      t
+    })
   })
 
   // there will be no document/AST nor resolved operation

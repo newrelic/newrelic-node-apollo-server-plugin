@@ -125,6 +125,10 @@ utils.executeBatchAssertResult = async function executeBatchAssertResult({
     handler(event, context, resultCallback.bind(null, t))
   } else {
     const result = await handler(event, context)
+    t.ok(result.body)
+
+    const jsonResult = JSON.parse(result.body)
+    t.equal(jsonResult.length, 2)
     checkResult(t, result, () => {
       t.end()
     })

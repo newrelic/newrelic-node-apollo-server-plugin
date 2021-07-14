@@ -313,6 +313,70 @@ function createTransactionTests(t, frameworkName) {
     })
   })
 
+  t.test('union, should return deepest unique path', (t) => {
+    const { helper, serverUrl } = t.context
+
+    const expectedName = 'GetSearchResult'
+    const query = `query ${expectedName} {
+      search(contains: "10x") {
+        __typename
+        ... on Author {
+          name
+        }
+      }
+    }`
+
+    const deepestPath = 'search<Author>.name'
+
+    helper.agent.on('transactionFinished', (transaction) => {
+      t.equal(
+        transaction.name,
+        `${EXPECTED_PREFIX}//query/${expectedName}/${deepestPath}`
+      )
+    })
+
+    executeQuery(serverUrl, query, (err, result) => {
+      t.error(err)
+      checkResult(t, result, () => {
+        t.end()
+      })
+    })
+  })
+
+  t.test('union, multiple inline fragments, should return deepest unique path', (t) => {
+    const { helper, serverUrl } = t.context
+
+    const expectedName = 'GetSearchResult'
+    const query = `query ${expectedName} {
+      search(contains: "10x") {
+        __typename
+        ... on Author {
+          name
+        }
+        ... on Book {
+          title
+        }
+      }
+    }`
+
+    const deepestPath = 'search'
+
+    helper.agent.on('transactionFinished', (transaction) => {
+      t.equal(
+        transaction.name,
+        `${EXPECTED_PREFIX}//query/${expectedName}/${deepestPath}`
+      )
+    })
+
+    executeQuery(serverUrl, query, (err, result) => {
+      t.error(err)
+      checkResult(t, result, () => {
+        t.end()
+      })
+    })
+  })
+
+
   // there will be no document/AST nor resolved operation
   t.test('if the query cannot be parsed, should be named /*', (t) => {
     const { helper, serverUrl } = t.context
