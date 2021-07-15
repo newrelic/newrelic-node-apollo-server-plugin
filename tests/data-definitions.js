@@ -55,7 +55,7 @@ const magazines = [
   {
     title: 'Node Weekly',
     issue: 1,
-    branch: 'downtown'
+    branch: 'riverside'
   }
 ]
 
