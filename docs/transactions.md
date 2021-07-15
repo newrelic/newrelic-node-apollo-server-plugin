@@ -106,7 +106,7 @@ Would result in the deepest unique path of: 'libraries.branch'.
 
 ## Union Types and Inline Fragments
 
-For Union types which utilize Inline Fragments, the transaction name will use `< ... >` brackets to indicate the underlying type returned by the Union query if only one result is specified in the query.
+For Union types which utilize Inline Fragments, the transaction name will use `< ... >` brackets to indicate the underlying selected field for the Union query if only one result is specified in the query.
 
 For the following schema:
 ```

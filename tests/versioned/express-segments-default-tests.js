@@ -190,6 +190,54 @@ function createSegmentsTests(t, frameworkName) {
     })
   })
 
+  t.test('named query with aliases should use alias in segment naming', (t) => {
+    const { helper, serverUrl } = t.context
+
+    const expectedName = 'GetBooksByLibrary'
+    const query = `query ${expectedName} {
+      alias: libraries {
+        books {
+          title
+          author {
+            name
+          }
+        }
+      }
+    }`
+
+    const path = 'libraries.books'
+
+    helper.agent.on('transactionFinished', (transaction) => {
+      const operationPart = `query/${expectedName}/${path}`
+      const expectedSegments = [{
+        name: `${TRANSACTION_PREFIX}//${operationPart}`,
+        children: [{
+          name: 'Expressjs/Router: /',
+          children: [{
+            name: 'Nodejs/Middleware/Expressjs/<anonymous>',
+            children: [{
+              name: `${OPERATION_PREFIX}/${operationPart}`,
+              children: [
+                { name: `${RESOLVE_PREFIX}/alias` },
+                { name: `${RESOLVE_PREFIX}/alias.books` },
+                { name: `${RESOLVE_PREFIX}/alias.books.author` }
+              ]
+            }]
+          }]
+        }]
+      }]
+
+      t.segments(transaction.trace.root, expectedSegments)
+    })
+
+    executeQuery(serverUrl, query, (err, result) => {
+      t.error(err)
+      checkResult(t, result, () => {
+        t.end()
+      })
+    })
+  })
+
   t.test('anonymous mutation, single level', (t) => {
     const { helper, serverUrl } = t.context
 

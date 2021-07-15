@@ -204,6 +204,81 @@ function createAttributesTests(t) {
     })
   })
 
+  t.test('query with alias should use alias in path attributes', (t) => {
+    const { helper, patchedHandler, stubContext, modVersion } = t.context
+
+    const expectedName = 'GetBooksByLibrary'
+    const query = `query ${expectedName} {
+      alias: libraries {
+        books {
+          title
+          author {
+            name
+          }
+        }
+      }
+    }`
+
+    const path = 'libraries.books'
+
+    helper.agent.on('transactionFinished', (transaction) => {
+      const operationName = `${OPERATION_PREFIX}/query/${expectedName}/${path}`
+      const operationSegment = findSegmentByName(transaction.trace.root, operationName)
+
+      const expectedOperationAttributes = {
+        'graphql.operation.type': 'query',
+        'graphql.operation.name': expectedName
+      }
+
+      const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
+      t.matches(
+        operationAttributes,
+        expectedOperationAttributes,
+        'should have operation attributes'
+      )
+
+      const [resolveLibrariesSegment, resolveBooksSegment] = operationSegment.children
+
+      const expectedLibrariesAttributes = {
+        'graphql.field.name': 'libraries',
+        'graphql.field.returnType': '[Library]',
+        'graphql.field.parentType': 'Query',
+        'graphql.field.path': 'alias'
+      }
+
+      const resolveLibrariesAttributes
+         = resolveLibrariesSegment.attributes.get(SEGMENT_DESTINATION)
+      t.matches(
+        resolveLibrariesAttributes,
+        expectedLibrariesAttributes,
+        'should have field resolve attributes for libraries'
+      )
+
+      const expectedBooksAttributes = {
+        'graphql.field.name': 'books',
+        'graphql.field.returnType': '[Book!]',
+        'graphql.field.parentType': 'Library',
+        'graphql.field.path': 'alias.book'
+      }
+
+      const resolveBooksAttributes
+         = resolveBooksSegment.attributes.get(SEGMENT_DESTINATION)
+      t.matches(
+        resolveBooksAttributes,
+        expectedBooksAttributes,
+        'should have field resolve attributes for books'
+      )
+    })
+
+    executeQueryAssertResult({
+      handler: patchedHandler,
+      query,
+      context: stubContext,
+      modVersion,
+      t
+    })
+  })
+
   t.test('named mutation should capture all standard attributes', (t) => {
     const { helper, patchedHandler, stubContext, modVersion } = t.context
 

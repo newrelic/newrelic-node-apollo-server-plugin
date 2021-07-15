@@ -179,6 +179,51 @@ function createLambdaSegmentsTests(t, frameworkName) {
     })
   })
 
+  t.test('named query with aliases should use alias in segment naming', (t) => {
+    const { helper, patchedHandler, stubContext, modVersion } = t.context
+
+    const expectedName = 'GetBooksByLibrary'
+    const query = `query ${expectedName} {
+      alias: libraries {
+        books {
+          title
+          author {
+            name
+          }
+        }
+      }
+    }`
+
+    const path = 'libraries.books'
+
+    helper.agent.on('transactionFinished', (transaction) => {
+      const operationPart = `query/${expectedName}/${path}`
+      const expectedSegments = [{
+        name: `${TRANSACTION_PREFIX}//${operationPart}`,
+        children: [{
+          name: `${OPERATION_PREFIX}/${operationPart}`,
+          children: [
+            { name: `${RESOLVE_PREFIX}/alias` },
+            { name: `${RESOLVE_PREFIX}/alias.books` },
+            { name: `${RESOLVE_PREFIX}/alias.books.title` },
+            { name: `${RESOLVE_PREFIX}/alias.books.author` },
+            { name: `${RESOLVE_PREFIX}/alias.books.author.name` }
+          ]
+        }]
+      }]
+
+      t.segments(transaction.trace.root, expectedSegments)
+    })
+
+    executeQueryAssertResult({
+      handler: patchedHandler,
+      query,
+      context: stubContext,
+      t,
+      modVersion
+    })
+  })
+
   t.test('anonymous mutation, single level', (t) => {
     const { helper, patchedHandler, stubContext, modVersion } = t.context
 
