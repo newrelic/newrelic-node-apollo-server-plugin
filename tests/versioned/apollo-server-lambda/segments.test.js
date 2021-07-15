@@ -449,6 +449,85 @@ function createLambdaSegmentsTests(t, frameworkName) {
     })
   })
 
+  t.test('union, single level', (t) => {
+    const { helper, patchedHandler, stubContext, modVersion } = t.context
+
+    const expectedName = 'GetSearchResult'
+    const query = `query ${expectedName} {
+      search(contains: "10x") {
+        __typename
+        ... on Author {
+          name
+        }
+      }
+    }`
+
+    const deepestPath = 'search<Author>.name'
+
+    helper.agent.on('transactionFinished', (transaction) => {
+      const operationPart = `query/${expectedName}/${deepestPath}`
+      const expectedSegments = [{
+        name: `${TRANSACTION_PREFIX}//${operationPart}`,
+        children: [{
+          name: `${OPERATION_PREFIX}/${operationPart}`,
+          children: [
+            { name: `${RESOLVE_PREFIX}/search` }
+          ]
+        }]
+      }]
+      t.segments(transaction.trace.root, expectedSegments)
+    })
+
+    executeQueryAssertResult({
+      handler: patchedHandler,
+      query,
+      context: stubContext,
+      t,
+      modVersion
+    })
+  })
+
+  t.test('union, multiple inline fragments, single level', (t) => {
+    const { helper, patchedHandler, stubContext, modVersion } = t.context
+
+    const expectedName = 'GetSearchResult'
+    const query = `query ${expectedName} {
+      search(contains: "10x") {
+        __typename
+        ... on Author {
+          name
+        }
+        ... on Book {
+          title
+        }
+      }
+    }`
+
+    const deepestPath = 'search'
+
+    helper.agent.on('transactionFinished', (transaction) => {
+      const operationPart = `query/${expectedName}/${deepestPath}`
+      const expectedSegments = [{
+        name: `${TRANSACTION_PREFIX}//${operationPart}`,
+        children: [{
+          name: `${OPERATION_PREFIX}/${operationPart}`,
+          children: [
+            { name: `${RESOLVE_PREFIX}/search` }
+          ]
+        }]
+      }]
+      t.segments(transaction.trace.root, expectedSegments)
+    })
+
+    executeQueryAssertResult({
+      handler: patchedHandler,
+      query,
+      context: stubContext,
+      t,
+      modVersion
+    })
+  })
+
   // there will be no document/AST nor resolved operation
   t.test('when the query cannot be parsed, should have operation placeholder', (t) => {
     const { helper, patchedHandler, stubContext, modVersion } = t.context

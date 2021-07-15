@@ -426,6 +426,117 @@ function createAttributesTests(t) {
       t.end()
     })
   })
+
+  t.test('union, should capture all expected attributes', (t) => {
+    const { helper, serverUrl } = t.context
+
+    const expectedName = 'GetSearchResult'
+    const query = `query ${expectedName} {
+      search(contains: "10x") {
+        __typename
+        ... on Author {
+          name
+        }
+      }
+    }`
+
+    const deepestPath = 'search<Author>.name'
+
+    helper.agent.on('transactionFinished', (transaction) => {
+      const operationName = `${OPERATION_PREFIX}/query/${expectedName}/${deepestPath}`
+      const operationSegment = findSegmentByName(transaction.trace.root, operationName)
+      const expectedOperationAttributes = {
+        'graphql.operation.type': 'query',
+        'graphql.operation.name': expectedName,
+        'graphql.operation.query': query.replace('contains: "10x"', '***')
+      }
+
+      const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
+      t.matches(
+        operationAttributes,
+        expectedOperationAttributes,
+        'should have operation attributes'
+      )
+
+      const resolveHelloSegment = operationSegment.children[0]
+
+      const expectedResolveAttributes = {
+        'graphql.field.name': 'search',
+        'graphql.field.returnType': '[SearchResult!]',
+        'graphql.field.parentType': 'Query',
+        'graphql.field.path': 'search'
+      }
+
+      const resolveAttributes = resolveHelloSegment.attributes.get(SEGMENT_DESTINATION)
+      t.matches(
+        resolveAttributes,
+        expectedResolveAttributes,
+        'should have field resolve attributes'
+      )
+    })
+
+    executeQuery(serverUrl, query, (err) => {
+      t.error(err)
+      t.end()
+    })
+  })
+
+  t.test('union, multiple inline fragments, should return expected attributes', (t) => {
+    const { helper, serverUrl } = t.context
+
+    const expectedName = 'GetSearchResult'
+    const query = `query ${expectedName} {
+      search(contains: "10x") {
+        __typename
+        ... on Author {
+          name
+        }
+        ... on Book {
+          title
+        }
+      }
+    }`
+
+    const deepestPath = 'search'
+
+    helper.agent.on('transactionFinished', (transaction) => {
+      const operationName = `${OPERATION_PREFIX}/query/${expectedName}/${deepestPath}`
+      const operationSegment = findSegmentByName(transaction.trace.root, operationName)
+      const expectedOperationAttributes = {
+        'graphql.operation.type': 'query',
+        'graphql.operation.name': expectedName,
+        'graphql.operation.query': query.replace('contains: "10x"', '***')
+      }
+
+      const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
+      t.matches(
+        operationAttributes,
+        expectedOperationAttributes,
+        'should have operation attributes'
+      )
+
+      const resolveHelloSegment = operationSegment.children[0]
+
+      const expectedResolveAttributes = {
+        'graphql.field.name': 'search',
+        'graphql.field.returnType': '[SearchResult!]',
+        'graphql.field.parentType': 'Query',
+        'graphql.field.path': 'search'
+      }
+
+      const resolveAttributes = resolveHelloSegment.attributes.get(SEGMENT_DESTINATION)
+      t.matches(
+        resolveAttributes,
+        expectedResolveAttributes,
+        'should have field resolve attributes'
+      )
+    })
+
+    executeQuery(serverUrl, query, (err) => {
+      t.error(err)
+      t.end()
+    })
+  })
 }
 
 module.exports = {
