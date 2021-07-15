@@ -469,15 +469,15 @@ function createAttributesTests(t) {
 
     const expectedName = 'GetSearchResult'
     const query = `query ${expectedName} {
-      search(contains: "10x") {
+      search(contains: "Ollies") {
         __typename
-        ... on Author {
-          name
+        ... on Book {
+          title
         }
       }
     }`
 
-    const deepestPath = 'search<Author>.name'
+    const deepestPath = 'search<Book>.title'
 
     helper.agent.on('transactionFinished', (transaction) => {
       const operationName = `${OPERATION_PREFIX}/query/${expectedName}/${deepestPath}`
@@ -485,7 +485,7 @@ function createAttributesTests(t) {
       const expectedOperationAttributes = {
         'graphql.operation.type': 'query',
         'graphql.operation.name': expectedName,
-        'graphql.operation.query': query.replace('contains: "10x"', '***')
+        'graphql.operation.query': query.replace('contains: "Ollies"', '***')
       }
 
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
@@ -526,10 +526,10 @@ function createAttributesTests(t) {
 
     const expectedName = 'GetSearchResult'
     const query = `query ${expectedName} {
-      search(contains: "10x") {
+      search(contains: "Node") {
         __typename
-        ... on Author {
-          name
+        ... on Magazine {
+          title
         }
         ... on Book {
           title
@@ -545,7 +545,7 @@ function createAttributesTests(t) {
       const expectedOperationAttributes = {
         'graphql.operation.type': 'query',
         'graphql.operation.name': expectedName,
-        'graphql.operation.query': query.replace('contains: "10x"', '***')
+        'graphql.operation.query': query.replace('contains: "Node"', '***')
       }
 
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
