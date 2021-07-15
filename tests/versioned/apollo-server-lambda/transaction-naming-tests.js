@@ -138,6 +138,39 @@ function createTransactionTests(t, frameworkName) {
     })
   })
 
+  t.test('named query, multi-level with aliases should ignore aliases in naming', (t) => {
+    const { helper, patchedHandler, stubContext, modVersion } = t.context
+
+    const expectedName = 'GetBooksByLibrary'
+    const query = `query ${expectedName} {
+      libAlias: libraries {
+        bookAlias: books {
+          title
+          author {
+            name
+          }
+        }
+      }
+    }`
+
+    const path = 'libraries.books'
+
+    helper.agent.on('transactionFinished', (transaction) => {
+      t.equal(
+        transaction.name,
+        `${EXPECTED_PREFIX}//query/${expectedName}/${path}`
+      )
+    })
+
+    executeQueryAssertResult({
+      handler: patchedHandler,
+      query,
+      context: stubContext,
+      modVersion,
+      t
+    })
+  })
+
   t.test('anonymous mutation, single level, should use anonymous placeholder', (t) => {
     const { helper, patchedHandler, stubContext, modVersion } = t.context
 
