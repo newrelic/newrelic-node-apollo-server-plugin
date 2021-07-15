@@ -51,12 +51,17 @@ const magazines = [
     title: 'Reli Updates Weekly',
     issue: 2,
     branch: 'downtown'
+  },
+  {
+    title: 'Node Weekly',
+    issue: 1,
+    branch: 'riverside'
   }
 ]
 
 function getTypeDefs(gql) {
   const typeDefs = gql`
-    union SearchResult = Book | Author
+    union SearchResult = Book | Magazine
 
     type Library {
       branch: String!
@@ -98,6 +103,12 @@ function getTypeDefs(gql) {
 
 const resolvers = {
   Query: {
+    search: (_, { contains }) => {
+      const filteredBooks = books.filter((book) => book.title.includes(contains))
+      const filteredMagazines = magazines.filter((magazine) =>
+        magazine.title.includes(contains))
+      return [...filteredBooks, ...filteredMagazines]
+    },
     hello: () => {
       return 'hello world'
     },
@@ -145,6 +156,17 @@ const resolvers = {
       return {
         name: parent.author
       }
+    }
+  },
+  SearchResult: {
+    __resolveType(obj) {
+      if (obj.issue) {
+        return 'Magazine'
+      }
+      if (obj.isbn) {
+        return 'Book'
+      }
+      return null // GraphQLError is thrown
     }
   }
 }

@@ -540,15 +540,15 @@ function createSegmentsTests(t, frameworkName) {
 
     const expectedName = 'GetSearchResult'
     const query = `query ${expectedName} {
-      search(contains: "10x") {
+      search(contains: "Ollies") {
         __typename
-        ... on Author {
-          name
+        ... on Book {
+          title
         }
       }
     }`
 
-    const deepestPath = 'search<Author>.name'
+    const deepestPath = 'search<Book>.title'
 
     helper.agent.on('transactionFinished', (transaction) => {
       const operationPart = `query/${expectedName}/${deepestPath}`
@@ -583,10 +583,10 @@ function createSegmentsTests(t, frameworkName) {
 
     const expectedName = 'GetSearchResult'
     const query = `query ${expectedName} {
-      search(contains: "10x") {
+      search(contains: "Node") {
         __typename
-        ... on Author {
-          name
+        ... on Magazine {
+          title
         }
         ... on Book {
           title

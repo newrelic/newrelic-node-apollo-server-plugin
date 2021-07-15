@@ -344,16 +344,16 @@ function createTransactionTests(t, frameworkName) {
 
     const expectedName = 'GetSearchResults'
     const query = `query ${expectedName} {
-      search(contains: "10x") {
+      search(contains: "Ollies") {
         __typename
-        ... on Author {
-          name
+        ... on Book {
+          title
         }
       }
     }`
 
 
-    const deepestPath = 'search<Author>.name'
+    const deepestPath = 'search<Book>.title'
     helper.agent.on('transactionFinished', (transaction) => {
       t.equal(
         transaction.name,
@@ -375,10 +375,10 @@ function createTransactionTests(t, frameworkName) {
 
     const expectedName = 'GetSearchResults'
     const query = `query ${expectedName} {
-      search(contains: "10x") {
+      search(contains: "Node") {
         __typename
-        ... on Author {
-          name
+        ... on Magazine {
+          title
         }
         ... on Book {
           title
@@ -386,8 +386,8 @@ function createTransactionTests(t, frameworkName) {
       }
     }`
 
-
     const deepestPath = 'search'
+
     helper.agent.on('transactionFinished', (transaction) => {
       t.equal(
         transaction.name,

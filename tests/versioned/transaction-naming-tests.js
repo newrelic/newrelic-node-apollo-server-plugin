@@ -350,15 +350,15 @@ function createTransactionTests(t, frameworkName) {
 
     const expectedName = 'GetSearchResult'
     const query = `query ${expectedName} {
-      search(contains: "10x") {
+      search(contains: "Ollies") {
         __typename
-        ... on Author {
-          name
+        ... on Book {
+          title
         }
       }
     }`
 
-    const deepestPath = 'search<Author>.name'
+    const deepestPath = 'search<Book>.title'
 
     helper.agent.on('transactionFinished', (transaction) => {
       t.equal(
@@ -367,8 +367,16 @@ function createTransactionTests(t, frameworkName) {
       )
     })
 
+    const expectedResult = [
+      {
+        __typename: 'Book',
+        title: 'Ollies for O11y: A Sk8er\'s Guide to Observability'
+      }
+    ]
     executeQuery(serverUrl, query, (err, result) => {
       t.error(err)
+      t.same(result.data.search, expectedResult,
+        'should return expected results with union search query')
       checkResult(t, result, () => {
         t.end()
       })
@@ -380,10 +388,10 @@ function createTransactionTests(t, frameworkName) {
 
     const expectedName = 'GetSearchResult'
     const query = `query ${expectedName} {
-      search(contains: "10x") {
+      search(contains: "Node") {
         __typename
-        ... on Author {
-          name
+        ... on Magazine {
+          title
         }
         ... on Book {
           title
@@ -400,7 +408,13 @@ function createTransactionTests(t, frameworkName) {
       )
     })
 
+    const expectedResult = [
+      { __typename: 'Book', title: 'Node Agent: The Book' },
+      { __typename: 'Magazine', title: 'Node Weekly'}
+    ]
     executeQuery(serverUrl, query, (err, result) => {
+      t.same(result.data.search, expectedResult,
+        'should return expected results with union search query')
       t.error(err)
       checkResult(t, result, () => {
         t.end()
