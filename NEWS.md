@@ -1,3 +1,18 @@
+## 1.0.0 (07/15/2021)
+* **BREAKING**: modifies transaction and operation segment/span naming to use deepest *unique* path instead of first deepest path.
+
+  The deepest unique path is the deepest path in the selection set of a query where only one field was selected at each level. 'id' and '__typename' fields are automatically excluded from this decision. For example: `query { libraries { branch booksInStock magazinesInStock }}` will use the path name 'libraries' and  `query { libraries { branch __typename id }}` will use the path name 'libraries.branch'. For more information, see the latest [transaction naming documentation](https://github.com/newrelic/newrelic-node-apollo-server-plugin/blob/main/docs/transactions.md).
+
+  This may result in naming changes for your existing GraphQL queries. Any charts, etc. where you are querying by transaction name will need to be updated upon upgrading.
+
+* **BREAKING**: removed the deepest path attribute 'graphql.operation.deepestPath' from operation segments/spans.
+* **BREAKING**: Removed support for Node v10.
+* Added support for 3.x.x of `apollo-server` and the framework plugin integrations.
+* Updated plugin to Ignore Service Definition and/or Health Check queries received from Federated Gateway Server.
+  Setting config item(s) `captureServiceDefinitionQuery` and/or `captureHealthCheckQuery` to true will enable plugin to capture timings for those respective queries.
+* Improved transaction names that contain InlineFragments(federated sub-graph calls, and union types)
+* Added running `apollo-sever-hapi` versioned tests on node 16, `apollo-server-hapi@3.0.0`, `@hapi/hapi@20.1.x`.
+
 ## 0.3.0 (07/08/2021)
 * Added Apollo Federation support.
   * Updated to always use the GraphQL document schema AST to generate the name and deepest path for transactions for a more consistent naming convention between federated gateway and standard Apollo servers.
