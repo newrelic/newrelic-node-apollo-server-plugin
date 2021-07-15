@@ -7,11 +7,11 @@
 
 * **BREAKING**: removed the deepest path attribute 'graphql.operation.deepestPath' from operation segments/spans.
 * **BREAKING**: Removed support for Node v10.
-* Added support for `apollo-server` v3.x.x
+* Added support for 3.x.x of `apollo-server` and the framework plugin integrations.
 * Updated plugin to Ignore Service Definition and/or Health Check queries received from Federated Gateway Server.
   Setting config item(s) `captureServiceDefinitionQuery` and/or `captureHealthCheckQuery` to true will enable plugin to capture timings for those respective queries.
 * Improved transaction names that contain InlineFragments(federated sub-graph calls, and union types)
-* Added running `apollo-sever-hapi` versioned tests on node 16, `apollo-server-hapi@3.0.0`, `@hapi/hapi@20.1.x`
+* Added running `apollo-sever-hapi` versioned tests on node 16, `apollo-server-hapi@3.0.0`, `@hapi/hapi@20.1.x`.
 
 ## 0.3.0 (07/08/2021)
 * Added Apollo Federation support.
