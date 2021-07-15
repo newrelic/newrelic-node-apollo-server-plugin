@@ -487,6 +487,95 @@ function createSegmentsTests(t, frameworkName) {
     })
   })
 
+  t.test('union, single level', (t) => {
+    const { helper, serverUrl } = t.context
+
+    const expectedName = 'GetSearchResult'
+    const query = `query ${expectedName} {
+      search(contains: "10x") {
+        __typename
+        ... on Author {
+          name
+        }
+      }
+    }`
+
+    const deepestPath = 'search<Author>.name'
+
+    helper.agent.on('transactionFinished', (transaction) => {
+      const operationPart = `query/${expectedName}/${deepestPath}`
+      const expectedSegments = [{
+        name: `${TRANSACTION_PREFIX}//${operationPart}`,
+        children: [{
+          name: 'Expressjs/Router: /',
+          children: [{
+            name: 'Nodejs/Middleware/Expressjs/<anonymous>',
+            children: [{
+              name: `${OPERATION_PREFIX}/${operationPart}`,
+              children: [
+                { name: `${RESOLVE_PREFIX}/search` }
+              ]
+            }]
+          }]
+        }]
+      }]
+      t.segments(transaction.trace.root, expectedSegments)
+    })
+
+    executeQuery(serverUrl, query, (err, result) => {
+      t.error(err)
+      checkResult(t, result, () => {
+        t.end()
+      })
+    })
+  })
+
+  t.test('union, multiple inline fragments, single level', (t) => {
+    const { helper, serverUrl } = t.context
+
+    const expectedName = 'GetSearchResult'
+    const query = `query ${expectedName} {
+      search(contains: "10x") {
+        __typename
+        ... on Author {
+          name
+        }
+        ... on Book {
+          title
+        }
+      }
+    }`
+
+    const deepestPath = 'search'
+
+    helper.agent.on('transactionFinished', (transaction) => {
+      const operationPart = `query/${expectedName}/${deepestPath}`
+      const expectedSegments = [{
+        name: `${TRANSACTION_PREFIX}//${operationPart}`,
+        children: [{
+          name: 'Expressjs/Router: /',
+          children: [{
+            name: 'Nodejs/Middleware/Expressjs/<anonymous>',
+            children: [{
+              name: `${OPERATION_PREFIX}/${operationPart}`,
+              children: [
+                { name: `${RESOLVE_PREFIX}/search` }
+              ]
+            }]
+          }]
+        }]
+      }]
+      t.segments(transaction.trace.root, expectedSegments)
+    })
+
+    executeQuery(serverUrl, query, (err, result) => {
+      t.error(err)
+      checkResult(t, result, () => {
+        t.end()
+      })
+    })
+  })
+
   // there will be no document/AST nor resolved operation
   t.test('when the query cannot be parsed, should have operation placeholder', (t) => {
     const { helper, serverUrl } = t.context
