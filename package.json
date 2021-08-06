@@ -6,6 +6,7 @@
   "scripts": {
     "integration": "rm -f newrelic_agent.log && time tap --test-regex='(\\/|^tests\\/integration\\/.*\\.test\\.js)$' --no-coverage",
     "lint": "eslint *.js lib tests",
+    "lint:fix": "eslint --fix *.js lib tests",
     "prepare": "husky install",
     "test": "npm run unit && npm run integration && npm run versioned",
     "unit": "tap --test-regex='(\\/|^tests\\/unit\\/.*\\.test\\.js)$' --no-coverage",
@@ -34,14 +35,18 @@
   "devDependencies": {
     "@newrelic/test-utilities": "^5.1.0",
     "apollo-server": "^2.18.2",
-    "eslint": "^7.8.1",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-header": "^3.1.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^3.4.0",
     "husky": "^6.0.0",
     "lint-staged": "^11.0.0",
     "newrelic": "^7.3.1",
+    "prettier": "^2.3.2",
     "tap": "^15.0.6"
   },
   "peerDependencies": {
     "newrelic": ">=6.13.0"
-  },
-  "dependencies": {}
+  }
 }

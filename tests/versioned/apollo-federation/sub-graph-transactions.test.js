@@ -125,8 +125,7 @@ function createFederatedSegmentsTests(t) {
 
     let transactions = []
     const expectedPath = 'libraries.branch'
-    const expectedTransaction
-      = `WebTransaction/Expressjs/POST//query/<anonymous>/${expectedPath}`
+    const expectedTransaction = `WebTransaction/Expressjs/POST//query/<anonymous>/${expectedPath}`
 
     helper.agent.on('transactionFinished', (transaction) => {
       transactions.push(transaction.name)

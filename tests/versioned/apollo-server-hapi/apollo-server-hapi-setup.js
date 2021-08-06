@@ -14,7 +14,7 @@ const { getTypeDefs, resolvers } = require('../../data-definitions')
 
 const WEB_FRAMEWORK = 'Hapi'
 
-function setupApolloServerHapiTests({suiteName, createTests, pluginConfig}, config) {
+function setupApolloServerHapiTests({ suiteName, createTests, pluginConfig }, config) {
   tap.test(`apollo-server-hapi: ${suiteName}`, (t) => {
     t.autoend()
 

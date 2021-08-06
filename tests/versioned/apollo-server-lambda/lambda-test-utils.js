@@ -1,7 +1,7 @@
 /*
-* Copyright 2020 New Relic Corporation. All rights reserved.
-* SPDX-License-Identifier: Apache-2.0
-*/
+ * Copyright 2020 New Relic Corporation. All rights reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 'use strict'
 const { checkResult } = require('../common')
@@ -165,7 +165,7 @@ function assertErrorBody({ result, code, t }) {
  */
 function errorCallback(t, code, err, result) {
   t.error(err)
-  assertErrorBody({ result, code, t})
+  assertErrorBody({ result, code, t })
 }
 
 /**
@@ -223,8 +223,7 @@ function createApiEvent(query) {
       'CloudFront-Viewer-Country': 'US',
       'Host': 'wt6mne2s9k.execute-api.us-west-2.amazonaws.com',
       'Upgrade-Insecure-Requests': '1',
-      'User-Agent':
-        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6)',
+      'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6)',
       'Via': '1.1 fb7cca60f0ecd82ce07790c9c5eef16c.cloudfront.net (CloudFront)',
       'X-Amz-Cf-Id': 'nBsWBOrSHMgnaROZJK1wGCZ9PcRcSpq_oSXZNQwQ10OTZL4cimZo3g==',
       'X-Forwarded-For': '192.168.100.1, 192.168.1.1',
@@ -246,8 +245,7 @@ function createApiEvent(query) {
         cognitoAuthenticationType: '',
         cognitoAuthenticationProvider: '',
         userArn: '',
-        userAgent:
-          'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6)',
+        userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6)',
         user: ''
       },
       resourcePath: '/{proxy+}',
@@ -261,4 +259,3 @@ function createApiEvent(query) {
 
   return apiGatewayProxyEvent
 }
-

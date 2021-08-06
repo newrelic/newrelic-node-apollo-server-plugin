@@ -5,9 +5,7 @@
 
 'use strict'
 
-const {
-  executeQueryAssertErrors
-} = require('./lambda-test-utils')
+const { executeQueryAssertErrors } = require('./lambda-test-utils')
 const agentTesting = require('../../agent-testing')
 
 const ANON_PLACEHOLDER = '<anonymous>'
@@ -17,7 +15,6 @@ const OPERATION_PREFIX = 'GraphQL/operation/ApolloServer'
 const RESOLVE_PREFIX = 'GraphQL/resolve/ApolloServer'
 
 const { setupApolloServerLambdaTests } = require('./apollo-server-lambda-setup')
-
 
 function createErrorTests(t) {
   t.test('parsing error should be noticed and assigned to operation span', (t) => {
@@ -43,7 +40,7 @@ function createErrorTests(t) {
 
       const errorTrace = errorTraces[0]
 
-      const [, transactionName, errorMessage, errorType, params ] = errorTrace
+      const [, transactionName, errorMessage, errorType, params] = errorTrace
       t.equal(transactionName, transaction.name)
       t.equal(errorMessage, expectedErrorMessage)
       t.equal(errorType, expectedErrorType)
@@ -54,7 +51,7 @@ function createErrorTests(t) {
 
       const matchingSpan = agentTesting.findSpanById(helper.agent, agentAttributes.spanId)
 
-      const {attributes, intrinsics} = matchingSpan
+      const { attributes, intrinsics } = matchingSpan
       t.equal(intrinsics.name, `${OPERATION_PREFIX}/${UNKNOWN_OPERATION}`)
       t.equal(attributes['error.message'], expectedErrorMessage)
       t.equal(attributes['error.class'], expectedErrorType)
@@ -87,8 +84,7 @@ function createErrorTests(t) {
     }`
 
     const deepestPath = 'libraries.books.doesnotexist.name'
-    const expectedOperationName
-      = `${OPERATION_PREFIX}/query/${ANON_PLACEHOLDER}/${deepestPath}`
+    const expectedOperationName = `${OPERATION_PREFIX}/query/${ANON_PLACEHOLDER}/${deepestPath}`
 
     helper.agent.on('transactionFinished', (transaction) => {
       const errorTraces = agentTesting.getErrorTraces(helper.agent)
@@ -107,7 +103,7 @@ function createErrorTests(t) {
 
       const matchingSpan = agentTesting.findSpanById(helper.agent, agentAttributes.spanId)
 
-      const {attributes, intrinsics} = matchingSpan
+      const { attributes, intrinsics } = matchingSpan
       t.equal(intrinsics.name, expectedOperationName)
       t.equal(attributes['error.message'], expectedErrorMessage)
       t.equal(attributes['error.class'], expectedErrorType)
@@ -153,7 +149,7 @@ function createErrorTests(t) {
 
       const matchingSpan = agentTesting.findSpanById(helper.agent, agentAttributes.spanId)
 
-      const {attributes, intrinsics} = matchingSpan
+      const { attributes, intrinsics } = matchingSpan
       t.equal(intrinsics.name, expectedResolveName)
       t.equal(attributes['error.message'], expectedErrorMessage)
       t.equal(attributes['error.class'], expectedErrorType)

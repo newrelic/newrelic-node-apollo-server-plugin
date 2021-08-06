@@ -61,43 +61,51 @@ function createNoScalarTests(t) {
 
     helper.agent.on('transactionFinished', (transaction) => {
       const operationPart = `query/${expectedName}/${path}`
-      const expectedSegments = [{
-        name: `${TRANSACTION_PREFIX}//${operationPart}`,
-        children: [
-          { name: 'Nodejs/Middleware/Expressjs/query' },
-          { name: 'Nodejs/Middleware/Expressjs/expressInit' },
-          {
-            name: 'Expressjs/Router: /',
-            children: [
-              { name: 'Nodejs/Middleware/Expressjs/<anonymous>' },
-              { name: 'Nodejs/Middleware/Expressjs/corsMiddleware' },
-              { name: 'Nodejs/Middleware/Expressjs/jsonParser' },
-              { name: 'Nodejs/Middleware/Expressjs/<anonymous>' },
-              {
-                name: 'Nodejs/Middleware/Expressjs/<anonymous>',
-                children: [{
-                  name: `${OPERATION_PREFIX}/${operationPart}`,
+      const expectedSegments = [
+        {
+          name: `${TRANSACTION_PREFIX}//${operationPart}`,
+          children: [
+            { name: 'Nodejs/Middleware/Expressjs/query' },
+            { name: 'Nodejs/Middleware/Expressjs/expressInit' },
+            {
+              name: 'Expressjs/Router: /',
+              children: [
+                { name: 'Nodejs/Middleware/Expressjs/<anonymous>' },
+                { name: 'Nodejs/Middleware/Expressjs/corsMiddleware' },
+                { name: 'Nodejs/Middleware/Expressjs/jsonParser' },
+                { name: 'Nodejs/Middleware/Expressjs/<anonymous>' },
+                {
+                  name: 'Nodejs/Middleware/Expressjs/<anonymous>',
                   children: [
                     {
-                      name: `${RESOLVE_PREFIX}/library`,
-                      children: [{
-                        name: 'timers.setTimeout',
-                        children: [{
-                          name: 'Callback: <anonymous>'
-                        }]
-                      }]
-                    },
-                    { name: `${RESOLVE_PREFIX}/library.books` },
-                    { name: `${RESOLVE_PREFIX}/library.books.author` },
-                    { name: `${RESOLVE_PREFIX}/library.books.author` },
-                    { name: `${RESOLVE_PREFIX}/library.magazines`}
+                      name: `${OPERATION_PREFIX}/${operationPart}`,
+                      children: [
+                        {
+                          name: `${RESOLVE_PREFIX}/library`,
+                          children: [
+                            {
+                              name: 'timers.setTimeout',
+                              children: [
+                                {
+                                  name: 'Callback: <anonymous>'
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        { name: `${RESOLVE_PREFIX}/library.books` },
+                        { name: `${RESOLVE_PREFIX}/library.books.author` },
+                        { name: `${RESOLVE_PREFIX}/library.books.author` },
+                        { name: `${RESOLVE_PREFIX}/library.magazines` }
+                      ]
+                    }
                   ]
                 }
               ]
             }
           ]
-        }]
-      }]
+        }
+      ]
 
       // Exact match to ensure no extra fields snuck in
       t.exactSegments(transaction.trace.root, expectedSegments)
@@ -136,49 +144,57 @@ function createScalarTests(t) {
 
     helper.agent.on('transactionFinished', (transaction) => {
       const operationPart = `query/${expectedName}/${path}`
-      const expectedSegments = [{
-        name: `${TRANSACTION_PREFIX}//${operationPart}`,
-        children: [
-          { name: 'Nodejs/Middleware/Expressjs/query' },
-          { name: 'Nodejs/Middleware/Expressjs/expressInit' },
-          {
-            name: 'Expressjs/Router: /',
-            children: [
-              { name: 'Nodejs/Middleware/Expressjs/<anonymous>' },
-              { name: 'Nodejs/Middleware/Expressjs/corsMiddleware' },
-              { name: 'Nodejs/Middleware/Expressjs/jsonParser' },
-              { name: 'Nodejs/Middleware/Expressjs/<anonymous>' },
-              {
-                name: 'Nodejs/Middleware/Expressjs/<anonymous>',
-                children: [{
-                  name: `${OPERATION_PREFIX}/${operationPart}`,
+      const expectedSegments = [
+        {
+          name: `${TRANSACTION_PREFIX}//${operationPart}`,
+          children: [
+            { name: 'Nodejs/Middleware/Expressjs/query' },
+            { name: 'Nodejs/Middleware/Expressjs/expressInit' },
+            {
+              name: 'Expressjs/Router: /',
+              children: [
+                { name: 'Nodejs/Middleware/Expressjs/<anonymous>' },
+                { name: 'Nodejs/Middleware/Expressjs/corsMiddleware' },
+                { name: 'Nodejs/Middleware/Expressjs/jsonParser' },
+                { name: 'Nodejs/Middleware/Expressjs/<anonymous>' },
+                {
+                  name: 'Nodejs/Middleware/Expressjs/<anonymous>',
                   children: [
                     {
-                      name: `${RESOLVE_PREFIX}/library`,
-                      children: [{
-                        name: 'timers.setTimeout',
-                        children: [{
-                          name: 'Callback: <anonymous>'
-                        }]
-                      }]
-                    },
-                    { name: `${RESOLVE_PREFIX}/library.books` },
-                    { name: `${RESOLVE_PREFIX}/library.books.title` },
-                    { name: `${RESOLVE_PREFIX}/library.books.author` },
-                    { name: `${RESOLVE_PREFIX}/library.books.author.name` },
-                    { name: `${RESOLVE_PREFIX}/library.books.title` },
-                    { name: `${RESOLVE_PREFIX}/library.books.author` },
-                    { name: `${RESOLVE_PREFIX}/library.books.author.name` },
-                    { name: `${RESOLVE_PREFIX}/library.magazines`},
-                    { name: `${RESOLVE_PREFIX}/library.magazines.title`},
-                    { name: `${RESOLVE_PREFIX}/library.magazines.issue`}
+                      name: `${OPERATION_PREFIX}/${operationPart}`,
+                      children: [
+                        {
+                          name: `${RESOLVE_PREFIX}/library`,
+                          children: [
+                            {
+                              name: 'timers.setTimeout',
+                              children: [
+                                {
+                                  name: 'Callback: <anonymous>'
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        { name: `${RESOLVE_PREFIX}/library.books` },
+                        { name: `${RESOLVE_PREFIX}/library.books.title` },
+                        { name: `${RESOLVE_PREFIX}/library.books.author` },
+                        { name: `${RESOLVE_PREFIX}/library.books.author.name` },
+                        { name: `${RESOLVE_PREFIX}/library.books.title` },
+                        { name: `${RESOLVE_PREFIX}/library.books.author` },
+                        { name: `${RESOLVE_PREFIX}/library.books.author.name` },
+                        { name: `${RESOLVE_PREFIX}/library.magazines` },
+                        { name: `${RESOLVE_PREFIX}/library.magazines.title` },
+                        { name: `${RESOLVE_PREFIX}/library.magazines.issue` }
+                      ]
+                    }
                   ]
                 }
               ]
             }
           ]
-        }]
-      }]
+        }
+      ]
 
       // Exact match to ensure no extra fields snuck in
       t.exactSegments(transaction.trace.root, expectedSegments)

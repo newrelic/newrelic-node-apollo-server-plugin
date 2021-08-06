@@ -32,21 +32,31 @@ function createSegmentsTests(t, frameworkName) {
 
     helper.agent.on('transactionFinished', (transaction) => {
       const operationPart = `query/${ANON_PLACEHOLDER}/hello`
-      const expectedSegments = [{
-        name: `${TRANSACTION_PREFIX}//${operationPart}`,
-        children: [{
-          name: 'Expressjs/Router: /',
-          children: [{
-            name: 'Nodejs/Middleware/Expressjs/<anonymous>',
-            children: [{
-              name: `${OPERATION_PREFIX}/${operationPart}`,
-              children: [{
-                name: `${RESOLVE_PREFIX}/hello`
-              }]
-            }]
-          }]
-        }]
-      }]
+      const expectedSegments = [
+        {
+          name: `${TRANSACTION_PREFIX}//${operationPart}`,
+          children: [
+            {
+              name: 'Expressjs/Router: /',
+              children: [
+                {
+                  name: 'Nodejs/Middleware/Expressjs/<anonymous>',
+                  children: [
+                    {
+                      name: `${OPERATION_PREFIX}/${operationPart}`,
+                      children: [
+                        {
+                          name: `${RESOLVE_PREFIX}/hello`
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
 
       t.segments(transaction.trace.root, expectedSegments)
     })
@@ -69,21 +79,31 @@ function createSegmentsTests(t, frameworkName) {
 
     helper.agent.on('transactionFinished', (transaction) => {
       const operationPart = `query/${expectedName}/hello`
-      const expectedSegments = [{
-        name: `${TRANSACTION_PREFIX}//${operationPart}`,
-        children: [{
-          name: 'Expressjs/Router: /',
-          children: [{
-            name: 'Nodejs/Middleware/Expressjs/<anonymous>',
-            children: [{
-              name: `${OPERATION_PREFIX}/${operationPart}`,
-              children: [{
-                name: `${RESOLVE_PREFIX}/hello`
-              }]
-            }]
-          }]
-        }]
-      }]
+      const expectedSegments = [
+        {
+          name: `${TRANSACTION_PREFIX}//${operationPart}`,
+          children: [
+            {
+              name: 'Expressjs/Router: /',
+              children: [
+                {
+                  name: 'Nodejs/Middleware/Expressjs/<anonymous>',
+                  children: [
+                    {
+                      name: `${OPERATION_PREFIX}/${operationPart}`,
+                      children: [
+                        {
+                          name: `${RESOLVE_PREFIX}/hello`
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
 
       t.segments(transaction.trace.root, expectedSegments)
     })
@@ -114,24 +134,32 @@ function createSegmentsTests(t, frameworkName) {
 
     helper.agent.on('transactionFinished', (transaction) => {
       const operationPart = `query/${ANON_PLACEHOLDER}/${path}`
-      const expectedSegments = [{
-        name: `${TRANSACTION_PREFIX}//${operationPart}`,
-        children: [{
-          name: 'Expressjs/Router: /',
-          children: [{
-            name: 'Nodejs/Middleware/Expressjs/<anonymous>',
-            children: [{
-              name: `${OPERATION_PREFIX}/${operationPart}`,
+      const expectedSegments = [
+        {
+          name: `${TRANSACTION_PREFIX}//${operationPart}`,
+          children: [
+            {
+              name: 'Expressjs/Router: /',
               children: [
-                { name: `${RESOLVE_PREFIX}/libraries` },
-                { name: `${RESOLVE_PREFIX}/libraries.books` },
-                { name: `${RESOLVE_PREFIX}/libraries.books.author` },
-                { name: `${RESOLVE_PREFIX}/libraries.books.author.name` }
+                {
+                  name: 'Nodejs/Middleware/Expressjs/<anonymous>',
+                  children: [
+                    {
+                      name: `${OPERATION_PREFIX}/${operationPart}`,
+                      children: [
+                        { name: `${RESOLVE_PREFIX}/libraries` },
+                        { name: `${RESOLVE_PREFIX}/libraries.books` },
+                        { name: `${RESOLVE_PREFIX}/libraries.books.author` },
+                        { name: `${RESOLVE_PREFIX}/libraries.books.author.name` }
+                      ]
+                    }
+                  ]
+                }
               ]
-            }]
-          }]
-        }]
-      }]
+            }
+          ]
+        }
+      ]
 
       t.segments(transaction.trace.root, expectedSegments)
     })
@@ -163,25 +191,33 @@ function createSegmentsTests(t, frameworkName) {
 
     helper.agent.on('transactionFinished', (transaction) => {
       const operationPart = `query/${expectedName}/${path}`
-      const expectedSegments = [{
-        name: `${TRANSACTION_PREFIX}//${operationPart}`,
-        children: [{
-          name: 'Expressjs/Router: /',
-          children: [{
-            name: 'Nodejs/Middleware/Expressjs/<anonymous>',
-            children: [{
-              name: `${OPERATION_PREFIX}/${operationPart}`,
+      const expectedSegments = [
+        {
+          name: `${TRANSACTION_PREFIX}//${operationPart}`,
+          children: [
+            {
+              name: 'Expressjs/Router: /',
               children: [
-                { name: `${RESOLVE_PREFIX}/libraries` },
-                { name: `${RESOLVE_PREFIX}/libraries.books` },
-                { name: `${RESOLVE_PREFIX}/libraries.books.title` },
-                { name: `${RESOLVE_PREFIX}/libraries.books.author` },
-                { name: `${RESOLVE_PREFIX}/libraries.books.author.name` }
+                {
+                  name: 'Nodejs/Middleware/Expressjs/<anonymous>',
+                  children: [
+                    {
+                      name: `${OPERATION_PREFIX}/${operationPart}`,
+                      children: [
+                        { name: `${RESOLVE_PREFIX}/libraries` },
+                        { name: `${RESOLVE_PREFIX}/libraries.books` },
+                        { name: `${RESOLVE_PREFIX}/libraries.books.title` },
+                        { name: `${RESOLVE_PREFIX}/libraries.books.author` },
+                        { name: `${RESOLVE_PREFIX}/libraries.books.author.name` }
+                      ]
+                    }
+                  ]
+                }
               ]
-            }]
-          }]
-        }]
-      }]
+            }
+          ]
+        }
+      ]
 
       t.segments(transaction.trace.root, expectedSegments)
     })
@@ -203,27 +239,41 @@ function createSegmentsTests(t, frameworkName) {
 
     helper.agent.on('transactionFinished', (transaction) => {
       const operationPart = `mutation/${ANON_PLACEHOLDER}/addThing`
-      const expectedSegments = [{
-        name: `${TRANSACTION_PREFIX}//${operationPart}`,
-        children: [{
-          name: 'Expressjs/Router: /',
-          children: [{
-            name: 'Nodejs/Middleware/Expressjs/<anonymous>',
-            children: [{
-              name: `${OPERATION_PREFIX}/${operationPart}`,
-              children: [{
-                name: `${RESOLVE_PREFIX}/addThing`,
-                children: [{
-                  name: 'timers.setTimeout',
-                  children: [{
-                    name: 'Callback: namedCallback'
-                  }]
-                }]
-              }]
-            }]
-          }]
-        }]
-      }]
+      const expectedSegments = [
+        {
+          name: `${TRANSACTION_PREFIX}//${operationPart}`,
+          children: [
+            {
+              name: 'Expressjs/Router: /',
+              children: [
+                {
+                  name: 'Nodejs/Middleware/Expressjs/<anonymous>',
+                  children: [
+                    {
+                      name: `${OPERATION_PREFIX}/${operationPart}`,
+                      children: [
+                        {
+                          name: `${RESOLVE_PREFIX}/addThing`,
+                          children: [
+                            {
+                              name: 'timers.setTimeout',
+                              children: [
+                                {
+                                  name: 'Callback: namedCallback'
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
 
       t.segments(transaction.trace.root, expectedSegments)
     })
@@ -246,27 +296,41 @@ function createSegmentsTests(t, frameworkName) {
 
     helper.agent.on('transactionFinished', (transaction) => {
       const operationPart = `mutation/${expectedName}/addThing`
-      const expectedSegments = [{
-        name: `${TRANSACTION_PREFIX}//${operationPart}`,
-        children: [{
-          name: 'Expressjs/Router: /',
-          children: [{
-            name: 'Nodejs/Middleware/Expressjs/<anonymous>',
-            children: [{
-              name: `${OPERATION_PREFIX}/${operationPart}`,
-              children: [{
-                name: `${RESOLVE_PREFIX}/addThing`,
-                children: [{
-                  name: 'timers.setTimeout',
-                  children: [{
-                    name: 'Callback: namedCallback'
-                  }]
-                }]
-              }]
-            }]
-          }]
-        }]
-      }]
+      const expectedSegments = [
+        {
+          name: `${TRANSACTION_PREFIX}//${operationPart}`,
+          children: [
+            {
+              name: 'Expressjs/Router: /',
+              children: [
+                {
+                  name: 'Nodejs/Middleware/Expressjs/<anonymous>',
+                  children: [
+                    {
+                      name: `${OPERATION_PREFIX}/${operationPart}`,
+                      children: [
+                        {
+                          name: `${RESOLVE_PREFIX}/addThing`,
+                          children: [
+                            {
+                              name: 'timers.setTimeout',
+                              children: [
+                                {
+                                  name: 'Callback: namedCallback'
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
 
       t.segments(transaction.trace.root, expectedSegments)
     })
@@ -288,21 +352,27 @@ function createSegmentsTests(t, frameworkName) {
 
     helper.agent.on('transactionFinished', (transaction) => {
       const operationPart = `query/${ANON_PLACEHOLDER}/paramQuery`
-      const expectedSegments = [{
-        name: `${TRANSACTION_PREFIX}//${operationPart}`,
-        children: [{
-          name: 'Expressjs/Router: /',
-          children: [{
-            name: 'Nodejs/Middleware/Expressjs/<anonymous>',
-            children: [{
-              name: `${OPERATION_PREFIX}/${operationPart}`,
+      const expectedSegments = [
+        {
+          name: `${TRANSACTION_PREFIX}//${operationPart}`,
+          children: [
+            {
+              name: 'Expressjs/Router: /',
               children: [
-                { name: `${RESOLVE_PREFIX}/paramQuery` }
+                {
+                  name: 'Nodejs/Middleware/Expressjs/<anonymous>',
+                  children: [
+                    {
+                      name: `${OPERATION_PREFIX}/${operationPart}`,
+                      children: [{ name: `${RESOLVE_PREFIX}/paramQuery` }]
+                    }
+                  ]
+                }
               ]
-            }]
-          }]
-        }]
-      }]
+            }
+          ]
+        }
+      ]
 
       t.segments(transaction.trace.root, expectedSegments)
     })
@@ -325,21 +395,27 @@ function createSegmentsTests(t, frameworkName) {
 
     helper.agent.on('transactionFinished', (transaction) => {
       const operationPart = `query/${expectedName}/paramQuery`
-      const expectedSegments = [{
-        name: `${TRANSACTION_PREFIX}//${operationPart}`,
-        children: [{
-          name: 'Expressjs/Router: /',
-          children: [{
-            name: 'Nodejs/Middleware/Expressjs/<anonymous>',
-            children: [{
-              name: `${OPERATION_PREFIX}/${operationPart}`,
+      const expectedSegments = [
+        {
+          name: `${TRANSACTION_PREFIX}//${operationPart}`,
+          children: [
+            {
+              name: 'Expressjs/Router: /',
               children: [
-                { name: `${RESOLVE_PREFIX}/paramQuery` }
+                {
+                  name: 'Nodejs/Middleware/Expressjs/<anonymous>',
+                  children: [
+                    {
+                      name: `${OPERATION_PREFIX}/${operationPart}`,
+                      children: [{ name: `${RESOLVE_PREFIX}/paramQuery` }]
+                    }
+                  ]
+                }
               ]
-            }]
-          }]
-        }]
-      }]
+            }
+          ]
+        }
+      ]
 
       t.segments(transaction.trace.root, expectedSegments)
     })
@@ -371,33 +447,45 @@ function createSegmentsTests(t, frameworkName) {
 
     helper.agent.on('transactionFinished', (transaction) => {
       const operationPart = `query/${expectedName}/${path}`
-      const expectedSegments = [{
-        name: `${TRANSACTION_PREFIX}//${operationPart}`,
-        children: [{
-          name: 'Expressjs/Router: /',
-          children: [{
-            name: 'Nodejs/Middleware/Expressjs/<anonymous>',
-            children: [{
-              name: `${OPERATION_PREFIX}/${operationPart}`,
+      const expectedSegments = [
+        {
+          name: `${TRANSACTION_PREFIX}//${operationPart}`,
+          children: [
+            {
+              name: 'Expressjs/Router: /',
               children: [
                 {
-                  name: `${RESOLVE_PREFIX}/library`,
-                  children: [{
-                    name: 'timers.setTimeout',
-                    children: [{
-                      name: 'Callback: <anonymous>'
-                    }]
-                  }]
-                },
-                { name: `${RESOLVE_PREFIX}/library.books` },
-                { name: `${RESOLVE_PREFIX}/library.books.title` },
-                { name: `${RESOLVE_PREFIX}/library.books.author` },
-                { name: `${RESOLVE_PREFIX}/library.books.author.name` }
+                  name: 'Nodejs/Middleware/Expressjs/<anonymous>',
+                  children: [
+                    {
+                      name: `${OPERATION_PREFIX}/${operationPart}`,
+                      children: [
+                        {
+                          name: `${RESOLVE_PREFIX}/library`,
+                          children: [
+                            {
+                              name: 'timers.setTimeout',
+                              children: [
+                                {
+                                  name: 'Callback: <anonymous>'
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        { name: `${RESOLVE_PREFIX}/library.books` },
+                        { name: `${RESOLVE_PREFIX}/library.books.title` },
+                        { name: `${RESOLVE_PREFIX}/library.books.author` },
+                        { name: `${RESOLVE_PREFIX}/library.books.author.name` }
+                      ]
+                    }
+                  ]
+                }
               ]
-            }]
-          }]
-        }]
-      }]
+            }
+          ]
+        }
+      ]
 
       t.segments(transaction.trace.root, expectedSegments)
     })
@@ -441,47 +529,63 @@ function createSegmentsTests(t, frameworkName) {
 
       const batchTransactionPrefix = `${TRANSACTION_PREFIX}//batch`
 
-      const expectedSegments = [{
-        name: `${batchTransactionPrefix}/${expectedQuery1Name}/${expectedQuery2Name}`,
-        children: [{
-          name: 'Expressjs/Router: /',
-          children: [{
-            name: 'Nodejs/Middleware/Expressjs/<anonymous>',
-            children: [
-              {
-                name: `${OPERATION_PREFIX}/${operationPart1}`,
-                children: [
-                  {
-                    name: `${RESOLVE_PREFIX}/library`,
-                    children: [{
-                      name: 'timers.setTimeout',
-                      children: [{
-                        name: 'Callback: <anonymous>'
-                      }]
-                    }]
-                  },
-                  { name: `${RESOLVE_PREFIX}/library.books` },
-                  { name: `${RESOLVE_PREFIX}/library.books.title`},
-                  { name: `${RESOLVE_PREFIX}/library.books.author` },
-                  { name: `${RESOLVE_PREFIX}/library.books.author.name` }
-                ]
-              },
-              {
-                name: `${OPERATION_PREFIX}/${operationPart2}`,
-                children: [{
-                  name: `${RESOLVE_PREFIX}/addThing`,
-                  children: [{
-                    name: 'timers.setTimeout',
-                    children: [{
-                      name: 'Callback: namedCallback'
-                    }]
-                  }]
-                }]
-              }
-            ]
-          }]
-        }]
-      }]
+      const expectedSegments = [
+        {
+          name: `${batchTransactionPrefix}/${expectedQuery1Name}/${expectedQuery2Name}`,
+          children: [
+            {
+              name: 'Expressjs/Router: /',
+              children: [
+                {
+                  name: 'Nodejs/Middleware/Expressjs/<anonymous>',
+                  children: [
+                    {
+                      name: `${OPERATION_PREFIX}/${operationPart1}`,
+                      children: [
+                        {
+                          name: `${RESOLVE_PREFIX}/library`,
+                          children: [
+                            {
+                              name: 'timers.setTimeout',
+                              children: [
+                                {
+                                  name: 'Callback: <anonymous>'
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        { name: `${RESOLVE_PREFIX}/library.books` },
+                        { name: `${RESOLVE_PREFIX}/library.books.title` },
+                        { name: `${RESOLVE_PREFIX}/library.books.author` },
+                        { name: `${RESOLVE_PREFIX}/library.books.author.name` }
+                      ]
+                    },
+                    {
+                      name: `${OPERATION_PREFIX}/${operationPart2}`,
+                      children: [
+                        {
+                          name: `${RESOLVE_PREFIX}/addThing`,
+                          children: [
+                            {
+                              name: 'timers.setTimeout',
+                              children: [
+                                {
+                                  name: 'Callback: namedCallback'
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
 
       t.segments(transaction.trace.root, expectedSegments)
     })
@@ -512,18 +616,26 @@ function createSegmentsTests(t, frameworkName) {
     ` // missing closing }
 
     helper.agent.on('transactionFinished', (transaction) => {
-      const expectedSegments = [{
-        name: `${TRANSACTION_PREFIX}//*`,
-        children: [{
-          name: 'Expressjs/Router: /',
-          children: [{
-            name: 'Nodejs/Middleware/Expressjs/<anonymous>',
-            children: [{
-              name: `${OPERATION_PREFIX}/${UNKNOWN_OPERATION}`
-            }]
-          }]
-        }]
-      }]
+      const expectedSegments = [
+        {
+          name: `${TRANSACTION_PREFIX}//*`,
+          children: [
+            {
+              name: 'Expressjs/Router: /',
+              children: [
+                {
+                  name: 'Nodejs/Middleware/Expressjs/<anonymous>',
+                  children: [
+                    {
+                      name: `${OPERATION_PREFIX}/${UNKNOWN_OPERATION}`
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
 
       t.segments(transaction.trace.root, expectedSegments)
     })
@@ -562,18 +674,26 @@ function createSegmentsTests(t, frameworkName) {
 
     helper.agent.on('transactionFinished', (transaction) => {
       const operationPart = `query/${ANON_PLACEHOLDER}/${path}`
-      const expectedSegments = [{
-        name: `${TRANSACTION_PREFIX}//${operationPart}`,
-        children: [{
-          name: 'Expressjs/Router: /',
-          children: [{
-            name: 'Nodejs/Middleware/Expressjs/<anonymous>',
-            children: [{
-              name: `${OPERATION_PREFIX}/${operationPart}`
-            }]
-          }]
-        }]
-      }]
+      const expectedSegments = [
+        {
+          name: `${TRANSACTION_PREFIX}//${operationPart}`,
+          children: [
+            {
+              name: 'Expressjs/Router: /',
+              children: [
+                {
+                  name: 'Nodejs/Middleware/Expressjs/<anonymous>',
+                  children: [
+                    {
+                      name: `${OPERATION_PREFIX}/${operationPart}`
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
 
       t.segments(transaction.trace.root, expectedSegments)
     })

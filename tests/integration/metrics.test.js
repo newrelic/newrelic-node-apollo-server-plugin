@@ -22,7 +22,6 @@ setupApolloServerTests({
   createTests: createMetricsTests
 })
 
-
 function createMetricsTests(t) {
   setupEnvConfig(t)
 
@@ -35,10 +34,7 @@ function createMetricsTests(t) {
 
     helper.agent.on('transactionFinished', () => {
       const operationPart = `query/${ANON_PLACEHOLDER}/hello`
-      t.metrics([
-        `${OPERATION_PREFIX}/${operationPart}`,
-        `${RESOLVE_PREFIX}/hello`
-      ])
+      t.metrics([`${OPERATION_PREFIX}/${operationPart}`, `${RESOLVE_PREFIX}/hello`])
     })
 
     executeQuery(serverUrl, query, (err) => {
@@ -57,10 +53,7 @@ function createMetricsTests(t) {
 
     helper.agent.on('transactionFinished', () => {
       const operationPart = `query/${expectedName}/hello`
-      t.metrics([
-        `${OPERATION_PREFIX}/${operationPart}`,
-        `${RESOLVE_PREFIX}/hello`
-      ])
+      t.metrics([`${OPERATION_PREFIX}/${operationPart}`, `${RESOLVE_PREFIX}/hello`])
     })
 
     executeQuery(serverUrl, query, (err) => {
@@ -200,9 +193,7 @@ function createMetricsTests(t) {
     ` // missing closing }
 
     helper.agent.on('transactionFinished', () => {
-      t.metrics([
-        `${OPERATION_PREFIX}/${UNKNOWN_OPERATION}`
-      ])
+      t.metrics([`${OPERATION_PREFIX}/${UNKNOWN_OPERATION}`])
     })
 
     executeQuery(serverUrl, invalidQuery, (err) => {

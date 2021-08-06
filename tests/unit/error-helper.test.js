@@ -1,3 +1,8 @@
+/*
+ * Copyright 2020 New Relic Corporation. All rights reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 'use strict'
 const tap = require('tap')
 
@@ -13,27 +18,23 @@ class MockedInstrumentationApi {
         this.mockedLogsTrace.push(message)
       }
     }
-
-    this.agent = {
+    ;(this.agent = {
       errors: {
-        add: function(transaction, error) {
+        add: function (transaction, error) {
           parentThis.mockedCollectedErrors.push(error)
         }
       }
-    },
-
-    this.tracer = {
-      getTransaction: function() {
-      }
-    }
+    }),
+      (this.tracer = {
+        getTransaction: function () {}
+      })
   }
 }
 
-const mockInstrumentationApi = new MockedInstrumentationApi
-
+const mockInstrumentationApi = new MockedInstrumentationApi()
 
 tap.test('ErrorHelper tests', (t) => {
-  const errorHelper = new ErrorHelper
+  const errorHelper = new ErrorHelper()
 
   const fixture1 = false
   t.equal(
@@ -42,8 +43,7 @@ tap.test('ErrorHelper tests', (t) => {
     'returns false when requestContext is false'
   )
 
-  const fixture2 = {
-  }
+  const fixture2 = {}
   t.equal(
     false,
     errorHelper.isValidRequestContext(mockInstrumentationApi, fixture2),
@@ -60,7 +60,7 @@ tap.test('ErrorHelper tests', (t) => {
   )
 
   const fixture4 = {
-    errors: [(new Error),(new Error)]
+    errors: [new Error(), new Error()]
   }
   t.equal(
     true,
@@ -72,11 +72,7 @@ tap.test('ErrorHelper tests', (t) => {
   errorHelper.addErrorsFromApolloRequestContext(mockInstrumentationApi, fixture2)
   errorHelper.addErrorsFromApolloRequestContext(mockInstrumentationApi, fixture3)
   errorHelper.addErrorsFromApolloRequestContext(mockInstrumentationApi, fixture4)
-  t.equal(
-    mockInstrumentationApi.mockedCollectedErrors.length,
-    2,
-    'captures only valid errors'
-  )
+  t.equal(mockInstrumentationApi.mockedCollectedErrors.length, 2, 'captures only valid errors')
 
   t.equal(
     mockInstrumentationApi.mockedLogsTrace.length,

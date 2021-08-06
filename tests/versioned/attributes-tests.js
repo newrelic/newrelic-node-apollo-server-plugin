@@ -158,8 +158,7 @@ function createAttributesTests(t) {
         'graphql.field.path': 'libraries'
       }
 
-      const resolveLibrariesAttributes
-         = resolveLibrariesSegment.attributes.get(SEGMENT_DESTINATION)
+      const resolveLibrariesAttributes = resolveLibrariesSegment.attributes.get(SEGMENT_DESTINATION)
       t.matches(
         resolveLibrariesAttributes,
         expectedLibrariesAttributes,
@@ -173,8 +172,7 @@ function createAttributesTests(t) {
         'graphql.field.path': 'libraries.book'
       }
 
-      const resolveBooksAttributes
-         = resolveBooksSegment.attributes.get(SEGMENT_DESTINATION)
+      const resolveBooksAttributes = resolveBooksSegment.attributes.get(SEGMENT_DESTINATION)
       t.matches(
         resolveBooksAttributes,
         expectedBooksAttributes,
@@ -230,8 +228,7 @@ function createAttributesTests(t) {
         'graphql.field.path': 'alias'
       }
 
-      const resolveLibrariesAttributes
-         = resolveLibrariesSegment.attributes.get(SEGMENT_DESTINATION)
+      const resolveLibrariesAttributes = resolveLibrariesSegment.attributes.get(SEGMENT_DESTINATION)
       t.matches(
         resolveLibrariesAttributes,
         expectedLibrariesAttributes,
@@ -245,8 +242,7 @@ function createAttributesTests(t) {
         'graphql.field.path': 'alias.book'
       }
 
-      const resolveBooksAttributes
-         = resolveBooksSegment.attributes.get(SEGMENT_DESTINATION)
+      const resolveBooksAttributes = resolveBooksSegment.attributes.get(SEGMENT_DESTINATION)
       t.matches(
         resolveBooksAttributes,
         expectedBooksAttributes,
@@ -352,7 +348,7 @@ function createAttributesTests(t) {
       const resolveHelloSegment = operationSegment.children[0]
 
       const resolveAttributes = resolveHelloSegment.attributes.get(SEGMENT_DESTINATION)
-      t.matches(resolveAttributes, {'graphql.field.args.name': 'added thing!'})
+      t.matches(resolveAttributes, { 'graphql.field.args.name': 'added thing!' })
     })
 
     executeQuery(serverUrl, query, (err) => {
@@ -488,8 +484,7 @@ function createAttributesTests(t) {
 
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
 
-      t.ok(operationAttributes['graphql.operation.query']
-        .includes(`${expectedName}(***)`))
+      t.ok(operationAttributes['graphql.operation.query'].includes(`${expectedName}(***)`))
       t.ok(operationAttributes['graphql.operation.query'].includes('paramQuery(***)'))
     })
 

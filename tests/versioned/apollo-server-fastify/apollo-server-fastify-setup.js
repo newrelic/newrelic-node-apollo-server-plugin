@@ -14,7 +14,7 @@ const { getTypeDefs, resolvers } = require('../../data-definitions')
 
 const WEB_FRAMEWORK = 'Nodejs'
 
-function setupApolloServerFastifyTests({suiteName, createTests, pluginConfig}, config) {
+function setupApolloServerFastifyTests({ suiteName, createTests, pluginConfig }, config) {
   tap.test(`apollo-server-fastify: ${suiteName}`, (t) => {
     t.autoend()
 
@@ -47,7 +47,9 @@ function setupApolloServerFastifyTests({suiteName, createTests, pluginConfig}, c
 
       return new Promise((resolve, reject) => {
         app.listen(0, (err, address) => {
-          if (err) {reject(err)}
+          if (err) {
+            reject(err)
+          }
           serverUrl = `${address}${server.graphqlPath}`
 
           t.context.helper = helper

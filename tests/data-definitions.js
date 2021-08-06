@@ -22,7 +22,7 @@ const books = [
     branch: 'riverside'
   },
   {
-    title: 'Ollies for O11y: A Sk8er\'s Guide to Observability',
+    title: "Ollies for O11y: A Sk8er's Guide to Observability",
     isbn: 'a-second-fake-isbn',
     author: 'Faux Hawk',
     branch: 'downtown'
@@ -95,7 +95,7 @@ function getTypeDefs(gql) {
     }
 
     type Mutation {
-      addThing(name: String!) : String!
+      addThing(name: String!): String!
     }
   `
   return typeDefs
@@ -105,8 +105,7 @@ const resolvers = {
   Query: {
     search: (_, { contains }) => {
       const filteredBooks = books.filter((book) => book.title.includes(contains))
-      const filteredMagazines = magazines.filter((magazine) =>
-        magazine.title.includes(contains))
+      const filteredMagazines = magazines.filter((magazine) => magazine.title.includes(contains))
       return [...filteredBooks, ...filteredMagazines]
     },
     hello: () => {
@@ -115,16 +114,16 @@ const resolvers = {
     boom: () => {
       throw new Error('Boom goes the dynamite!')
     },
-    paramQuery: (_, {blah, blee}) => {
+    paramQuery: (_, { blah, blee }) => {
       return blah + blee
     },
     libraries: () => {
       return libraries
     },
-    library: (_, {branch}) => {
+    library: (_, { branch }) => {
       const promise = new Promise((resolve) => {
         setTimeout(() => {
-          const filtered = libraries.find(library => library.branch === branch)
+          const filtered = libraries.find((library) => library.branch === branch)
           resolve(filtered)
         }, 0)
       })
@@ -133,7 +132,7 @@ const resolvers = {
     }
   },
   Mutation: {
-    addThing: async (_, {name}) => {
+    addThing: async (_, { name }) => {
       const promise = new Promise((resolve) => {
         setTimeout(function namedCallback() {
           resolve(name)
@@ -145,10 +144,10 @@ const resolvers = {
   },
   Library: {
     books(parent) {
-      return books.filter(book => book.branch === parent.branch)
+      return books.filter((book) => book.branch === parent.branch)
     },
     magazines(parent) {
-      return magazines.filter(magazine => magazine.branch === parent.branch)
+      return magazines.filter((magazine) => magazine.branch === parent.branch)
     }
   },
   Book: {
