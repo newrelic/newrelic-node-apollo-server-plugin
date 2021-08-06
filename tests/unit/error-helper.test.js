@@ -20,13 +20,13 @@ class MockedInstrumentationApi {
     }
     ;(this.agent = {
       errors: {
-        add: function (transaction, error) {
+        add: function add(transaction, error) {
           parentThis.mockedCollectedErrors.push(error)
         }
       }
     }),
       (this.tracer = {
-        getTransaction: function () {}
+        getTransaction: function getTransaction() {}
       })
   }
 }
