@@ -80,6 +80,34 @@ function createTransactionTests(t, frameworkName) {
     }
   )
 
+  t.test('Nested queries with arguments', (t) => {
+    const { helper, serverUrl } = t.context
+
+    const query = `query {
+      library(branch: "riverside") {
+        magazines {
+          title
+        },
+        books(category: NOVEL) {
+          title
+        }
+      }
+    }`
+
+    const path = 'library'
+
+    helper.agent.on('transactionFinished', (transaction) => {
+      t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${ANON_PLACEHOLDER}/${path}`)
+    })
+
+    executeQuery(serverUrl, query, (err, result) => {
+      t.error(err)
+      checkResult(t, result, () => {
+        t.end()
+      })
+    })
+  })
+
   t.test('anonymous query, multi-level should return deepest unique path', (t) => {
     const { helper, serverUrl } = t.context
 

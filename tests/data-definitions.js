@@ -19,25 +19,29 @@ const books = [
     title: 'Node Agent: The Book',
     isbn: 'a-fake-isbn',
     author: 'Sentient Bits',
-    branch: 'riverside'
+    branch: 'riverside',
+    category: 'NOVEL'
   },
   {
     title: "Ollies for O11y: A Sk8er's Guide to Observability",
     isbn: 'a-second-fake-isbn',
     author: 'Faux Hawk',
-    branch: 'downtown'
+    branch: 'downtown',
+    category: 'COOKBOOK'
   },
   {
     title: '[Redacted]',
     isbn: 'a-third-fake-isbn',
     author: 'Closed Telemetry',
-    branch: 'riverside'
+    branch: 'riverside',
+    category: 'NOVEL'
   },
   {
     title: 'Be a hero: fixing the things you broke',
     isbn: 'a-fourth-fake-isbn',
     author: '10x Developer',
-    branch: 'downtown'
+    branch: 'downtown',
+    category: 'COOKBOOK'
   }
 ]
 
@@ -65,7 +69,7 @@ function getTypeDefs(gql) {
 
     type Library {
       branch: String!
-      books: [Book!]
+      books(category: BookCategory): [Book!]
       magazines: [Magazine]
     }
 
@@ -73,6 +77,12 @@ function getTypeDefs(gql) {
       title: String!
       isbn: String
       author: Author!
+      category: BookCategory
+    }
+
+    enum BookCategory {
+      NOVEL
+      COOKBOOK
     }
 
     type Author {
@@ -86,7 +96,7 @@ function getTypeDefs(gql) {
 
     type Query {
       search(contains: String): [SearchResult!]
-      books: [Book]
+      books(category: BookCategory): [Book]!
       hello: String
       boom: String
       paramQuery(blah: String!, blee: String): String!

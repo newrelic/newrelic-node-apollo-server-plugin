@@ -10,82 +10,50 @@ const tap = require('tap')
 const cleanQuery = require('../../lib/query-utils')
 
 tap.test('Obfuscate GraphQL query args tests', (t) => {
-  t.test('Should remove new line and tabs', (t) => {
-    const query = `query {
+  t.test('Should obfuscate query args', (t) => {
+    const query = `query logans(run: "(333") {
       runner
     }`
 
-    const newQuery = cleanQuery(query)
+    const argLocations = [
+      {
+        start: 13,
+        end: 24
+      }
+    ]
 
-    t.equal(newQuery, query)
-
-    t.end()
-  })
-
-  t.test('Should hide one arg', (t) => {
-    const query = `query logans(run: 333) {
-      runner
-    }`
-
-    const newQuery = cleanQuery(query)
+    const newQuery = cleanQuery(query, argLocations)
 
     t.notOk(newQuery.includes('333'))
+    t.ok(newQuery.includes('logans(***)'))
 
     t.end()
   })
 
   t.test('Should obfuscate multiple args', (t) => {
-    const query = `query chickens(hens: 'yes', eggs: 0) {
-      eggs(yolk: 'yes')
-    }`
-
-    const newQuery = cleanQuery(query)
-
-    t.notOk(newQuery.includes('yes'))
-    t.notOk(newQuery.includes('0'))
-    t.ok('chickens(***)')
-    t.ok('eggs(***)', 'subquery args')
-
-    t.end()
-  })
-
-  t.test('Should not obfuscate aliases', (t) => {
-    const query = `query {
-      pony: horse(horseId: 4, color: 'brown') {
-        horse
+    const query = `query chickens(hens: 'yes') {
+      eggs(yolk: 'yes') {
+        yolk
       }
     }`
 
-    const newQuery = cleanQuery(query)
+    const argLocations = [
+      {
+        start: 15,
+        end: 26
+      },
+      {
+        start: 41,
+        end: 52
+      }
+    ]
 
-    t.ok(newQuery.includes('pony: horse'), 'alias is intact')
-    t.ok(newQuery.includes('horse(***)'))
+    const newQuery = cleanQuery(query, argLocations)
 
-    t.end()
-  })
-
-  t.test('Should obfuscate mutation args', (t) => {
-    const query = `mutation corn(husks: {
-      husky: 'yes',
-      id: 5
-    })`
-
-    const newQuery = cleanQuery(query)
-
-    t.ok(newQuery.includes('corn(***)'))
-
-    t.end()
-  })
-
-  t.test('Should obfuscate variable placeholders', (t) => {
-    const query = `query ParamQueryWithArgs($arg1: String!, $arg2: String) {
-      paramQuery(blah: $arg1, blee: $arg2)
-    }`
-
-    const newQuery = cleanQuery(query)
-
-    t.ok(newQuery.includes('ParamQueryWithArgs(***)'))
-    t.ok(newQuery.includes('paramQuery(***)'))
+    t.notOk(newQuery.includes('hens'))
+    t.notOk(newQuery.includes('yolk:'))
+    t.ok(newQuery.includes('chickens(***)'))
+    t.ok(newQuery.includes('eggs(***)'))
 
     t.end()
   })

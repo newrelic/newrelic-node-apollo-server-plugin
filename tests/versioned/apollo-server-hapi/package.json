@@ -15,7 +15,8 @@
         "segments.test.js",
         "transaction-naming.test.js",
         "errors.test.js",
-        "attributes.test.js"
+        "attributes.test.js",
+        "query-obfuscation.test.js"
       ]
     },
     {
@@ -30,7 +31,8 @@
         "segments.test.js",
         "transaction-naming.test.js",
         "errors.test.js",
-        "attributes.test.js"
+        "attributes.test.js",
+        "query-obfuscation.test.js"
       ]
     }
   ],
