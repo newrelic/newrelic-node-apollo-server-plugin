@@ -9,6 +9,7 @@
     "lint:fix": "eslint --fix *.js lib tests",
     "prepare": "husky install",
     "test": "npm run unit && npm run integration && npm run versioned",
+    "third-party-updates": "oss third-party manifest --includeOptDeps && oss third-party notices --includeOptDeps && git add THIRD_PARTY_NOTICES.md third_party_manifest.json",
     "unit": "tap --test-regex='(\\/|^tests\\/unit\\/.*\\.test\\.js)$' --no-coverage",
     "versioned": "npm run versioned:npm6",
     "versioned:folder": "versioned-tests --minor -i 2",
@@ -33,7 +34,8 @@
     "node": ">=12.0.0"
   },
   "devDependencies": {
-    "@newrelic/eslint-config": "^0.0.1",
+    "@newrelic/eslint-config": "^0.0.2",
+    "@newrelic/newrelic-oss-cli": "^0.1.2",
     "@newrelic/test-utilities": "^5.1.0",
     "apollo-server": "^2.18.2",
     "eslint": "^7.32.0",
