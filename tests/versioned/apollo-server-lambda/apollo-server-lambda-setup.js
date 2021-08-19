@@ -15,7 +15,7 @@ const { getTypeDefs, resolvers } = require('../../data-definitions')
 
 const WEB_FRAMEWORK = 'WebFrameworkUri'
 
-function setupApolloServerLambdaTests({suiteName, createTests, pluginConfig}, config) {
+function setupApolloServerLambdaTests({ suiteName, createTests, pluginConfig }, config) {
   tap.test(`apollo-server-lambda: ${suiteName}`, (t) => {
     t.autoend()
 
@@ -43,7 +43,7 @@ function setupApolloServerLambdaTests({suiteName, createTests, pluginConfig}, co
       // TODO: eventually use proper function for instrumenting and not .shim
       const plugin = createPlugin(nrApi.shim, pluginConfig)
 
-      stubContext = {
+      ;(stubContext = {
         done: () => {},
         succeed: () => {},
         fail: () => {},
@@ -52,19 +52,18 @@ function setupApolloServerLambdaTests({suiteName, createTests, pluginConfig}, co
         invokedFunctionArn: 'arn:test:function',
         memoryLimitInMB: '128',
         awsRequestId: 'testid'
-      },
-
-      server = new ApolloServer({
-        typeDefs: getTypeDefs(gql),
-        resolvers,
-        plugins: [plugin],
-        context: ({ event, context }) => ({
-          headers: event.headers,
-          functionName: context.functionName,
-          event,
-          context
-        })
-      })
+      }),
+        (server = new ApolloServer({
+          typeDefs: getTypeDefs(gql),
+          resolvers,
+          plugins: [plugin],
+          context: ({ event, context }) => ({
+            headers: event.headers,
+            functionName: context.functionName,
+            event,
+            context
+          })
+        }))
 
       handler = server.createHandler()
 

@@ -14,7 +14,7 @@ const { getTypeDefs, resolvers } = require('../../data-definitions')
 
 const WEB_FRAMEWORK = 'Expressjs'
 
-function setupApolloServerExpressTests({suiteName, createTests, pluginConfig}, config) {
+function setupApolloServerExpressTests({ suiteName, createTests, pluginConfig }, config) {
   tap.test(`apollo-server-express: ${suiteName}`, (t) => {
     t.autoend()
 
@@ -48,7 +48,9 @@ function setupApolloServerExpressTests({suiteName, createTests, pluginConfig}, c
 
       return new Promise((resolve, reject) => {
         expressServer = app.listen(0, (err) => {
-          if (err) {reject(err)}
+          if (err) {
+            reject(err)
+          }
 
           serverUrl = `http://localhost:${expressServer.address().port}${server.graphqlPath}`
 

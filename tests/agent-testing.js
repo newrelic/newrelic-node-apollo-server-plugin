@@ -24,7 +24,7 @@ function findSpanById(agent, spanId) {
   const spans = getSpanEvents(agent)
 
   const matchingSpan = spans.find((value) => {
-    const {intrinsics} = value
+    const { intrinsics } = value
     return intrinsics.guid === spanId
   })
 

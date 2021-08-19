@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 New Relic Corporation. All rights reserved.
+ * Copyright 2020 New Relic Corporation. All rights reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -52,7 +52,7 @@ function _getLibraryTypeDef(gql) {
       library(id: ID!): Library
       libraries: [Library]
     }
-    `
+  `
 
   return typeDefs
 }
@@ -86,7 +86,7 @@ const books = [
     branch: '2'
   },
   {
-    title: 'Ollies for O11y: A Sk8er\'s Guide to Observability',
+    title: "Ollies for O11y: A Sk8er's Guide to Observability",
     isbn: 'a-second-fake-isbn',
     author: 'Faux Hawk',
     branch: '1'

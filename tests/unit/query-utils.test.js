@@ -38,9 +38,9 @@ tap.test('Obfuscate GraphQL query args tests', (t) => {
     const query = `query chickens(hens: 'yes', eggs: 0) {
       eggs(yolk: 'yes')
     }`
-    
+
     const newQuery = cleanQuery(query)
-  
+
     t.notOk(newQuery.includes('yes'))
     t.notOk(newQuery.includes('0'))
     t.ok('chickens(***)')
@@ -73,7 +73,7 @@ tap.test('Obfuscate GraphQL query args tests', (t) => {
     const newQuery = cleanQuery(query)
 
     t.ok(newQuery.includes('corn(***)'))
-  
+
     t.end()
   })
 
@@ -92,4 +92,3 @@ tap.test('Obfuscate GraphQL query args tests', (t) => {
 
   t.end()
 })
-

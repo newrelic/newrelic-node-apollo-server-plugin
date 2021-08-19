@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 New Relic Corporation. All rights reserved.
+ * Copyright 2020 New Relic Corporation. All rights reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -15,11 +15,7 @@ const federatedData = require('./federated-data-definitions')
 const WEB_FRAMEWORK = 'Expressjs'
 
 function setupFederatedGatewayServerTests(options, agentConfig) {
-  const {
-    suiteName,
-    createTests,
-    pluginConfig
-  } = options
+  const { suiteName, createTests, pluginConfig } = options
 
   tap.test(`apollo-federation: ${suiteName}`, (t) => {
     t.autoend()
@@ -99,12 +95,7 @@ function setupFederatedGatewayServerTests(options, agentConfig) {
       helper.unload()
       helper = null
 
-      clearCachedModules([
-        'express',
-        'apollo-server',
-        '@apollo/gateway',
-        '@apollo/federation'
-      ])
+      clearCachedModules(['express', 'apollo-server', '@apollo/gateway', '@apollo/federation'])
     })
 
     createTests(t, WEB_FRAMEWORK)

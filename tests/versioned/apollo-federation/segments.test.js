@@ -56,23 +56,31 @@ function createFederatedSegmentsTests(t, frameworkName) {
       const magazineExternal = formatExternalSegment(t.context.magazineUrl)
 
       const operationPart = `query/${ANON_PLACEHOLDER}/libraries`
-      const expectedSegments = [{
-        name: `${TRANSACTION_PREFIX}//${operationPart}`,
-        children: [{
-          name: 'Expressjs/Router: /',
-          children: [{
-            name: 'Nodejs/Middleware/Expressjs/<anonymous>',
-            children: [{
-              name: `${OPERATION_PREFIX}/${operationPart}`,
+      const expectedSegments = [
+        {
+          name: `${TRANSACTION_PREFIX}//${operationPart}`,
+          children: [
+            {
+              name: 'Expressjs/Router: /',
               children: [
-                { name: libraryExternal },
-                { name: bookExternal },
-                { name: magazineExternal }
+                {
+                  name: 'Nodejs/Middleware/Expressjs/<anonymous>',
+                  children: [
+                    {
+                      name: `${OPERATION_PREFIX}/${operationPart}`,
+                      children: [
+                        { name: libraryExternal },
+                        { name: bookExternal },
+                        { name: magazineExternal }
+                      ]
+                    }
+                  ]
+                }
               ]
-            }]
-          }]
-        }]
-      }]
+            }
+          ]
+        }
+      ]
 
       t.segments(transaction.trace.root, expectedSegments)
     })
@@ -127,31 +135,31 @@ function createFederatedSegmentsTests(t, frameworkName) {
 
       const batchTransactionPrefix = `${TRANSACTION_PREFIX}//batch`
 
-      const expectedSegments = [{
-        name: `${batchTransactionPrefix}/${expectedQuery1Name}/${expectedQuery2Name}`,
-        children: [{
-          name: 'Expressjs/Router: /',
-          children: [{
-            name: 'Nodejs/Middleware/Expressjs/<anonymous>',
-            children: [
-              {
-                name: `${OPERATION_PREFIX}/${operationPart1}`,
-                children: [
-                  { name: libraryExternal },
-                  { name: bookExternal }
-                ]
-              },
-              {
-                name: `${OPERATION_PREFIX}/${operationPart2}`,
-                children: [
-                  { name: libraryExternal },
-                  { name: magazineExternal }
-                ]
-              }
-            ]
-          }]
-        }]
-      }]
+      const expectedSegments = [
+        {
+          name: `${batchTransactionPrefix}/${expectedQuery1Name}/${expectedQuery2Name}`,
+          children: [
+            {
+              name: 'Expressjs/Router: /',
+              children: [
+                {
+                  name: 'Nodejs/Middleware/Expressjs/<anonymous>',
+                  children: [
+                    {
+                      name: `${OPERATION_PREFIX}/${operationPart1}`,
+                      children: [{ name: libraryExternal }, { name: bookExternal }]
+                    },
+                    {
+                      name: `${OPERATION_PREFIX}/${operationPart2}`,
+                      children: [{ name: libraryExternal }, { name: magazineExternal }]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
 
       t.segments(transaction.trace.root, expectedSegments)
     })

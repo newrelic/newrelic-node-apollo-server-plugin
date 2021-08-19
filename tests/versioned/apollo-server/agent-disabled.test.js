@@ -43,7 +43,6 @@ tap.test('Agent disabled', (t) => {
     serverUrl = null
   })
 
-
   t.test('should not break existing functionality', (t) => {
     const query = `query {
       hello

@@ -15,11 +15,7 @@ const { getTypeDefs, resolvers } = require('./data-definitions')
 const WEB_FRAMEWORK = 'Expressjs'
 
 function setupApolloServerTests(options, agentConfig) {
-  const {
-    suiteName,
-    createTests,
-    pluginConfig
-  } = options
+  const { suiteName, createTests, pluginConfig } = options
 
   tap.test(`apollo-server: ${suiteName}`, (t) => {
     t.autoend()
@@ -46,7 +42,7 @@ function setupApolloServerTests(options, agentConfig) {
         plugins: [...startingPlugins, instrumentationPlugin]
       })
 
-      return server.listen({port: 0}).then(({ url }) => {
+      return server.listen({ port: 0 }).then(({ url }) => {
         serverUrl = url
 
         t.context.helper = helper

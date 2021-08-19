@@ -34,10 +34,7 @@ function createTransactionTests(t, frameworkName) {
     }`
 
     helper.agent.on('transactionFinished', (transaction) => {
-      t.equal(
-        transaction.name,
-        `${EXPECTED_PREFIX}//query/${ANON_PLACEHOLDER}/hello`
-      )
+      t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${ANON_PLACEHOLDER}/hello`)
     })
 
     executeQueryAssertResult({
@@ -58,10 +55,7 @@ function createTransactionTests(t, frameworkName) {
     }`
 
     helper.agent.on('transactionFinished', (transaction) => {
-      t.equal(
-        transaction.name,
-        `${EXPECTED_PREFIX}//query/${expectedName}/hello`
-      )
+      t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${expectedName}/hello`)
     })
 
     executeQueryAssertResult({
@@ -90,10 +84,7 @@ function createTransactionTests(t, frameworkName) {
     const path = 'libraries.books'
 
     helper.agent.on('transactionFinished', (transaction) => {
-      t.equal(
-        transaction.name,
-        `${EXPECTED_PREFIX}//query/${ANON_PLACEHOLDER}/${path}`
-      )
+      t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${ANON_PLACEHOLDER}/${path}`)
     })
 
     executeQueryAssertResult({
@@ -123,10 +114,7 @@ function createTransactionTests(t, frameworkName) {
     const path = 'libraries.books'
 
     helper.agent.on('transactionFinished', (transaction) => {
-      t.equal(
-        transaction.name,
-        `${EXPECTED_PREFIX}//query/${expectedName}/${path}`
-      )
+      t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${expectedName}/${path}`)
     })
 
     executeQueryAssertResult({
@@ -156,10 +144,7 @@ function createTransactionTests(t, frameworkName) {
     const path = 'libraries.books'
 
     helper.agent.on('transactionFinished', (transaction) => {
-      t.equal(
-        transaction.name,
-        `${EXPECTED_PREFIX}//query/${expectedName}/${path}`
-      )
+      t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${expectedName}/${path}`)
     })
 
     executeQueryAssertResult({
@@ -179,10 +164,7 @@ function createTransactionTests(t, frameworkName) {
     }`
 
     helper.agent.on('transactionFinished', (transaction) => {
-      t.equal(
-        transaction.name,
-        `${EXPECTED_PREFIX}//mutation/${ANON_PLACEHOLDER}/addThing`
-      )
+      t.equal(transaction.name, `${EXPECTED_PREFIX}//mutation/${ANON_PLACEHOLDER}/addThing`)
     })
 
     executeQueryAssertResult({
@@ -203,10 +185,7 @@ function createTransactionTests(t, frameworkName) {
     }`
 
     helper.agent.on('transactionFinished', (transaction) => {
-      t.equal(
-        transaction.name,
-        `${EXPECTED_PREFIX}//mutation/${expectedName}/addThing`
-      )
+      t.equal(transaction.name, `${EXPECTED_PREFIX}//mutation/${expectedName}/addThing`)
     })
 
     executeQueryAssertResult({
@@ -226,10 +205,7 @@ function createTransactionTests(t, frameworkName) {
     }`
 
     helper.agent.on('transactionFinished', (transaction) => {
-      t.equal(
-        transaction.name,
-        `${EXPECTED_PREFIX}//query/${ANON_PLACEHOLDER}/paramQuery`
-      )
+      t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${ANON_PLACEHOLDER}/paramQuery`)
     })
 
     executeQueryAssertResult({
@@ -250,10 +226,7 @@ function createTransactionTests(t, frameworkName) {
     }`
 
     helper.agent.on('transactionFinished', (transaction) => {
-      t.equal(
-        transaction.name,
-        `${EXPECTED_PREFIX}//query/${expectedName}/paramQuery`
-      )
+      t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${expectedName}/paramQuery`)
     })
 
     executeQueryAssertResult({
@@ -283,10 +256,7 @@ function createTransactionTests(t, frameworkName) {
     const path = 'library.books'
 
     helper.agent.on('transactionFinished', (transaction) => {
-      t.equal(
-        transaction.name,
-        `${EXPECTED_PREFIX}//query/${expectedName}/${path}`
-      )
+      t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${expectedName}/${path}`)
     })
 
     executeQueryAssertResult({
@@ -352,13 +322,9 @@ function createTransactionTests(t, frameworkName) {
       }
     }`
 
-
     const deepestPath = 'search<Book>.title'
     helper.agent.on('transactionFinished', (transaction) => {
-      t.equal(
-        transaction.name,
-        `${EXPECTED_PREFIX}//query/${expectedName}/${deepestPath}`
-      )
+      t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${expectedName}/${deepestPath}`)
     })
 
     executeQueryAssertResult({
@@ -389,10 +355,7 @@ function createTransactionTests(t, frameworkName) {
     const deepestPath = 'search'
 
     helper.agent.on('transactionFinished', (transaction) => {
-      t.equal(
-        transaction.name,
-        `${EXPECTED_PREFIX}//query/${expectedName}/${deepestPath}`
-      )
+      t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${expectedName}/${deepestPath}`)
     })
 
     executeQueryAssertResult({
@@ -451,10 +414,7 @@ function createTransactionTests(t, frameworkName) {
     const path = 'libraries.books.doesnotexist.name'
 
     helper.agent.on('transactionFinished', (transaction) => {
-      t.equal(
-        transaction.name,
-        `${EXPECTED_PREFIX}//query/${ANON_PLACEHOLDER}/${path}`
-      )
+      t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${ANON_PLACEHOLDER}/${path}`)
     })
 
     executeQueryAssertErrors({
@@ -486,10 +446,7 @@ function createTransactionTests(t, frameworkName) {
     const path = 'libraries.books.doesnotexist.name'
 
     helper.agent.on('transactionFinished', (transaction) => {
-      t.equal(
-        transaction.name,
-        `${EXPECTED_PREFIX}//query/${expectedName}/${path}`
-      )
+      t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${expectedName}/${path}`)
     })
 
     executeQueryAssertErrors({

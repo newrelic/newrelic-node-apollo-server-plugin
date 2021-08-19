@@ -182,10 +182,7 @@ function createFederatedTransactionNamingTests(t, frameworkName) {
 
       const batchTransactionPrefix = `${TRANSACTION_PREFIX}//batch`
 
-      t.equal(
-        transaction.name,
-        `${batchTransactionPrefix}/${operationPart1}/${operationPart2}`
-      )
+      t.equal(transaction.name, `${batchTransactionPrefix}/${operationPart1}/${operationPart2}`)
     })
 
     executeQueryBatch(serverUrl, queries, (err, result) => {

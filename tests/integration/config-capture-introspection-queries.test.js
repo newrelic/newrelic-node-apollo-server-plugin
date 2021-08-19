@@ -48,37 +48,35 @@ setupApolloServerTests({
   }
 })
 
-
 function createCaptureIntrospectionTests(ignore, t) {
   setupEnvConfig(t)
 
   queries.forEach((query) => {
-    t.test(`should ${ignore ? '' : 'not '}ignore transaction when
+    t.test(
+      `should ${ignore ? '' : 'not '}ignore transaction when
 captureIntrospectionQuery is ${!ignore} and query contains
-introspection types`, (t) => {
-      const { helper, serverUrl } = t.context
+introspection types`,
+      (t) => {
+        const { helper, serverUrl } = t.context
 
+        helper.agent.on('transactionFinished', (transaction) => {
+          t.equal(transaction.ignore, ignore, `should set transaction.ignore to ${ignore}`)
+        })
 
-      helper.agent.on('transactionFinished', (transaction) => {
-        t.equal(
-          transaction.ignore,
-          ignore,
-          `should set transaction.ignore to ${ignore}`
-        )
-      })
-
-      executeQuery(serverUrl, query, (err) => {
-        t.error(err)
-        t.end()
-      })
-    })
+        executeQuery(serverUrl, query, (err) => {
+          t.error(err)
+          t.end()
+        })
+      }
+    )
   })
 
-  t.test(`should not ignore transaction when
+  t.test(
+    `should not ignore transaction when
 captureIntrospectionQuery is ${!ignore} and query
-does not contain an introspection type`, (t) => {
+does not contain an introspection type`,
+    (t) => {
       const { helper, serverUrl } = t.context
-
 
       helper.agent.on('transactionFinished', (transaction) => {
         t.notOk(
@@ -98,6 +96,6 @@ does not contain an introspection type`, (t) => {
         t.error(err)
         t.end()
       })
-  })
+    }
+  )
 }
-

@@ -14,7 +14,7 @@ const { getTypeDefs, resolvers } = require('../../data-definitions')
 
 const WEB_FRAMEWORK = 'WebFrameworkUri/Koa'
 
-function setupApolloServerKoaTests({suiteName, createTests, pluginConfig}, config) {
+function setupApolloServerKoaTests({ suiteName, createTests, pluginConfig }, config) {
   tap.test(`apollo-server-koa: ${suiteName}`, (t) => {
     t.autoend()
 
@@ -52,7 +52,9 @@ function setupApolloServerKoaTests({suiteName, createTests, pluginConfig}, confi
 
       return new Promise((resolve, reject) => {
         koaServer = app.listen(0, (err) => {
-          if (err) {reject(err)}
+          if (err) {
+            reject(err)
+          }
           serverUrl = `http://localhost:${koaServer.address().port}${server.graphqlPath}`
 
           t.context.helper = helper
