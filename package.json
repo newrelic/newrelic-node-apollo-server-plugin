@@ -9,7 +9,7 @@
     "lint:fix": "eslint --fix *.js lib tests",
     "prepare": "husky install",
     "test": "npm run unit && npm run integration && npm run versioned",
-    "third-party-updates": "oss third-party manifest --includeOptDeps && oss third-party notices --includeOptDeps && git add THIRD_PARTY_NOTICES.md third_party_manifest.json",
+    "third-party-updates": "oss third-party manifest && oss third-party notices && git add THIRD_PARTY_NOTICES.md third_party_manifest.json",
     "unit": "tap --test-regex='(\\/|^tests\\/unit\\/.*\\.test\\.js)$' --no-coverage",
     "versioned": "npm run versioned:npm6",
     "versioned:folder": "versioned-tests --minor -i 2",

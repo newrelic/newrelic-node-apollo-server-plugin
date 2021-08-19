@@ -1,8 +1,8 @@
 {
-  "lastUpdated": "Thu Aug 19 2021 11:59:20 GMT-0700 (Pacific Daylight Time)",
+  "lastUpdated": "Thu Aug 19 2021 12:39:39 GMT-0700 (Pacific Daylight Time)",
   "projectName": "New Relic Node Apollo Server Plugin",
   "projectUrl": "https://github.com/newrelic/newrelic-node-apollo-server-plugin/",
-  "includeOptDeps": true,
+  "includeOptDeps": false,
   "optionalDependencies": {},
   "includeDev": true,
   "dependencies": {},
