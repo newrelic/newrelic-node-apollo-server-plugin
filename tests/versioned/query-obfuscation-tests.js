@@ -22,6 +22,7 @@ const QUERY_ATTRIBUTE_NAME = 'graphql.operation.query'
  */
 function createQueryObfuscaionTests(t) {
   const OPERATION_PREFIX = 'GraphQL/operation/ApolloServer/query'
+  const UNKNOWN_OPERATION_NAME = 'GraphQL/operation/ApolloServer/<unknown>'
 
   t.test('Obfuscates query arguments and nested query arguments', (t) => {
     const { helper, serverUrl } = t.context
@@ -84,6 +85,74 @@ function createQueryObfuscaionTests(t) {
       checkResult(t, result, () => {
         t.end()
       })
+    })
+  })
+
+  t.test('Obfuscates query arguments for failed query validation', (t) => {
+    const { helper, serverUrl } = t.context
+
+    const query = `query {
+      boooook(branch: "riverside") {
+        magazines {
+          title
+        },
+        books(category: NOVEL) {
+          title
+        }
+      }
+    }`
+
+    const path = 'boooook'
+
+    helper.agent.on('transactionFinished', (transaction) => {
+      const operationName = `${OPERATION_PREFIX}/${ANON_PLACEHOLDER}/${path}`
+      const operationSegment = findSegmentByName(transaction.trace.root, operationName)
+
+      const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
+
+      t.ok(operationAttributes[QUERY_ATTRIBUTE_NAME].includes('boooook(***)') > 0)
+    })
+
+    executeQuery(serverUrl, query, (err, result) => {
+      t.error(err)
+      t.ok(result)
+      t.ok(result.errors)
+      t.equal(result.errors.length, 1) // should have one parsing error
+
+      const [validationError] = result.errors
+      t.equal(validationError.extensions.code, 'GRAPHQL_VALIDATION_FAILED')
+      t.end()
+    })
+  })
+
+  t.test('Failed query parsing should not include query attribute', (t) => {
+    const { helper, serverUrl } = t.context
+
+    const query = `query {
+      blahblah()>>: "riverside") {
+        magazines {
+          title
+      }
+    }`
+
+    helper.agent.on('transactionFinished', (transaction) => {
+      const operationName = UNKNOWN_OPERATION_NAME
+      const operationSegment = findSegmentByName(transaction.trace.root, operationName)
+
+      const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
+
+      t.notOk(operationAttributes[QUERY_ATTRIBUTE_NAME])
+    })
+
+    executeQuery(serverUrl, query, (err, result) => {
+      t.error(err)
+      t.ok(result)
+      t.ok(result.errors)
+      t.equal(result.errors.length, 1) // should have one parsing error
+
+      const [validationError] = result.errors
+      t.equal(validationError.extensions.code, 'GRAPHQL_PARSE_FAILED')
+      t.end()
     })
   })
 }

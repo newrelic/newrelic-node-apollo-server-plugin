@@ -30,6 +30,26 @@ tap.test('Obfuscate GraphQL query args tests', (t) => {
     t.end()
   })
 
+  t.test('Should obfuscate aliased query args for aliased', (t) => {
+    const query = `query thing: logans(run: "(333") {
+      runner
+    }`
+
+    const argLocations = [
+      {
+        start: 20,
+        end: 31
+      }
+    ]
+
+    const newQuery = cleanQuery(query, argLocations)
+
+    t.notOk(newQuery.includes('333'))
+    t.ok(newQuery.includes('logans(***)'))
+
+    t.end()
+  })
+
   t.test('Should obfuscate multiple args', (t) => {
     const query = `query chickens(hens: 'yes') {
       eggs(yolk: 'yes') {
