@@ -5,7 +5,7 @@
 
 'use strict'
 
-const { executeQuery } = require('../test-client')
+const { executeQuery, executeJson } = require('../test-client')
 const { checkResult } = require('./common')
 
 const SEGMENT_DESTINATION = 0x20
@@ -81,6 +81,44 @@ function createQueryObfuscaionTests(t) {
     })
 
     executeQuery(serverUrl, query, (err, result) => {
+      t.error(err)
+      checkResult(t, result, () => {
+        t.end()
+      })
+    })
+  })
+
+  t.test('Obfuscates parameterized query arguments', (t) => {
+    const { helper, serverUrl } = t.context
+    const expectedName = 'ParamQueryWithArgs'
+    const query = `query ${expectedName}($branch: String!) {
+      library(branch: $branch) {
+          magazines {
+            title
+          }
+        }
+      }`
+
+    const queryJson = {
+      operationName: expectedName,
+      query: query,
+      variables: {
+        branch: 'riverside'
+      }
+    }
+
+    const path = 'library.magazines.title'
+
+    helper.agent.on('transactionFinished', (transaction) => {
+      const operationName = `${OPERATION_PREFIX}/${expectedName}/${path}`
+      const operationSegment = findSegmentByName(transaction.trace.root, operationName)
+
+      const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
+
+      t.ok(operationAttributes[QUERY_ATTRIBUTE_NAME].includes('library(***)') > 0)
+    })
+
+    executeJson(serverUrl, queryJson, (err, result) => {
       t.error(err)
       checkResult(t, result, () => {
         t.end()

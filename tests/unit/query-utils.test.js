@@ -45,7 +45,28 @@ tap.test('Obfuscate GraphQL query args tests', (t) => {
     const newQuery = cleanQuery(query, argLocations)
 
     t.notOk(newQuery.includes('333'))
-    t.ok(newQuery.includes('logans(***)'))
+    t.ok(newQuery.includes('thing: logans', 'alias is intact'))
+    t.ok(newQuery.includes('logans(***)', 'args obfuscated'))
+
+    t.end()
+  })
+
+  t.test('Should obfuscate mutation args', (t) => {
+    const argLocations = [
+      {
+        start: 14,
+        end: 60
+      }
+    ]
+
+    const query = `mutation corn(husks: {
+      husky: 'yes',
+      id: 5
+    })`
+
+    const newQuery = cleanQuery(query, argLocations)
+
+    t.ok(newQuery.includes('corn(***)'))
 
     t.end()
   })
