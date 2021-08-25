@@ -15,7 +15,8 @@
         "segments.test.js",
         "agent-disabled.test.js",
         "errors.test.js",
-        "attributes.test.js"
+        "attributes.test.js",
+        "query-obfuscation.test.js"
       ]
     }
   ],

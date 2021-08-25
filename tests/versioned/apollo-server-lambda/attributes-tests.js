@@ -494,43 +494,6 @@ function createAttributesTests(t) {
     })
   })
 
-  t.test('query with args should have args obfuscated in raw query attribute', (t) => {
-    const { helper, patchedHandler, stubContext, modVersion } = t.context
-
-    const expectedName = 'ParamQueryWithArgs'
-    const query = `query ${expectedName}($arg1: String!, $arg2: String) {
-      paramQuery(blah: $arg1, blee: $arg2)
-    }`
-
-    const queryJson = {
-      operationName: expectedName,
-      query: query,
-      variables: {
-        arg1: 'first',
-        arg2: 'second'
-      }
-    }
-
-    helper.agent.on('transactionFinished', (transaction) => {
-      const operationName = `${OPERATION_PREFIX}/query/${expectedName}/paramQuery`
-
-      const operationSegment = findSegmentByName(transaction.trace.root, operationName)
-
-      const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
-
-      t.ok(operationAttributes['graphql.operation.query'].includes(`${expectedName}(***)`))
-      t.ok(operationAttributes['graphql.operation.query'].includes('paramQuery(***)'))
-    })
-
-    executeQueryJson({
-      handler: patchedHandler,
-      query: queryJson,
-      context: stubContext,
-      modVersion,
-      t
-    })
-  })
-
   t.test('union, should capture all expected attributes', (t) => {
     const { helper, patchedHandler, stubContext, modVersion } = t.context
 

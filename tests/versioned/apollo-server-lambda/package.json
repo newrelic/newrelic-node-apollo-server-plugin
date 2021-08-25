@@ -14,7 +14,8 @@
         "segments.test.js",
         "attributes-tests.js",
         "transaction-naming-tests.js",
-        "errors-tests.js"
+        "errors-tests.js",
+        "query-obfuscation-tests.js"
       ]
     }
   ],

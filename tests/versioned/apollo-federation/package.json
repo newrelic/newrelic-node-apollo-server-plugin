@@ -14,9 +14,10 @@
       },
       "files": [
         "segments.test.js",
-        "service-definition-and-healthcheck-filtering.test.js",
         "transaction-naming.test.js",
-        "sub-graph-transactions.test.js"
+        "service-definition-and-healthcheck-filtering.test.js",
+        "sub-graph-transactions.test.js",
+        "query-obfuscation.test.js"
       ]
     },
     {
@@ -33,7 +34,8 @@
         "segments.test.js",
         "service-definition-and-healthcheck-filtering.test.js",
         "transaction-naming.test.js",
-        "sub-graph-transactions.test.js"
+        "sub-graph-transactions.test.js",
+        "query-obfuscation.test.js"
       ]
     }
   ],
