@@ -1,3 +1,9 @@
+## 1.0.1 (08/25/2021)
+* Updated query argument obfuscation logic to use document definition rather than regex.
+  **WARNING**: Un-parsable queries will not be added as a graphql.operation.query attribute.
+* Added a pre-commit hook to check if package.json changes and run oss third-party manifest and oss third-party notices. This will ensure the third_party_manifest.json and THIRD_PARTY_NOTICES.md are up to date.
+* Added @newrelic/eslint-config to rely on a centralized eslint ruleset.
+
 ## 1.0.0 (07/15/2021)
 * **BREAKING**: modifies transaction and operation segment/span naming to use deepest *unique* path instead of first deepest path.
 
