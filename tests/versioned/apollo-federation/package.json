@@ -9,24 +9,10 @@
       },
       "dependencies": {
         "@apollo/federation": ">=0.25.2",
-        "@apollo/gateway": ">=0.25.2 <0.31.0",
-        "apollo-server": ">=2.25.1"
-      },
-      "files": [
-        "segments.test.js",
-        "transaction-naming.test.js",
-        "service-definition-and-healthcheck-filtering.test.js",
-        "sub-graph-transactions.test.js",
-        "query-obfuscation.test.js"
-      ]
-    },
-    {
-      "engines": {
-        "node": ">=12.13.0"
-      },
-      "dependencies": {
-        "@apollo/federation": ">=0.25.2",
-        "@apollo/gateway": ">=0.31.0",
+        "@apollo/gateway": {
+          "versions": ">=0.31.0",
+          "samples": 3
+        },
         "@opentelemetry/api": "1.0.1",
         "apollo-server": "2.25.1"
       },
