@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "Thu Aug 19 2021 12:39:39 GMT-0700 (Pacific Daylight Time)",
+  "lastUpdated": "Fri Aug 27 2021 11:19:20 GMT-0400 (Eastern Daylight Time)",
   "projectName": "New Relic Node Apollo Server Plugin",
   "projectUrl": "https://github.com/newrelic/newrelic-node-apollo-server-plugin/",
   "includeOptDeps": false,
@@ -169,6 +169,18 @@
       "licenseUrl": "https://github.com/prettier/prettier/blob/v2.3.2/LICENSE",
       "licenseTextSource": "file",
       "publisher": "James Long"
+    },
+    "sinon@11.1.2": {
+      "name": "sinon",
+      "version": "11.1.2",
+      "range": "^11.1.2",
+      "licenses": "BSD-3-Clause",
+      "repoUrl": "https://github.com/sinonjs/sinon",
+      "versionedRepoUrl": "https://github.com/sinonjs/sinon/tree/v11.1.2",
+      "licenseFile": "node_modules/sinon/LICENSE",
+      "licenseUrl": "https://github.com/sinonjs/sinon/blob/v11.1.2/LICENSE",
+      "licenseTextSource": "file",
+      "publisher": "Christian Johansen"
     },
     "tap@15.0.6": {
       "name": "tap",
