@@ -1,3 +1,7 @@
+## 1.0.2 (08/27/2021)
+* Defaulted deepestPath to an array to avoid crash when there are no selections in query.
+* Reduced the test matrix versions of dependencies for apollo-federation versioned tests.
+
 ## 1.0.1 (08/25/2021)
 * Updated query argument obfuscation logic to use document definition rather than regex.
   **WARNING**: Un-parsable queries will not be added as a graphql.operation.query attribute.
