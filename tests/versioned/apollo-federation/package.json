@@ -10,7 +10,7 @@
       "dependencies": {
         "@apollo/federation": ">=0.25.2",
         "@apollo/gateway": {
-          "versions": ">=0.31.0",
+          "versions": ">=0.31.0 <0.41",
           "samples": 3
         },
         "@opentelemetry/api": "1.0.1",
