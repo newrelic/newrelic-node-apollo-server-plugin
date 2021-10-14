@@ -3,14 +3,16 @@
   "version": "1.0.2",
   "description": "Apollo Server plugin that adds New Relic Node.js agent instrumentation.",
   "main": "./index.js",
+  "types": "./index.d.ts",
   "scripts": {
     "integration": "rm -f newrelic_agent.log && time tap --test-regex='(\\/|^tests\\/integration\\/.*\\.test\\.js)$' --no-coverage",
     "lint": "eslint *.js lib tests",
     "lint:fix": "eslint --fix *.js lib tests",
     "prepare": "husky install",
-    "test": "npm run unit && npm run integration && npm run versioned",
+    "test": "npm run unit && npm run integration && npm run versioned && npm run type-check",
     "third-party-updates": "oss third-party manifest && oss third-party notices && git add THIRD_PARTY_NOTICES.md third_party_manifest.json",
     "unit": "tap --test-regex='(\\/|^tests\\/unit\\/.*\\.test\\.js)$' --no-coverage",
+    "type-check": "tsd",
     "versioned": "npm run versioned:npm7",
     "versioned:folder": "versioned-tests --minor -i 2",
     "versioned:npm6": "versioned-tests --minor -i 2 'tests/versioned/**/!(apollo-server-koa)' && versioned-tests --minor --all -i 2 'tests/versioned/apollo-server-koa'",
@@ -18,6 +20,7 @@
   },
   "files": [
     "index.js",
+    "index.d.ts",
     "lib/*.js"
   ],
   "repository": {
@@ -48,9 +51,19 @@
     "newrelic": "^7.3.1",
     "prettier": "^2.3.2",
     "sinon": "^11.1.2",
-    "tap": "^15.0.6"
+    "tap": "^15.0.6",
+    "tsd": "^0.18.0"
   },
   "peerDependencies": {
-    "newrelic": ">=6.13.0"
+    "newrelic": ">=6.13.0",
+    "apollo-server-plugin-base": ">=0.10.1"
+  },
+  "tsd": {
+    "directory": "./tests/types",
+    "compilerOptions": {
+      "lib": [
+        "es2019"
+      ]
+    }
   }
 }
