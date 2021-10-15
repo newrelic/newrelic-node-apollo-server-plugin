@@ -1,6 +1,12 @@
 name: Apollo Server Plugin CI
 
-on: [push, pull_request, workflow_dispatch]
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+  schedule:
+  # Run every Monday at 9AM PST (16 UTC)
+  - cron: '0 16 * * 1'
 
 jobs:
   lint:
