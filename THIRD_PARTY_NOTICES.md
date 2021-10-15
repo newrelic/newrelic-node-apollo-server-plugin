@@ -32,6 +32,7 @@ code, the source code can be found at [https://github.com/newrelic/newrelic-node
 * [prettier](#prettier)
 * [sinon](#sinon)
 * [tap](#tap)
+* [tsd](#tsd)
 
 
 ## dependencies
@@ -458,7 +459,7 @@ This product includes source derived from [@newrelic/newrelic-oss-cli](https://g
 
 ### @newrelic/test-utilities
 
-This product includes source derived from [@newrelic/test-utilities](https://github.com/newrelic/node-test-utilities) ([v5.1.0](https://github.com/newrelic/node-test-utilities/tree/v5.1.0)), distributed under the [Apache-2.0 License](https://github.com/newrelic/node-test-utilities/blob/v5.1.0/LICENSE):
+This product includes source derived from [@newrelic/test-utilities](https://github.com/newrelic/node-test-utilities) ([v6.1.1](https://github.com/newrelic/node-test-utilities/tree/v6.1.1)), distributed under the [Apache-2.0 License](https://github.com/newrelic/node-test-utilities/blob/v6.1.1/LICENSE):
 
 ```
                                  Apache License
@@ -667,7 +668,7 @@ This product includes source derived from [@newrelic/test-utilities](https://git
 
 ### apollo-server
 
-This product includes source derived from [apollo-server](https://github.com/apollographql/apollo-server) ([v2.25.2](https://github.com/apollographql/apollo-server/tree/v2.25.2)), distributed under the [MIT License](https://github.com/apollographql/apollo-server/blob/v2.25.2/LICENSE):
+This product includes source derived from [apollo-server](https://github.com/apollographql/apollo-server) ([v2.18.2](https://github.com/apollographql/apollo-server/tree/v2.18.2)), distributed under the [MIT License](https://github.com/apollographql/apollo-server/blob/v2.18.2/LICENSE):
 
 ```
 The MIT License (MIT)
@@ -1164,6 +1165,23 @@ ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
 WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
 ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR
 IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+```
+
+### tsd
+
+This product includes source derived from [tsd](https://github.com/SamVerschueren/tsd) ([v0.18.0](https://github.com/SamVerschueren/tsd/tree/v0.18.0)), distributed under the [MIT License](https://github.com/SamVerschueren/tsd/blob/v0.18.0/license):
+
+```
+MIT License
+
+Copyright (c) Sam Verschueren <sam.verschueren@gmail.com> (github.com/SamVerschueren)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ```
 

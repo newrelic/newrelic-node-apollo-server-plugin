@@ -2,19 +2,22 @@
   "name": "apollo-server-tests",
   "version": "0.0.0",
   "private": true,
+  "//": [
+    "TODO: this is using latest as federation/gateway are not yet >=1.0 and ship with",
+    "breaking changes. Some versions of gateway do not play well with federation.",
+    "Update to proper version testing as federation and gateway modules stabilize."
+  ],
   "tests": [
     {
       "engines": {
         "node": ">=12.13.0"
       },
       "dependencies": {
-        "@apollo/federation": ">=0.25.2",
-        "@apollo/gateway": {
-          "versions": ">=0.31.0 <0.41",
-          "samples": 3
-        },
-        "@opentelemetry/api": "1.0.1",
-        "apollo-server": "2.25.1"
+        "@apollo/federation": "latest",
+        "@apollo/gateway": "latest",
+        "@opentelemetry/api": "latest",
+        "apollo-server": "latest"
+
       },
       "files": [
         "segments.test.js",
