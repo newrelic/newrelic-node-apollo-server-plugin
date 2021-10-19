@@ -12,7 +12,7 @@ const OPERATION_PREFIX = 'GraphQL/operation/ApolloServer'
 const RESOLVE_PREFIX = 'GraphQL/resolve/ApolloServer'
 const TRANSACTION_PREFIX = 'WebTransaction/Expressjs/POST'
 
-const { setupApolloServerTests } = require('../apollo-server-setup')
+const { setupApolloServerTests } = require('./apollo-server-setup')
 
 setupApolloServerTests({
   suiteName: 'default',

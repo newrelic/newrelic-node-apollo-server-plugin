@@ -11,7 +11,7 @@ const { checkResult } = require('./common')
 const ANON_PLACEHOLDER = '<anonymous>'
 
 /**
- * Creates a set of standard transction tests to run against various
+ * Creates a set of standard transaction tests to run against various
  * apollo-server libraries.
  * It is required that t.context.helper and t.context.serverUrl are set.
  * @param {*} t a tap test instance

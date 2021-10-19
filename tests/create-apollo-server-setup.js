@@ -14,7 +14,11 @@ const { getTypeDefs, resolvers } = require('./data-definitions')
 
 const WEB_FRAMEWORK = 'Expressjs'
 
-function setupApolloServerTests(options, agentConfig) {
+function createApolloServerSetup(loadApolloServer, clearCachedModules) {
+  return setupApolloServerTests.bind(null, loadApolloServer, clearCachedModules)
+}
+
+function setupApolloServerTests(loadApolloServer, clearCachedModules, options, agentConfig) {
   const { suiteName, createTests, pluginConfig } = options
 
   tap.test(`apollo-server: ${suiteName}`, (t) => {
@@ -24,7 +28,7 @@ function setupApolloServerTests(options, agentConfig) {
     let serverUrl = null
     let helper = null
 
-    t.beforeEach(() => {
+    t.beforeEach((t) => {
       // load default instrumentation. express being critical
       helper = utils.TestAgent.makeInstrumented(agentConfig)
       const createPlugin = require('../lib/create-plugin')
@@ -35,7 +39,8 @@ function setupApolloServerTests(options, agentConfig) {
       const instrumentationPlugin = createPlugin(nrApi.shim, pluginConfig)
 
       // Do after instrumentation to ensure express isn't loaded too soon.
-      const { ApolloServer, gql } = require('apollo-server')
+      const { ApolloServer, gql } = loadApolloServer()
+
       server = new ApolloServer({
         typeDefs: getTypeDefs(gql),
         resolvers,
@@ -65,13 +70,6 @@ function setupApolloServerTests(options, agentConfig) {
   })
 }
 
-function clearCachedModules(modules) {
-  modules.forEach((moduleName) => {
-    const requirePath = require.resolve(moduleName)
-    delete require.cache[requirePath]
-  })
-}
-
 function initializePlugins(instrumentationApi, plugins) {
   plugins = plugins || []
   const initializedPlugins = plugins.map((plugin) => {
@@ -85,6 +83,4 @@ function initializePlugins(instrumentationApi, plugins) {
   return initializedPlugins
 }
 
-module.exports = {
-  setupApolloServerTests
-}
+module.exports = createApolloServerSetup
