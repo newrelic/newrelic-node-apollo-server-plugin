@@ -1,14 +1,36 @@
+## 1.1.0 (10/20/2021)
+
+* Added TypeScript type definition for the plugin.
+
+  Thank you to @alanhr for the contribution!
+
+* Updated apollo-federation versioned tests to always test against latest dependency versions.
+
+  Federated gateway modules are al < 1.0 releases and have incompatibilities with each other at various versions that impact our versioned testing. We now test only the latest pairs while these are in flight and may have various breaking changes. Once these go 1.0+, we can switch back to a permutation approach.
+
+* Bumped `@newrelic/test-utilities` to ^6.1.1.
+* Added `graphql` as a test dependency for apollo-federation versioned tests to fix issues on Node 12/14 runs.
+* Limited samples to 15 for full versioned test runs to limit permutations as more versions are released.
+* Added `workflow_dispatch` to CI to allow for manual triggering.
+* Scheduled CI workflow runs for Monday mornings.
+* Limited `apollo-server-koa` versions in versioned tests to skip testing versions that have a hard-pinned `koa` peer-dependency.
+* Fixed apollo-server test setup so that the apollo-server specific versioned tests accurately test the right version.
+
+
 ## 1.0.2 (08/27/2021)
+
 * Defaulted deepestPath to an array to avoid crash when there are no selections in query.
 * Reduced the test matrix versions of dependencies for apollo-federation versioned tests.
 
 ## 1.0.1 (08/25/2021)
+
 * Updated query argument obfuscation logic to use document definition rather than regex.
   **WARNING**: Un-parsable queries will not be added as a graphql.operation.query attribute.
 * Added a pre-commit hook to check if package.json changes and run oss third-party manifest and oss third-party notices. This will ensure the third_party_manifest.json and THIRD_PARTY_NOTICES.md are up to date.
 * Added @newrelic/eslint-config to rely on a centralized eslint ruleset.
 
 ## 1.0.0 (07/15/2021)
+
 * **BREAKING**: modifies transaction and operation segment/span naming to use deepest *unique* path instead of first deepest path.
 
   The deepest unique path is the deepest path in the selection set of a query where only one field was selected at each level. 'id' and '__typename' fields are automatically excluded from this decision. For example: `query { libraries { branch booksInStock magazinesInStock }}` will use the path name 'libraries' and  `query { libraries { branch __typename id }}` will use the path name 'libraries.branch'. For more information, see the latest [transaction naming documentation](https://github.com/newrelic/newrelic-node-apollo-server-plugin/blob/main/docs/transactions.md).
@@ -24,6 +46,7 @@
 * Added running `apollo-sever-hapi` versioned tests on node 16, `apollo-server-hapi@3.0.0`, `@hapi/hapi@20.1.x`.
 
 ## 0.3.0 (07/08/2021)
+
 * Added Apollo Federation support.
   * Updated to always use the GraphQL document schema AST to generate the name and deepest path for transactions for a more consistent naming convention between federated gateway and standard Apollo servers.
   * Fixed segment nesting for Apollo Federation gateway operations.
@@ -35,6 +58,7 @@
 * Added husky + lint staged to run linting on all staged files as a pre-commit git hook.
 
 ## 0.2.0 (05/25/2021)
+
 * Added Node.js v16 to run CI pipeline steps
 * Fixed the main field in package.json to point to proper location
 
