@@ -7,7 +7,7 @@
 
 const { executeQuery } = require('../test-client')
 const { setupEnvConfig } = require('../agent-testing')
-const { setupApolloServerTests } = require('../apollo-server-setup')
+const { setupApolloServerTests } = require('./apollo-server-setup')
 const queries = [
   `{
     __schema {

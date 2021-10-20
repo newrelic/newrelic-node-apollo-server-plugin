@@ -15,7 +15,7 @@ const UNKNOWN_OPERATION = '<unknown>'
 const OPERATION_PREFIX = 'GraphQL/operation/ApolloServer'
 const RESOLVE_PREFIX = 'GraphQL/resolve/ApolloServer'
 
-const { setupApolloServerTests } = require('../apollo-server-setup')
+const { setupApolloServerTests } = require('./apollo-server-setup')
 
 setupApolloServerTests({
   suiteName: 'metrics',
