@@ -16,8 +16,8 @@
         "@apollo/federation": "latest",
         "@apollo/gateway": "latest",
         "@opentelemetry/api": "latest",
-        "apollo-server": "latest"
-
+        "apollo-server": "latest",
+        "graphql": "latest"
       },
       "files": [
         "segments.test.js",
