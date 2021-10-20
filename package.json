@@ -15,8 +15,8 @@
     "type-check": "tsd",
     "versioned": "npm run versioned:npm7",
     "versioned:folder": "versioned-tests --minor -i 2",
-    "versioned:npm6": "versioned-tests --minor -i 2 'tests/versioned/**/!(apollo-server-koa)' && versioned-tests --minor --all -i 2 'tests/versioned/apollo-server-koa'",
-    "versioned:npm7": "versioned-tests --minor --all -i 2 'tests/versioned/*'"
+    "versioned:npm6": "versioned-tests --minor --samples 15 -i 2 'tests/versioned/**/!(apollo-server-koa)' && versioned-tests --minor --all -i 2 'tests/versioned/apollo-server-koa'",
+    "versioned:npm7": "versioned-tests --minor --all --samples 15 -i 2 'tests/versioned/*'"
   },
   "files": [
     "index.js",
@@ -39,7 +39,7 @@
   "devDependencies": {
     "@newrelic/eslint-config": "^0.0.2",
     "@newrelic/newrelic-oss-cli": "^0.1.2",
-    "@newrelic/test-utilities": "^5.1.0",
+    "@newrelic/test-utilities": "^6.1.1",
     "apollo-server": "^2.18.2",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
@@ -55,8 +55,8 @@
     "tsd": "^0.18.0"
   },
   "peerDependencies": {
-    "newrelic": ">=6.13.0",
-    "apollo-server-plugin-base": ">=0.10.1"
+    "apollo-server-plugin-base": ">=0.10.1",
+    "newrelic": ">=6.13.0"
   },
   "tsd": {
     "directory": "./tests/types",
