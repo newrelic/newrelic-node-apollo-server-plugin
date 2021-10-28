@@ -7,8 +7,4 @@ export type NRPluginConfig = {
   captureHealthCheckQueries?: boolean;
 };
 
-declare let NRApolloPlugin: ApolloServerPlugin;
-
-export function createPlugin(config: NRPluginConfig): ApolloServerPlugin;
-
-export default NRApolloPlugin;
+export default function createPlugin(config: NRPluginConfig): ApolloServerPlugin;
