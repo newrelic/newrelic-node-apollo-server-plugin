@@ -140,13 +140,12 @@ async function loadMagazines({ ApolloServer, gql }, plugins) {
 }
 
 async function loadServer(ApolloServer, config, plugins) {
-  const { buildFederatedSchema } = require('@apollo/federation')
+  const { buildSubgraphSchema } = require('@apollo/federation')
 
   const { name, typeDefs, resolvers } = config
 
-  // TODO: (node:8785) DeprecationWarning: 'buildFederatedSchema' is deprecated. Use 'buildSubgraphSchema' instead.
   const server = new ApolloServer({
-    schema: buildFederatedSchema([{ typeDefs, resolvers }]),
+    schema: buildSubgraphSchema([{ typeDefs, resolvers }]),
     plugins
   })
 
