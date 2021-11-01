@@ -14,7 +14,7 @@
     "unit": "tap --test-regex='(\\/|^tests\\/unit\\/.*\\.test\\.js)$' --no-coverage",
     "type-check": "tsd",
     "versioned": "npm run versioned:npm7",
-    "versioned:folder": "versioned-tests --minor -i 2",
+    "versioned:folder": "versioned-tests --minor --all -i 2",
     "versioned:npm6": "versioned-tests --minor --samples 15 -i 2 'tests/versioned/**/!(apollo-server-koa)' && versioned-tests --minor --all -i 2 'tests/versioned/apollo-server-koa'",
     "versioned:npm7": "versioned-tests --minor --all --samples 15 -i 2 'tests/versioned/*'"
   },

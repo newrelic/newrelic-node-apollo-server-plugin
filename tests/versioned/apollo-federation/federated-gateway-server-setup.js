@@ -140,12 +140,12 @@ async function loadMagazines({ ApolloServer, gql }, plugins) {
 }
 
 async function loadServer(ApolloServer, config, plugins) {
-  const { buildFederatedSchema } = require('@apollo/federation')
+  const { buildSubgraphSchema } = require('@apollo/federation')
 
   const { name, typeDefs, resolvers } = config
 
   const server = new ApolloServer({
-    schema: buildFederatedSchema([{ typeDefs, resolvers }]),
+    schema: buildSubgraphSchema([{ typeDefs, resolvers }]),
     plugins
   })
 

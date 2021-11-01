@@ -17,7 +17,7 @@
         "@apollo/gateway": "latest",
         "@opentelemetry/api": "latest",
         "apollo-server": "latest",
-        "graphql": "latest"
+        "graphql": "15.7.2"
       },
       "files": [
         "segments.test.js",
