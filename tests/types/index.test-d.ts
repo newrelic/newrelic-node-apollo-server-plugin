@@ -1,9 +1,7 @@
 import { ApolloServerPlugin } from "apollo-server-plugin-base";
-import { expectType, expectAssignable } from "tsd";
+import { expectType } from "tsd";
 
-import NRApolloPlugin, { createPlugin } from "../..";
-
-expectAssignable<ApolloServerPlugin>(NRApolloPlugin);
+import createPlugin from "../..";
 
 expectType<ApolloServerPlugin>(createPlugin({}));
 
