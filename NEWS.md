@@ -1,7 +1,11 @@
 ## 1.1.1 (11/10/2021)
 
 * Updated TypeScript definitions to export `createPlugin` function by default instead of a plugin instance.
+
+  Thank you to @luads for the contribution!
+
 * Pinned `graphql` to a 15.x version for compatibility with Apollo libraries at ^15.
+
 * Updated federation test setup to use `buildSubgraphSchema` per deprecation warnings.
 
 ## 1.1.0 (10/20/2021)
