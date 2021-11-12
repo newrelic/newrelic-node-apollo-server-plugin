@@ -1,3 +1,9 @@
+## 1.1.2 (11/11/2021)
+
+* Updated TypeScript definitions to allow plugin configuration to be optional.
+
+  Thank you to @newmind for the contribution!
+
 ## 1.1.1 (11/10/2021)
 
 * Updated TypeScript definitions to export `createPlugin` function by default instead of a plugin instance.
