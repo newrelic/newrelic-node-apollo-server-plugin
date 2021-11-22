@@ -127,11 +127,11 @@ const server = new ApolloServer({
 
 ```js
 // Sub-Graph server index.js
-const { buildFederatedSchema } = require('@apollo/federation');
+const { buildSubgraphSchema } = require('@apollo/federation');
 const plugin = require('@newrelic/apollo-server-plugin')
 
 const server = new ApolloServer({
-  schema: buildFederatedSchema([{ typeDefs, resolvers }]),
+  schema: buildSubgraphSchema([{ typeDefs, resolvers }]),
   plugins: [ plugin ]
 });
 ```
