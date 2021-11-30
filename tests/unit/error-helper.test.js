@@ -18,16 +18,16 @@ class MockedInstrumentationApi {
         this.mockedLogsTrace.push(message)
       }
     }
-    ;(this.agent = {
+
+    this.agent = {
       errors: {
         add: function add(transaction, error) {
           parentThis.mockedCollectedErrors.push(error)
         }
       }
-    }),
-      (this.tracer = {
-        getTransaction: function getTransaction() {}
-      })
+    }
+
+    this.getActiveSegment = () => {}
   }
 }
 
