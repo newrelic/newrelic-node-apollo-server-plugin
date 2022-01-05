@@ -1,16 +1,15 @@
-name: Prepare Agent Release PR
+name: Prepare Release PR
 
-# Manual trigger only
 on:
   workflow_dispatch:
     inputs:
       release_type:
-        description: 'Type of release. patch or minor (major if breaking)'
+        description: Type of release. patch or minor (major if breaking)
         required: true
-        default: 'patch'
+        default: patch
 
 jobs:
-  agent-release-notes:
-    uses: bizob2828/node-newrelic/.github/workflows/prep-release.yml@main
+  release-notes:
+    uses: newrelic/node-newrelic/.github/workflows/prep-release.yml@main
     with:
       release_type: ${{ github.event.inputs.release_type }}
