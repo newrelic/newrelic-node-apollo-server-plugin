@@ -1,3 +1,20 @@
+### v1.2.0 (2022-01-11)
+
+* Added workflow to automate preparing release notes by reusing the newrelic/node-newrelic/.github/workflows/prep-release.yml@main workflow from agent repository.
+
+* Added job to add PRs and Issues to Node.js Engineering board
+
+* Removed direct usage of internal tracer.
+
+--- NOTES NEEDS REVIEW ---
+`buildFederatedSchema` was [deprecated in @apollo/federation v0.28.0](https://www.apollographql.com/docs/federation/api/apollo-subgraph/#buildsubgraphschema) in favor of `buildSubgraphSchema()`.
+
+This updates the README to demonstrate the latest apollo server api.
+
+![image](https://user-images.githubusercontent.com/242797/142935872-da4bb07e-d09d-435d-aeef-afbb6b1302aa.png)
+
+--------------------------
+
 ## 1.1.2 (11/11/2021)
 
 * Updated TypeScript definitions to allow plugin configuration to be optional.
