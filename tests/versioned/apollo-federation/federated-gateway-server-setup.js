@@ -105,9 +105,12 @@ function setupFederatedGatewayServerTests(options, agentConfig) {
 async function loadGateway({ ApolloServer }, services, plugins) {
   const name = 'Gateway'
 
-  const { ApolloGateway } = require('@apollo/gateway')
+  const { ApolloGateway, IntrospectAndCompose } = require('@apollo/gateway')
+
   const gateway = new ApolloGateway({
-    serviceList: services
+    supergraphSdl: new IntrospectAndCompose({
+      subgraphs: services
+    })
   })
 
   const server = new ApolloServer({
