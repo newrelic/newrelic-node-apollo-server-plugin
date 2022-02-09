@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "Mon Feb 07 2022 10:21:29 GMT-0800 (Pacific Standard Time)",
+  "lastUpdated": "Wed Feb 09 2022 17:08:11 GMT-0500 (Eastern Standard Time)",
   "projectName": "New Relic Node Apollo Server Plugin",
   "projectUrl": "https://github.com/newrelic/newrelic-node-apollo-server-plugin/",
   "includeOptDeps": false,
@@ -45,15 +45,15 @@
       "publisher": "New Relic Node.js agent team",
       "email": "nodejs@newrelic.com"
     },
-    "apollo-server@2.18.2": {
+    "apollo-server@2.25.3": {
       "name": "apollo-server",
-      "version": "2.18.2",
+      "version": "2.25.3",
       "range": "^2.18.2",
       "licenses": "MIT",
       "repoUrl": "https://github.com/apollographql/apollo-server",
-      "versionedRepoUrl": "https://github.com/apollographql/apollo-server/tree/v2.18.2",
+      "versionedRepoUrl": "https://github.com/apollographql/apollo-server/tree/v2.25.3",
       "licenseFile": "node_modules/apollo-server/LICENSE",
-      "licenseUrl": "https://github.com/apollographql/apollo-server/blob/v2.18.2/LICENSE",
+      "licenseUrl": "https://github.com/apollographql/apollo-server/blob/v2.25.3/LICENSE",
       "licenseTextSource": "file",
       "publisher": "Apollo",
       "email": "opensource@apollographql.com"
@@ -118,6 +118,17 @@
       "licenseTextSource": "file",
       "publisher": "Nicholas C. Zakas",
       "email": "nicholas+npm@nczconsulting.com"
+    },
+    "graphql@15.8.0": {
+      "name": "graphql",
+      "version": "15.8.0",
+      "range": "^15.8.0",
+      "licenses": "MIT",
+      "repoUrl": "https://github.com/graphql/graphql-js",
+      "versionedRepoUrl": "https://github.com/graphql/graphql-js/tree/v15.8.0",
+      "licenseFile": "node_modules/graphql/LICENSE",
+      "licenseUrl": "https://github.com/graphql/graphql-js/blob/v15.8.0/LICENSE",
+      "licenseTextSource": "file"
     },
     "husky@6.0.0": {
       "name": "husky",
