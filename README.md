@@ -53,8 +53,6 @@ The New Relic plugin is known to work with the following Apollo Server modules:
 * apollo-server-fastify
 * apollo-server-lambda
 
-Note: Because fastify is not fully instrumented in the Node.js Agent, transactions will be prefixed with `WebTransaction\Nodejs`.
-
 Other plugins may work, depending on their underlying implementation, but have not been verified.
 
 ### Interaction with other Apollo Plugins
