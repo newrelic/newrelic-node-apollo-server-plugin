@@ -277,7 +277,7 @@ If you have any questions, or to execute our corporate CLA (which is required if
 
 If you would like to contribute to this project, review [these guidelines](./CONTRIBUTING.md).
 
-To [all contributors](https://github.com/newrelic/newrelic-node-apollo-server-plugin/graphs/contributors), we thank you!  Without your contribution, this project would not be what it is today.  We also host a community project page dedicated to the [New Relic Apollo Server plugin](https://opensource.newrelic.com/newrelic/newrelic-node-apollo-server-plugin).
+To [all contributors](https://github.com/newrelic/newrelic-node-apollo-server-plugin/graphs/contributors), we thank you!  Without your contribution, this project would not be what it is today.  We also host a community project page dedicated to the [New Relic Apollo Server plugin](https://opensource.newrelic.com/projects/newrelic/newrelic-node-apollo-server-plugin).
 
 **A note about vulnerabilities**
 
