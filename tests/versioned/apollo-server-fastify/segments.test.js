@@ -13,6 +13,11 @@ const UNKNOWN_OPERATION = '<unknown>'
 const OPERATION_PREFIX = 'GraphQL/operation/ApolloServer'
 const RESOLVE_PREFIX = 'GraphQL/resolve/ApolloServer'
 
+// Varies based on apollo-server-fastify version.
+// Nodejs/Middleware/Fastify/<anonymous>//graphql OR
+// Nodejs/Middleware/Fastify/handler//graphql
+const GQL_MIDDLEWARE_SEGMENT_PATTERN = '//graphql'
+
 const { setupApolloServerFastifyTests } = require('./apollo-server-fastify-setup')
 const { checkResult } = require('../common')
 
@@ -41,16 +46,22 @@ function createFastifySegmentsTests(t, frameworkName) {
           name: `${TRANSACTION_PREFIX}//${operationPart}`,
           children: [
             {
-              name: `${OPERATION_PREFIX}/${operationPart}`,
+              name: GQL_MIDDLEWARE_SEGMENT_PATTERN,
               children: [
                 {
-                  name: `${RESOLVE_PREFIX}/hello`
+                  name: `${OPERATION_PREFIX}/${operationPart}`,
+                  children: [
+                    {
+                      name: `${RESOLVE_PREFIX}/hello`
+                    }
+                  ]
                 }
               ]
             }
           ]
         }
       ]
+
       t.segments(transaction.trace.root, expectedSegments)
     })
 
@@ -77,10 +88,15 @@ function createFastifySegmentsTests(t, frameworkName) {
           name: `${TRANSACTION_PREFIX}//${operationPart}`,
           children: [
             {
-              name: `${OPERATION_PREFIX}/${operationPart}`,
+              name: GQL_MIDDLEWARE_SEGMENT_PATTERN,
               children: [
                 {
-                  name: `${RESOLVE_PREFIX}/hello`
+                  name: `${OPERATION_PREFIX}/${operationPart}`,
+                  children: [
+                    {
+                      name: `${RESOLVE_PREFIX}/hello`
+                    }
+                  ]
                 }
               ]
             }
@@ -121,12 +137,17 @@ function createFastifySegmentsTests(t, frameworkName) {
           name: `${TRANSACTION_PREFIX}//${operationPart}`,
           children: [
             {
-              name: `${OPERATION_PREFIX}/${operationPart}`,
+              name: GQL_MIDDLEWARE_SEGMENT_PATTERN,
               children: [
-                { name: `${RESOLVE_PREFIX}/libraries` },
-                { name: `${RESOLVE_PREFIX}/libraries.books` },
-                { name: `${RESOLVE_PREFIX}/libraries.books.author` },
-                { name: `${RESOLVE_PREFIX}/libraries.books.author.name` }
+                {
+                  name: `${OPERATION_PREFIX}/${operationPart}`,
+                  children: [
+                    { name: `${RESOLVE_PREFIX}/libraries` },
+                    { name: `${RESOLVE_PREFIX}/libraries.books` },
+                    { name: `${RESOLVE_PREFIX}/libraries.books.author` },
+                    { name: `${RESOLVE_PREFIX}/libraries.books.author.name` }
+                  ]
+                }
               ]
             }
           ]
@@ -168,13 +189,18 @@ function createFastifySegmentsTests(t, frameworkName) {
           name: `${TRANSACTION_PREFIX}//${operationPart}`,
           children: [
             {
-              name: `${OPERATION_PREFIX}/${operationPart}`,
+              name: GQL_MIDDLEWARE_SEGMENT_PATTERN,
               children: [
-                { name: `${RESOLVE_PREFIX}/libraries` },
-                { name: `${RESOLVE_PREFIX}/libraries.books` },
-                { name: `${RESOLVE_PREFIX}/libraries.books.title` },
-                { name: `${RESOLVE_PREFIX}/libraries.books.author` },
-                { name: `${RESOLVE_PREFIX}/libraries.books.author.name` }
+                {
+                  name: `${OPERATION_PREFIX}/${operationPart}`,
+                  children: [
+                    { name: `${RESOLVE_PREFIX}/libraries` },
+                    { name: `${RESOLVE_PREFIX}/libraries.books` },
+                    { name: `${RESOLVE_PREFIX}/libraries.books.title` },
+                    { name: `${RESOLVE_PREFIX}/libraries.books.author` },
+                    { name: `${RESOLVE_PREFIX}/libraries.books.author.name` }
+                  ]
+                }
               ]
             }
           ]
@@ -206,16 +232,21 @@ function createFastifySegmentsTests(t, frameworkName) {
           name: `${TRANSACTION_PREFIX}//${operationPart}`,
           children: [
             {
-              name: `${OPERATION_PREFIX}/${operationPart}`,
+              name: GQL_MIDDLEWARE_SEGMENT_PATTERN,
               children: [
                 {
-                  name: `${RESOLVE_PREFIX}/addThing`,
+                  name: `${OPERATION_PREFIX}/${operationPart}`,
                   children: [
                     {
-                      name: 'timers.setTimeout',
+                      name: `${RESOLVE_PREFIX}/addThing`,
                       children: [
                         {
-                          name: 'Callback: namedCallback'
+                          name: 'timers.setTimeout',
+                          children: [
+                            {
+                              name: 'Callback: namedCallback'
+                            }
+                          ]
                         }
                       ]
                     }
@@ -253,16 +284,21 @@ function createFastifySegmentsTests(t, frameworkName) {
           name: `${TRANSACTION_PREFIX}//${operationPart}`,
           children: [
             {
-              name: `${OPERATION_PREFIX}/${operationPart}`,
+              name: GQL_MIDDLEWARE_SEGMENT_PATTERN,
               children: [
                 {
-                  name: `${RESOLVE_PREFIX}/addThing`,
+                  name: `${OPERATION_PREFIX}/${operationPart}`,
                   children: [
                     {
-                      name: 'timers.setTimeout',
+                      name: `${RESOLVE_PREFIX}/addThing`,
                       children: [
                         {
-                          name: 'Callback: namedCallback'
+                          name: 'timers.setTimeout',
+                          children: [
+                            {
+                              name: 'Callback: namedCallback'
+                            }
+                          ]
                         }
                       ]
                     }
@@ -299,8 +335,13 @@ function createFastifySegmentsTests(t, frameworkName) {
           name: `${TRANSACTION_PREFIX}//${operationPart}`,
           children: [
             {
-              name: `${OPERATION_PREFIX}/${operationPart}`,
-              children: [{ name: `${RESOLVE_PREFIX}/paramQuery` }]
+              name: GQL_MIDDLEWARE_SEGMENT_PATTERN,
+              children: [
+                {
+                  name: `${OPERATION_PREFIX}/${operationPart}`,
+                  children: [{ name: `${RESOLVE_PREFIX}/paramQuery` }]
+                }
+              ]
             }
           ]
         }
@@ -332,8 +373,13 @@ function createFastifySegmentsTests(t, frameworkName) {
           name: `${TRANSACTION_PREFIX}//${operationPart}`,
           children: [
             {
-              name: `${OPERATION_PREFIX}/${operationPart}`,
-              children: [{ name: `${RESOLVE_PREFIX}/paramQuery` }]
+              name: GQL_MIDDLEWARE_SEGMENT_PATTERN,
+              children: [
+                {
+                  name: `${OPERATION_PREFIX}/${operationPart}`,
+                  children: [{ name: `${RESOLVE_PREFIX}/paramQuery` }]
+                }
+              ]
             }
           ]
         }
@@ -374,25 +420,30 @@ function createFastifySegmentsTests(t, frameworkName) {
           name: `${TRANSACTION_PREFIX}//${operationPart}`,
           children: [
             {
-              name: `${OPERATION_PREFIX}/${operationPart}`,
+              name: GQL_MIDDLEWARE_SEGMENT_PATTERN,
               children: [
                 {
-                  name: `${RESOLVE_PREFIX}/library`,
+                  name: `${OPERATION_PREFIX}/${operationPart}`,
                   children: [
                     {
-                      name: 'timers.setTimeout',
+                      name: `${RESOLVE_PREFIX}/library`,
                       children: [
                         {
-                          name: 'Callback: <anonymous>'
+                          name: 'timers.setTimeout',
+                          children: [
+                            {
+                              name: 'Callback: <anonymous>'
+                            }
+                          ]
                         }
                       ]
-                    }
+                    },
+                    { name: `${RESOLVE_PREFIX}/library.books` },
+                    { name: `${RESOLVE_PREFIX}/library.books.title` },
+                    { name: `${RESOLVE_PREFIX}/library.books.author` },
+                    { name: `${RESOLVE_PREFIX}/library.books.author.name` }
                   ]
-                },
-                { name: `${RESOLVE_PREFIX}/library.books` },
-                { name: `${RESOLVE_PREFIX}/library.books.title` },
-                { name: `${RESOLVE_PREFIX}/library.books.author` },
-                { name: `${RESOLVE_PREFIX}/library.books.author.name` }
+                }
               ]
             }
           ]
@@ -446,38 +497,43 @@ function createFastifySegmentsTests(t, frameworkName) {
           name: `${batchTransactionPrefix}/${expectedQuery1Name}/${expectedQuery2Name}`,
           children: [
             {
-              name: `${OPERATION_PREFIX}/${operationPart1}`,
+              name: GQL_MIDDLEWARE_SEGMENT_PATTERN,
               children: [
                 {
-                  name: `${RESOLVE_PREFIX}/library`,
+                  name: `${OPERATION_PREFIX}/${operationPart1}`,
                   children: [
                     {
-                      name: 'timers.setTimeout',
+                      name: `${RESOLVE_PREFIX}/library`,
                       children: [
                         {
-                          name: 'Callback: <anonymous>'
+                          name: 'timers.setTimeout',
+                          children: [
+                            {
+                              name: 'Callback: <anonymous>'
+                            }
+                          ]
                         }
                       ]
-                    }
+                    },
+                    { name: `${RESOLVE_PREFIX}/library.books` },
+                    { name: `${RESOLVE_PREFIX}/library.books.title` },
+                    { name: `${RESOLVE_PREFIX}/library.books.author` },
+                    { name: `${RESOLVE_PREFIX}/library.books.author.name` }
                   ]
                 },
-                { name: `${RESOLVE_PREFIX}/library.books` },
-                { name: `${RESOLVE_PREFIX}/library.books.title` },
-                { name: `${RESOLVE_PREFIX}/library.books.author` },
-                { name: `${RESOLVE_PREFIX}/library.books.author.name` }
-              ]
-            },
-            {
-              name: `${OPERATION_PREFIX}/${operationPart2}`,
-              children: [
                 {
-                  name: `${RESOLVE_PREFIX}/addThing`,
+                  name: `${OPERATION_PREFIX}/${operationPart2}`,
                   children: [
                     {
-                      name: 'timers.setTimeout',
+                      name: `${RESOLVE_PREFIX}/addThing`,
                       children: [
                         {
-                          name: 'Callback: namedCallback'
+                          name: 'timers.setTimeout',
+                          children: [
+                            {
+                              name: 'Callback: namedCallback'
+                            }
+                          ]
                         }
                       ]
                     }
@@ -523,7 +579,12 @@ function createFastifySegmentsTests(t, frameworkName) {
           name: `${TRANSACTION_PREFIX}//*`,
           children: [
             {
-              name: `${OPERATION_PREFIX}/${UNKNOWN_OPERATION}`
+              name: GQL_MIDDLEWARE_SEGMENT_PATTERN,
+              children: [
+                {
+                  name: `${OPERATION_PREFIX}/${UNKNOWN_OPERATION}`
+                }
+              ]
             }
           ]
         }
@@ -570,7 +631,12 @@ function createFastifySegmentsTests(t, frameworkName) {
           name: `${TRANSACTION_PREFIX}//${operationPart}`,
           children: [
             {
-              name: `${OPERATION_PREFIX}/${operationPart}`
+              name: GQL_MIDDLEWARE_SEGMENT_PATTERN,
+              children: [
+                {
+                  name: `${OPERATION_PREFIX}/${operationPart}`
+                }
+              ]
             }
           ]
         }
