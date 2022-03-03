@@ -12,7 +12,7 @@ utils.assert.extendTap(tap)
 
 const { getTypeDefs, resolvers } = require('../../data-definitions')
 
-const WEB_FRAMEWORK = 'Nodejs'
+const WEB_FRAMEWORK = 'WebFrameworkUri/Fastify'
 
 function setupApolloServerFastifyTests({ suiteName, createTests, pluginConfig }, config) {
   tap.test(`apollo-server-fastify: ${suiteName}`, (t) => {

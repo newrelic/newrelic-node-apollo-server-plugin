@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "Wed Feb 09 2022 16:44:22 GMT-0500 (Eastern Standard Time)",
+  "lastUpdated": "Tue Mar 01 2022 16:29:21 GMT-0800 (Pacific Standard Time)",
   "projectName": "New Relic Node Apollo Server Plugin",
   "projectUrl": "https://github.com/newrelic/newrelic-node-apollo-server-plugin/",
   "includeOptDeps": false,
@@ -45,15 +45,15 @@
       "publisher": "New Relic Node.js agent team",
       "email": "nodejs@newrelic.com"
     },
-    "apollo-server@2.18.2": {
+    "apollo-server@2.25.3": {
       "name": "apollo-server",
-      "version": "2.18.2",
+      "version": "2.25.3",
       "range": "^2.18.2",
       "licenses": "MIT",
       "repoUrl": "https://github.com/apollographql/apollo-server",
-      "versionedRepoUrl": "https://github.com/apollographql/apollo-server/tree/v2.18.2",
+      "versionedRepoUrl": "https://github.com/apollographql/apollo-server/tree/v2.25.3",
       "licenseFile": "node_modules/apollo-server/LICENSE",
-      "licenseUrl": "https://github.com/apollographql/apollo-server/blob/v2.18.2/LICENSE",
+      "licenseUrl": "https://github.com/apollographql/apollo-server/blob/v2.25.3/LICENSE",
       "licenseTextSource": "file",
       "publisher": "Apollo",
       "email": "opensource@apollographql.com"
@@ -156,15 +156,15 @@
       "publisher": "Andrey Okonetchnikov",
       "email": "andrey@okonet.ru"
     },
-    "newrelic@7.3.1": {
+    "newrelic@8.8.0": {
       "name": "newrelic",
-      "version": "7.3.1",
-      "range": "^7.3.1",
+      "version": "8.8.0",
+      "range": "^8.8.0",
       "licenses": "Apache-2.0",
       "repoUrl": "https://github.com/newrelic/node-newrelic",
-      "versionedRepoUrl": "https://github.com/newrelic/node-newrelic/tree/v7.3.1",
+      "versionedRepoUrl": "https://github.com/newrelic/node-newrelic/tree/v8.8.0",
       "licenseFile": "node_modules/newrelic/LICENSE",
-      "licenseUrl": "https://github.com/newrelic/node-newrelic/blob/v7.3.1/LICENSE",
+      "licenseUrl": "https://github.com/newrelic/node-newrelic/blob/v8.8.0/LICENSE",
       "licenseTextSource": "file",
       "publisher": "New Relic Node.js agent team",
       "email": "nodejs@newrelic.com"
@@ -193,15 +193,15 @@
       "licenseTextSource": "file",
       "publisher": "Christian Johansen"
     },
-    "tap@15.0.6": {
+    "tap@15.1.6": {
       "name": "tap",
-      "version": "15.0.6",
+      "version": "15.1.6",
       "range": "^15.0.6",
       "licenses": "ISC",
       "repoUrl": "https://github.com/tapjs/node-tap",
-      "versionedRepoUrl": "https://github.com/tapjs/node-tap/tree/v15.0.6",
+      "versionedRepoUrl": "https://github.com/tapjs/node-tap/tree/v15.1.6",
       "licenseFile": "node_modules/tap/LICENSE",
-      "licenseUrl": "https://github.com/tapjs/node-tap/blob/v15.0.6/LICENSE",
+      "licenseUrl": "https://github.com/tapjs/node-tap/blob/v15.1.6/LICENSE",
       "licenseTextSource": "file",
       "publisher": "Isaac Z. Schlueter",
       "email": "i@izs.me",

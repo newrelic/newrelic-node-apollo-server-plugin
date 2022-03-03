@@ -669,7 +669,7 @@ This product includes source derived from [@newrelic/test-utilities](https://git
 
 ### apollo-server
 
-This product includes source derived from [apollo-server](https://github.com/apollographql/apollo-server) ([v2.18.2](https://github.com/apollographql/apollo-server/tree/v2.18.2)), distributed under the [MIT License](https://github.com/apollographql/apollo-server/blob/v2.18.2/LICENSE):
+This product includes source derived from [apollo-server](https://github.com/apollographql/apollo-server) ([v2.25.3](https://github.com/apollographql/apollo-server/tree/v2.25.3)), distributed under the [MIT License](https://github.com/apollographql/apollo-server/blob/v2.25.3/LICENSE):
 
 ```
 The MIT License (MIT)
@@ -919,7 +919,7 @@ SOFTWARE.
 
 ### newrelic
 
-This product includes source derived from [newrelic](https://github.com/newrelic/node-newrelic) ([v7.3.1](https://github.com/newrelic/node-newrelic/tree/v7.3.1)), distributed under the [Apache-2.0 License](https://github.com/newrelic/node-newrelic/blob/v7.3.1/LICENSE):
+This product includes source derived from [newrelic](https://github.com/newrelic/node-newrelic) ([v8.8.0](https://github.com/newrelic/node-newrelic/tree/v8.8.0)), distributed under the [Apache-2.0 License](https://github.com/newrelic/node-newrelic/blob/v8.8.0/LICENSE):
 
 ```
                                  Apache License
@@ -1177,7 +1177,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ### tap
 
-This product includes source derived from [tap](https://github.com/tapjs/node-tap) ([v15.0.6](https://github.com/tapjs/node-tap/tree/v15.0.6)), distributed under the [ISC License](https://github.com/tapjs/node-tap/blob/v15.0.6/LICENSE):
+This product includes source derived from [tap](https://github.com/tapjs/node-tap) ([v15.1.6](https://github.com/tapjs/node-tap/tree/v15.1.6)), distributed under the [ISC License](https://github.com/tapjs/node-tap/blob/v15.1.6/LICENSE):
 
 ```
 The ISC License
