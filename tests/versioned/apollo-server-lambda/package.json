@@ -8,7 +8,8 @@
         "node": ">=12"
       },
       "dependencies": {
-        "apollo-server-lambda": ">=2.14.0"
+        "apollo-server-lambda": ">=2.14.0",
+        "graphql": "15.8.0"
       },
       "files": [
         "segments.test.js",
