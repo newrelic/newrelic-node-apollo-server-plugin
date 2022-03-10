@@ -455,6 +455,138 @@ function createKoaSegmentsTests(t, frameworkName) {
     })
   })
 
+  t.test('named query with fragment, query first', (t) => {
+    const { helper, serverUrl } = t.context
+
+    const expectedName = 'GetBookForLibrary'
+    const query = `query ${expectedName} {
+      library(branch: "downtown") {
+        books {
+          ... LibraryBook
+        }
+      }
+    }
+    fragment LibraryBook on Book {
+      title
+      author {
+        name
+      }
+    }`
+
+    const path = 'library.books.LibraryBook'
+
+    helper.agent.on('transactionFinished', (transaction) => {
+      const operationPart = `query/${expectedName}/${path}`
+      const expectedSegments = [
+        {
+          name: `${TRANSACTION_PREFIX}//${operationPart}`,
+          children: [
+            {
+              name: 'Nodejs/Middleware/Koa',
+              children: [
+                {
+                  name: `${OPERATION_PREFIX}/${operationPart}`,
+                  children: [
+                    {
+                      name: `${RESOLVE_PREFIX}/library`,
+                      children: [
+                        {
+                          name: 'timers.setTimeout',
+                          children: [
+                            {
+                              name: 'Callback: <anonymous>'
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    { name: `${RESOLVE_PREFIX}/library.books` },
+                    { name: `${RESOLVE_PREFIX}/library.books.title` },
+                    { name: `${RESOLVE_PREFIX}/library.books.author` },
+                    { name: `${RESOLVE_PREFIX}/library.books.author.name` }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+
+      t.segments(transaction.trace.root, expectedSegments)
+    })
+
+    executeQuery(serverUrl, query, (err) => {
+      t.error(err)
+      t.end()
+    })
+  })
+
+  t.test('named query with fragment, fragment first', (t) => {
+    const { helper, serverUrl } = t.context
+
+    const expectedName = 'GetBookForLibrary'
+    const query = `fragment LibraryBook on Book {
+      title
+      author {
+        name
+      }
+    }
+    query ${expectedName} {
+      library(branch: "downtown") {
+        books {
+          ... LibraryBook
+        }
+      }
+    }`
+
+    const path = 'library.books.LibraryBook'
+
+    helper.agent.on('transactionFinished', (transaction) => {
+      const operationPart = `query/${expectedName}/${path}`
+      const expectedSegments = [
+        {
+          name: `${TRANSACTION_PREFIX}//${operationPart}`,
+          children: [
+            {
+              name: 'Nodejs/Middleware/Koa',
+              children: [
+                {
+                  name: `${OPERATION_PREFIX}/${operationPart}`,
+                  children: [
+                    {
+                      name: `${RESOLVE_PREFIX}/library`,
+                      children: [
+                        {
+                          name: 'timers.setTimeout',
+                          children: [
+                            {
+                              name: 'Callback: <anonymous>'
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    { name: `${RESOLVE_PREFIX}/library.books` },
+                    { name: `${RESOLVE_PREFIX}/library.books.title` },
+                    { name: `${RESOLVE_PREFIX}/library.books.author` },
+                    { name: `${RESOLVE_PREFIX}/library.books.author.name` }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+
+      t.segments(transaction.trace.root, expectedSegments)
+    })
+
+    executeQuery(serverUrl, query, (err) => {
+      t.error(err)
+      t.end()
+    })
+  })
+
   t.test('batch query should include segments for nested queries', (t) => {
     const { helper, serverUrl } = t.context
 
