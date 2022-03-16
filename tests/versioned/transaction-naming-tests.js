@@ -420,6 +420,66 @@ function createTransactionTests(t, frameworkName) {
     })
   })
 
+  t.test('named query with fragment, query first', (t) => {
+    const { helper, serverUrl } = t.context
+
+    const expectedName = 'GetBookForLibrary'
+    const query = `query ${expectedName} {
+      library(branch: "downtown") {
+        books {
+          ... LibraryBook
+        }
+      }
+    }
+    fragment LibraryBook on Book {
+      title
+      author {
+        name
+      }
+    }`
+
+    const path = 'library.books.LibraryBook'
+
+    helper.agent.on('transactionFinished', (transaction) => {
+      t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${expectedName}/${path}`)
+    })
+
+    executeQuery(serverUrl, query, (err) => {
+      t.error(err)
+      t.end()
+    })
+  })
+
+  t.test('named query with fragment, fragment first', (t) => {
+    const { helper, serverUrl } = t.context
+
+    const expectedName = 'GetBookForLibrary'
+    const query = `fragment LibraryBook on Book {
+      title
+      author {
+        name
+      }
+    }
+    query ${expectedName} {
+      library(branch: "downtown") {
+        books {
+          ... LibraryBook
+        }
+      }
+    }`
+
+    const path = 'library.books.LibraryBook'
+
+    helper.agent.on('transactionFinished', (transaction) => {
+      t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${expectedName}/${path}`)
+    })
+
+    executeQuery(serverUrl, query, (err) => {
+      t.error(err)
+      t.end()
+    })
+  })
+
   // there will be no document/AST nor resolved operation
   t.test('if the query cannot be parsed, should be named /*', (t) => {
     const { helper, serverUrl } = t.context

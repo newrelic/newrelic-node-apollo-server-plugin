@@ -43,6 +43,7 @@ tap.test('createPlugin edge cases', (t) => {
       document: {
         definitions: [
           {
+            kind: 'OperationDefinition',
             selectionSet: {
               selections: []
             }
