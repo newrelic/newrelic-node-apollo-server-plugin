@@ -13,13 +13,25 @@
  * @returns {Object} graphql schema
  */
 module.exports = function setupErrorResolvers(serverPkgExport, resolvers) {
-  const { gql, UserInputError, ValidationError, ApolloError, ForbiddenError } = serverPkgExport
+  const {
+    gql,
+    UserInputError,
+    ValidationError,
+    ApolloError,
+    ForbiddenError,
+    SyntaxError,
+    AuthenticationError
+  } = serverPkgExport
 
   class CustomError extends ApolloError {
     constructor(message) {
       super(message, 'CUSTOM_ERROR', { code: 'CUSTOM_ERROR' })
       Object.defineProperty(this, 'name', { value: 'CustomError' })
     }
+  }
+
+  resolvers.Query.boom = () => {
+    throw new Error('Boom goes the dynamite!')
   }
 
   resolvers.Query.userInputError = () => {
@@ -38,12 +50,23 @@ module.exports = function setupErrorResolvers(serverPkgExport, resolvers) {
     throw new CustomError('custom error')
   }
 
+  resolvers.Query.syntaxError = () => {
+    throw new SyntaxError('syntax error')
+  }
+
+  resolvers.Query.authError = () => {
+    throw new AuthenticationError('auth error')
+  }
+
   return gql`
     extend type Query {
+      boom: String
       userInputError: String
       validationError: String
       forbiddenError: String
       customError: String
+      syntaxError: String
+      authError: String
     }
   `
 }

@@ -195,7 +195,8 @@ function createErrorTests(t) {
       msg: 'validation error'
     },
     { type: 'ForbiddenError', code: 'FORBIDDEN', name: 'forbiddenError', msg: 'forbidden error' },
-    { type: 'CustomError', code: 'CUSTOM_ERROR', name: 'customError', msg: 'custom error' }
+    { type: 'SyntaxError', code: 'GRAPHQL_PARSE_FAILED', name: 'syntaxError', msg: 'syntax error' },
+    { type: 'AuthenticationError', code: 'UNAUTHENTICATED', name: 'authError', msg: 'auth error' }
   ]
 
   errorTests.forEach(({ type, code, name, msg }) => {
