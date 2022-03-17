@@ -11,6 +11,7 @@ const utils = require('@newrelic/test-utilities')
 utils.assert.extendTap(tap)
 
 const { getTypeDefs, resolvers } = require('./data-definitions')
+const setupErrorSchema = require('./versioned/error-setup')
 
 const WEB_FRAMEWORK = 'Expressjs'
 
@@ -39,10 +40,13 @@ function setupApolloServerTests(loadApolloServer, clearCachedModules, options, a
       const instrumentationPlugin = createPlugin(nrApi.shim, pluginConfig)
 
       // Do after instrumentation to ensure express isn't loaded too soon.
-      const { ApolloServer, gql } = loadApolloServer()
+      const apolloServerPkg = loadApolloServer()
+      const { ApolloServer, gql } = apolloServerPkg
+      const schema = getTypeDefs(gql)
+      const errorSchema = setupErrorSchema(apolloServerPkg, resolvers)
 
       server = new ApolloServer({
-        typeDefs: getTypeDefs(gql),
+        typeDefs: [schema, errorSchema],
         resolvers,
         plugins: [...startingPlugins, instrumentationPlugin]
       })

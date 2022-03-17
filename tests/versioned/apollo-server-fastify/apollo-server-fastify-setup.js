@@ -11,6 +11,7 @@ const utils = require('@newrelic/test-utilities')
 utils.assert.extendTap(tap)
 
 const { getTypeDefs, resolvers } = require('../../data-definitions')
+const setupErrorSchema = require('../error-setup')
 
 const WEB_FRAMEWORK = 'WebFrameworkUri/Fastify'
 
@@ -35,9 +36,12 @@ function setupApolloServerFastifyTests({ suiteName, createTests, pluginConfig },
       const plugin = createPlugin(nrApi.shim, pluginConfig)
 
       // Do after instrumentation to ensure hapi isn't loaded too soon.
-      const { ApolloServer, gql } = require('apollo-server-fastify')
+      const fastifyServerPkg = require('apollo-server-fastify')
+      const { ApolloServer, gql } = fastifyServerPkg
+      const schema = getTypeDefs(gql)
+      const errorSchema = setupErrorSchema(fastifyServerPkg, resolvers)
       server = new ApolloServer({
-        typeDefs: getTypeDefs(gql),
+        typeDefs: [schema, errorSchema],
         resolvers,
         plugins: [plugin]
       })
