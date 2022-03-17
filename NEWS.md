@@ -1,3 +1,29 @@
+### v1.2.1 (2022-03-16)
+
+* Fixed transaction naming and operation segments when a fragment is defined before query.
+
+* Added `graqhql` as a test dependency in the versioned test `package.json` configurations.
+
+* Bumped `newrelic` dev dependency to ^8.8.0.
+
+* Updated versioned testing to account for built-in agent instrumentation for Fastify.
+
+* Fixed readme link to New Relic Open Source project page.
+
+* Removed note about Fastify not being fully supported by agent. We added GA support in [v8.5.0](https://github.com/newrelic/node-newrelic/releases/tag/v8.5.0)
+
+* Updated `apollo-server`, `json-schema`, and `browserslist`  to resolve a dev-dependency security warning.
+
+* Updated federation versioned tests to only use latest version of `graphql` to avoid incompatibility failures while federation/gateway are still unstable.
+
+* Updated ApolloGateway test setup to use IntrospectAndClose instead of deprecated serviceList.
+
+* Updated `node-fetch` to resolve a dev-dependency security warning.
+
+* Updated `object-path` to resolve a dev-dependency security warning.
+
+* Updated `add-to-board` to use org level `NODE_AGENT_GH_TOKEN`
+
 ### v1.2.0 (2022-01-11)
 
 * Removed direct usage of internal tracer.
