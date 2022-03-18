@@ -70,10 +70,10 @@ function createFederatedSegmentsTests(t) {
 
     let transactions = []
     const expectedTransactions = [
-      'WebTransaction/Expressjs/POST//query/<anonymous>/libraries.branch',
-      'WebTransaction/Expressjs/POST//query/<anonymous>/_entities<Library>.booksInStock',
+      'WebTransaction/Expressjs/POST//query/SubGraphs__Library__0/libraries.branch',
+      'WebTransaction/Expressjs/POST//query/SubGraphs__Book__1/_entities<Library>.booksInStock',
       // eslint-disable-next-line max-len
-      'WebTransaction/Expressjs/POST//query/<anonymous>/_entities<Library>.magazinesInStock',
+      'WebTransaction/Expressjs/POST//query/SubGraphs__Magazine__2/_entities<Library>.magazinesInStock',
       'WebTransaction/Expressjs/POST//query/SubGraphs/libraries'
     ]
 
@@ -125,7 +125,7 @@ function createFederatedSegmentsTests(t) {
 
     let transactions = []
     const expectedPath = 'libraries.branch'
-    const expectedTransaction = `WebTransaction/Expressjs/POST//query/<anonymous>/${expectedPath}`
+    const expectedTransaction = `WebTransaction/Expressjs/POST//query/SubGraphs__Library__0/${expectedPath}`
 
     helper.agent.on('transactionFinished', (transaction) => {
       transactions.push(transaction.name)
