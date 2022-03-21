@@ -54,7 +54,7 @@ tap.test('createPlugin edge cases', (t) => {
 
     const hooks = createPlugin(instrumentationApi)
     const operationHooks = hooks.requestDidStart({})
-    operationHooks.willSendResponse(responseContext)
+    operationHooks.validationDidStart(responseContext)
     t.equal(
       operationSegment.name,
       'GraphQL/operation/ApolloServer/undefined/<anonymous>',
@@ -63,16 +63,12 @@ tap.test('createPlugin edge cases', (t) => {
     t.end()
   })
 
-  t.test('should not set operation name to unknown when document is null', (t) => {
+  t.test('should not set operation name when document is null', (t) => {
     const responseContext = {}
     const hooks = createPlugin(instrumentationApi)
     const operationHooks = hooks.requestDidStart({})
     operationHooks.willSendResponse(responseContext)
-    t.equal(
-      operationSegment.name,
-      'GraphQL/operation/ApolloServer/<unknown>',
-      'should set operation to unknown'
-    )
+    t.equal(operationSegment.name, undefined, 'should set operation to unknown')
     t.end()
   })
 })
