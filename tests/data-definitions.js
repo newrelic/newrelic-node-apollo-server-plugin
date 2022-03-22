@@ -98,7 +98,6 @@ function getTypeDefs(gql) {
       search(contains: String): [SearchResult!]
       books(category: BookCategory): [Book]!
       hello: String
-      boom: String
       paramQuery(blah: String!, blee: String): String!
       libraries: [Library]
       library(branch: String!): Library
@@ -120,9 +119,6 @@ const resolvers = {
     },
     hello: () => {
       return 'hello world'
-    },
-    boom: () => {
-      throw new Error('Boom goes the dynamite!')
     },
     paramQuery: (_, { blah, blee }) => {
       return blah + blee

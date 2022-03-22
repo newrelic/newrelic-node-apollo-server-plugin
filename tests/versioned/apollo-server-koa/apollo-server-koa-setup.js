@@ -11,6 +11,7 @@ const utils = require('@newrelic/test-utilities')
 utils.assert.extendTap(tap)
 
 const { getTypeDefs, resolvers } = require('../../data-definitions')
+const setupErrorSchema = require('../error-setup')
 
 const WEB_FRAMEWORK = 'WebFrameworkUri/Koa'
 
@@ -40,9 +41,12 @@ function setupApolloServerKoaTests({ suiteName, createTests, pluginConfig }, con
       const graphqlPath = '/gql'
 
       // Do after instrumentation to ensure hapi isn't loaded too soon.
-      const { ApolloServer, gql } = require('apollo-server-koa')
+      const koaServerPkg = require('apollo-server-koa')
+      const { ApolloServer, gql } = koaServerPkg
+      const schema = getTypeDefs(gql)
+      const errorSchema = setupErrorSchema(koaServerPkg, resolvers)
       server = new ApolloServer({
-        typeDefs: getTypeDefs(gql),
+        typeDefs: [schema, errorSchema],
         resolvers,
         plugins: [plugin]
       })

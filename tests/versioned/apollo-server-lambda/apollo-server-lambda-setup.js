@@ -12,6 +12,7 @@ const utils = require('@newrelic/test-utilities')
 utils.assert.extendTap(tap)
 
 const { getTypeDefs, resolvers } = require('../../data-definitions')
+const setupErrorSchema = require('../error-setup')
 
 const WEB_FRAMEWORK = 'WebFrameworkUri'
 
@@ -32,7 +33,10 @@ function setupApolloServerLambdaTests({ suiteName, createTests, pluginConfig }, 
     agentTesting.temporarySetEnv(t, 'NEW_RELIC_ACCOUNT_ID', 'eeeeee')
 
     t.beforeEach((t) => {
-      const { ApolloServer, gql } = require('apollo-server-lambda')
+      const lambdaServerPkg = require('apollo-server-lambda')
+      const { ApolloServer, gql } = lambdaServerPkg
+      const schema = getTypeDefs(gql)
+      const errorSchema = setupErrorSchema(lambdaServerPkg, resolvers)
       const { version } = require('apollo-server-lambda/package')
 
       helper = utils.TestAgent.makeInstrumented(config)
@@ -54,7 +58,7 @@ function setupApolloServerLambdaTests({ suiteName, createTests, pluginConfig }, 
         awsRequestId: 'testid'
       }),
         (server = new ApolloServer({
-          typeDefs: getTypeDefs(gql),
+          typeDefs: [schema, errorSchema],
           resolvers,
           plugins: [plugin],
           context: ({ event, context }) => ({

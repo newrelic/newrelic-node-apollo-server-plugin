@@ -180,6 +180,70 @@ function createErrorTests(t) {
       t.end()
     })
   })
+
+  const errorTests = [
+    {
+      type: 'UserInputError',
+      code: 'BAD_USER_INPUT',
+      name: 'userInputError',
+      msg: 'user input error'
+    },
+    {
+      type: 'ValidationError',
+      code: 'GRAPHQL_VALIDATION_FAILED',
+      name: 'validationError',
+      msg: 'validation error'
+    },
+    { type: 'ForbiddenError', code: 'FORBIDDEN', name: 'forbiddenError', msg: 'forbidden error' },
+    { type: 'SyntaxError', code: 'GRAPHQL_PARSE_FAILED', name: 'syntaxError', msg: 'syntax error' },
+    { type: 'AuthenticationError', code: 'UNAUTHENTICATED', name: 'authError', msg: 'auth error' }
+  ]
+
+  errorTests.forEach(({ type, code, name, msg }) => {
+    t.test(type, (t) => {
+      const { helper, serverUrl } = t.context
+
+      const expectedErrorMessage = msg
+      const expectedErrorType = type
+
+      const invalidQuery = `query ${name} {
+        ${name}
+      }`
+
+      helper.agent.on('transactionFinished', (transaction) => {
+        const errorTraces = agentTesting.getErrorTraces(helper.agent)
+        t.equal(errorTraces.length, 1)
+
+        const errorTrace = errorTraces[0]
+
+        const [, transactionName, errorMessage, errorType, params] = errorTrace
+        t.equal(transactionName, transaction.name)
+        t.equal(errorMessage, expectedErrorMessage)
+        t.equal(errorType, expectedErrorType)
+
+        const { agentAttributes } = params
+
+        t.ok(agentAttributes.spanId)
+
+        const matchingSpan = agentTesting.findSpanById(helper.agent, agentAttributes.spanId)
+
+        const { attributes } = matchingSpan
+        t.equal(attributes['error.message'], expectedErrorMessage)
+        t.equal(attributes['error.class'], expectedErrorType)
+      })
+
+      executeQuery(serverUrl, invalidQuery, (err, result) => {
+        t.error(err)
+        t.ok(result)
+        t.ok(result.errors)
+        t.equal(result.errors.length, 1) // should have one parsing error
+
+        const [resolverError] = result.errors
+        t.equal(resolverError.extensions.code, code)
+        t.end()
+      })
+    })
+  })
 }
 
 module.exports = {

@@ -11,6 +11,7 @@ const utils = require('@newrelic/test-utilities')
 utils.assert.extendTap(tap)
 
 const { getTypeDefs, resolvers } = require('../../data-definitions')
+const setupErrorSchema = require('../error-setup')
 
 const WEB_FRAMEWORK = 'Hapi'
 
@@ -37,9 +38,12 @@ function setupApolloServerHapiTests({ suiteName, createTests, pluginConfig }, co
       const graphqlPath = '/gql'
 
       // Do after instrumentation to ensure hapi isn't loaded too soon.
-      const { ApolloServer, gql } = require('apollo-server-hapi')
+      const hapiServerPkg = require('apollo-server-hapi')
+      const { ApolloServer, gql } = hapiServerPkg
+      const schema = getTypeDefs(gql)
+      const errorSchema = setupErrorSchema(hapiServerPkg, resolvers)
       server = new ApolloServer({
-        typeDefs: getTypeDefs(gql),
+        typeDefs: [schema, errorSchema],
         resolvers,
         plugins: [plugin]
       })
