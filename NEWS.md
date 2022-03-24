@@ -1,3 +1,11 @@
+### v1.2.2 (2022-03-24)
+
+* Updated error helper to report the original error when applicable.
+
+* Moved naming of operation segment and updating transaction to `validationDidStart` phase of Apollo Server request.
+
+* Updated expected names for transaction in federated versioned tests.
+
 ### v1.2.1 (2022-03-16)
 
 * Fixed transaction naming and operation segments when a fragment is defined before query.
