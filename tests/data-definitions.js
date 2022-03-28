@@ -63,7 +63,12 @@ const magazines = [
   }
 ]
 
-const collection = []
+const collection = [
+  {
+    id: Date.now(),
+    title: 'True life, I am an o11y fan boy'
+  }
+]
 
 function getTypeDefs(gql) {
   const typeDefs = gql`
@@ -103,15 +108,17 @@ function getTypeDefs(gql) {
       paramQuery(blah: String!, blee: String): String!
       libraries: [Library]
       library(branch: String!): Library
+      searchCollection(title: String): Item!
     }
 
-    type Collection {
+    type Item {
       id: String!
+      title: String!
     }
 
     type Mutation {
       addThing(name: String!): String!
-      addToCollection(title: String!): Collection!
+      addToCollection(title: String!): Item!
     }
   `
   return typeDefs
@@ -142,6 +149,10 @@ const resolvers = {
       })
 
       return promise
+    },
+    searchCollection: (_, { title }) => {
+      const item = collection.filter((coll) => coll.title.includes(title))
+      return item[0]
     }
   },
   Mutation: {
@@ -156,8 +167,9 @@ const resolvers = {
     },
     addToCollection: async (_, { title }) => {
       return await new Promise((resolve) => {
-        collection.push({ id: title })
-        resolve({ id: title })
+        const id = Date.now()
+        collection.push({ id, title })
+        resolve({ id })
       })
     }
   },

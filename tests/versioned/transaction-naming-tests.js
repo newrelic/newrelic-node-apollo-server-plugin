@@ -136,6 +136,30 @@ function createTransactionTests(t, frameworkName) {
     })
   })
 
+  t.test(
+    'anonymous query, only returns reserved field(id) should return deepest unique path',
+    (t) => {
+      const { helper, serverUrl } = t.context
+
+      const query = `query {
+      searchCollection(title: "True life") {
+        id
+      }
+    }`
+
+      helper.agent.on('transactionFinished', (transaction) => {
+        t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${ANON_PLACEHOLDER}/searchCollection`)
+      })
+
+      executeQuery(serverUrl, query, (err, result) => {
+        t.error(err)
+        checkResult(t, result, () => {
+          t.end()
+        })
+      })
+    }
+  )
+
   t.test('named query, multi-level should return deepest unique path', (t) => {
     const { helper, serverUrl } = t.context
 
