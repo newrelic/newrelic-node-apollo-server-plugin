@@ -63,6 +63,8 @@ const magazines = [
   }
 ]
 
+const collection = []
+
 function getTypeDefs(gql) {
   const typeDefs = gql`
     union SearchResult = Book | Magazine
@@ -103,8 +105,14 @@ function getTypeDefs(gql) {
       library(branch: String!): Library
     }
 
+    type Collection {
+      "concat string"
+      id: String!
+    }
+
     type Mutation {
       addThing(name: String!): String!
+      addToCollection(title: String!): Collection!
     }
   `
   return typeDefs
@@ -146,6 +154,12 @@ const resolvers = {
       })
       const result = await promise
       return result
+    },
+    addToCollection: async (_, { title }) => {
+      return await new Promise((resolve) => {
+        collection.push({ id: title })
+        resolve({ id: title })
+      })
     }
   },
   Library: {

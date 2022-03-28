@@ -194,6 +194,33 @@ function createTransactionTests(t, frameworkName) {
     })
   })
 
+  t.test(
+    'anonymous mutation, single level, reserved field, should use anonymous placeholder',
+    (t) => {
+      const { helper, serverUrl } = t.context
+
+      const query = `mutation {
+      addToCollection(title: "Don Quixote") {
+        id
+      }
+    }`
+
+      helper.agent.on('transactionFinished', (transaction) => {
+        t.equal(
+          transaction.name,
+          `${EXPECTED_PREFIX}//mutation/${ANON_PLACEHOLDER}/addToCollection`
+        )
+      })
+
+      executeQuery(serverUrl, query, (err, result) => {
+        t.error(err)
+        checkResult(t, result, () => {
+          t.end()
+        })
+      })
+    }
+  )
+
   t.test('anonymous mutation, single level, should use anonymous placeholder', (t) => {
     const { helper, serverUrl } = t.context
 
@@ -203,6 +230,28 @@ function createTransactionTests(t, frameworkName) {
 
     helper.agent.on('transactionFinished', (transaction) => {
       t.equal(transaction.name, `${EXPECTED_PREFIX}//mutation/${ANON_PLACEHOLDER}/addThing`)
+    })
+
+    executeQuery(serverUrl, query, (err, result) => {
+      t.error(err)
+      checkResult(t, result, () => {
+        t.end()
+      })
+    })
+  })
+
+  t.test('named mutation, single level, reserved field, should use mutation name', (t) => {
+    const { helper, serverUrl } = t.context
+
+    const expectedName = 'addIt'
+    const query = `mutation ${expectedName} {
+      addToCollection(title: "Don Quixote") {
+        id
+      }
+    }`
+
+    helper.agent.on('transactionFinished', (transaction) => {
+      t.equal(transaction.name, `${EXPECTED_PREFIX}//mutation/${expectedName}/addToCollection`)
     })
 
     executeQuery(serverUrl, query, (err, result) => {
