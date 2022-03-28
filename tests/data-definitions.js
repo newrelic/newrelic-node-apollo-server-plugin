@@ -106,7 +106,6 @@ function getTypeDefs(gql) {
     }
 
     type Collection {
-      "concat string"
       id: String!
     }
 
