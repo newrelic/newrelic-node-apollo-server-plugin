@@ -1,3 +1,7 @@
+### v1.2.3 (2022-03-29)
+
+* Fixed an issue where a mutation or query selected only reserved fields and the segment name lacked the mutation/query name
+
 ### v1.2.2 (2022-03-24)
 
 * Updated error helper to report the original error when applicable.
