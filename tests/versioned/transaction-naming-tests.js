@@ -142,10 +142,10 @@ function createTransactionTests(t, frameworkName) {
       const { helper, serverUrl } = t.context
 
       const query = `query {
-      searchCollection(title: "True life") {
-        id
-      }
-    }`
+        searchCollection(title: "True life") {
+          id
+        }
+      }`
 
       helper.agent.on('transactionFinished', (transaction) => {
         t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${ANON_PLACEHOLDER}/searchCollection`)
@@ -224,10 +224,10 @@ function createTransactionTests(t, frameworkName) {
       const { helper, serverUrl } = t.context
 
       const query = `mutation {
-      addToCollection(title: "Don Quixote") {
-        id
-      }
-    }`
+        addToCollection(title: "Don Quixote") {
+          id
+        }
+      }`
 
       helper.agent.on('transactionFinished', (transaction) => {
         t.equal(
