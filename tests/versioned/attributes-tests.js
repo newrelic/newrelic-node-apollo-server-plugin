@@ -379,7 +379,9 @@ function createAttributesTests(t) {
         'graphql.field.args.blee': 'second'
       }
       const resolveAttributes = resolveHelloSegment.attributes.get(SEGMENT_DESTINATION)
+      const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
       t.matches(resolveAttributes, expectedArgAttributes)
+      t.matches(operationAttributes, expectedArgAttributes)
     })
 
     executeQuery(serverUrl, query, (err) => {
