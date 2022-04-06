@@ -348,7 +348,9 @@ function createAttributesTests(t) {
       const resolveHelloSegment = operationSegment.children[0]
 
       const resolveAttributes = resolveHelloSegment.attributes.get(SEGMENT_DESTINATION)
+      const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
       t.matches(resolveAttributes, { 'graphql.field.args.name': 'added thing!' })
+      t.matches(operationAttributes, { 'graphql.field.args.name': 'added thing!' })
     })
 
     executeQuery(serverUrl, query, (err) => {
@@ -379,7 +381,9 @@ function createAttributesTests(t) {
         'graphql.field.args.blee': 'second'
       }
       const resolveAttributes = resolveHelloSegment.attributes.get(SEGMENT_DESTINATION)
+      const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
       t.matches(resolveAttributes, expectedArgAttributes)
+      t.matches(operationAttributes, expectedArgAttributes)
     })
 
     executeQuery(serverUrl, query, (err) => {

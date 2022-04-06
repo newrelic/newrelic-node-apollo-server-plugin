@@ -57,7 +57,7 @@ function _getLibraryTypeDef(gql) {
   return typeDefs
 }
 
-// https://www.apollographql.com/docs/federation/api/apollo-federation/#__resolvereference
+// https://www.apollographql.com/docs/federation/api/apollo-subgraph/#__resolvereference
 function _getLibraryResolvers() {
   const resolvers = {
     Library: {
