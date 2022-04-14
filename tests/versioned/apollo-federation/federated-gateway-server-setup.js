@@ -95,7 +95,7 @@ function setupFederatedGatewayServerTests(options, agentConfig) {
       helper.unload()
       helper = null
 
-      clearCachedModules(['express', 'apollo-server', '@apollo/gateway', '@apollo/federation'])
+      clearCachedModules(['express', 'apollo-server', '@apollo/gateway', '@apollo/subgraph'])
     })
 
     createTests(t, WEB_FRAMEWORK)
@@ -143,7 +143,7 @@ async function loadMagazines({ ApolloServer, gql }, plugins) {
 }
 
 async function loadServer(ApolloServer, config, plugins) {
-  const { buildSubgraphSchema } = require('@apollo/federation')
+  const { buildSubgraphSchema } = require('@apollo/subgraph')
 
   const { name, typeDefs, resolvers } = config
 

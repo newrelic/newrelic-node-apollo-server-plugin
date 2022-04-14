@@ -13,7 +13,7 @@
         "node": ">=12.13.0"
       },
       "dependencies": {
-        "@apollo/federation": "latest",
+        "@apollo/subgraph": "latest",
         "@apollo/gateway": "latest",
         "@opentelemetry/api": "latest",
         "apollo-server": "latest",
