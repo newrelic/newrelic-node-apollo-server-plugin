@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "Mon Apr 11 2022 09:38:48 GMT-0700 (Pacific Daylight Time)",
+  "lastUpdated": "Thu Apr 14 2022 14:53:30 GMT-0400 (Eastern Daylight Time)",
   "projectName": "New Relic Node Apollo Server Plugin",
   "projectUrl": "https://github.com/newrelic/newrelic-node-apollo-server-plugin/",
   "includeOptDeps": false,
@@ -32,15 +32,15 @@
       "licenseTextSource": "file",
       "publisher": "New Relic"
     },
-    "@newrelic/test-utilities@6.1.1": {
+    "@newrelic/test-utilities@6.5.2": {
       "name": "@newrelic/test-utilities",
-      "version": "6.1.1",
-      "range": "^6.1.1",
+      "version": "6.5.2",
+      "range": "^6.5.2",
       "licenses": "Apache-2.0",
       "repoUrl": "https://github.com/newrelic/node-test-utilities",
-      "versionedRepoUrl": "https://github.com/newrelic/node-test-utilities/tree/v6.1.1",
+      "versionedRepoUrl": "https://github.com/newrelic/node-test-utilities/tree/v6.5.2",
       "licenseFile": "node_modules/@newrelic/test-utilities/LICENSE",
-      "licenseUrl": "https://github.com/newrelic/node-test-utilities/blob/v6.1.1/LICENSE",
+      "licenseUrl": "https://github.com/newrelic/node-test-utilities/blob/v6.5.2/LICENSE",
       "licenseTextSource": "file",
       "publisher": "New Relic Node.js agent team",
       "email": "nodejs@newrelic.com"

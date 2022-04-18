@@ -70,11 +70,11 @@ function createFederatedSegmentsTests(t) {
 
     let transactions = []
     const expectedTransactions = [
-      'WebTransaction/Expressjs/POST//query/SubGraphs__Library__0/libraries.branch',
-      'WebTransaction/Expressjs/POST//query/SubGraphs__Book__1/_entities<Library>.booksInStock',
+      /WebTransaction\/Expressjs\/POST\/\/query\/SubGraphs__Library__[\d]+\/libraries.branch/,
+      /WebTransaction\/Expressjs\/POST\/\/query\/SubGraphs__Book__[\d]+\/_entities<Library>.booksInStock/,
       // eslint-disable-next-line max-len
-      'WebTransaction/Expressjs/POST//query/SubGraphs__Magazine__2/_entities<Library>.magazinesInStock',
-      'WebTransaction/Expressjs/POST//query/SubGraphs/libraries'
+      /WebTransaction\/Expressjs\/POST\/\/query\/SubGraphs__Magazine__[\d]+\/_entities<Library>.magazinesInStock/,
+      /WebTransaction\/Expressjs\/POST\/\/query\/SubGraphs\/libraries/
     ]
 
     helper.agent.on('transactionFinished', (transaction) => {
@@ -83,8 +83,13 @@ function createFederatedSegmentsTests(t) {
 
     executeQuery(serverUrl, query, (err, result) => {
       t.equal(transactions.length, 4, 'should create 4 transactions')
+      const transactionMatches = transactions.filter((transaction) => {
+        return expectedTransactions.some((expectedTransaction) =>
+          transaction.match(expectedTransaction)
+        )
+      })
+      t.equal(transactionMatches.length, 4, 'transactions should match proper names')
 
-      t.same(transactions, expectedTransactions, 'should properly name each transaction')
       t.error(err)
       checkResult(t, result, () => {
         t.end()
