@@ -16,7 +16,7 @@
     "versioned": "npm run versioned:npm7",
     "versioned:folder": "versioned-tests --minor --all -i 2",
     "versioned:major": "versioned-tests --major --all -i 2 'tests/versioned/*'",
-    "versioned:npm6": "versioned-tests --minor --samples 15 -i 2 'tests/versioned/**/!(apollo-server-koa)' && versioned-tests --minor --all -i 2 'tests/versioned/apollo-server-koa'",
+    "versioned:npm6": "versioned-tests --minor --samples 15 -i 2 'tests/versioned/*'",
     "versioned:npm7": "versioned-tests --minor --all --samples 15 -i 2 'tests/versioned/*'"
   },
   "files": [
