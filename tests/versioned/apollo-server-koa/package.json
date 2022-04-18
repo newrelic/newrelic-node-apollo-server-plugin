@@ -8,8 +8,8 @@
         "node": ">=12"
       },
       "dependencies": {
-        "apollo-server-koa": ">=2.14.0 <3.0.2",
-        "koa": ">=2.13.0",
+        "apollo-server-koa": ">=2.14.0 <3.4.0",
+        "koa": "2.13.1",
         "graphql": "15.8.0"
       },
       "files": [
@@ -26,7 +26,7 @@
       },
       "dependencies": {
         "apollo-server-koa": ">=3.4.0",
-        "koa": ">=2.13.1"
+        "koa": "^2.13.1"
       },
       "files": [
         "segments.test.js",
