@@ -51,7 +51,7 @@ utils.executeQueryAssertResult = async function executeQueryAssertResult({
   t
 }) {
   const jsonQuery = JSON.stringify({ query })
-  const event = createApiEvent(jsonQuery)
+  const event = utils.createApiEvent(jsonQuery)
 
   if (requiresCallback(modVersion)) {
     handler(event, context, resultCallback.bind(null, t))
@@ -83,7 +83,7 @@ utils.executeQueryJson = async function executeQueryJson({
   t
 }) {
   const jsonQuery = JSON.stringify(query)
-  const event = createApiEvent(jsonQuery)
+  const event = utils.createApiEvent(jsonQuery)
 
   if (requiresCallback(modVersion)) {
     handler(event, context, (err) => {
@@ -119,7 +119,7 @@ utils.executeBatchAssertResult = async function executeBatchAssertResult({
     return { query: innerQuery }
   })
   const jsonQuery = JSON.stringify(data)
-  const event = createApiEvent(jsonQuery)
+  const event = utils.createApiEvent(jsonQuery)
 
   if (requiresCallback(modVersion)) {
     handler(event, context, resultCallback.bind(null, t))
@@ -189,7 +189,7 @@ utils.executeQueryAssertErrors = async function executeQueryAssertErrors({
   code
 }) {
   const jsonQuery = JSON.stringify({ query })
-  const event = createApiEvent(jsonQuery)
+  const event = utils.createApiEvent(jsonQuery)
 
   if (requiresCallback(modVersion)) {
     handler(event, context, errorCallback.bind(null, t, code))
@@ -205,7 +205,7 @@ utils.executeQueryAssertErrors = async function executeQueryAssertErrors({
  *
  * @param {string} query to execute
  */
-function createApiEvent(query) {
+utils.createApiEvent = function createApiEvent(query) {
   const apiGatewayProxyEvent = {
     path: '/graphql',
     headers: {

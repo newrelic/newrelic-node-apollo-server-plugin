@@ -57,7 +57,7 @@ tap.test('createPlugin edge cases', (t) => {
 
     const hooks = createPlugin(instrumentationApi)
     const operationHooks = hooks.requestDidStart({})
-    operationHooks.validationDidStart(responseContext)
+    operationHooks.willSendResponse(responseContext)
     t.equal(
       operationSegment.name,
       'GraphQL/operation/ApolloServer/undefined/<anonymous>',
@@ -75,7 +75,7 @@ tap.test('createPlugin edge cases', (t) => {
       'GraphQL/operation/ApolloServer/<unknown>',
       'should default operation name'
     )
-    operationHooks.validationDidStart(responseContext)
+    operationHooks.willSendResponse(responseContext)
     t.equal(
       operationSegment.name,
       'GraphQL/operation/ApolloServer/<unknown>',

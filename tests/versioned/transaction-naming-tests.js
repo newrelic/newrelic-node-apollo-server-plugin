@@ -656,6 +656,34 @@ function createTransactionTests(t, frameworkName) {
       t.end()
     })
   })
+
+  t.test('multiple queries do not affect transaction naming', (t) => {
+    const { helper, serverUrl } = t.context
+
+    const expectedName = 'HeyThere'
+    const query = `query ${expectedName} {
+      hello
+    }`
+    let count = 0
+
+    helper.agent.on('transactionFinished', (transaction) => {
+      t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${expectedName}/hello`)
+      count++
+    })
+
+    executeQuery(serverUrl, query, (err, result) => {
+      t.error(err)
+      checkResult(t, result, () => {
+        executeQuery(serverUrl, query, (err2, result2) => {
+          t.error(err2)
+          checkResult(t, result2, () => {
+            t.equal(count, 2, 'should have checked 2 transactions')
+            t.end()
+          })
+        })
+      })
+    })
+  })
 }
 
 module.exports = {
