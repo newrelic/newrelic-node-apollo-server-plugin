@@ -462,7 +462,7 @@ function createTransactionTests(t, frameworkName) {
   })
 
   t.test('multiple queries do not affect transaction naming', (t) => {
-    const { helper, patchedHandler, stubContext } = t.context
+    const { helper, patchedHandler, stubContext, modVersion } = t.context
 
     const expectedName = 'HeyThere'
     const query = `query ${expectedName} {
@@ -477,15 +477,30 @@ function createTransactionTests(t, frameworkName) {
 
     const jsonQuery = JSON.stringify({ query })
     const event = createApiEvent(jsonQuery)
-    patchedHandler(event, stubContext).then((result) => {
-      checkResult(t, result, async () => {
-        patchedHandler(event, stubContext).then((result2) => {
-          checkResult(t, result2, () => {
-            t.equal(count, 2, 'should have checked 2 transactions')
-            t.end()
+    if (modVersion < '2.21.1') {
+      patchedHandler(event, stubContext, (err, result) => {
+        t.error(err)
+        checkResult(t, result, () => {
+          patchedHandler(event, stubContext, (err2, result2) => {
+            t.error(err2)
+            checkResult(t, result2, () => {
+              t.equal(count, 2, 'should have checked 2 transactions')
+              t.end()
+            })
           })
         })
       })
-    })
+    } else {
+      patchedHandler(event, stubContext).then((result) => {
+        checkResult(t, result, async () => {
+          patchedHandler(event, stubContext).then((result2) => {
+            checkResult(t, result2, () => {
+              t.equal(count, 2, 'should have checked 2 transactions')
+              t.end()
+            })
+          })
+        })
+      })
+    }
   })
 }
