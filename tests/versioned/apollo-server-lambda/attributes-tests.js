@@ -5,8 +5,13 @@
 
 'use strict'
 
-const { executeQueryJson, executeQueryAssertResult } = require('./lambda-test-utils')
+const {
+  executeQueryJson,
+  executeQueryAssertResult,
+  createApiEvent
+} = require('./lambda-test-utils')
 const { findSegmentByName } = require('../../agent-testing')
+const { checkResult } = require('../common')
 
 const SEGMENT_DESTINATION = 0x20
 
@@ -615,5 +620,71 @@ function createAttributesTests(t) {
       modVersion,
       t
     })
+  })
+
+  t.test('should capture all attributes on multiple queries', (t) => {
+    const { helper, patchedHandler, stubContext, modVersion } = t.context
+
+    const expectedName = 'HeyThere'
+    const query = `query ${expectedName} {
+      hello
+    }`
+
+    let count = 0
+
+    helper.agent.on('transactionFinished', (transaction) => {
+      const operationName = `${OPERATION_PREFIX}/query/${expectedName}/hello`
+
+      const operationSegment = findSegmentByName(transaction.trace.root, operationName)
+      if (!operationSegment) {
+        const err = new Error(`Cannot find operation segment with name ${operationName}`)
+        t.error(err)
+        return
+      }
+
+      const expectedOperationAttributes = {
+        'graphql.operation.type': 'query',
+        'graphql.operation.query': query,
+        'graphql.operation.name': expectedName
+      }
+
+      const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
+
+      t.matches(
+        operationAttributes,
+        expectedOperationAttributes,
+        'should have operation attributes'
+      )
+      count++
+    })
+
+    const jsonQuery = JSON.stringify({ query })
+    const event = createApiEvent(jsonQuery)
+
+    if (modVersion < '2.21.1') {
+      patchedHandler(event, stubContext, (err, result) => {
+        t.error(err)
+        checkResult(t, result, () => {
+          patchedHandler(event, stubContext, (err2, result2) => {
+            t.error(err2)
+            checkResult(t, result2, () => {
+              t.equal(count, 2, 'should have checked 2 transactions')
+              t.end()
+            })
+          })
+        })
+      })
+    } else {
+      patchedHandler(event, stubContext).then((result) => {
+        checkResult(t, result, async () => {
+          patchedHandler(event, stubContext).then((result2) => {
+            checkResult(t, result2, () => {
+              t.equal(count, 2, 'should have checked 2 transactions')
+              t.end()
+            })
+          })
+        })
+      })
+    }
   })
 }
