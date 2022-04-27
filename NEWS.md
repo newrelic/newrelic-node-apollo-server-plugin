@@ -1,3 +1,23 @@
+### v1.3.0 (2022-04-27)
+
+* Moved naming of transaction to both `didResolveOperation`, and `willSendResponse` to properly handle when validation of document does not get invoked.
+
+* Added the graphql query arguments to the operation segment.
+
+* Removed `koa` as a test dependency from versions < 3.0.0 as it was already bundled with `apollo-sever-koa`.
+
+* Updated `async` to resolve a dev-dependency security warning.
+
+* Updated `moment` to resolve a dev-dependency security warning.
+
+* Updated `tap` to resolve a dev-dependency security warning.
+
+* Fixed subgraph transaction tests to be less rigid as the order of transactions vary.
+
+* Upgraded `@newrelic/test-utilities` to `6.5.2` to take advantage of new features.
+
+* Swapped out `@apollo/federation` for `@apollo/subgraph` in testing as it is now the recommended package for building sub graph schemas.
+
 ### v1.2.3 (2022-03-29)
 
 * Fixed an issue where a mutation or query selected only reserved fields and the segment name lacked the mutation/query name
