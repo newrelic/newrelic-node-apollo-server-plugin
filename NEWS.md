@@ -1,3 +1,12 @@
+### v2.0.0 (2022-07-27)
+
+* **BREAKING** Removed support for Node 12.
+
+  The minimum supported version is now Node v14. For further information on our support policy, see: https://docs.newrelic.com/docs/agents/nodejs-agent/getting-started/compatibility-requirements-nodejs-agent.
+
+* Added support for Node 18.
+* Resolved several dev-dependency audit warnings.
+
 ### v1.3.0 (2022-04-27)
 
 * Moved naming of transaction to both `didResolveOperation`, and `willSendResponse` to properly handle when validation of document does not get invoked.
