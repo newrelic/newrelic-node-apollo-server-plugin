@@ -5,7 +5,7 @@
 
 'use strict'
 
-const { executeQuery } = require('../test-client')
+const { executeQuery, makeRequest } = require('../test-client')
 const agentTesting = require('../agent-testing')
 
 const ANON_PLACEHOLDER = '<anonymous>'
@@ -242,6 +242,46 @@ function createErrorTests(t) {
         t.equal(resolverError.extensions.code, code)
         t.end()
       })
+    })
+  })
+
+  t.test('Invalid operation name should not crash server', (t) => {
+    const { helper, serverUrl } = t.context
+    const query = 'query Hello { hello }'
+    const expectedErrorMessage = 'Unknown operation named "testMe".'
+    const expectedErrorType = 'GraphQLError'
+
+    helper.agent.on('transactionFinished', (transaction) => {
+      const errorTraces = agentTesting.getErrorTraces(helper.agent)
+      t.equal(errorTraces.length, 1)
+
+      const errorTrace = errorTraces[0]
+
+      const [, transactionName, errorMessage, errorType, params] = errorTrace
+      t.equal(transactionName, transaction.name)
+      t.equal(errorMessage, expectedErrorMessage)
+      t.equal(errorType, expectedErrorType)
+
+      const { agentAttributes } = params
+
+      t.ok(agentAttributes.spanId)
+
+      const matchingSpan = agentTesting.findSpanById(helper.agent, agentAttributes.spanId)
+
+      const { attributes } = matchingSpan
+      t.equal(attributes['error.message'], expectedErrorMessage)
+      t.equal(attributes['error.class'], expectedErrorType)
+    })
+    const data = JSON.stringify({ query, operationName: 'testMe' })
+    makeRequest(serverUrl, data, (err, result) => {
+      t.error(err)
+      t.ok(result)
+      t.ok(result.errors)
+      t.equal(result.errors.length, 1) // should have one parsing error
+      const [resolverError] = result.errors
+      t.equal(resolverError.extensions.code, 'INTERNAL_SERVER_ERROR')
+      t.equal(resolverError.message, expectedErrorMessage)
+      t.end()
     })
   })
 }
