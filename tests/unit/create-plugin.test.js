@@ -83,4 +83,13 @@ tap.test('createPlugin edge cases', (t) => {
     )
     t.end()
   })
+
+  t.test('should not crash when ctx.operation is undefined in didResolveOperation', (t) => {
+    const hooks = createPlugin(instrumentationApi)
+    const operationHooks = hooks.requestDidStart({})
+    t.doesNotThrow(() => {
+      operationHooks.didResolveOperation({})
+    })
+    t.end()
+  })
 })
