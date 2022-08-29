@@ -1,3 +1,7 @@
+### v2.0.1 (2022-08-29)
+
+* Added defensive code to prevent plugin from masking actual graphql errors.
+
 ### v2.0.0 (2022-07-27)
 
 * **BREAKING** Removed support for Node 12.
