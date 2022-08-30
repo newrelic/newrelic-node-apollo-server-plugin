@@ -2,7 +2,7 @@
 
 # New Relic Apollo Server plugin ![Apollo Server Plugin CI](https://github.com/newrelic/newrelic-node-apollo-server-plugin/workflows/Apollo%20Server%20Plugin%20CI/badge.svg)
 
-New Relic's official Apollo Server plugin for use with the [Node.js agent](https://github.com/newrelic/node-newrelic).
+New Relic's official Apollo Server plugin for use with the [Node.js agent](https://github.com/newrelic/node-newrelic). The supported Apollo Server version is 2.14 or later.
 
 This plugin expects the Node.js agent [newrelic npm package](https://www.npmjs.com/package/newrelic) has already been installed in your application.
 
@@ -46,7 +46,7 @@ const server = new ApolloServer({
 ## Usage
 
 The New Relic plugin is known to work with the following Apollo Server modules:
-* apollo-server
+* apollo-server (>= 2.14)
 * apollo-server-express
 * apollo-server-hapi
 * apollo-server-koa
