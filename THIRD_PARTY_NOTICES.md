@@ -669,7 +669,7 @@ This product includes source derived from [@newrelic/test-utilities](https://git
 
 ### apollo-server
 
-This product includes source derived from [apollo-server](https://github.com/apollographql/apollo-server) ([v2.25.3](https://github.com/apollographql/apollo-server/tree/v2.25.3)), distributed under the [MIT License](https://github.com/apollographql/apollo-server/blob/v2.25.3/LICENSE):
+This product includes source derived from [apollo-server](https://github.com/apollographql/apollo-server) ([v3.10.2](https://github.com/apollographql/apollo-server/tree/v3.10.2)), distributed under the [MIT License](https://github.com/apollographql/apollo-server/blob/v3.10.2/LICENSE):
 
 ```
 The MIT License (MIT)

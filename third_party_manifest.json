@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "Mon Jul 25 2022 11:26:43 GMT-0400 (Eastern Daylight Time)",
+  "lastUpdated": "Mon Sep 05 2022 15:40:58 GMT+0400 (Armenia Standard Time)",
   "projectName": "New Relic Node Apollo Server Plugin",
   "projectUrl": "https://github.com/newrelic/newrelic-node-apollo-server-plugin/",
   "includeOptDeps": false,
@@ -45,18 +45,18 @@
       "publisher": "New Relic Node.js agent team",
       "email": "nodejs@newrelic.com"
     },
-    "apollo-server@2.25.3": {
+    "apollo-server@3.10.2": {
       "name": "apollo-server",
-      "version": "2.25.3",
-      "range": "^2.18.2",
+      "version": "3.10.2",
+      "range": "^3.6.4",
       "licenses": "MIT",
       "repoUrl": "https://github.com/apollographql/apollo-server",
-      "versionedRepoUrl": "https://github.com/apollographql/apollo-server/tree/v2.25.3",
+      "versionedRepoUrl": "https://github.com/apollographql/apollo-server/tree/v3.10.2",
       "licenseFile": "node_modules/apollo-server/LICENSE",
-      "licenseUrl": "https://github.com/apollographql/apollo-server/blob/v2.25.3/LICENSE",
+      "licenseUrl": "https://github.com/apollographql/apollo-server/blob/v3.10.2/LICENSE",
       "licenseTextSource": "file",
       "publisher": "Apollo",
-      "email": "opensource@apollographql.com"
+      "email": "packages@apollographql.com"
     },
     "eslint-config-prettier@8.3.0": {
       "name": "eslint-config-prettier",
