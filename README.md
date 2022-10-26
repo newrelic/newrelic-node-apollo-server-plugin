@@ -1,6 +1,7 @@
-[![Community Plus header](https://github.com/newrelic/opensource-website/raw/master/src/images/categories/Community_Plus.png)](https://opensource.newrelic.com/oss-category/#community-plus)
+[![Community Plus header](https://github.com/newrelic/opensource-website/raw/main/src/images/categories/Community_Plus.png)](https://opensource.newrelic.com/oss-category/#community-plus)
 
-# New Relic Apollo Server plugin ![Apollo Server Plugin CI](https://github.com/newrelic/newrelic-node-apollo-server-plugin/workflows/Apollo%20Server%20Plugin%20CI/badge.svg)
+# New Relic Apollo Server plugin 
+[![npm status badge][5]][6] [![Apollo Server Plugin CI][1]][2] [![codecov][3]][4]
 
 New Relic's official Apollo Server plugin for use with the [Node.js agent](https://github.com/newrelic/node-newrelic). The supported Apollo Server version is 2.14 or later.
 
@@ -290,3 +291,10 @@ If you believe you have found a security vulnerability in this project or any of
 The New Relic Apollo Server plugin is licensed under the [Apache 2.0](http://apache.org/licenses/LICENSE-2.0.txt) License.
 
 The New Relic Apollo Server plugin also uses source code from third-party libraries. You can find full details on which libraries are used and the terms under which they are licensed in the third-party notices document.
+
+[1]: https://github.com/newrelic/newrelic-node-apollo-server-plugin/workflows/Apollo%20Server%20Plugin%20CI/badge.svg
+[2]: https://github.com/newrelic/newrelic-node-apollo-server-plugin/actions/workflows/ci-workflow.yml
+[3]: https://codecov.io/gh/newrelic/newrelic-node-apollo-server-plugin/branch/main/graph/badge.svg?token=89T0ZLX43N
+[4]: https://codecov.io/gh/newrelic/newrelic-node-apollo-server-plugin
+[5]: https://img.shields.io/npm/v/@newrelic/apollo-server-plugin.svg 
+[6]: https://www.npmjs.com/package/@newrelic/apollo-server-plugin
