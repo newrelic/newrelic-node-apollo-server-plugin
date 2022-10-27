@@ -1,5 +1,5 @@
 {
   "reporter": ["html", "lcov"],
   "all": true,
-  "exclude": ["tests/*", "coverage/*", ".eslintrc.js"]
+  "exclude": ["tests/*", "coverage/*", ".eslintrc.js", "*.d.ts"]
 }
