@@ -16,8 +16,8 @@
     "versioned": "npm run versioned:npm7",
     "versioned:folder": "versioned-tests --minor --all -i 2",
     "versioned:major": "versioned-tests --major --all -i 2 'tests/versioned/*'",
-    "versioned:npm6": "c8 -o ./coverage/versioned versioned-tests --minor --samples 15 -i 2 'tests/versioned/*'",
-    "versioned:npm7": "c8 -o ./coverage/versioned versioned-tests --minor --all --samples 15 -i 2 'tests/versioned/*'"
+    "versioned:npm6": "SAMPLES=\"${SAMPLES:-15}\"; c8 -o ./coverage/versioned versioned-tests --minor --samples $SAMPLES -i 2 'tests/versioned/*'",
+    "versioned:npm7": "SAMPLES=\"${SAMPLES:-15}\"; c8 -o ./coverage/versioned versioned-tests --minor --all --samples $SAMPLES -i 2 'tests/versioned/*'"
   },
   "files": [
     "index.js",
