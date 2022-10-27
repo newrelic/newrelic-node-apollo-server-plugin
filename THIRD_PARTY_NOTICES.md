@@ -14,6 +14,7 @@ code, the source code can be found at [https://github.com/newrelic/newrelic-node
 
 **[dependencies](#dependencies)**
 
+* [c8](#c8)
 
 **[devDependencies](#devDependencies)**
 
@@ -37,6 +38,28 @@ code, the source code can be found at [https://github.com/newrelic/newrelic-node
 
 
 ## dependencies
+
+### c8
+
+This product includes source derived from [c8](https://github.com/bcoe/c8) ([v7.12.0](https://github.com/bcoe/c8/tree/v7.12.0)), distributed under the [ISC License](https://github.com/bcoe/c8/blob/v7.12.0/LICENSE.txt):
+
+```
+Copyright (c) 2017, Contributors
+
+Permission to use, copy, modify, and/or distribute this software
+for any purpose with or without fee is hereby granted, provided
+that the above copyright notice and this permission notice
+appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES
+OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE
+LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES
+OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
+WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION,
+ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+```
 
 
 ## devDependencies
@@ -669,7 +692,7 @@ This product includes source derived from [@newrelic/test-utilities](https://git
 
 ### apollo-server
 
-This product includes source derived from [apollo-server](https://github.com/apollographql/apollo-server) ([v2.25.3](https://github.com/apollographql/apollo-server/tree/v2.25.3)), distributed under the [MIT License](https://github.com/apollographql/apollo-server/blob/v2.25.3/LICENSE):
+This product includes source derived from [apollo-server](https://github.com/apollographql/apollo-server) ([v2.25.4](https://github.com/apollographql/apollo-server/tree/v2.25.4)), distributed under the [MIT License](https://github.com/apollographql/apollo-server/blob/v2.25.4/LICENSE):
 
 ```
 The MIT License (MIT)

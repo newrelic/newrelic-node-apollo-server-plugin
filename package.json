@@ -5,19 +5,19 @@
   "main": "./index.js",
   "types": "./index.d.ts",
   "scripts": {
-    "integration": "rm -f newrelic_agent.log && time tap --test-regex='(\\/|^tests\\/integration\\/.*\\.test\\.js)$' --no-coverage",
+    "integration": "rm -f newrelic_agent.log && time c8 -o ./coverage/integration tap --test-regex='(\\/|^tests\\/integration\\/.*\\.test\\.js)$' --no-coverage",
     "lint": "eslint *.js lib tests",
     "lint:fix": "eslint --fix *.js lib tests",
     "prepare": "husky install",
     "test": "npm run unit && npm run integration && npm run versioned && npm run type-check",
     "third-party-updates": "oss third-party manifest && oss third-party notices && git add THIRD_PARTY_NOTICES.md third_party_manifest.json",
-    "unit": "tap --test-regex='(\\/|^tests\\/unit\\/.*\\.test\\.js)$' --no-coverage",
+    "unit": "c8 -o ./coverage/unit tap --test-regex='(\\/|^tests\\/unit\\/.*\\.test\\.js)$' --no-coverage",
     "type-check": "tsd",
     "versioned": "npm run versioned:npm7",
     "versioned:folder": "versioned-tests --minor --all -i 2",
     "versioned:major": "versioned-tests --major --all -i 2 'tests/versioned/*'",
-    "versioned:npm6": "versioned-tests --minor --samples 15 -i 2 'tests/versioned/*'",
-    "versioned:npm7": "versioned-tests --minor --all --samples 15 -i 2 'tests/versioned/*'"
+    "versioned:npm6": "SAMPLES=\"${SAMPLES:-15}\"; c8 -o ./coverage/versioned versioned-tests --minor --samples $SAMPLES -i 2 'tests/versioned/*'",
+    "versioned:npm7": "SAMPLES=\"${SAMPLES:-15}\"; c8 -o ./coverage/versioned versioned-tests --minor --all --samples $SAMPLES -i 2 'tests/versioned/*'"
   },
   "files": [
     "index.js",
@@ -67,5 +67,8 @@
         "es2019"
       ]
     }
+  },
+  "dependencies": {
+    "c8": "^7.12.0"
   }
 }
