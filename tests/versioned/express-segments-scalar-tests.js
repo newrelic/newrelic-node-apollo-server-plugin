@@ -38,7 +38,7 @@ function createSegmentsTests(t, frameworkName, isApollo4) {
    * In apollo 4 they tweaked how the apollo server express instance is constructed.
    * It lacks a / router and routes everything through a global middleware
    */
-  function constructSegments(expectedSegments, operationSegments, isApollo4) {
+  function constructSegments(expectedSegments, operationSegments) {
     if (isApollo4) {
       expectedSegments.children.push(operationSegments)
     } else {
