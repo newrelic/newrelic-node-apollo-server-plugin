@@ -15,6 +15,8 @@ const setupErrorSchema = require('./versioned/error-setup')
 
 const WEB_FRAMEWORK = 'Expressjs'
 
+const isApollo4 = (pkg) => !!pkg.startStandaloneServer
+
 function createApolloServerSetup(loadApolloServer, clearCachedModules) {
   return setupApolloServerTests.bind(null, loadApolloServer, clearCachedModules)
 }
@@ -28,8 +30,9 @@ function setupApolloServerTests(loadApolloServer, clearCachedModules, options, a
     let server = null
     let serverUrl = null
     let helper = null
+    let apolloServerPkg = null
 
-    t.beforeEach((t) => {
+    t.before(async () => {
       // load default instrumentation. express being critical
       helper = utils.TestAgent.makeInstrumented(agentConfig)
       const createPlugin = require('../lib/create-plugin')
@@ -40,37 +43,49 @@ function setupApolloServerTests(loadApolloServer, clearCachedModules, options, a
       const instrumentationPlugin = createPlugin(nrApi.shim, pluginConfig)
 
       // Do after instrumentation to ensure express isn't loaded too soon.
-      const apolloServerPkg = loadApolloServer()
-      const { ApolloServer, gql } = apolloServerPkg
+      apolloServerPkg = loadApolloServer()
+      const { ApolloServer, gql, startStandaloneServer } = apolloServerPkg
       const schema = getTypeDefs(gql)
-      const errorSchema = setupErrorSchema(apolloServerPkg, resolvers)
+      const errorSchema = setupErrorSchema(
+        apolloServerPkg,
+        resolvers,
+        gql,
+        isApollo4(apolloServerPkg)
+      )
 
       server = new ApolloServer({
         typeDefs: [schema, errorSchema],
         resolvers,
-        plugins: [...startingPlugins, instrumentationPlugin]
+        plugins: [...startingPlugins, instrumentationPlugin],
+        allowBatchedHttpRequests: true
       })
 
-      return server.listen({ port: 0 }).then(({ url }) => {
-        serverUrl = url
+      const { url } = startStandaloneServer
+        ? await startStandaloneServer(server, { listen: { port: 0 } })
+        : await server.listen({ port: 0 })
 
-        t.context.helper = helper
-        t.context.serverUrl = serverUrl
-      })
+      serverUrl = url
+
+      t.context.helper = helper
+      t.context.serverUrl = serverUrl
     })
 
     t.afterEach(() => {
-      server.stop()
+      helper.agent.errors.traceAggregator.clear()
+    })
+
+    t.teardown(async () => {
+      await server.stop()
 
       helper.unload()
       server = null
       serverUrl = null
       helper = null
 
-      clearCachedModules(['express', 'apollo-server'])
+      clearCachedModules(['express'])
     })
 
-    createTests(t, WEB_FRAMEWORK)
+    createTests(t, WEB_FRAMEWORK, isApollo4(apolloServerPkg))
   })
 }
 
