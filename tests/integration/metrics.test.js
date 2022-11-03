@@ -32,7 +32,7 @@ function createMetricsTests(t) {
       hello
     }`
 
-    helper.agent.on('transactionFinished', () => {
+    helper.agent.once('transactionFinished', () => {
       const operationPart = `query/${ANON_PLACEHOLDER}/hello`
       t.metrics([`${OPERATION_PREFIX}/${operationPart}`, `${RESOLVE_PREFIX}/hello`])
     })
@@ -51,7 +51,7 @@ function createMetricsTests(t) {
       hello
     }`
 
-    helper.agent.on('transactionFinished', () => {
+    helper.agent.once('transactionFinished', () => {
       const operationPart = `query/${expectedName}/hello`
       t.metrics([`${OPERATION_PREFIX}/${operationPart}`, `${RESOLVE_PREFIX}/hello`])
     })
@@ -78,7 +78,7 @@ function createMetricsTests(t) {
 
     const path = 'libraries.books'
 
-    helper.agent.on('transactionFinished', () => {
+    helper.agent.once('transactionFinished', () => {
       const operationPart = `query/${ANON_PLACEHOLDER}/${path}`
 
       t.metrics([
@@ -118,7 +118,7 @@ function createMetricsTests(t) {
 
     const queries = [query1, query2]
 
-    helper.agent.on('transactionFinished', () => {
+    helper.agent.once('transactionFinished', () => {
       const operationPart1 = `query/${expectedName1}/${path1}`
       const operationPart2 = `mutation/${ANON_PLACEHOLDER}/addThing`
 
@@ -154,7 +154,7 @@ function createMetricsTests(t) {
     const persistedQuery = `${serverUrl}?extensions={"persistedQuery":{"version":1,
       "sha256Hash":"${querySha}"}}`
 
-    helper.agent.on('transactionFinished', () => {
+    helper.agent.once('transactionFinished', () => {
       const operationPart = `query/${ANON_PLACEHOLDER}/${path}`
 
       t.metrics([
@@ -192,7 +192,7 @@ function createMetricsTests(t) {
       }
     ` // missing closing }
 
-    helper.agent.on('transactionFinished', () => {
+    helper.agent.once('transactionFinished', () => {
       t.metrics([`${OPERATION_PREFIX}/${UNKNOWN_OPERATION}`])
     })
 
@@ -223,7 +223,7 @@ function createMetricsTests(t) {
 
     const path = 'library.books.LibraryBook'
 
-    helper.agent.on('transactionFinished', () => {
+    helper.agent.once('transactionFinished', () => {
       const operationPart = `query/${expectedName}/${path}`
 
       t.metrics([
@@ -260,7 +260,7 @@ function createMetricsTests(t) {
 
     const path = 'library.books.LibraryBook'
 
-    helper.agent.on('transactionFinished', () => {
+    helper.agent.once('transactionFinished', () => {
       const operationPart = `query/${expectedName}/${path}`
 
       t.metrics([

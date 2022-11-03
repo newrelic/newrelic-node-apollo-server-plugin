@@ -16,6 +16,7 @@ function loadApolloServer() {
 
 // Required to delete modules from same location.
 function clearCachedModules(modules) {
+  modules.push('apollo-server')
   modules.forEach((moduleName) => {
     const requirePath = require.resolve(moduleName)
     delete require.cache[requirePath]

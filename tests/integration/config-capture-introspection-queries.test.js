@@ -59,7 +59,7 @@ introspection types`,
       (t) => {
         const { helper, serverUrl } = t.context
 
-        helper.agent.on('transactionFinished', (transaction) => {
+        helper.agent.once('transactionFinished', (transaction) => {
           t.equal(transaction.ignore, ignore, `should set transaction.ignore to ${ignore}`)
         })
 
@@ -78,7 +78,7 @@ does not contain an introspection type`,
     (t) => {
       const { helper, serverUrl } = t.context
 
-      helper.agent.on('transactionFinished', (transaction) => {
+      helper.agent.once('transactionFinished', (transaction) => {
         t.notOk(
           transaction.ignore,
           'should set transaction.ignore to false when not an introspection type'
