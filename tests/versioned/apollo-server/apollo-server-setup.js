@@ -12,15 +12,27 @@ const setupApolloServerTests = createApolloServerSetup(loadApolloServer, clearCa
 // Required to load modules starting from this folder.
 // This is important so that versioned testing uses version permutations not the  dev dependency version.
 function loadApolloServer() {
-  return require('apollo-server')
+  try {
+    return require('apollo-server')
+  } catch {
+    const gql = require('graphql-tag')
+    const apolloServer = require('@apollo/server')
+    const { startStandaloneServer } = require('@apollo/server/standalone')
+    return { gql, ...apolloServer, startStandaloneServer }
+  }
 }
 
 // Required to delete modules from same location.
 function clearCachedModules(modules) {
   modules.push('apollo-server')
+  modules.push('@apollo/server')
   modules.forEach((moduleName) => {
-    const requirePath = require.resolve(moduleName)
-    delete require.cache[requirePath]
+    try {
+      const requirePath = require.resolve(moduleName)
+      delete require.cache[requirePath]
+    } catch {
+      // silent
+    }
   })
 }
 

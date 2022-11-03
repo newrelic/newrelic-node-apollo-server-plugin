@@ -2,6 +2,9 @@
   "name": "apollo-server-tests",
   "version": "0.0.0",
   "private": true,
+  "engines": {
+    "node": ">=14"
+  },
   "tests": [
     {
       "engines": {
@@ -11,6 +14,23 @@
         "apollo-server-express": ">=2.14.0",
         "express": "4.17.1",
         "graphql": "15.8.0"
+      },
+      "files": [
+        "transaction-naming.test.js",
+        "segments.test.js",
+        "errors.test.js",
+        "attributes.test.js",
+        "query-obfuscation.tests.js"
+      ]
+    },
+    {
+      "engines": {
+        "node": ">=14"
+      },
+      "dependencies": {
+        "@apollo/server": ">=4.0.0",
+        "graphql": "16.6.0",
+        "body-parser": "latest"
       },
       "files": [
         "transaction-naming.test.js",
