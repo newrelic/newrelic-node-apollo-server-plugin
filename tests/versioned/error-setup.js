@@ -73,7 +73,7 @@ function createErrorClasses() {
  * @param {Object} resolvers gql resolver definition
  * @returns {Object} graphql schema
  */
-module.exports = function setupErrorResolvers(serverPkgExport, resolvers, gql, isApollo4) {
+module.exports = function setupErrorResolvers(serverPkgExport, resolvers, isApollo4) {
   const {
     CustomError,
     ForbiddenError,
@@ -111,6 +111,7 @@ module.exports = function setupErrorResolvers(serverPkgExport, resolvers, gql, i
     throw new AuthenticationError('auth error')
   }
 
+  const { gql } = serverPkgExport
   return gql`
     extend type Query {
       boom: String

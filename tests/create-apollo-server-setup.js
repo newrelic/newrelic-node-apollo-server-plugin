@@ -46,12 +46,7 @@ function setupApolloServerTests(loadApolloServer, clearCachedModules, options, a
       apolloServerPkg = loadApolloServer()
       const { ApolloServer, gql, startStandaloneServer } = apolloServerPkg
       const schema = getTypeDefs(gql)
-      const errorSchema = setupErrorSchema(
-        apolloServerPkg,
-        resolvers,
-        gql,
-        isApollo4(apolloServerPkg)
-      )
+      const errorSchema = setupErrorSchema(apolloServerPkg, resolvers, isApollo4(apolloServerPkg))
 
       server = new ApolloServer({
         typeDefs: [schema, errorSchema],
