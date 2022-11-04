@@ -40,7 +40,7 @@ function createQueryObfuscaionTests(t) {
 
     const path = 'library'
 
-    helper.agent.on('transactionFinished', (transaction) => {
+    helper.agent.once('transactionFinished', (transaction) => {
       const operationName = `${OPERATION_PREFIX}/${ANON_PLACEHOLDER}/${path}`
       const operationSegment = findSegmentByName(transaction.trace.root, operationName)
 
@@ -71,7 +71,7 @@ function createQueryObfuscaionTests(t) {
 
     const path = 'library.magazines.title'
 
-    helper.agent.on('transactionFinished', (transaction) => {
+    helper.agent.once('transactionFinished', (transaction) => {
       const operationName = `${OPERATION_PREFIX}/${ANON_PLACEHOLDER}/${path}`
       const operationSegment = findSegmentByName(transaction.trace.root, operationName)
 
@@ -109,7 +109,7 @@ function createQueryObfuscaionTests(t) {
 
     const path = 'library.magazines.title'
 
-    helper.agent.on('transactionFinished', (transaction) => {
+    helper.agent.once('transactionFinished', (transaction) => {
       const operationName = `${OPERATION_PREFIX}/${expectedName}/${path}`
       const operationSegment = findSegmentByName(transaction.trace.root, operationName)
 
@@ -142,7 +142,7 @@ function createQueryObfuscaionTests(t) {
 
     const path = 'boooook'
 
-    helper.agent.on('transactionFinished', (transaction) => {
+    helper.agent.once('transactionFinished', (transaction) => {
       const operationName = `${OPERATION_PREFIX}/${ANON_PLACEHOLDER}/${path}`
       const operationSegment = findSegmentByName(transaction.trace.root, operationName)
 
@@ -173,7 +173,7 @@ function createQueryObfuscaionTests(t) {
       }
     }`
 
-    helper.agent.on('transactionFinished', (transaction) => {
+    helper.agent.once('transactionFinished', (transaction) => {
       const operationName = UNKNOWN_OPERATION_NAME
       const operationSegment = findSegmentByName(transaction.trace.root, operationName)
 

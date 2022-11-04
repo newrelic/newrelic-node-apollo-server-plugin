@@ -12,6 +12,7 @@ utils.assert.extendTap(tap)
 
 const { getTypeDefs, resolvers } = require('../../data-definitions')
 const setupErrorSchema = require('../error-setup')
+const { clearCachedModules } = require('../../utils')
 
 const WEB_FRAMEWORK = 'Expressjs'
 
@@ -36,10 +37,22 @@ function setupApolloServerExpressTests({ suiteName, createTests, pluginConfig },
       const express = require('express')
 
       // Do after instrumentation to ensure express isn't loaded too soon.
-      const expressServerPkg = require('apollo-server-express')
-      const { ApolloServer, gql } = expressServerPkg
+      let expressServerPkg
+      let isApollo4 = false
+      try {
+        expressServerPkg = require('apollo-server-express')
+      } catch {
+        expressServerPkg = require('@apollo/server')
+        expressServerPkg.gql = require('graphql-tag')
+        expressServerPkg.bodyParser = require('body-parser')
+        expressServerPkg.expressMiddleware = require('@apollo/server/express4')
+        isApollo4 = true
+      }
+
+      const { gql, ApolloServer } = expressServerPkg
+
       const schema = getTypeDefs(gql)
-      const errorSchema = setupErrorSchema(expressServerPkg, resolvers)
+      const errorSchema = setupErrorSchema(expressServerPkg, resolvers, isApollo4)
       server = new ApolloServer({
         typeDefs: [schema, errorSchema],
         resolvers,
@@ -48,7 +61,13 @@ function setupApolloServerExpressTests({ suiteName, createTests, pluginConfig },
 
       const app = express()
       await server.start()
-      server.applyMiddleware({ app })
+
+      if (isApollo4) {
+        const { bodyParser, expressMiddleware } = expressServerPkg
+        app.use('/graphql', bodyParser.json(), expressMiddleware(server))
+      } else {
+        server.applyMiddleware({ app })
+      }
 
       return new Promise((resolve, reject) => {
         expressServer = app.listen(0, (err) => {
@@ -74,17 +93,13 @@ function setupApolloServerExpressTests({ suiteName, createTests, pluginConfig },
       serverUrl = null
       helper = null
 
-      clearCachedModules(['express', 'apollo-server-express'])
+      clearCachedModules(
+        ['express', 'apollo-server-express', '@apollo/server', '@apollo/server/express4'],
+        __dirname
+      )
     })
 
     createTests(t, WEB_FRAMEWORK)
-  })
-}
-
-function clearCachedModules(modules) {
-  modules.forEach((moduleName) => {
-    const requirePath = require.resolve(moduleName)
-    delete require.cache[requirePath]
   })
 }
 

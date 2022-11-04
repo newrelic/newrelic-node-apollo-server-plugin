@@ -12,6 +12,7 @@ utils.assert.extendTap(tap)
 
 const { getTypeDefs, resolvers } = require('../../data-definitions')
 const setupErrorSchema = require('../error-setup')
+const { clearCachedModules } = require('../../utils')
 
 const WEB_FRAMEWORK = 'Hapi'
 
@@ -72,17 +73,10 @@ function setupApolloServerHapiTests({ suiteName, createTests, pluginConfig }, co
       serverUrl = null
       helper = null
 
-      clearCachedModules(['@hapi/hapi', 'apollo-server-hapi'])
+      clearCachedModules(['@hapi/hapi', 'apollo-server-hapi'], __dirname)
     })
 
     createTests(t, WEB_FRAMEWORK)
-  })
-}
-
-function clearCachedModules(modules) {
-  modules.forEach((moduleName) => {
-    const requirePath = require.resolve(moduleName)
-    delete require.cache[requirePath]
   })
 }
 

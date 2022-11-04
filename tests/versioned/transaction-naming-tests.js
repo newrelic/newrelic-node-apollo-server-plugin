@@ -26,7 +26,7 @@ function createTransactionTests(t, frameworkName) {
       hello
     }`
 
-    helper.agent.on('transactionFinished', (transaction) => {
+    helper.agent.once('transactionFinished', (transaction) => {
       t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${ANON_PLACEHOLDER}/hello`)
     })
 
@@ -46,7 +46,7 @@ function createTransactionTests(t, frameworkName) {
       hello
     }`
 
-    helper.agent.on('transactionFinished', (transaction) => {
+    helper.agent.once('transactionFinished', (transaction) => {
       t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${expectedName}/hello`)
     })
 
@@ -67,7 +67,7 @@ function createTransactionTests(t, frameworkName) {
       const expectedName = '__ApolloServiceHealthCheck__'
       const query = `query ${expectedName} { __typename }`
 
-      helper.agent.on('transactionFinished', (transaction) => {
+      helper.agent.once('transactionFinished', (transaction) => {
         t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${expectedName}`)
       })
 
@@ -96,7 +96,7 @@ function createTransactionTests(t, frameworkName) {
 
     const path = 'library'
 
-    helper.agent.on('transactionFinished', (transaction) => {
+    helper.agent.once('transactionFinished', (transaction) => {
       t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${ANON_PLACEHOLDER}/${path}`)
     })
 
@@ -124,7 +124,7 @@ function createTransactionTests(t, frameworkName) {
 
     const path = 'libraries.books'
 
-    helper.agent.on('transactionFinished', (transaction) => {
+    helper.agent.once('transactionFinished', (transaction) => {
       t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${ANON_PLACEHOLDER}/${path}`)
     })
 
@@ -147,7 +147,7 @@ function createTransactionTests(t, frameworkName) {
         }
       }`
 
-      helper.agent.on('transactionFinished', (transaction) => {
+      helper.agent.once('transactionFinished', (transaction) => {
         t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${ANON_PLACEHOLDER}/searchCollection`)
       })
 
@@ -177,7 +177,7 @@ function createTransactionTests(t, frameworkName) {
 
     const path = 'libraries.books'
 
-    helper.agent.on('transactionFinished', (transaction) => {
+    helper.agent.once('transactionFinished', (transaction) => {
       t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${expectedName}/${path}`)
     })
 
@@ -206,7 +206,7 @@ function createTransactionTests(t, frameworkName) {
 
     const path = 'libraries.books'
 
-    helper.agent.on('transactionFinished', (transaction) => {
+    helper.agent.once('transactionFinished', (transaction) => {
       t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${expectedName}/${path}`)
     })
 
@@ -229,7 +229,7 @@ function createTransactionTests(t, frameworkName) {
         }
       }`
 
-      helper.agent.on('transactionFinished', (transaction) => {
+      helper.agent.once('transactionFinished', (transaction) => {
         t.equal(
           transaction.name,
           `${EXPECTED_PREFIX}//mutation/${ANON_PLACEHOLDER}/addToCollection`
@@ -252,7 +252,7 @@ function createTransactionTests(t, frameworkName) {
       addThing(name: "added thing!")
     }`
 
-    helper.agent.on('transactionFinished', (transaction) => {
+    helper.agent.once('transactionFinished', (transaction) => {
       t.equal(transaction.name, `${EXPECTED_PREFIX}//mutation/${ANON_PLACEHOLDER}/addThing`)
     })
 
@@ -274,7 +274,7 @@ function createTransactionTests(t, frameworkName) {
       }
     }`
 
-    helper.agent.on('transactionFinished', (transaction) => {
+    helper.agent.once('transactionFinished', (transaction) => {
       t.equal(transaction.name, `${EXPECTED_PREFIX}//mutation/${expectedName}/addToCollection`)
     })
 
@@ -294,7 +294,7 @@ function createTransactionTests(t, frameworkName) {
       addThing(name: "added thing!")
     }`
 
-    helper.agent.on('transactionFinished', (transaction) => {
+    helper.agent.once('transactionFinished', (transaction) => {
       t.equal(transaction.name, `${EXPECTED_PREFIX}//mutation/${expectedName}/addThing`)
     })
 
@@ -313,7 +313,7 @@ function createTransactionTests(t, frameworkName) {
       paramQuery(blah: "blah", blee: "blee")
     }`
 
-    helper.agent.on('transactionFinished', (transaction) => {
+    helper.agent.once('transactionFinished', (transaction) => {
       t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${ANON_PLACEHOLDER}/paramQuery`)
     })
 
@@ -333,7 +333,7 @@ function createTransactionTests(t, frameworkName) {
       paramQuery(blah: "blah")
     }`
 
-    helper.agent.on('transactionFinished', (transaction) => {
+    helper.agent.once('transactionFinished', (transaction) => {
       t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${expectedName}/paramQuery`)
     })
 
@@ -362,7 +362,7 @@ function createTransactionTests(t, frameworkName) {
 
     const path = 'library.books'
 
-    helper.agent.on('transactionFinished', (transaction) => {
+    helper.agent.once('transactionFinished', (transaction) => {
       t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${expectedName}/${path}`)
     })
 
@@ -397,7 +397,7 @@ function createTransactionTests(t, frameworkName) {
 
     const queries = [query1, query2]
 
-    helper.agent.on('transactionFinished', (transaction) => {
+    helper.agent.once('transactionFinished', (transaction) => {
       const expectedQuery1Name = `query/${expectedName1}/${path1}`
       const expectedQuery2Name = `mutation/${ANON_PLACEHOLDER}/addThing`
       t.equal(
@@ -431,7 +431,7 @@ function createTransactionTests(t, frameworkName) {
 
     const deepestPath = 'search<Book>.title'
 
-    helper.agent.on('transactionFinished', (transaction) => {
+    helper.agent.once('transactionFinished', (transaction) => {
       t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${expectedName}/${deepestPath}`)
     })
 
@@ -472,7 +472,7 @@ function createTransactionTests(t, frameworkName) {
 
     const deepestPath = 'search'
 
-    helper.agent.on('transactionFinished', (transaction) => {
+    helper.agent.once('transactionFinished', (transaction) => {
       t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${expectedName}/${deepestPath}`)
     })
 
@@ -513,7 +513,7 @@ function createTransactionTests(t, frameworkName) {
 
     const path = 'library.books.LibraryBook'
 
-    helper.agent.on('transactionFinished', (transaction) => {
+    helper.agent.once('transactionFinished', (transaction) => {
       t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${expectedName}/${path}`)
     })
 
@@ -543,7 +543,7 @@ function createTransactionTests(t, frameworkName) {
 
     const path = 'library.books.LibraryBook'
 
-    helper.agent.on('transactionFinished', (transaction) => {
+    helper.agent.once('transactionFinished', (transaction) => {
       t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${expectedName}/${path}`)
     })
 
@@ -568,7 +568,7 @@ function createTransactionTests(t, frameworkName) {
       }
     ` // missing closing }
 
-    helper.agent.on('transactionFinished', (transaction) => {
+    helper.agent.once('transactionFinished', (transaction) => {
       t.equal(transaction.name, `${EXPECTED_PREFIX}//*`)
     })
 
@@ -603,7 +603,7 @@ function createTransactionTests(t, frameworkName) {
 
     const path = 'libraries.books.doesnotexist.name'
 
-    helper.agent.on('transactionFinished', (transaction) => {
+    helper.agent.once('transactionFinished', (transaction) => {
       t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${ANON_PLACEHOLDER}/${path}`)
     })
 
@@ -639,7 +639,7 @@ function createTransactionTests(t, frameworkName) {
 
     const path = 'libraries.books.doesnotexist.name'
 
-    helper.agent.on('transactionFinished', (transaction) => {
+    helper.agent.once('transactionFinished', (transaction) => {
       t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${expectedName}/${path}`)
     })
 
@@ -666,9 +666,14 @@ function createTransactionTests(t, frameworkName) {
     }`
     let count = 0
 
-    helper.agent.on('transactionFinished', (transaction) => {
+    let transactionHandler = (transaction) => {
       t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${expectedName}/hello`)
       count++
+    }
+
+    helper.agent.on('transactionFinished', transactionHandler)
+    t.teardown(() => {
+      helper.agent.removeListener('transactionFinished', transactionHandler)
     })
 
     executeQuery(serverUrl, query, (err, result) => {

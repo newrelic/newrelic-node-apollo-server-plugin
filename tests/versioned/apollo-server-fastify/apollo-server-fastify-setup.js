@@ -12,6 +12,7 @@ utils.assert.extendTap(tap)
 
 const { getTypeDefs, resolvers } = require('../../data-definitions')
 const setupErrorSchema = require('../error-setup')
+const { clearCachedModules } = require('../../utils')
 
 const WEB_FRAMEWORK = 'WebFrameworkUri/Fastify'
 
@@ -73,17 +74,10 @@ function setupApolloServerFastifyTests({ suiteName, createTests, pluginConfig },
       serverUrl = null
       helper = null
 
-      clearCachedModules(['fastify', 'apollo-server-fastify'])
+      clearCachedModules(['fastify', 'apollo-server-fastify'], __dirname)
     })
 
     createTests(t, WEB_FRAMEWORK)
-  })
-}
-
-function clearCachedModules(modules) {
-  modules.forEach((moduleName) => {
-    const requirePath = require.resolve(moduleName)
-    delete require.cache[requirePath]
   })
 }
 

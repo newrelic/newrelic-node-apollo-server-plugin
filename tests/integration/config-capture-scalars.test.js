@@ -59,7 +59,7 @@ function createNoScalarTests(t) {
 
     const path = 'library'
 
-    helper.agent.on('transactionFinished', (transaction) => {
+    helper.agent.once('transactionFinished', (transaction) => {
       const operationPart = `query/${expectedName}/${path}`
       const expectedSegments = [
         {
@@ -141,7 +141,7 @@ function createScalarTests(t) {
 
     const path = 'library'
 
-    helper.agent.on('transactionFinished', (transaction) => {
+    helper.agent.once('transactionFinished', (transaction) => {
       const operationPart = `query/${expectedName}/${path}`
       const expectedSegments = [
         {

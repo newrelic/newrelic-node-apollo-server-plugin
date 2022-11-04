@@ -6,20 +6,13 @@
 'use strict'
 
 const createApolloServerSetup = require('../create-apollo-server-setup')
+const { version: pkgVersion } = require('apollo-server/package.json')
 
-const setupApolloServerTests = createApolloServerSetup(loadApolloServer, clearCachedModules)
+const setupApolloServerTests = createApolloServerSetup(loadApolloServer, __dirname, pkgVersion)
 
 // Required to load modules starting from this folder.
 function loadApolloServer() {
   return require('apollo-server')
-}
-
-// Required to delete modules from same location.
-function clearCachedModules(modules) {
-  modules.forEach((moduleName) => {
-    const requirePath = require.resolve(moduleName)
-    delete require.cache[requirePath]
-  })
 }
 
 module.exports = {

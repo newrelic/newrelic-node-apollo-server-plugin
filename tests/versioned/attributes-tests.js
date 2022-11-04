@@ -28,7 +28,7 @@ function createAttributesTests(t) {
       hello
     }`
 
-    helper.agent.on('transactionFinished', (transaction) => {
+    helper.agent.once('transactionFinished', (transaction) => {
       const operationName = `${OPERATION_PREFIX}/query/${ANON_PLACEHOLDER}/hello`
       const operationSegment = findSegmentByName(transaction.trace.root, operationName)
 
@@ -77,7 +77,7 @@ function createAttributesTests(t) {
       hello
     }`
 
-    helper.agent.on('transactionFinished', (transaction) => {
+    helper.agent.once('transactionFinished', (transaction) => {
       const operationName = `${OPERATION_PREFIX}/query/${expectedName}/hello`
       const operationSegment = findSegmentByName(transaction.trace.root, operationName)
 
@@ -133,7 +133,7 @@ function createAttributesTests(t) {
 
     const deepestPath = 'libraries.books'
 
-    helper.agent.on('transactionFinished', (transaction) => {
+    helper.agent.once('transactionFinished', (transaction) => {
       const operationName = `${OPERATION_PREFIX}/query/${expectedName}/${deepestPath}`
       const operationSegment = findSegmentByName(transaction.trace.root, operationName)
 
@@ -203,7 +203,7 @@ function createAttributesTests(t) {
 
     const deepestPath = 'libraries.books'
 
-    helper.agent.on('transactionFinished', (transaction) => {
+    helper.agent.once('transactionFinished', (transaction) => {
       const operationName = `${OPERATION_PREFIX}/query/${expectedName}/${deepestPath}`
       const operationSegment = findSegmentByName(transaction.trace.root, operationName)
 
@@ -264,7 +264,7 @@ function createAttributesTests(t) {
       addThing(name: "added thing!")
     }`
 
-    helper.agent.on('transactionFinished', (transaction) => {
+    helper.agent.once('transactionFinished', (transaction) => {
       const operationName = `${OPERATION_PREFIX}/mutation/${expectedName}/addThing`
 
       const operationSegment = findSegmentByName(transaction.trace.root, operationName)
@@ -312,7 +312,7 @@ function createAttributesTests(t) {
       addThing(name: "added thing!")
     }`
 
-    helper.agent.on('transactionFinished', (transaction) => {
+    helper.agent.once('transactionFinished', (transaction) => {
       const operationName = `${OPERATION_PREFIX}/mutation/${expectedName}/addThing`
 
       const operationSegment = findSegmentByName(transaction.trace.root, operationName)
@@ -341,7 +341,7 @@ function createAttributesTests(t) {
       addThing(name: "added thing!")
     }`
 
-    helper.agent.on('transactionFinished', (transaction) => {
+    helper.agent.once('transactionFinished', (transaction) => {
       const operationName = `${OPERATION_PREFIX}/mutation/${expectedName}/addThing`
 
       const operationSegment = findSegmentByName(transaction.trace.root, operationName)
@@ -370,7 +370,7 @@ function createAttributesTests(t) {
       paramQuery(blah: "first", blee: "second")
     }`
 
-    helper.agent.on('transactionFinished', (transaction) => {
+    helper.agent.once('transactionFinished', (transaction) => {
       const operationName = `${OPERATION_PREFIX}/query/${expectedName}/paramQuery`
 
       const operationSegment = findSegmentByName(transaction.trace.root, operationName)
@@ -412,7 +412,7 @@ function createAttributesTests(t) {
       }
     }
 
-    helper.agent.on('transactionFinished', (transaction) => {
+    helper.agent.once('transactionFinished', (transaction) => {
       const operationName = `${OPERATION_PREFIX}/query/${expectedName}/paramQuery`
 
       const operationSegment = findSegmentByName(transaction.trace.root, operationName)
@@ -440,7 +440,7 @@ function createAttributesTests(t) {
       ciao
     }`
 
-    helper.agent.on('transactionFinished', (transaction) => {
+    helper.agent.once('transactionFinished', (transaction) => {
       const operationName = `${OPERATION_PREFIX}/query/${expectedName}/ciao`
 
       const operationSegment = findSegmentByName(transaction.trace.root, operationName)
@@ -479,7 +479,7 @@ function createAttributesTests(t) {
 
     const deepestPath = 'search<Book>.title'
 
-    helper.agent.on('transactionFinished', (transaction) => {
+    helper.agent.once('transactionFinished', (transaction) => {
       const operationName = `${OPERATION_PREFIX}/query/${expectedName}/${deepestPath}`
       const operationSegment = findSegmentByName(transaction.trace.root, operationName)
       const expectedOperationAttributes = {
@@ -536,7 +536,7 @@ function createAttributesTests(t) {
 
     const deepestPath = 'search'
 
-    helper.agent.on('transactionFinished', (transaction) => {
+    helper.agent.once('transactionFinished', (transaction) => {
       const operationName = `${OPERATION_PREFIX}/query/${expectedName}/${deepestPath}`
       const operationSegment = findSegmentByName(transaction.trace.root, operationName)
       const expectedOperationAttributes = {
@@ -585,7 +585,7 @@ function createAttributesTests(t) {
 
     let count = 0
 
-    helper.agent.on('transactionFinished', (transaction) => {
+    const transactionHandler = (transaction) => {
       const operationName = `${OPERATION_PREFIX}/query/${expectedName}/hello`
 
       const operationSegment = findSegmentByName(transaction.trace.root, operationName)
@@ -609,6 +609,11 @@ function createAttributesTests(t) {
         'should have operation attributes'
       )
       count++
+    }
+
+    helper.agent.on('transactionFinished', transactionHandler)
+    t.teardown(() => {
+      helper.agent.removeListener('transactionFinished', transactionHandler)
     })
 
     executeQuery(serverUrl, query, (err) => {
