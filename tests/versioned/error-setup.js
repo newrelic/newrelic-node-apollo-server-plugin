@@ -5,8 +5,8 @@
 
 'use strict'
 
-function createErrorClasses() {
-  const { GraphQLError } = require('graphql')
+function createErrorClasses(serverPkgExport) {
+  const { GraphQLError } = serverPkgExport.graphql
 
   class CustomError extends GraphQLError {
     constructor(message) {
@@ -81,7 +81,7 @@ module.exports = function setupErrorResolvers(serverPkgExport, resolvers, isApol
     UserInputError,
     ValidationError,
     AuthenticationError
-  } = isApollo4 ? createErrorClasses() : serverPkgExport
+  } = isApollo4 ? createErrorClasses(serverPkgExport) : serverPkgExport
 
   resolvers.Query.boom = () => {
     throw new Error('Boom goes the dynamite!')
