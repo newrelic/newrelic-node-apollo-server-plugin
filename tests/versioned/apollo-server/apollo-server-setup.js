@@ -7,33 +7,22 @@
 
 const createApolloServerSetup = require('../../create-apollo-server-setup')
 
-const setupApolloServerTests = createApolloServerSetup(loadApolloServer, clearCachedModules)
+const setupApolloServerTests = createApolloServerSetup(loadApolloServer, __dirname)
 
-// Required to load modules starting from this folder.
-// This is important so that versioned testing uses version permutations not the  dev dependency version.
+/**
+ * Gotta love require. We are trying apollo 4 based stuff
+ * first because since we have apollo server as a dev dep of this
+ * repo it'll always find that because it traverses up to look for node_modules
+ */
 function loadApolloServer() {
   try {
-    return require('apollo-server')
-  } catch {
     const gql = require('graphql-tag')
     const apolloServer = require('@apollo/server')
     const { startStandaloneServer } = require('@apollo/server/standalone')
     return { gql, ...apolloServer, startStandaloneServer }
+  } catch {
+    return require('apollo-server')
   }
-}
-
-// Required to delete modules from same location.
-function clearCachedModules(modules) {
-  modules.push('apollo-server')
-  modules.push('@apollo/server')
-  modules.forEach((moduleName) => {
-    try {
-      const requirePath = require.resolve(moduleName)
-      delete require.cache[requirePath]
-    } catch {
-      // silent
-    }
-  })
 }
 
 module.exports = {

@@ -229,7 +229,7 @@ function createErrorTests(t, _, isApollo4) {
 
         const { attributes } = matchingSpan
         t.equal(attributes['error.message'], expectedErrorMessage)
-        // t.equal(attributes['error.class'], expectedErrorType)
+        t.equal(attributes['error.class'], expectedErrorType)
       })
 
       executeQuery(serverUrl, invalidQuery, (err, result) => {

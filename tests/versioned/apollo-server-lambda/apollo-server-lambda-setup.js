@@ -13,6 +13,7 @@ utils.assert.extendTap(tap)
 
 const { getTypeDefs, resolvers } = require('../../data-definitions')
 const setupErrorSchema = require('../error-setup')
+const { clearCachedModules } = require('../../utils')
 
 const WEB_FRAMEWORK = 'WebFrameworkUri'
 
@@ -89,17 +90,10 @@ function setupApolloServerLambdaTests({ suiteName, createTests, pluginConfig }, 
       patchedHandler = null
       stubContext = null
 
-      clearCachedModules(['apollo-server-lambda'])
+      clearCachedModules(['apollo-server-lambda'], __dirname)
     })
 
     createTests(t, WEB_FRAMEWORK)
-  })
-}
-
-function clearCachedModules(modules) {
-  modules.forEach((moduleName) => {
-    const requirePath = require.resolve(moduleName)
-    delete require.cache[requirePath]
   })
 }
 

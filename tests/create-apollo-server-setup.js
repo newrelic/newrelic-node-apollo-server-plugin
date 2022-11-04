@@ -12,16 +12,17 @@ utils.assert.extendTap(tap)
 
 const { getTypeDefs, resolvers } = require('./data-definitions')
 const setupErrorSchema = require('./versioned/error-setup')
+const { clearCachedModules } = require('./utils')
 
 const WEB_FRAMEWORK = 'Expressjs'
 
 const isApollo4 = (pkg) => !!pkg.startStandaloneServer
 
-function createApolloServerSetup(loadApolloServer, clearCachedModules) {
-  return setupApolloServerTests.bind(null, loadApolloServer, clearCachedModules)
+function createApolloServerSetup(loadApolloServer, testDir) {
+  return setupApolloServerTests.bind(null, loadApolloServer, testDir)
 }
 
-function setupApolloServerTests(loadApolloServer, clearCachedModules, options, agentConfig) {
+function setupApolloServerTests(loadApolloServer, testDir, options, agentConfig) {
   const { suiteName, createTests, pluginConfig } = options
 
   tap.test(`apollo-server: ${suiteName}`, (t) => {
@@ -76,8 +77,10 @@ function setupApolloServerTests(loadApolloServer, clearCachedModules, options, a
       server = null
       serverUrl = null
       helper = null
-
-      clearCachedModules(['express'])
+      clearCachedModules(
+        ['express', 'apollo-server', '@apollo/server', '@apollo/server/express4'],
+        testDir
+      )
     })
 
     createTests(t, WEB_FRAMEWORK, isApollo4(apolloServerPkg))

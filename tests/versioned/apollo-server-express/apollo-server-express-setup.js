@@ -12,6 +12,7 @@ utils.assert.extendTap(tap)
 
 const { getTypeDefs, resolvers } = require('../../data-definitions')
 const setupErrorSchema = require('../error-setup')
+const { clearCachedModules } = require('../../utils')
 
 const WEB_FRAMEWORK = 'Expressjs'
 
@@ -92,17 +93,13 @@ function setupApolloServerExpressTests({ suiteName, createTests, pluginConfig },
       serverUrl = null
       helper = null
 
-      clearCachedModules(['express', 'apollo-server-express'])
+      clearCachedModules(
+        ['express', 'apollo-server-express', '@apollo/server', '@apollo/server/express4'],
+        __dirname
+      )
     })
 
     createTests(t, WEB_FRAMEWORK)
-  })
-}
-
-function clearCachedModules(modules) {
-  modules.forEach((moduleName) => {
-    const requirePath = require.resolve(moduleName)
-    delete require.cache[requirePath]
   })
 }
 

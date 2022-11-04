@@ -12,6 +12,7 @@ utils.assert.extendTap(tap)
 
 const { getTypeDefs, resolvers } = require('../../data-definitions')
 const setupErrorSchema = require('../error-setup')
+const { clearCachedModules } = require('../../utils')
 
 const WEB_FRAMEWORK = 'WebFrameworkUri/Koa'
 
@@ -78,17 +79,10 @@ function setupApolloServerKoaTests({ suiteName, createTests, pluginConfig }, con
       serverUrl = null
       helper = null
 
-      clearCachedModules(['koa', 'apollo-server-koa'])
+      clearCachedModules(['koa', 'apollo-server-koa'], __dirname)
     })
 
     createTests(t, WEB_FRAMEWORK)
-  })
-}
-
-function clearCachedModules(modules) {
-  modules.forEach((moduleName) => {
-    const requirePath = require.resolve(moduleName)
-    delete require.cache[requirePath]
   })
 }
 

@@ -11,6 +11,7 @@ const utils = require('@newrelic/test-utilities')
 utils.assert.extendTap(tap)
 
 const federatedData = require('./federated-data-definitions')
+const { clearCachedModules } = require('../../utils')
 
 const WEB_FRAMEWORK = 'Expressjs'
 
@@ -95,7 +96,10 @@ function setupFederatedGatewayServerTests(options, agentConfig) {
       helper.unload()
       helper = null
 
-      clearCachedModules(['express', 'apollo-server', '@apollo/gateway', '@apollo/subgraph'])
+      clearCachedModules(
+        ['express', 'apollo-server', '@apollo/gateway', '@apollo/subgraph'],
+        __dirname
+      )
     })
 
     createTests(t, WEB_FRAMEWORK)
@@ -167,13 +171,6 @@ function createIgnoreTransactionPlugin(nrApi) {
       transactionHandle.ignore()
     }
   }
-}
-
-function clearCachedModules(modules) {
-  modules.forEach((moduleName) => {
-    const requirePath = require.resolve(moduleName)
-    delete require.cache[requirePath]
-  })
 }
 
 function initializePlugins(instrumentationApi, plugins) {
