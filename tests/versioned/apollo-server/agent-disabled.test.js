@@ -6,7 +6,16 @@
 'use strict'
 
 const tap = require('tap')
-const { ApolloServer, gql } = require('apollo-server')
+let ApolloServer
+let gql
+let startStandaloneServer
+try {
+  ;({ ApolloServer } = require('@apollo/server'))
+  gql = require('graphql-tag')
+  ;({ startStandaloneServer } = require('@apollo/server/standalone'))
+} catch {
+  ;({ ApolloServer, gql } = require('apollo-server'))
+}
 
 const { getTypeDefs, resolvers } = require('../../data-definitions')
 const { executeQuery } = require('../../test-client')
@@ -19,7 +28,7 @@ tap.test('Agent disabled', (t) => {
   let server = null
   let serverUrl = null
 
-  t.beforeEach(() => {
+  t.beforeEach(async () => {
     const createPlugin = require('../../../lib/create-plugin')
 
     // when the agent is disabled, the agent API will be a no-op API
@@ -31,9 +40,10 @@ tap.test('Agent disabled', (t) => {
       plugins: [plugin]
     })
 
-    return server.listen().then(({ url }) => {
-      serverUrl = url
-    })
+    const { url } = startStandaloneServer
+      ? await startStandaloneServer(server, { listen: { port: 0 } })
+      : await server.listen({ port: 0 })
+    serverUrl = url
   })
 
   t.afterEach(() => {
@@ -52,7 +62,7 @@ tap.test('Agent disabled', (t) => {
       t.error(err)
 
       t.ok(result)
-      t.deepEqual(result.data, { hello: 'hello world' })
+      t.same(result.data, { hello: 'hello world' })
 
       if (result.errors) {
         result.errors.forEach((error) => {

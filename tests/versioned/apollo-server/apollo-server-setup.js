@@ -19,7 +19,8 @@ function loadApolloServer() {
     const gql = require('graphql-tag')
     const apolloServer = require('@apollo/server')
     const { startStandaloneServer } = require('@apollo/server/standalone')
-    return { gql, ...apolloServer, startStandaloneServer }
+    const graphql = require('graphql')
+    return { gql, ...apolloServer, startStandaloneServer, graphql }
   } catch {
     return require('apollo-server')
   }

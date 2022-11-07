@@ -24,8 +24,9 @@ function setupApolloServerExpressTests({ suiteName, createTests, pluginConfig },
     let expressServer = null
     let serverUrl = null
     let helper = null
+    let isApollo4 = false
 
-    t.beforeEach(async () => {
+    t.before(async () => {
       // load default instrumentation. express being critical
       helper = utils.TestAgent.makeInstrumented(config)
       const createPlugin = require('../../../lib/create-plugin')
@@ -38,15 +39,16 @@ function setupApolloServerExpressTests({ suiteName, createTests, pluginConfig },
 
       // Do after instrumentation to ensure express isn't loaded too soon.
       let expressServerPkg
-      let isApollo4 = false
       try {
-        expressServerPkg = require('apollo-server-express')
-      } catch {
         expressServerPkg = require('@apollo/server')
         expressServerPkg.gql = require('graphql-tag')
         expressServerPkg.bodyParser = require('body-parser')
-        expressServerPkg.expressMiddleware = require('@apollo/server/express4')
+        const { expressMiddleware } = require('@apollo/server/express4')
+        expressServerPkg.expressMiddleware = expressMiddleware
+        expressServerPkg.graphql = require('graphql')
         isApollo4 = true
+      } catch {
+        expressServerPkg = require('apollo-server-express')
       }
 
       const { gql, ApolloServer } = expressServerPkg
@@ -56,7 +58,8 @@ function setupApolloServerExpressTests({ suiteName, createTests, pluginConfig },
       server = new ApolloServer({
         typeDefs: [schema, errorSchema],
         resolvers,
-        plugins: [plugin]
+        plugins: [plugin],
+        allowBatchedHttpRequests: true
       })
 
       const app = express()
@@ -75,7 +78,9 @@ function setupApolloServerExpressTests({ suiteName, createTests, pluginConfig },
             reject(err)
           }
 
-          serverUrl = `http://localhost:${expressServer.address().port}${server.graphqlPath}`
+          serverUrl = `http://localhost:${expressServer.address().port}${
+            server.graphqlPath || '/graphql'
+          }`
 
           t.context.helper = helper
           t.context.serverUrl = serverUrl
@@ -85,6 +90,10 @@ function setupApolloServerExpressTests({ suiteName, createTests, pluginConfig },
     })
 
     t.afterEach(() => {
+      helper.agent.errors.traceAggregator.clear()
+    })
+
+    t.teardown(() => {
       expressServer && expressServer.close()
       server && server.stop()
 
@@ -99,7 +108,7 @@ function setupApolloServerExpressTests({ suiteName, createTests, pluginConfig },
       )
     })
 
-    createTests(t, WEB_FRAMEWORK)
+    createTests(t, WEB_FRAMEWORK, isApollo4)
   })
 }
 

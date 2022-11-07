@@ -30,7 +30,8 @@
       "dependencies": {
         "@apollo/server": ">=4.0.0",
         "graphql": "16.6.0",
-        "body-parser": "latest"
+        "body-parser": "latest",
+        "graphql-tag": "latest"
       },
       "files": [
         "transaction-naming.test.js",
