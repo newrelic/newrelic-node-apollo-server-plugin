@@ -1,25 +1,11 @@
 {
-  "lastUpdated": "Thu Oct 27 2022 17:00:43 GMT-0400 (Eastern Daylight Time)",
+  "lastUpdated": "Tue Nov 08 2022 10:50:03 GMT-0500 (Eastern Standard Time)",
   "projectName": "New Relic Node Apollo Server Plugin",
   "projectUrl": "https://github.com/newrelic/newrelic-node-apollo-server-plugin/",
   "includeOptDeps": false,
   "optionalDependencies": {},
   "includeDev": true,
-  "dependencies": {
-    "c8@7.12.0": {
-      "name": "c8",
-      "version": "7.12.0",
-      "range": "^7.12.0",
-      "licenses": "ISC",
-      "repoUrl": "https://github.com/bcoe/c8",
-      "versionedRepoUrl": "https://github.com/bcoe/c8/tree/v7.12.0",
-      "licenseFile": "node_modules/c8/LICENSE.txt",
-      "licenseUrl": "https://github.com/bcoe/c8/blob/v7.12.0/LICENSE.txt",
-      "licenseTextSource": "file",
-      "publisher": "Ben Coe",
-      "email": "ben@npmjs.com"
-    }
-  },
+  "dependencies": {},
   "devDependencies": {
     "@newrelic/eslint-config@0.0.2": {
       "name": "@newrelic/eslint-config",
@@ -71,6 +57,19 @@
       "licenseTextSource": "file",
       "publisher": "Apollo",
       "email": "opensource@apollographql.com"
+    },
+    "c8@7.12.0": {
+      "name": "c8",
+      "version": "7.12.0",
+      "range": "^7.12.0",
+      "licenses": "ISC",
+      "repoUrl": "https://github.com/bcoe/c8",
+      "versionedRepoUrl": "https://github.com/bcoe/c8/tree/v7.12.0",
+      "licenseFile": "node_modules/c8/LICENSE.txt",
+      "licenseUrl": "https://github.com/bcoe/c8/blob/v7.12.0/LICENSE.txt",
+      "licenseTextSource": "file",
+      "publisher": "Ben Coe",
+      "email": "ben@npmjs.com"
     },
     "eslint-config-prettier@8.3.0": {
       "name": "eslint-config-prettier",
