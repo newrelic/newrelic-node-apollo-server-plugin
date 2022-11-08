@@ -6,9 +6,8 @@
 'use strict'
 
 const createApolloServerSetup = require('../create-apollo-server-setup')
-const { version: pkgVersion } = require('apollo-server/package.json')
 
-const setupApolloServerTests = createApolloServerSetup(loadApolloServer, __dirname, pkgVersion)
+const setupApolloServerTests = createApolloServerSetup(loadApolloServer, __dirname)
 
 // Required to load modules starting from this folder.
 function loadApolloServer() {

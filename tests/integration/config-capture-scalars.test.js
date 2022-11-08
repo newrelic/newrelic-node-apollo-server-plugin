@@ -72,7 +72,6 @@ function createNoScalarTests(t) {
               children: [
                 { name: 'Nodejs/Middleware/Expressjs/corsMiddleware' },
                 { name: 'Nodejs/Middleware/Expressjs/jsonParser' },
-                { name: 'Nodejs/Middleware/Expressjs/<anonymous>' },
                 {
                   name: 'Nodejs/Middleware/Expressjs/<anonymous>',
                   children: [
@@ -154,7 +153,6 @@ function createScalarTests(t) {
               children: [
                 { name: 'Nodejs/Middleware/Expressjs/corsMiddleware' },
                 { name: 'Nodejs/Middleware/Expressjs/jsonParser' },
-                { name: 'Nodejs/Middleware/Expressjs/<anonymous>' },
                 {
                   name: 'Nodejs/Middleware/Expressjs/<anonymous>',
                   children: [

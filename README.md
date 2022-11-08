@@ -44,9 +44,29 @@ const server = new ApolloServer({
 })
 ```
 
+**Note**: If you are using typescript and `@apollo/server` to load the plugin, you must pass in the appropriate `ApolloServerPlugin` type.
+
+```ts
+// index.ts
+
+import { ApolloServerPlugin, ApolloServer } from '@apollo/server';
+import createNewRelicPlugin from '@newrelic/apollo-server-plugin';
+
+const newRelicPlugin = createNewRelicPlugin<ApolloServerPlugin>({}) 
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  plugins: [
+    newRelicPlugin,
+  ],
+});
+```
+
+
 ## Usage
 
 The New Relic plugin is known to work with the following Apollo Server modules:
+* @apollo/server
 * apollo-server (>= 2.14)
 * apollo-server-express
 * apollo-server-hapi

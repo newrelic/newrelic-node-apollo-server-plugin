@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "Tue Nov 08 2022 10:50:03 GMT-0500 (Eastern Standard Time)",
+  "lastUpdated": "Wed Nov 09 2022 17:14:02 GMT-0500 (Eastern Standard Time)",
   "projectName": "New Relic Node Apollo Server Plugin",
   "projectUrl": "https://github.com/newrelic/newrelic-node-apollo-server-plugin/",
   "includeOptDeps": false,
@@ -7,6 +7,19 @@
   "includeDev": true,
   "dependencies": {},
   "devDependencies": {
+    "@apollo/server@4.1.1": {
+      "name": "@apollo/server",
+      "version": "4.1.1",
+      "range": "^4.1.1",
+      "licenses": "MIT",
+      "repoUrl": "https://github.com/apollographql/apollo-server",
+      "versionedRepoUrl": "https://github.com/apollographql/apollo-server/tree/v4.1.1",
+      "licenseFile": "node_modules/@apollo/server/README.md",
+      "licenseUrl": "https://github.com/apollographql/apollo-server/blob/v4.1.1/README.md",
+      "licenseTextSource": "spdx",
+      "publisher": "Apollo",
+      "email": "packages@apollographql.com"
+    },
     "@newrelic/eslint-config@0.0.2": {
       "name": "@newrelic/eslint-config",
       "version": "0.0.2",
@@ -32,31 +45,31 @@
       "licenseTextSource": "file",
       "publisher": "New Relic"
     },
-    "@newrelic/test-utilities@6.5.2": {
+    "@newrelic/test-utilities@6.5.5": {
       "name": "@newrelic/test-utilities",
-      "version": "6.5.2",
+      "version": "6.5.5",
       "range": "^6.5.2",
       "licenses": "Apache-2.0",
       "repoUrl": "https://github.com/newrelic/node-test-utilities",
-      "versionedRepoUrl": "https://github.com/newrelic/node-test-utilities/tree/v6.5.2",
+      "versionedRepoUrl": "https://github.com/newrelic/node-test-utilities/tree/v6.5.5",
       "licenseFile": "node_modules/@newrelic/test-utilities/LICENSE",
-      "licenseUrl": "https://github.com/newrelic/node-test-utilities/blob/v6.5.2/LICENSE",
+      "licenseUrl": "https://github.com/newrelic/node-test-utilities/blob/v6.5.5/LICENSE",
       "licenseTextSource": "file",
       "publisher": "New Relic Node.js agent team",
       "email": "nodejs@newrelic.com"
     },
-    "apollo-server@2.25.4": {
+    "apollo-server@3.11.1": {
       "name": "apollo-server",
-      "version": "2.25.4",
-      "range": "^2.18.2",
+      "version": "3.11.1",
+      "range": "^3.11.1",
       "licenses": "MIT",
       "repoUrl": "https://github.com/apollographql/apollo-server",
-      "versionedRepoUrl": "https://github.com/apollographql/apollo-server/tree/v2.25.4",
+      "versionedRepoUrl": "https://github.com/apollographql/apollo-server/tree/v3.11.1",
       "licenseFile": "node_modules/apollo-server/LICENSE",
-      "licenseUrl": "https://github.com/apollographql/apollo-server/blob/v2.25.4/LICENSE",
+      "licenseUrl": "https://github.com/apollographql/apollo-server/blob/v3.11.1/LICENSE",
       "licenseTextSource": "file",
       "publisher": "Apollo",
-      "email": "opensource@apollographql.com"
+      "email": "packages@apollographql.com"
     },
     "c8@7.12.0": {
       "name": "c8",
@@ -71,15 +84,15 @@
       "publisher": "Ben Coe",
       "email": "ben@npmjs.com"
     },
-    "eslint-config-prettier@8.3.0": {
+    "eslint-config-prettier@8.5.0": {
       "name": "eslint-config-prettier",
-      "version": "8.3.0",
+      "version": "8.5.0",
       "range": "^8.3.0",
       "licenses": "MIT",
       "repoUrl": "https://github.com/prettier/eslint-config-prettier",
-      "versionedRepoUrl": "https://github.com/prettier/eslint-config-prettier/tree/v8.3.0",
+      "versionedRepoUrl": "https://github.com/prettier/eslint-config-prettier/tree/v8.5.0",
       "licenseFile": "node_modules/eslint-config-prettier/LICENSE",
-      "licenseUrl": "https://github.com/prettier/eslint-config-prettier/blob/v8.3.0/LICENSE",
+      "licenseUrl": "https://github.com/prettier/eslint-config-prettier/blob/v8.5.0/LICENSE",
       "licenseTextSource": "file",
       "publisher": "Simon Lydell"
     },
@@ -107,15 +120,15 @@
       "licenseTextSource": "file",
       "publisher": "Toru Nagashima"
     },
-    "eslint-plugin-prettier@3.4.0": {
+    "eslint-plugin-prettier@3.4.1": {
       "name": "eslint-plugin-prettier",
-      "version": "3.4.0",
+      "version": "3.4.1",
       "range": "^3.4.0",
       "licenses": "MIT",
       "repoUrl": "https://github.com/prettier/eslint-plugin-prettier",
-      "versionedRepoUrl": "https://github.com/prettier/eslint-plugin-prettier/tree/v3.4.0",
+      "versionedRepoUrl": "https://github.com/prettier/eslint-plugin-prettier/tree/v3.4.1",
       "licenseFile": "node_modules/eslint-plugin-prettier/LICENSE.md",
-      "licenseUrl": "https://github.com/prettier/eslint-plugin-prettier/blob/v3.4.0/LICENSE.md",
+      "licenseUrl": "https://github.com/prettier/eslint-plugin-prettier/blob/v3.4.1/LICENSE.md",
       "licenseTextSource": "file",
       "publisher": "Teddy Katz"
     },
@@ -132,15 +145,15 @@
       "publisher": "Nicholas C. Zakas",
       "email": "nicholas+npm@nczconsulting.com"
     },
-    "graphql@15.8.0": {
+    "graphql@16.6.0": {
       "name": "graphql",
-      "version": "15.8.0",
-      "range": "^15.8.0",
+      "version": "16.6.0",
+      "range": "^16.6.0",
       "licenses": "MIT",
       "repoUrl": "https://github.com/graphql/graphql-js",
-      "versionedRepoUrl": "https://github.com/graphql/graphql-js/tree/v15.8.0",
+      "versionedRepoUrl": "https://github.com/graphql/graphql-js/tree/v16.6.0",
       "licenseFile": "node_modules/graphql/LICENSE",
-      "licenseUrl": "https://github.com/graphql/graphql-js/blob/v15.8.0/LICENSE",
+      "licenseUrl": "https://github.com/graphql/graphql-js/blob/v16.6.0/LICENSE",
       "licenseTextSource": "file"
     },
     "husky@6.0.0": {
@@ -156,41 +169,41 @@
       "publisher": "Typicode",
       "email": "typicode@gmail.com"
     },
-    "lint-staged@11.0.0": {
+    "lint-staged@11.2.6": {
       "name": "lint-staged",
-      "version": "11.0.0",
+      "version": "11.2.6",
       "range": "^11.0.0",
       "licenses": "MIT",
       "repoUrl": "https://github.com/okonet/lint-staged",
-      "versionedRepoUrl": "https://github.com/okonet/lint-staged/tree/v11.0.0",
+      "versionedRepoUrl": "https://github.com/okonet/lint-staged/tree/v11.2.6",
       "licenseFile": "node_modules/lint-staged/LICENSE",
-      "licenseUrl": "https://github.com/okonet/lint-staged/blob/v11.0.0/LICENSE",
+      "licenseUrl": "https://github.com/okonet/lint-staged/blob/v11.2.6/LICENSE",
       "licenseTextSource": "file",
       "publisher": "Andrey Okonetchnikov",
       "email": "andrey@okonet.ru"
     },
-    "newrelic@8.8.0": {
+    "newrelic@8.17.1": {
       "name": "newrelic",
-      "version": "8.8.0",
+      "version": "8.17.1",
       "range": "^8.8.0",
       "licenses": "Apache-2.0",
       "repoUrl": "https://github.com/newrelic/node-newrelic",
-      "versionedRepoUrl": "https://github.com/newrelic/node-newrelic/tree/v8.8.0",
+      "versionedRepoUrl": "https://github.com/newrelic/node-newrelic/tree/v8.17.1",
       "licenseFile": "node_modules/newrelic/LICENSE",
-      "licenseUrl": "https://github.com/newrelic/node-newrelic/blob/v8.8.0/LICENSE",
+      "licenseUrl": "https://github.com/newrelic/node-newrelic/blob/v8.17.1/LICENSE",
       "licenseTextSource": "file",
       "publisher": "New Relic Node.js agent team",
       "email": "nodejs@newrelic.com"
     },
-    "prettier@2.3.2": {
+    "prettier@2.7.1": {
       "name": "prettier",
-      "version": "2.3.2",
+      "version": "2.7.1",
       "range": "^2.3.2",
       "licenses": "MIT",
       "repoUrl": "https://github.com/prettier/prettier",
-      "versionedRepoUrl": "https://github.com/prettier/prettier/tree/v2.3.2",
+      "versionedRepoUrl": "https://github.com/prettier/prettier/tree/v2.7.1",
       "licenseFile": "node_modules/prettier/LICENSE",
-      "licenseUrl": "https://github.com/prettier/prettier/blob/v2.3.2/LICENSE",
+      "licenseUrl": "https://github.com/prettier/prettier/blob/v2.7.1/LICENSE",
       "licenseTextSource": "file",
       "publisher": "James Long"
     },
@@ -206,15 +219,15 @@
       "licenseTextSource": "file",
       "publisher": "Christian Johansen"
     },
-    "tap@16.0.1": {
+    "tap@16.3.0": {
       "name": "tap",
-      "version": "16.0.1",
+      "version": "16.3.0",
       "range": "^16.0.1",
       "licenses": "ISC",
       "repoUrl": "https://github.com/tapjs/node-tap",
-      "versionedRepoUrl": "https://github.com/tapjs/node-tap/tree/v16.0.1",
+      "versionedRepoUrl": "https://github.com/tapjs/node-tap/tree/v16.3.0",
       "licenseFile": "node_modules/tap/LICENSE",
-      "licenseUrl": "https://github.com/tapjs/node-tap/blob/v16.0.1/LICENSE",
+      "licenseUrl": "https://github.com/tapjs/node-tap/blob/v16.3.0/LICENSE",
       "licenseTextSource": "file",
       "publisher": "Isaac Z. Schlueter",
       "email": "i@izs.me",
