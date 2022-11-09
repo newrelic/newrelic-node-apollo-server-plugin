@@ -59,7 +59,19 @@ function resetModuleCache(callback) {
   delete require.cache[newrelicPath]
   delete require.cache[newrelicLogger]
   delete require.cache[newrelicConfig]
-  delete require.cache.__NR_cache
+
+  // In 9.6.0 of the agent the cached agent moved from a property
+  // to a symbol. Look up the symbol and then delete cached agent
+  // from prop or symbol.
+  const [agentCacheSym] = Object.getOwnPropertySymbols(require.cache).filter(
+    (name) => name.toString() === 'Symbol(cache)'
+  )
+
+  if (require.cache.__NR_cache) {
+    delete require.cache.__NR_cache
+  } else {
+    delete require.cache[agentCacheSym]
+  }
 
   callback()
 }
