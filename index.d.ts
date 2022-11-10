@@ -1,5 +1,5 @@
-import type {ApolloServerPlugin as Base } from "apollo-server-plugin-base";
-import type { ApolloServerPlugin } from "@apollo/server";
+import type { ApolloServerPlugin as Base } from 'apollo-server-plugin-base';
+import type { ApolloServerPlugin } from '@apollo/server';
 
 export type NRPluginConfig = {
   captureScalars?: boolean;
