@@ -1,3 +1,86 @@
+### v2.1.0 (2022-11-10)
+
+* Updated type definition of plugin to work with both `apollo-server` and `@apollo-server` packages.
+ * For Apollo Server 4+ typescript users, you must update your instantiation of the `@newrelic/apollo-server-plugin`:
+
+```ts
+// index.ts
+
+import { ApolloServerPlugin, ApolloServer } from '@apollo/server';
+import createNewRelicPlugin from '@newrelic/apollo-server-plugin';
+
+const newRelicPlugin = createNewRelicPlugin<ApolloServerPlugin>({}) 
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  plugins: [
+    newRelicPlugin,
+  ],
+});
+```
+
+ * Removed `apollo-server-plugin-base` as peer dependency as you can now use `@apollo/server` to get the `ApolloPluginBase`
+
+* Added a versioned test suite to verify `@apollo/server` 4+ still functions with our plugin.
+
+--- NOTES NEEDS REVIEW ---
+Bumps [apollo-server](https://github.com/apollographql/apollo-server/tree/HEAD/packages/apollo-server) from 2.25.3 to 2.25.4.
+<details>
+<summary>Changelog</summary>
+<p><em>Sourced from <a href="https://github.com/apollographql/apollo-server/blob/apollo-server@2.25.4/CHANGELOG.md">apollo-server's changelog</a>.</em></p>
+<blockquote>
+<h2>v2.25.4</h2>
+<ul>
+<li>⚠️ <strong>SECURITY</strong>: If your server does not explicitly enable <code>graphql-upload</code> support via the <code>uploads</code> option to <code>new ApolloServer</code> and your schema does not use the <code>Upload</code> scalar (other than in its own definition), Apollo Server will not process the <code>multipart/form-data</code> requests sent by <code>graphql-upload</code> clients. This fixes a Cross-Site Request Forgery (CSRF) vulnerability where origins could cause browsers to execute mutations using a user's cookies even when those origins are not allowed by your CORS policy. If you <em>do</em> use uploads in your server, the vulnerability still exists with this version; you should instead upgrade to Apollo Server v3.7 and enable the CSRF prevention feature. (The AS3.7 CSRF prevention feature also protects against other forms of CSRF such as timing attacks against read-only query operations.) See <a href="https://github.com/apollographql/apollo-server/security/advisories/GHSA-2p3c-p3qw-69r4">advisory GHSA-2p3c-p3qw-69r4</a> for more details.</li>
+</ul>
+</blockquote>
+</details>
+<details>
+<summary>Commits</summary>
+<ul>
+<li><a href="https://github.com/apollographql/apollo-server/commit/ae444b2916deb2fa37dbd8fa091201235dc2ec6d"><code>ae444b2</code></a> Release</li>
+<li>See full diff in <a href="https://github.com/apollographql/apollo-server/commits/apollo-server@2.25.4/packages/apollo-server">compare view</a></li>
+</ul>
+</details>
+<br />
+
+
+[![Dependabot compatibility score](https://dependabot-badges.githubapp.com/badges/compatibility_score?dependency-name=apollo-server&package-manager=npm_and_yarn&previous-version=2.25.3&new-version=2.25.4)](https://docs.github.com/en/github/managing-security-vulnerabilities/about-dependabot-security-updates#about-compatibility-scores)
+
+Dependabot will resolve any conflicts with this PR as long as you don't alter it yourself. You can also trigger a rebase manually by commenting `@dependabot rebase`.
+
+[//]: # (dependabot-automerge-start)
+[//]: # (dependabot-automerge-end)
+
+---
+
+<details>
+<summary>Dependabot commands and options</summary>
+<br />
+
+You can trigger Dependabot actions by commenting on this PR:
+- `@dependabot rebase` will rebase this PR
+- `@dependabot recreate` will recreate this PR, overwriting any edits that have been made to it
+- `@dependabot merge` will merge this PR after your CI passes on it
+- `@dependabot squash and merge` will squash and merge this PR after your CI passes on it
+- `@dependabot cancel merge` will cancel a previously requested merge and block automerging
+- `@dependabot reopen` will reopen this PR if it is closed
+- `@dependabot close` will close this PR and stop Dependabot recreating it. You can achieve the same result by closing it manually
+- `@dependabot ignore this major version` will close this PR and stop Dependabot creating any more for this major version (unless you reopen the PR or upgrade to it yourself)
+- `@dependabot ignore this minor version` will close this PR and stop Dependabot creating any more for this minor version (unless you reopen the PR or upgrade to it yourself)
+- `@dependabot ignore this dependency` will close this PR and stop Dependabot creating any more for this dependency (unless you reopen the PR or upgrade to it yourself)
+- `@dependabot use these labels` will set the current labels as the default for future PRs for this repo and language
+- `@dependabot use these reviewers` will set the current reviewers as the default for future PRs for this repo and language
+- `@dependabot use these assignees` will set the current assignees as the default for future PRs for this repo and language
+- `@dependabot use this milestone` will set the current milestone as the default for future PRs for this repo and language
+
+You can disable automated security fix PRs for this repo from the [Security Alerts page](https://github.com/newrelic/newrelic-node-apollo-server-plugin/network/alerts).
+
+</details>
+--------------------------
+
+* Added minimum supported server version to README.md
+
 ### v2.0.1 (2022-08-29)
 
 * Added defensive code to prevent plugin from masking actual graphql errors.
