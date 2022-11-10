@@ -1,3 +1,30 @@
+### v2.1.0 (2022-11-10)
+
+* 📢 Apollo Server 4 support 📢
+  * There were no changes to the plugin to support Apollo Server 4. The types had to be adjusted to support Apollo Server 2-4.
+  * Updated type definition of plugin to work with both `apollo-server` and `@apollo-server` packages.
+  * Removed `apollo-server-plugin-base` as peer dependency as you can now use `@apollo/server` to get the `ApolloPluginBase`
+  * Added a versioned test suite to verify `@apollo/server` 4+ still functions with our plugin.
+  * For Apollo Server 4+ typescript users, you must update your instantiation of the `@newrelic/apollo-server-plugin`:
+
+```ts
+// index.ts
+
+import { ApolloServerPlugin, ApolloServer } from '@apollo/server';
+import createNewRelicPlugin from '@newrelic/apollo-server-plugin';
+
+const newRelicPlugin = createNewRelicPlugin<ApolloServerPlugin>({}) 
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  plugins: [
+    newRelicPlugin,
+  ],
+});
+```
+
+* Added minimum supported server version to README.md
+
 ### v2.0.1 (2022-08-29)
 
 * Added defensive code to prevent plugin from masking actual graphql errors.
