@@ -38,17 +38,18 @@
     "node": ">=14.0.0"
   },
   "devDependencies": {
+    "@apollo/server": "^4.1.1",
     "@newrelic/eslint-config": "^0.0.2",
     "@newrelic/newrelic-oss-cli": "^0.1.2",
     "@newrelic/test-utilities": "^6.5.2",
-    "apollo-server": "^2.18.2",
+    "apollo-server": "^3.11.1",
     "c8": "^7.12.0",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-header": "^3.1.1",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^3.4.0",
-    "graphql": "^15.8.0",
+    "graphql": "^16.6.0",
     "husky": "^6.0.0",
     "lint-staged": "^11.0.0",
     "newrelic": "^8.8.0",
@@ -58,7 +59,6 @@
     "tsd": "^0.18.0"
   },
   "peerDependencies": {
-    "apollo-server-plugin-base": ">=0.10.1",
     "newrelic": ">=6.13.0"
   },
   "tsd": {

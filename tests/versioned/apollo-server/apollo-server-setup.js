@@ -8,22 +8,25 @@
 const createApolloServerSetup = require('../../create-apollo-server-setup')
 
 const setupApolloServerTests = createApolloServerSetup(loadApolloServer, __dirname)
+const { existsSync } = require('fs')
 
 /**
- * Gotta love require. We are trying apollo 4 based stuff
- * first because since we have apollo server as a dev dep of this
- * repo it'll always find that because it traverses up to look for node_modules
+ * We have to use fs.existsSync because the root of this project
+ * has both apollo-sever and @apollo/server for testing the types.
+ * We cannot use require.resolve to look up a module because it will start from
+ * here and go up every path until it hits `/` to find a module.
  */
 function loadApolloServer() {
-  try {
+  const isApollo4 = existsSync('./node_modules/@apollo/server')
+
+  if (isApollo4) {
     const gql = require('graphql-tag')
     const apolloServer = require('@apollo/server')
     const { startStandaloneServer } = require('@apollo/server/standalone')
     const graphql = require('graphql')
     return { gql, ...apolloServer, startStandaloneServer, graphql }
-  } catch {
-    return require('apollo-server')
   }
+  return require('apollo-server')
 }
 
 module.exports = {

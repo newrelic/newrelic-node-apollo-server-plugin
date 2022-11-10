@@ -5,6 +5,7 @@
 
 'use strict'
 
+const { existsSync } = require('fs')
 const tap = require('tap')
 
 const utils = require('@newrelic/test-utilities')
@@ -39,15 +40,22 @@ function setupApolloServerExpressTests({ suiteName, createTests, pluginConfig },
 
       // Do after instrumentation to ensure express isn't loaded too soon.
       let expressServerPkg
-      try {
+
+      /**
+       * We have to use fs.existsSync because the root of this project
+       * has both apollo-sever-express and @apollo/server.
+       * We cannot use require.resolve to look up a module because it will start from
+       * here and go up every path until it hits `/` to find a module.
+       */
+      isApollo4 = existsSync('./node_modules/@apollo/server')
+      if (isApollo4) {
         expressServerPkg = require('@apollo/server')
         expressServerPkg.gql = require('graphql-tag')
         expressServerPkg.bodyParser = require('body-parser')
         const { expressMiddleware } = require('@apollo/server/express4')
         expressServerPkg.expressMiddleware = expressMiddleware
         expressServerPkg.graphql = require('graphql')
-        isApollo4 = true
-      } catch {
+      } else {
         expressServerPkg = require('apollo-server-express')
       }
 
