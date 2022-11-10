@@ -10,11 +10,13 @@ function createStateLossPlugin(stateLossConfig, instrumentationApi) {
     requestDidStart() {
       triggerStateLoss(stateLossConfig.onRequestDidStart)
 
-      return {
-        willSendResponse() {
-          triggerStateLoss(stateLossConfig.onWillSendResponse)
-        }
-      }
+      return new Promise((resolve) => {
+        resolve({
+          willSendResponse() {
+            triggerStateLoss(stateLossConfig.onWillSendResponse)
+          }
+        })
+      })
     }
   }
 
