@@ -66,13 +66,13 @@ const server = new ApolloServer({
 ## Usage
 
 The New Relic plugin is known to work with the following Apollo Server modules:
-* @apollo/server
-* apollo-server (>= 2.14)
-* apollo-server-express
-* apollo-server-hapi
-* apollo-server-koa
-* apollo-server-fastify
-* apollo-server-lambda
+* `@apollo/server`
+* `apollo-server` (>= 2.14)
+* `apollo-server-express`
+* `apollo-server-hapi`
+* `apollo-server-koa`
+* `apollo-server-fastify`
+* `apollo-server-lambda`
 
 Other plugins may work, depending on their underlying implementation, but have not been verified.
 
@@ -165,7 +165,7 @@ Transactions are captured as web transactions, associated with the underlying fr
 
 Here's an example query and how that may be represented in NR One.
 
-```
+```graphql
 query {
   libraries {
     books {
@@ -196,8 +196,10 @@ Operation metrics are very similar to how transaction names are constructed incl
 
 If you would like to have a list of the top 10 slowest operations, the following query can be used to pull the data on demand or as a part of a dashboard. The 'Bar' chart type is a recommended visualization for this query.
 
-```
-FROM Metric SELECT average(newrelic.timeslice.value) * 1000 WHERE appName = '[YOUR APP NAME]' WITH METRIC_FORMAT 'GraphQL/operation/ApolloServer/{operation}' FACET operation LIMIT 10
+```sql
+FROM Metric SELECT average(newrelic.timeslice.value) * 1000 
+WHERE appName = '[YOUR APP NAME]' WITH METRIC_FORMAT 'GraphQL/operation/ApolloServer/{operation}' 
+FACET operation LIMIT 10
 ```
 
 #### Field Resolve Metrics
@@ -208,9 +210,10 @@ Resolve metrics capture the duration spent resolving a particular piece of reque
 
 If you would like to have a list of the top 10 slowest resolves, the following query can be used to pull the data on demand or as a part of a dashboard. The 'Bar' chart type is a recommended visualization for this query.
 
-```
-FROM Metric
-SELECT average(newrelic.timeslice.value) * 1000 WHERE appName = '[YOUR APP NAME]' WITH METRIC_FORMAT 'GraphQL/resolve/ApolloServer/{field}' FACET field LIMIT 10
+```sql
+FROM Metric SELECT average(newrelic.timeslice.value) * 1000 
+WHERE appName = '[YOUR APP NAME]' WITH METRIC_FORMAT 'GraphQL/resolve/ApolloServer/{field}' 
+FACET field LIMIT 10
 ```
 
 For more information on metrics and some recommended visualizations, please see the [metrics documentation](./docs/metrics.md).
