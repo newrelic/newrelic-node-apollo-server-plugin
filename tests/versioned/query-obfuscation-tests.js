@@ -20,7 +20,7 @@ const QUERY_ATTRIBUTE_NAME = 'graphql.operation.query'
  * It is required that t.context.helper and t.context.serverUrl are set.
  * @param {*} t a tap test instance
  */
-function createQueryObfuscaionTests(t) {
+function createQueryObfuscationTests(t) {
   const OPERATION_PREFIX = 'GraphQL/operation/ApolloServer/query'
   const UNKNOWN_OPERATION_NAME = 'GraphQL/operation/ApolloServer/<unknown>'
 
@@ -213,5 +213,5 @@ function findSegmentByName(root, name) {
 
 module.exports = {
   suiteName: 'query obfuscation',
-  createTests: createQueryObfuscaionTests
+  createTests: createQueryObfuscationTests
 }
