@@ -20,6 +20,7 @@
         "agent-disabled.test.js",
         "errors.test.js",
         "attributes.test.js",
+        "persisted-query.test.js",
         "query-obfuscation.test.js"
       ]
     },
