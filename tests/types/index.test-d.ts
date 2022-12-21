@@ -1,23 +1,21 @@
-import { ApolloServerPlugin as Base } from "apollo-server-plugin-base";
-import { ApolloServerPlugin } from "@apollo/server";
+import { ApolloServerPlugin as V3Plugin } from "apollo-server-plugin-base";
+import { ApolloServerPlugin as V4Plugin } from "@apollo/server";
 import { expectType } from "tsd";
 
 import createPlugin from "../..";
 
-expectType<Base>(createPlugin({}));
-
-expectType<Base>(
-  createPlugin({
+expectType<V3Plugin>(createPlugin<V3Plugin>({}));
+expectType<V3Plugin>(
+  createPlugin<V3Plugin>({
     captureHealthCheckQueries: true,
     captureScalars: false,
     captureServiceDefinitionQueries: true,
   })
 );
 
-expectType<ApolloServerPlugin>(createPlugin<ApolloServerPlugin>({}))
-
-expectType<ApolloServerPlugin>(
-  createPlugin<ApolloServerPlugin>({
+expectType<V4Plugin>(createPlugin<V4Plugin>({}))
+expectType<V4Plugin>(
+  createPlugin<V4Plugin>({
     captureHealthCheckQueries: true,
     captureScalars: false,
     captureServiceDefinitionQueries: true,
