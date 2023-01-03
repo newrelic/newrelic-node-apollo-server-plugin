@@ -44,15 +44,34 @@ const server = new ApolloServer({
 })
 ```
 
-**Note**: If you are using typescript and `@apollo/server` to load the plugin, you must pass in the appropriate `ApolloServerPlugin` type.
+**Note**: If you are using Typescript, you must pass in the appropriate `ApolloServerPlugin` type.
 
+**Using Apollo V4**
 ```ts
 // index.ts
 
 import { ApolloServerPlugin, ApolloServer } from '@apollo/server';
 import createNewRelicPlugin from '@newrelic/apollo-server-plugin';
 
-const newRelicPlugin = createNewRelicPlugin<ApolloServerPlugin>({}) 
+const newRelicPlugin = createNewRelicPlugin<ApolloServerPlugin>({})
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  plugins: [
+    newRelicPlugin,
+  ],
+});
+```
+
+**Using Apollo V3**
+```ts
+// index.ts
+
+import { ApolloServer } from 'apollo-server';
+import { ApolloServerPlugin } from 'apollo-server-plugin-base';
+import createNewRelicPlugin from '@newrelic/apollo-server-plugin';
+
+const newRelicPlugin = createNewRelicPlugin<ApolloServerPlugin>({})
 const server = new ApolloServer({
   typeDefs,
   resolvers,
