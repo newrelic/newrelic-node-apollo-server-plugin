@@ -18,8 +18,6 @@ const server = new ApolloServer({
 
 * Added lockfile checks to CI workflow to prevent malicious changes
 
-* Lightly edited the README for style
-
 ### v2.1.0 (2022-11-10)
 
 * 📢 Apollo Server 4 support 📢
