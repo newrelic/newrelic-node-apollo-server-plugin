@@ -1,6 +1,6 @@
 ### v3.0.0 (2023-01-04)
 
-**BREAKING**: Updated types definition to use user provided type
+* **BREAKING**: Updated types definition to use user provided type
 If your application uses both Typescript and Apollo version 3, you'll need to update where you configure the New Relic plugin to include the `ApolloServerPlugin` type from `apollo-server-plugin-base`, like in the following: 
 ```ts
 import { ApolloServer } from 'apollo-server';
@@ -18,7 +18,7 @@ const server = new ApolloServer({
 
 * Added lockfile checks to CI workflow to prevent malicious changes
 
-No content changed. I added graphql and sql syntax highlighting to the examples and broke up the NRQL line for readability.
+* Lightly edited the README for style
 
 ### v2.1.0 (2022-11-10)
 
