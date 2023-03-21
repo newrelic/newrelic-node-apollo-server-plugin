@@ -30,7 +30,7 @@ function setupFederatedGatewayServerTests(options, agentConfig) {
 
     t.beforeEach(async () => {
       // load default instrumentation. express being critical
-      helper = utils.TestAgent.makeInstrumented(agentConfig)
+      helper = utils.TestAgent.makeFullyInstrumented(agentConfig)
       const createPlugin = require('../../../lib/create-plugin')
       const nrApi = helper.getAgentApi()
 

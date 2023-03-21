@@ -27,7 +27,7 @@ function setupApolloServerHapiTests({ suiteName, createTests, pluginConfig }, co
 
     t.beforeEach(async () => {
       // load default instrumentation. hapi being critical
-      helper = utils.TestAgent.makeInstrumented(config)
+      helper = utils.TestAgent.makeFullyInstrumented(config)
       const createPlugin = require('../../../lib/create-plugin')
       const nrApi = helper.getAgentApi()
 
