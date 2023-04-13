@@ -29,7 +29,7 @@ function setupApolloServerExpressTests({ suiteName, createTests, pluginConfig },
 
     t.before(async () => {
       // load default instrumentation. express being critical
-      helper = utils.TestAgent.makeInstrumented(config)
+      helper = utils.TestAgent.makeFullyInstrumented(config)
       const createPlugin = require('../../../lib/create-plugin')
       const nrApi = helper.getAgentApi()
 

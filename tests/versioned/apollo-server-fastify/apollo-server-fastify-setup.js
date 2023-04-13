@@ -27,7 +27,7 @@ function setupApolloServerFastifyTests({ suiteName, createTests, pluginConfig },
 
     t.beforeEach(async () => {
       // load default instrumentation
-      helper = utils.TestAgent.makeInstrumented(config)
+      helper = utils.TestAgent.makeFullyInstrumented(config)
       const createPlugin = require('../../../lib/create-plugin')
       const nrApi = helper.getAgentApi()
 

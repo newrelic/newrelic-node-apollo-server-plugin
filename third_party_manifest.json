@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "Wed Nov 09 2022 17:14:02 GMT-0500 (Eastern Standard Time)",
+  "lastUpdated": "Thu Mar 23 2023 15:55:14 GMT-0400 (Eastern Daylight Time)",
   "projectName": "New Relic Node Apollo Server Plugin",
   "projectUrl": "https://github.com/newrelic/newrelic-node-apollo-server-plugin/",
   "includeOptDeps": false,
@@ -45,15 +45,15 @@
       "licenseTextSource": "file",
       "publisher": "New Relic"
     },
-    "@newrelic/test-utilities@6.5.5": {
+    "@newrelic/test-utilities@7.3.0": {
       "name": "@newrelic/test-utilities",
-      "version": "6.5.5",
-      "range": "^6.5.2",
+      "version": "7.3.0",
+      "range": "^7.3.0",
       "licenses": "Apache-2.0",
       "repoUrl": "https://github.com/newrelic/node-test-utilities",
-      "versionedRepoUrl": "https://github.com/newrelic/node-test-utilities/tree/v6.5.5",
+      "versionedRepoUrl": "https://github.com/newrelic/node-test-utilities/tree/v7.3.0",
       "licenseFile": "node_modules/@newrelic/test-utilities/LICENSE",
-      "licenseUrl": "https://github.com/newrelic/node-test-utilities/blob/v6.5.5/LICENSE",
+      "licenseUrl": "https://github.com/newrelic/node-test-utilities/blob/v7.3.0/LICENSE",
       "licenseTextSource": "file",
       "publisher": "New Relic Node.js agent team",
       "email": "nodejs@newrelic.com"
@@ -182,15 +182,29 @@
       "publisher": "Andrey Okonetchnikov",
       "email": "andrey@okonet.ru"
     },
-    "newrelic@8.17.1": {
+    "lockfile-lint@4.9.6": {
+      "name": "lockfile-lint",
+      "version": "4.9.6",
+      "range": "^4.9.6",
+      "licenses": "Apache-2.0",
+      "repoUrl": "https://github.com/lirantal/lockfile-lint",
+      "versionedRepoUrl": "https://github.com/lirantal/lockfile-lint/tree/v4.9.6",
+      "licenseFile": "node_modules/lockfile-lint/LICENSE",
+      "licenseUrl": "https://github.com/lirantal/lockfile-lint/blob/v4.9.6/LICENSE",
+      "licenseTextSource": "file",
+      "publisher": "Liran Tal",
+      "email": "liran.tal@gmail.com",
+      "url": "https://github.com/lirantal"
+    },
+    "newrelic@9.14.0": {
       "name": "newrelic",
-      "version": "8.17.1",
-      "range": "^8.8.0",
+      "version": "9.14.0",
+      "range": "^9.14.0",
       "licenses": "Apache-2.0",
       "repoUrl": "https://github.com/newrelic/node-newrelic",
-      "versionedRepoUrl": "https://github.com/newrelic/node-newrelic/tree/v8.17.1",
+      "versionedRepoUrl": "https://github.com/newrelic/node-newrelic/tree/v9.14.0",
       "licenseFile": "node_modules/newrelic/LICENSE",
-      "licenseUrl": "https://github.com/newrelic/node-newrelic/blob/v8.17.1/LICENSE",
+      "licenseUrl": "https://github.com/newrelic/node-newrelic/blob/v9.14.0/LICENSE",
       "licenseTextSource": "file",
       "publisher": "New Relic Node.js agent team",
       "email": "nodejs@newrelic.com"

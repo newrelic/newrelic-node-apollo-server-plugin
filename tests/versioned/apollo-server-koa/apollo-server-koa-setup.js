@@ -28,7 +28,7 @@ function setupApolloServerKoaTests({ suiteName, createTests, pluginConfig }, con
 
     t.beforeEach(async () => {
       // load default instrumentation
-      helper = utils.TestAgent.makeInstrumented(config)
+      helper = utils.TestAgent.makeFullyInstrumented(config)
       const createPlugin = require('../../../lib/create-plugin')
       const nrApi = helper.getAgentApi()
 

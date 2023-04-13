@@ -40,7 +40,7 @@ function setupApolloServerLambdaTests({ suiteName, createTests, pluginConfig }, 
       const errorSchema = setupErrorSchema(lambdaServerPkg, resolvers)
       const { version } = require('apollo-server-lambda/package')
 
-      helper = utils.TestAgent.makeInstrumented(config)
+      helper = utils.TestAgent.makeFullyInstrumented(config)
 
       const createPlugin = require('../../../lib/create-plugin')
       const nrApi = helper.getAgentApi()

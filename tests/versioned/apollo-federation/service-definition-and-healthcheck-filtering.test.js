@@ -33,7 +33,7 @@ tap.test(
 
     t.test('Should ignore Service Definiion query by default', async (t) => {
       // load default instrumentation. express being critical
-      helper = utils.TestAgent.makeInstrumented(agentConfig)
+      helper = utils.TestAgent.makeFullyInstrumented(agentConfig)
       let ignore = true
 
       helper.agent.on('transactionFinished', (transaction) => {
@@ -68,7 +68,7 @@ tap.test(
         'when captureServiceDefinitionQueries set to true',
       async (t) => {
         // load default instrumentation. express being critical
-        helper = utils.TestAgent.makeInstrumented(agentConfig)
+        helper = utils.TestAgent.makeFullyInstrumented(agentConfig)
         let ignore = false
 
         helper.agent.on('transactionFinished', (transaction) => {
@@ -103,7 +103,7 @@ tap.test(
 
     t.test('Should ignore Health Check query by default', async (t) => {
       // load default instrumentation. express being critical
-      helper = utils.TestAgent.makeInstrumented(agentConfig)
+      helper = utils.TestAgent.makeFullyInstrumented(agentConfig)
       let ignore = true
 
       helper.agent.on('transactionFinished', (transaction) => {
@@ -142,7 +142,7 @@ tap.test(
       'Should not ignore Health Check query when ' + 'captureHealthCheckQueries set to true',
       async (t) => {
         // load default instrumentation. express being critical
-        helper = utils.TestAgent.makeInstrumented(agentConfig)
+        helper = utils.TestAgent.makeFullyInstrumented(agentConfig)
         let ignore = false
 
         helper.agent.on('transactionFinished', (transaction) => {
