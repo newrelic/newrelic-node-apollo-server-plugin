@@ -81,11 +81,13 @@ const server = new ApolloServer({
 });
 ```
 
-
 ## Usage
 
 The New Relic plugin is known to work with the following Apollo Server modules:
+
 * `@apollo/server`
+* `@apollo/gateway`
+* `@apollo/subgraph`
 * `apollo-server` (>= 2.14)
 * `apollo-server-express`
 * `apollo-server-hapi`
