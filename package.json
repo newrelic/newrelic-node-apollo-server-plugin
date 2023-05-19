@@ -42,7 +42,7 @@
     "@apollo/server": "^4.1.1",
     "@newrelic/eslint-config": "^0.0.2",
     "@newrelic/newrelic-oss-cli": "^0.1.2",
-    "@newrelic/test-utilities": "^7.3.0",
+    "@newrelic/test-utilities": "^7.3.1",
     "apollo-server": "^3.11.1",
     "c8": "^7.12.0",
     "eslint": "^7.32.0",
@@ -57,7 +57,7 @@
     "newrelic": "^9.14.0",
     "prettier": "^2.3.2",
     "sinon": "^11.1.2",
-    "tap": "^16.0.1",
+    "tap": "^16.3.4",
     "tsd": "^0.18.0"
   },
   "peerDependencies": {
