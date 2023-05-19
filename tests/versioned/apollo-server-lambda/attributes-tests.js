@@ -46,11 +46,7 @@ function createAttributesTests(t) {
       }
 
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
-      t.matches(
-        operationAttributes,
-        expectedOperationAttributes,
-        'should have operation attributes'
-      )
+      t.match(operationAttributes, expectedOperationAttributes, 'should have operation attributes')
 
       const hasAttribute = Object.hasOwnProperty.bind(operationAttributes)
       t.notOk(hasAttribute('graphql.operation.name'))
@@ -65,11 +61,7 @@ function createAttributesTests(t) {
       }
 
       const resolveAttributes = resolveHelloSegment.attributes.get(SEGMENT_DESTINATION)
-      t.matches(
-        resolveAttributes,
-        expectedResolveAttributes,
-        'should have field resolve attributes'
-      )
+      t.match(resolveAttributes, expectedResolveAttributes, 'should have field resolve attributes')
     })
 
     executeQueryAssertResult({
@@ -99,11 +91,7 @@ function createAttributesTests(t) {
       }
 
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
-      t.matches(
-        operationAttributes,
-        expectedOperationAttributes,
-        'should have operation attributes'
-      )
+      t.match(operationAttributes, expectedOperationAttributes, 'should have operation attributes')
 
       const resolveHelloSegment = operationSegment.children[0]
 
@@ -115,11 +103,7 @@ function createAttributesTests(t) {
       }
 
       const resolveAttributes = resolveHelloSegment.attributes.get(SEGMENT_DESTINATION)
-      t.matches(
-        resolveAttributes,
-        expectedResolveAttributes,
-        'should have field resolve attributes'
-      )
+      t.match(resolveAttributes, expectedResolveAttributes, 'should have field resolve attributes')
     })
 
     executeQueryAssertResult({
@@ -158,11 +142,7 @@ function createAttributesTests(t) {
       }
 
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
-      t.matches(
-        operationAttributes,
-        expectedOperationAttributes,
-        'should have operation attributes'
-      )
+      t.match(operationAttributes, expectedOperationAttributes, 'should have operation attributes')
 
       const [resolveLibrariesSegment, resolveBooksSegment] = operationSegment.children
 
@@ -174,7 +154,7 @@ function createAttributesTests(t) {
       }
 
       const resolveLibrariesAttributes = resolveLibrariesSegment.attributes.get(SEGMENT_DESTINATION)
-      t.matches(
+      t.match(
         resolveLibrariesAttributes,
         expectedLibrariesAttributes,
         'should have field resolve attributes for libraries'
@@ -188,7 +168,7 @@ function createAttributesTests(t) {
       }
 
       const resolveBooksAttributes = resolveBooksSegment.attributes.get(SEGMENT_DESTINATION)
-      t.matches(
+      t.match(
         resolveBooksAttributes,
         expectedBooksAttributes,
         'should have field resolve attributes for books'
@@ -231,11 +211,7 @@ function createAttributesTests(t) {
       }
 
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
-      t.matches(
-        operationAttributes,
-        expectedOperationAttributes,
-        'should have operation attributes'
-      )
+      t.match(operationAttributes, expectedOperationAttributes, 'should have operation attributes')
 
       const [resolveLibrariesSegment, resolveBooksSegment] = operationSegment.children
 
@@ -247,7 +223,7 @@ function createAttributesTests(t) {
       }
 
       const resolveLibrariesAttributes = resolveLibrariesSegment.attributes.get(SEGMENT_DESTINATION)
-      t.matches(
+      t.match(
         resolveLibrariesAttributes,
         expectedLibrariesAttributes,
         'should have field resolve attributes for libraries'
@@ -261,7 +237,7 @@ function createAttributesTests(t) {
       }
 
       const resolveBooksAttributes = resolveBooksSegment.attributes.get(SEGMENT_DESTINATION)
-      t.matches(
+      t.match(
         resolveBooksAttributes,
         expectedBooksAttributes,
         'should have field resolve attributes for books'
@@ -296,11 +272,7 @@ function createAttributesTests(t) {
       }
 
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
-      t.matches(
-        operationAttributes,
-        expectedOperationAttributes,
-        'should have operation attributes'
-      )
+      t.match(operationAttributes, expectedOperationAttributes, 'should have operation attributes')
 
       const resolveHelloSegment = operationSegment.children[0]
 
@@ -312,11 +284,7 @@ function createAttributesTests(t) {
       }
 
       const resolveAttributes = resolveHelloSegment.attributes.get(SEGMENT_DESTINATION)
-      t.matches(
-        resolveAttributes,
-        expectedResolveAttributes,
-        'should have field resolve attributes'
-      )
+      t.match(resolveAttributes, expectedResolveAttributes, 'should have field resolve attributes')
     })
 
     executeQueryAssertResult({
@@ -376,8 +344,8 @@ function createAttributesTests(t) {
 
       const resolveAttributes = resolveHelloSegment.attributes.get(SEGMENT_DESTINATION)
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
-      t.matches(resolveAttributes, { 'graphql.field.args.name': 'added thing!' })
-      t.matches(operationAttributes, { 'graphql.field.args.name': 'added thing!' })
+      t.match(resolveAttributes, { 'graphql.field.args.name': 'added thing!' })
+      t.match(operationAttributes, { 'graphql.field.args.name': 'added thing!' })
     })
 
     executeQueryAssertResult({
@@ -412,8 +380,8 @@ function createAttributesTests(t) {
       }
       const resolveAttributes = resolveHelloSegment.attributes.get(SEGMENT_DESTINATION)
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
-      t.matches(resolveAttributes, expectedArgAttributes)
-      t.matches(operationAttributes, expectedArgAttributes)
+      t.match(resolveAttributes, expectedArgAttributes)
+      t.match(operationAttributes, expectedArgAttributes)
     })
 
     executeQueryAssertResult({
@@ -457,8 +425,8 @@ function createAttributesTests(t) {
       }
       const resolveAttributes = resolveHelloSegment.attributes.get(SEGMENT_DESTINATION)
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
-      t.matches(resolveAttributes, expectedArgAttributes)
-      t.matches(operationAttributes, expectedArgAttributes)
+      t.match(resolveAttributes, expectedArgAttributes)
+      t.match(operationAttributes, expectedArgAttributes)
     })
 
     executeQueryJson({
@@ -489,11 +457,7 @@ function createAttributesTests(t) {
 
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
 
-      t.matches(
-        operationAttributes,
-        expectedOperationAttributes,
-        'should have operation attributes'
-      )
+      t.match(operationAttributes, expectedOperationAttributes, 'should have operation attributes')
     })
 
     executeQueryAssertResult({
@@ -530,11 +494,7 @@ function createAttributesTests(t) {
       }
 
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
-      t.matches(
-        operationAttributes,
-        expectedOperationAttributes,
-        'should have operation attributes'
-      )
+      t.match(operationAttributes, expectedOperationAttributes, 'should have operation attributes')
 
       const resolveHelloSegment = operationSegment.children[0]
 
@@ -546,11 +506,7 @@ function createAttributesTests(t) {
       }
 
       const resolveAttributes = resolveHelloSegment.attributes.get(SEGMENT_DESTINATION)
-      t.matches(
-        resolveAttributes,
-        expectedResolveAttributes,
-        'should have field resolve attributes'
-      )
+      t.match(resolveAttributes, expectedResolveAttributes, 'should have field resolve attributes')
     })
 
     executeQueryAssertResult({
@@ -590,11 +546,7 @@ function createAttributesTests(t) {
       }
 
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
-      t.matches(
-        operationAttributes,
-        expectedOperationAttributes,
-        'should have operation attributes'
-      )
+      t.match(operationAttributes, expectedOperationAttributes, 'should have operation attributes')
 
       const resolveHelloSegment = operationSegment.children[0]
 
@@ -606,11 +558,7 @@ function createAttributesTests(t) {
       }
 
       const resolveAttributes = resolveHelloSegment.attributes.get(SEGMENT_DESTINATION)
-      t.matches(
-        resolveAttributes,
-        expectedResolveAttributes,
-        'should have field resolve attributes'
-      )
+      t.match(resolveAttributes, expectedResolveAttributes, 'should have field resolve attributes')
     })
 
     executeQueryAssertResult({
@@ -650,11 +598,7 @@ function createAttributesTests(t) {
 
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
 
-      t.matches(
-        operationAttributes,
-        expectedOperationAttributes,
-        'should have operation attributes'
-      )
+      t.match(operationAttributes, expectedOperationAttributes, 'should have operation attributes')
       count++
     })
 

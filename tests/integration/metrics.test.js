@@ -14,6 +14,7 @@ const UNKNOWN_OPERATION = '<unknown>'
 
 const OPERATION_PREFIX = 'GraphQL/operation/ApolloServer'
 const RESOLVE_PREFIX = 'GraphQL/resolve/ApolloServer'
+const TYPED_RESOLVE_PREFIX = 'GraphQL/typedResolve/ApolloServer'
 
 const { setupApolloServerTests } = require('./apollo-server-setup')
 
@@ -53,7 +54,11 @@ function createMetricsTests(t) {
 
     helper.agent.once('transactionFinished', () => {
       const operationPart = `query/${expectedName}/hello`
-      t.metrics([`${OPERATION_PREFIX}/${operationPart}`, `${RESOLVE_PREFIX}/hello`])
+      t.metrics([
+        `${OPERATION_PREFIX}/${operationPart}`,
+        `${RESOLVE_PREFIX}/hello`,
+        `${TYPED_RESOLVE_PREFIX}/Query.hello`
+      ])
     })
 
     executeQuery(serverUrl, query, (err) => {
@@ -85,7 +90,10 @@ function createMetricsTests(t) {
         `${OPERATION_PREFIX}/${operationPart}`,
         `${RESOLVE_PREFIX}/libraries`,
         `${RESOLVE_PREFIX}/books`,
-        `${RESOLVE_PREFIX}/author`
+        `${RESOLVE_PREFIX}/author`,
+        `${TYPED_RESOLVE_PREFIX}/Query.libraries`,
+        `${TYPED_RESOLVE_PREFIX}/Library.books`,
+        `${TYPED_RESOLVE_PREFIX}/Book.author`
       ])
     })
 
@@ -126,12 +134,16 @@ function createMetricsTests(t) {
         `${OPERATION_PREFIX}/${operationPart1}`,
         `${RESOLVE_PREFIX}/library`,
         `${RESOLVE_PREFIX}/books`,
-        `${RESOLVE_PREFIX}/author`
+        `${RESOLVE_PREFIX}/author`,
+        `${TYPED_RESOLVE_PREFIX}/Query.libraries`,
+        `${TYPED_RESOLVE_PREFIX}/Library.books`,
+        `${TYPED_RESOLVE_PREFIX}/Book.author`
       ]
 
       const operationMetrics2 = [
         `${OPERATION_PREFIX}/${operationPart2}`,
-        `${RESOLVE_PREFIX}/addThing`
+        `${RESOLVE_PREFIX}/addThing`,
+        `${TYPED_RESOLVE_PREFIX}/Mutation.addThing`
       ]
 
       t.metrics([...operationMetrics1, ...operationMetrics2])
@@ -161,7 +173,10 @@ function createMetricsTests(t) {
         `${OPERATION_PREFIX}/${operationPart}`,
         `${RESOLVE_PREFIX}/libraries`,
         `${RESOLVE_PREFIX}/books`,
-        `${RESOLVE_PREFIX}/author`
+        `${RESOLVE_PREFIX}/author`,
+        `${TYPED_RESOLVE_PREFIX}/Query.libraries`,
+        `${TYPED_RESOLVE_PREFIX}/Library.books`,
+        `${TYPED_RESOLVE_PREFIX}/Book.author`
       ])
     })
 
@@ -230,7 +245,10 @@ function createMetricsTests(t) {
         `${OPERATION_PREFIX}/${operationPart}`,
         `${RESOLVE_PREFIX}/library`,
         `${RESOLVE_PREFIX}/books`,
-        `${RESOLVE_PREFIX}/author`
+        `${RESOLVE_PREFIX}/author`,
+        `${TYPED_RESOLVE_PREFIX}/Query.libraries`,
+        `${TYPED_RESOLVE_PREFIX}/Library.books`,
+        `${TYPED_RESOLVE_PREFIX}/Book.author`
       ])
     })
 
@@ -267,7 +285,10 @@ function createMetricsTests(t) {
         `${OPERATION_PREFIX}/${operationPart}`,
         `${RESOLVE_PREFIX}/library`,
         `${RESOLVE_PREFIX}/books`,
-        `${RESOLVE_PREFIX}/author`
+        `${RESOLVE_PREFIX}/author`,
+        `${TYPED_RESOLVE_PREFIX}/Query.libraries`,
+        `${TYPED_RESOLVE_PREFIX}/Library.books`,
+        `${TYPED_RESOLVE_PREFIX}/Book.author`
       ])
     })
 

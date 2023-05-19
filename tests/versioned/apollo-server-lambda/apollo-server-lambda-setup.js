@@ -6,6 +6,7 @@
 'use strict'
 
 const tap = require('tap')
+const os = require('os')
 
 const agentTesting = require('../../agent-testing')
 const utils = require('@newrelic/test-utilities')
@@ -32,6 +33,7 @@ function setupApolloServerLambdaTests({ suiteName, createTests, pluginConfig }, 
      * distributed tracing.
      */
     agentTesting.temporarySetEnv(t, 'NEW_RELIC_ACCOUNT_ID', 'eeeeee')
+    agentTesting.temporarySetEnv(t, 'NEWRELIC_PIPE_PATH', os.devNull)
 
     t.beforeEach((t) => {
       const lambdaServerPkg = require('apollo-server-lambda')
