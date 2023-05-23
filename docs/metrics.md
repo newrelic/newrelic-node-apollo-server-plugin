@@ -19,10 +19,11 @@ Operation metrics include the operation type, operation name and deepest-path. T
 ## Field Resolve Metrics
 
 `/GraphQL/resolve/ApolloServer/[field-name]`
+`/GraphQL/typedResolve/ApolloServer/[parent-type].[field-name]`
 
-Resolve metrics capture the duration spent resolving a particular piece of requested GraphQL data. These can be useful to find specific resolvers that may contribute to slowing down incoming queries.
+Resolve metrics capture the duration spent resolving a particular piece of requested GraphQL data. These can be useful to find specific resolvers that may contribute to slowing down incoming queries. The metric with `typedResolve` in its prefix can be helpful for distinguishing field resolvers that happen to have the same name but are on different types. The metric without the parent type can be helpful in case of the same resolver being used across different types. 
 
-These differ slightly in naming from their segment/span counterparts. Be better visualize relationships, the full path to a field is represented in segments/spans (i.e. libraries.books.title). To understand the duration aggregated across all usages and transactions, the metric uses the field name without the full path.
+These differ slightly in naming from their segment/span counterparts. To better visualize relationships, the full path to a field is represented in segments/spans (e.g. libraries.books.title). To understand the duration aggregated across all usages and transactions, these metrics use the field name without the full path.
 
 ## Visualizations
 
