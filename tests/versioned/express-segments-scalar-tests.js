@@ -74,7 +74,7 @@ function createSegmentsTests(t, frameworkName, isApollo4) {
           ]
         }
       ]
-      constructSegments(expectedSegments, operationSegments, isApollo4)
+      constructSegments(expectedSegments, operationSegments)
 
       t.segments(transaction.trace.root, expectedSegments)
     })
@@ -113,7 +113,7 @@ function createSegmentsTests(t, frameworkName, isApollo4) {
           ]
         }
       ]
-      constructSegments(expectedSegments, operationSegments, isApollo4)
+      constructSegments(expectedSegments, operationSegments)
 
       t.segments(transaction.trace.root, expectedSegments)
     })
@@ -161,7 +161,7 @@ function createSegmentsTests(t, frameworkName, isApollo4) {
           ]
         }
       ]
-      constructSegments(expectedSegments, operationSegments, isApollo4)
+      constructSegments(expectedSegments, operationSegments)
 
       t.segments(transaction.trace.root, expectedSegments)
     })
@@ -216,7 +216,7 @@ function createSegmentsTests(t, frameworkName, isApollo4) {
           ]
         }
       ]
-      constructSegments(expectedSegments, operationSegments, isApollo4)
+      constructSegments(expectedSegments, operationSegments)
 
       t.segments(transaction.trace.root, expectedSegments)
     })
@@ -269,7 +269,7 @@ function createSegmentsTests(t, frameworkName, isApollo4) {
           ]
         }
       ]
-      constructSegments(expectedSegments, operationSegments, isApollo4)
+      constructSegments(expectedSegments, operationSegments)
 
       t.segments(transaction.trace.root, expectedSegments)
     })
@@ -318,7 +318,7 @@ function createSegmentsTests(t, frameworkName, isApollo4) {
           ]
         }
       ]
-      constructSegments(expectedSegments, operationSegments, isApollo4)
+      constructSegments(expectedSegments, operationSegments)
 
       t.segments(transaction.trace.root, expectedSegments)
     })
@@ -352,7 +352,7 @@ function createSegmentsTests(t, frameworkName, isApollo4) {
           ]
         }
       ]
-      constructSegments(expectedSegments, operationSegments, isApollo4)
+      constructSegments(expectedSegments, operationSegments)
 
       t.segments(transaction.trace.root, expectedSegments)
     })
@@ -387,7 +387,7 @@ function createSegmentsTests(t, frameworkName, isApollo4) {
           ]
         }
       ]
-      constructSegments(expectedSegments, operationSegments, isApollo4)
+      constructSegments(expectedSegments, operationSegments)
 
       t.segments(transaction.trace.root, expectedSegments)
     })
@@ -449,7 +449,7 @@ function createSegmentsTests(t, frameworkName, isApollo4) {
           ]
         }
       ]
-      constructSegments(expectedSegments, operationSegments, isApollo4)
+      constructSegments(expectedSegments, operationSegments)
 
       t.segments(transaction.trace.root, expectedSegments)
     })
@@ -514,7 +514,7 @@ function createSegmentsTests(t, frameworkName, isApollo4) {
           ]
         }
       ]
-      constructSegments(expectedSegments, operationSegments, isApollo4)
+      constructSegments(expectedSegments, operationSegments)
 
       t.segments(transaction.trace.root, expectedSegments)
     })
@@ -577,7 +577,7 @@ function createSegmentsTests(t, frameworkName, isApollo4) {
           ]
         }
       ]
-      constructSegments(expectedSegments, operationSegments, isApollo4)
+      constructSegments(expectedSegments, operationSegments)
 
       t.segments(transaction.trace.root, expectedSegments)
     })
@@ -668,7 +668,7 @@ function createSegmentsTests(t, frameworkName, isApollo4) {
           ]
         }
       ]
-      constructSegments(expectedSegments, operationSegments, isApollo4)
+      constructSegments(expectedSegments, operationSegments)
 
       t.segments(transaction.trace.root, expectedSegments)
     })
@@ -710,7 +710,7 @@ function createSegmentsTests(t, frameworkName, isApollo4) {
           ]
         }
       ]
-      constructSegments(expectedSegments, operationSegments, isApollo4)
+      constructSegments(expectedSegments, operationSegments)
 
       t.segments(transaction.trace.root, expectedSegments)
     })
@@ -760,7 +760,7 @@ function createSegmentsTests(t, frameworkName, isApollo4) {
           ]
         }
       ]
-      constructSegments(expectedSegments, operationSegments, isApollo4)
+      constructSegments(expectedSegments, operationSegments)
 
       t.segments(transaction.trace.root, expectedSegments)
     })

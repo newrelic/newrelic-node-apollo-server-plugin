@@ -71,7 +71,7 @@ const collection = [
 ]
 
 function getTypeDefs(gql) {
-  const typeDefs = gql`
+  return gql`
     union SearchResult = Book | Magazine
 
     type Library {
@@ -121,7 +121,6 @@ function getTypeDefs(gql) {
       addToCollection(title: String!): Item!
     }
   `
-  return typeDefs
 }
 
 const resolvers = {
@@ -141,14 +140,12 @@ const resolvers = {
       return libraries
     },
     library: (_, { branch }) => {
-      const promise = new Promise((resolve) => {
+      return new Promise((resolve) => {
         setTimeout(() => {
           const filtered = libraries.find((library) => library.branch === branch)
           resolve(filtered)
         }, 0)
       })
-
-      return promise
     },
     searchCollection: (_, { title }) => {
       const item = collection.filter((coll) => coll.title.includes(title))
@@ -162,8 +159,7 @@ const resolvers = {
           resolve(name)
         }, 1)
       })
-      const result = await promise
-      return result
+      return await promise
     },
     addToCollection: async (_, { title }) => {
       return await new Promise((resolve) => {

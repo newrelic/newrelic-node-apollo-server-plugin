@@ -68,7 +68,7 @@ function createFederatedSegmentsTests(t) {
       }
     }`
 
-    let transactions = []
+    const transactions = []
     const expectedTransactions = [
       /WebTransaction\/Expressjs\/POST\/\/query\/SubGraphs__Library__[\d]+\/libraries.branch/,
       /WebTransaction\/Expressjs\/POST\/\/query\/SubGraphs__Book__[\d]+\/_entities<Library>.booksInStock/,
@@ -128,7 +128,7 @@ function createFederatedSegmentsTests(t) {
       }
     }`
 
-    let transactions = []
+    const transactions = []
     const expectedPath = 'libraries.branch'
     const expectedTransaction = `WebTransaction/Expressjs/POST//query/SubGraphs__Library__0/${expectedPath}`
 

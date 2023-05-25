@@ -42,7 +42,7 @@ const libraries = [
 ]
 
 function _getLibraryTypeDef(gql) {
-  const typeDefs = gql`
+  return gql`
     type Library @key(fields: "id") {
       id: ID!
       branch: String
@@ -53,13 +53,11 @@ function _getLibraryTypeDef(gql) {
       libraries: [Library]
     }
   `
-
-  return typeDefs
 }
 
 // https://www.apollographql.com/docs/federation/api/apollo-subgraph/#__resolvereference
 function _getLibraryResolvers() {
-  const resolvers = {
+  return {
     Library: {
       __resolveReference(reference) {
         return libraries.find((library) => library.id === reference.id)
@@ -74,8 +72,6 @@ function _getLibraryResolvers() {
       }
     }
   }
-
-  return resolvers
 }
 
 const books = [
@@ -106,7 +102,7 @@ const books = [
 ]
 
 function _getBookTypeDef(gql) {
-  const typeDefs = gql`
+  return gql`
     type Book {
       isbn: ID!
       title: String
@@ -124,11 +120,10 @@ function _getBookTypeDef(gql) {
       books: [Book]
     }
   `
-  return typeDefs
 }
 
 function _getBookResolvers() {
-  const resolvers = {
+  return {
     Book: {
       branch(parent) {
         return { __typename: 'Library', id: parent.branch }
@@ -148,8 +143,6 @@ function _getBookResolvers() {
       }
     }
   }
-
-  return resolvers
 }
 
 const magazines = [
@@ -166,7 +159,7 @@ const magazines = [
 ]
 
 function _getMagazineTypeDef(gql) {
-  const typeDefs = gql`
+  return gql`
     type Magazine {
       issue: ID!
       title: String
@@ -183,12 +176,10 @@ function _getMagazineTypeDef(gql) {
       magazines: [Magazine]
     }
   `
-
-  return typeDefs
 }
 
 function _getMagazineResolvers() {
-  const resolvers = {
+  return {
     Magazine: {
       branch(parent) {
         return { __typename: 'Library', id: parent.branch }
@@ -208,38 +199,30 @@ function _getMagazineResolvers() {
       }
     }
   }
-
-  return resolvers
 }
 
 function getLibraryConfiguration(gql) {
-  const config = {
+  return {
     name: 'Library',
     typeDefs: _getLibraryTypeDef(gql),
     resolvers: _getLibraryResolvers()
   }
-
-  return config
 }
 
 function getBookConfiguration(gql) {
-  const config = {
+  return {
     name: 'Book',
     typeDefs: _getBookTypeDef(gql),
     resolvers: _getBookResolvers()
   }
-
-  return config
 }
 
 function getMagazineConfiguration(gql) {
-  const config = {
+  return {
     name: 'Magazine',
     typeDefs: _getMagazineTypeDef(gql),
     resolvers: _getMagazineResolvers()
   }
-
-  return config
 }
 
 module.exports = {

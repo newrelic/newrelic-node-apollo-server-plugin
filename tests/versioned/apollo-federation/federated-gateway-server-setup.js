@@ -41,7 +41,7 @@ function setupFederatedGatewayServerTests(options, agentConfig) {
       // Do after instrumentation to ensure express isn't loaded too soon.
       const apollo = require('apollo-server')
 
-      let subGraphPlugins = []
+      const subGraphPlugins = []
 
       if (options.instrumentSubGraphs) {
         subGraphPlugins.push(instrumentationPlugin)
@@ -175,15 +175,13 @@ function createIgnoreTransactionPlugin(nrApi) {
 
 function initializePlugins(instrumentationApi, plugins) {
   plugins = plugins || []
-  const initializedPlugins = plugins.map((plugin) => {
+  return plugins.map((plugin) => {
     if (typeof plugin === 'function') {
       return plugin(instrumentationApi)
     }
 
     return plugin
   })
-
-  return initializedPlugins
 }
 
 module.exports = {

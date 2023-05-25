@@ -177,7 +177,5 @@ function createFederatedSegmentsTests(t, frameworkName) {
 
 function formatExternalSegment(url) {
   const hostAndPort = url.replace('http://', '')
-  const name = `${EXTERNAL_PREFIX}/${hostAndPort}`
-
-  return name
+  return `${EXTERNAL_PREFIX}/${hostAndPort}`
 }

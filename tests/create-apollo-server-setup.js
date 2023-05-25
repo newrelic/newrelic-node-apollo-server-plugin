@@ -89,15 +89,13 @@ function setupApolloServerTests(loadApolloServer, testDir, options, agentConfig)
 
 function initializePlugins(instrumentationApi, plugins) {
   plugins = plugins || []
-  const initializedPlugins = plugins.map((plugin) => {
+  return plugins.map((plugin) => {
     if (typeof plugin === 'function') {
       return plugin(instrumentationApi)
     }
 
     return plugin
   })
-
-  return initializedPlugins
 }
 
 module.exports = createApolloServerSetup

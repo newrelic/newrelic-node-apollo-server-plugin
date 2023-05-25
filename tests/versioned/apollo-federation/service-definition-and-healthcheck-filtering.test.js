@@ -34,7 +34,7 @@ tap.test(
     t.test('Should ignore Service Definiion query by default', async (t) => {
       // load default instrumentation. express being critical
       helper = utils.TestAgent.makeFullyInstrumented(agentConfig)
-      let ignore = true
+      const ignore = true
 
       helper.agent.on('transactionFinished', (transaction) => {
         t.equal(transaction.ignore, ignore, `should set transaction.ignore to ${ignore}`)
@@ -44,7 +44,7 @@ tap.test(
 
       const nrApi = helper.getAgentApi()
 
-      const instrumentationPlugin = createPlugin(nrApi.shim, pluginConfig)
+      const instrumentationPlugin = createPlugin(nrApi, pluginConfig)
       const plugins = [instrumentationPlugin]
 
       // Do after instrumentation to ensure express isn't loaded too soon.
@@ -69,7 +69,7 @@ tap.test(
       async (t) => {
         // load default instrumentation. express being critical
         helper = utils.TestAgent.makeFullyInstrumented(agentConfig)
-        let ignore = false
+        const ignore = false
 
         helper.agent.on('transactionFinished', (transaction) => {
           t.equal(transaction.ignore, ignore, `should set transaction.ignore to ${ignore}`)
@@ -81,7 +81,7 @@ tap.test(
 
         const nrApi = helper.getAgentApi()
 
-        const instrumentationPlugin = createPlugin(nrApi.shim, pluginConfig)
+        const instrumentationPlugin = createPlugin(nrApi, pluginConfig)
         const plugins = [instrumentationPlugin]
 
         // Do after instrumentation to ensure express isn't loaded too soon.
@@ -104,7 +104,7 @@ tap.test(
     t.test('Should ignore Health Check query by default', async (t) => {
       // load default instrumentation. express being critical
       helper = utils.TestAgent.makeFullyInstrumented(agentConfig)
-      let ignore = true
+      const ignore = true
 
       helper.agent.on('transactionFinished', (transaction) => {
         if (transaction.name.includes('__ApolloServiceHealthCheck__')) {
@@ -116,7 +116,7 @@ tap.test(
 
       const nrApi = helper.getAgentApi()
 
-      const instrumentationPlugin = createPlugin(nrApi.shim, pluginConfig)
+      const instrumentationPlugin = createPlugin(nrApi, pluginConfig)
       const plugins = [instrumentationPlugin]
 
       // Do after instrumentation to ensure express isn't loaded too soon.
@@ -143,7 +143,7 @@ tap.test(
       async (t) => {
         // load default instrumentation. express being critical
         helper = utils.TestAgent.makeFullyInstrumented(agentConfig)
-        let ignore = false
+        const ignore = false
 
         helper.agent.on('transactionFinished', (transaction) => {
           if (transaction.name.includes('__ApolloServiceHealthCheck__')) {
@@ -157,7 +157,7 @@ tap.test(
 
         const nrApi = helper.getAgentApi()
 
-        const instrumentationPlugin = createPlugin(nrApi.shim, pluginConfig)
+        const instrumentationPlugin = createPlugin(nrApi, pluginConfig)
         const plugins = [instrumentationPlugin]
 
         // Do after instrumentation to ensure express isn't loaded too soon.
