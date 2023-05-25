@@ -8,11 +8,13 @@
 const { executeQueryAssertResult } = require('./lambda-test-utils')
 const { findSegmentByName } = require('../../agent-testing')
 
+const SPAN_DESTINATION = 0x10
 const SEGMENT_DESTINATION = 0x20
 
 const QUERY_ATTRIBUTE_NAME = 'graphql.operation.query'
 
 const OPERATION_PREFIX = 'GraphQL/operation/ApolloServer'
+const RESOLVE_PREFIX = 'GraphQL/resolve/ApolloServer'
 
 const { setupApolloServerLambdaTests } = require('./apollo-server-lambda-setup')
 
@@ -20,7 +22,12 @@ setupApolloServerLambdaTests({
   suiteName: 'lambda query obfuscation',
   createTests: createQueryObfuscationTests,
   pluginConfig: {
-    captureScalars: true
+    captureScalars: true,
+    customResolverAttributes({ context }) {
+      return {
+        stage: context.event.requestContext.stage
+      }
+    }
   }
 })
 
@@ -46,6 +53,17 @@ function createQueryObfuscationTests(t) {
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
 
       t.ok(operationAttributes[QUERY_ATTRIBUTE_NAME].includes('library(***)') > 0)
+
+      const resolverName = `${RESOLVE_PREFIX}/library`
+      const resolverSegment = findSegmentByName(transaction.trace.root, resolverName)
+      const resolverCustomAttributes = resolverSegment
+        .getSpanContext()
+        .customAttributes.get(SPAN_DESTINATION)
+      t.match(
+        resolverCustomAttributes,
+        { stage: 'test' },
+        'should have a contextual custom attribute'
+      )
     })
 
     executeQueryAssertResult({

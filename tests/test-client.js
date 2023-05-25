@@ -44,7 +44,8 @@ function makeRequest(url, postData, callback) {
   const options = {
     method: 'GET',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'client-name': 'ApolloTestClient'
     }
   }
 

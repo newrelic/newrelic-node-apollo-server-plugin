@@ -9,6 +9,7 @@ const { executeQuery, executeJson } = require('../test-client')
 const { findSegmentByName } = require('../agent-testing')
 
 const SEGMENT_DESTINATION = 0x20
+const SPAN_DESTINATION = 0x10
 
 const ANON_PLACEHOLDER = '<anonymous>'
 
@@ -32,6 +33,8 @@ function createAttributesTests(t) {
       const operationName = `${OPERATION_PREFIX}/query/${ANON_PLACEHOLDER}/hello`
       const operationSegment = findSegmentByName(transaction.trace.root, operationName)
 
+      assertCustomAttributes(t, operationSegment, { clientName: 'ApolloTestClient' })
+
       const expectedOperationAttributes = {
         'graphql.operation.type': 'query'
       }
@@ -53,6 +56,8 @@ function createAttributesTests(t) {
 
       const resolveAttributes = resolveHelloSegment.attributes.get(SEGMENT_DESTINATION)
       t.match(resolveAttributes, expectedResolveAttributes, 'should have field resolve attributes')
+
+      assertCustomAttributes(t, resolveHelloSegment, { returnType: 'String' })
     })
 
     executeQuery(serverUrl, query, (err) => {
@@ -158,6 +163,7 @@ function createAttributesTests(t) {
         expectedBooksAttributes,
         'should have field resolve attributes for books'
       )
+      assertCustomAttributes(t, resolveBooksSegment, { sourceBranch: 'downtown' })
     })
 
     executeQuery(serverUrl, query, (err) => {
@@ -392,6 +398,8 @@ function createAttributesTests(t) {
       }
       const resolveAttributes = resolveHelloSegment.attributes.get(SEGMENT_DESTINATION)
       t.match(resolveAttributes, expectedArgAttributes)
+
+      assertCustomAttributes(t, resolveHelloSegment, { args: 'blah,blee' })
     })
 
     executeJson(serverUrl, queryJson, (err) => {
@@ -573,7 +581,26 @@ function createAttributesTests(t) {
   })
 }
 
+function assertCustomAttributes(t, segment, expected) {
+  const customResolveAttributes = segment.getSpanContext().customAttributes.get(SPAN_DESTINATION)
+  t.match(customResolveAttributes, expected, `should have custom attributes on ${segment.name}`)
+}
+
 module.exports = {
   suiteName: 'attributes',
-  createTests: createAttributesTests
+  createTests: createAttributesTests,
+  pluginConfig: {
+    customResolverAttributes({ source, args, info }) {
+      return {
+        args: Object.keys(args).join(','),
+        returnType: info.returnType.name,
+        sourceBranch: source?.branch
+      }
+    },
+    customOperationAttributes(context) {
+      return {
+        clientName: context.request.http.headers.get('client-name')
+      }
+    }
+  }
 }
