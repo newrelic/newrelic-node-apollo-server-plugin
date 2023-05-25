@@ -121,7 +121,9 @@ const plugin = createPlugin({
   captureScalars: true,
   captureIntrospectionQueries: true,
   captureServiceDefinitionQueries: true,
-  captureHealthCheckQueries: true
+  captureHealthCheckQueries: true,
+  customResolverAttributes: () => { return { exampleAttribute: 'exampleValue' }},
+  customOperationAttributes: () => { return { exampleAttribute: 'exampleValue' }}
 })
 ```
 
@@ -137,6 +139,28 @@ const plugin = createPlugin({
 * `[captureServiceDefinitionQueries = false]` Enable capture of timings for a [Service Definition query](https://www.apollographql.com/docs/federation/federation-spec/#fetch-service-capabilities) received from an Apollo Federated Gateway Server.
 
 * `[captureHealthCheckQueries = false]` Enable capture of timings for a [Health Check query](https://www.apollographql.com/docs/federation/api/apollo-gateway/#servicehealthcheck) received from an Apollo Federated Gateway Server.
+
+There are two configuration options for providing callbacks that can be used to define custom attributes. As their names suggest, `customResolverAttributes` will put custom attributes on the resolver segment and `customOperationAttributes` will use the operation segment. 
+
+The `customResolverAttributes` callback gets passed a `resolverContext` object [corresponding to the attributes given to a resolver](https://www.apollographql.com/docs/apollo-server/data/resolvers/#resolver-arguments) in Apollo server. The `customOperationAttributes` callback gets passed [a `requestContext` argument](https://github.com/apollographql/apollo-server/blob/6b4945935a786d06e7ff904be94c0035fe27aeb1/packages/server/src/externalTypes/graphql.ts#L47). These arguments can be used to imbue more details into custom attributes.  Both callbacks must return an object that will be used to define custom attribute key-value pairs. For example,
+
+```js
+const plugin = createPlugin({
+  customResolverAttributes({ source, args, context, info }) {
+    return {
+      allArgs: Object.keys(args).join(','),
+      returnType: info.returnType.name,
+      sourceBranch: source?.branch
+      stage: context.event.requestContext.stage
+    }
+  },
+  customOperationAttributes(requestContext) {
+    return {
+      clientName: requestContext.request.http.headers.get('graphql-client-name')
+    }
+  }
+})
+```
 
 ### Apollo Federation Support
 
