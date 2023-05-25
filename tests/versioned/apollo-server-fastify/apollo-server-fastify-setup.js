@@ -34,7 +34,7 @@ function setupApolloServerFastifyTests({ suiteName, createTests, pluginConfig },
       app = require('fastify')()
 
       // TODO: eventually use proper function for instrumenting and not .shim
-      const plugin = createPlugin(nrApi.shim, pluginConfig)
+      const plugin = createPlugin(nrApi, pluginConfig)
 
       // Do after instrumentation to ensure hapi isn't loaded too soon.
       const fastifyServerPkg = require('apollo-server-fastify')

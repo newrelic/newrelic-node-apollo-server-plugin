@@ -5,7 +5,8 @@
 
 'use strict'
 
-function createStateLossPlugin(stateLossConfig, instrumentationApi) {
+function createStateLossPlugin(stateLossConfig, api) {
+  const instrumentationApi = api.shim
   return {
     requestDidStart() {
       triggerStateLoss(stateLossConfig.onRequestDidStart)

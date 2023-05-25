@@ -34,9 +34,9 @@ function setupFederatedGatewayServerTests(options, agentConfig) {
       const createPlugin = require('../../../lib/create-plugin')
       const nrApi = helper.getAgentApi()
 
-      const startingPlugins = initializePlugins(nrApi.shim, options.startingPlugins)
+      const startingPlugins = initializePlugins(nrApi, options.startingPlugins)
 
-      const instrumentationPlugin = createPlugin(nrApi.shim, pluginConfig)
+      const instrumentationPlugin = createPlugin(nrApi, pluginConfig)
 
       // Do after instrumentation to ensure express isn't loaded too soon.
       const apollo = require('apollo-server')

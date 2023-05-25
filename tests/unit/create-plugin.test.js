@@ -22,22 +22,26 @@ tap.test('createPlugin edge cases', (t) => {
     }
 
     instrumentationApi = {
-      logger: {
-        child: sinon
-          .stub()
-          .returns({ info: sinon.stub(), debug: sinon.stub(), trace: sinon.stub() })
+      shim: {
+        logger: {
+          child: sinon
+            .stub()
+            .returns({ info: sinon.stub(), debug: sinon.stub(), trace: sinon.stub() })
+        },
+        agent: {
+          metrics: {
+            getOrCreateMetric: sinon.stub().returns({ incrementCallCount: sinon.stub() })
+          }
+        },
+        getActiveSegment: sinon.stub().returns({}),
+        createSegment: sinon.stub().callsFake((name) => {
+          operationSegment.name = name
+          return operationSegment
+        }),
+        setActiveSegment: sinon.stub(),
+        isFunction: () => false
       },
-      agent: {
-        metrics: {
-          getOrCreateMetric: sinon.stub().returns({ incrementCallCount: sinon.stub() })
-        }
-      },
-      getActiveSegment: sinon.stub().returns({}),
-      createSegment: sinon.stub().callsFake((name) => {
-        operationSegment.name = name
-        return operationSegment
-      }),
-      setActiveSegment: sinon.stub()
+      addCustomAttributes: sinon.stub()
     }
   })
 
