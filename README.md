@@ -122,6 +122,7 @@ const plugin = createPlugin({
   captureIntrospectionQueries: true,
   captureServiceDefinitionQueries: true,
   captureHealthCheckQueries: true,
+  captureFieldMetrics: true,
   customResolverAttributes: () => { return { exampleAttribute: 'exampleValue' }},
   customOperationAttributes: () => { return { exampleAttribute: 'exampleValue' }}
 })
@@ -139,6 +140,8 @@ const plugin = createPlugin({
 * `[captureServiceDefinitionQueries = false]` Enable capture of timings for a [Service Definition query](https://www.apollographql.com/docs/federation/federation-spec/#fetch-service-capabilities) received from an Apollo Federated Gateway Server.
 
 * `[captureHealthCheckQueries = false]` Enable capture of timings for a [Health Check query](https://www.apollographql.com/docs/federation/api/apollo-gateway/#servicehealthcheck) received from an Apollo Federated Gateway Server.
+
+* `[captureFieldMetrics = false]` Enable capture of metrics for every field and resolver argument seen for an Apollo query. This is intended to be used to check for any unused fields in your graphql schema. 
 
 There are two configuration options for providing callbacks that can be used to define custom attributes. As their names suggest, `customResolverAttributes` will put custom attributes on the resolver segment and `customOperationAttributes` will use the operation segment. 
 

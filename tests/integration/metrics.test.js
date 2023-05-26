@@ -13,17 +13,25 @@ const ANON_PLACEHOLDER = '<anonymous>'
 const UNKNOWN_OPERATION = '<unknown>'
 
 const OPERATION_PREFIX = 'GraphQL/operation/ApolloServer'
+const FIELD_PREFIX = 'GraphQL/field/ApolloServer'
 const RESOLVE_PREFIX = 'GraphQL/resolve/ApolloServer'
+const ARG_PREFIX = 'GraphQL/arg/ApolloServer'
 const TYPED_RESOLVE_PREFIX = 'GraphQL/typedResolve/ApolloServer'
 
 const { setupApolloServerTests } = require('./apollo-server-setup')
 
 setupApolloServerTests({
   suiteName: 'metrics',
-  createTests: createMetricsTests
+  createTests: createMetricsTests.bind(null, false)
 })
 
-function createMetricsTests(t) {
+setupApolloServerTests({
+  suiteName: 'capture field metrics',
+  createTests: createMetricsTests.bind(null, true),
+  pluginConfig: { captureFieldMetrics: true }
+})
+
+function createMetricsTests(captureFieldMetrics, t) {
   setupEnvConfig(t)
 
   t.test('anonymous query, single level metrics', (t) => {
@@ -35,7 +43,13 @@ function createMetricsTests(t) {
 
     helper.agent.once('transactionFinished', () => {
       const operationPart = `query/${ANON_PLACEHOLDER}/hello`
-      t.metrics([`${OPERATION_PREFIX}/${operationPart}`, `${RESOLVE_PREFIX}/hello`])
+      const metrics = [`${OPERATION_PREFIX}/${operationPart}`, `${RESOLVE_PREFIX}/hello`]
+
+      if (captureFieldMetrics) {
+        metrics.push(`${FIELD_PREFIX}/Query.hello`)
+      }
+
+      t.metrics(metrics)
     })
 
     executeQuery(serverUrl, query, (err) => {
@@ -54,11 +68,17 @@ function createMetricsTests(t) {
 
     helper.agent.once('transactionFinished', () => {
       const operationPart = `query/${expectedName}/hello`
-      t.metrics([
+      const metrics = [
         `${OPERATION_PREFIX}/${operationPart}`,
         `${RESOLVE_PREFIX}/hello`,
         `${TYPED_RESOLVE_PREFIX}/Query.hello`
-      ])
+      ]
+
+      if (captureFieldMetrics) {
+        metrics.push(`${FIELD_PREFIX}/Query.hello`)
+      }
+
+      t.metrics(metrics)
     })
 
     executeQuery(serverUrl, query, (err) => {
@@ -86,7 +106,7 @@ function createMetricsTests(t) {
     helper.agent.once('transactionFinished', () => {
       const operationPart = `query/${ANON_PLACEHOLDER}/${path}`
 
-      t.metrics([
+      const metrics = [
         `${OPERATION_PREFIX}/${operationPart}`,
         `${RESOLVE_PREFIX}/libraries`,
         `${RESOLVE_PREFIX}/books`,
@@ -94,7 +114,21 @@ function createMetricsTests(t) {
         `${TYPED_RESOLVE_PREFIX}/Query.libraries`,
         `${TYPED_RESOLVE_PREFIX}/Library.books`,
         `${TYPED_RESOLVE_PREFIX}/Book.author`
-      ])
+      ]
+
+      if (captureFieldMetrics) {
+        const fieldMetrics = [
+          `${FIELD_PREFIX}/Query.libraries`,
+          `${FIELD_PREFIX}/Library.books`,
+          `${FIELD_PREFIX}/Book.title`,
+          `${FIELD_PREFIX}/Book.author`,
+          `${FIELD_PREFIX}/Author.name`
+        ]
+
+        metrics.push(...fieldMetrics)
+      }
+
+      t.metrics(metrics)
     })
 
     executeQuery(serverUrl, query, (err) => {
@@ -146,10 +180,65 @@ function createMetricsTests(t) {
         `${TYPED_RESOLVE_PREFIX}/Mutation.addThing`
       ]
 
+      if (captureFieldMetrics) {
+        const fieldMetrics1 = [
+          `${FIELD_PREFIX}/Query.library`,
+          `${ARG_PREFIX}/Query.library/branch`,
+          `${FIELD_PREFIX}/Library.books`,
+          `${FIELD_PREFIX}/Book.title`,
+          `${FIELD_PREFIX}/Book.author`,
+          `${FIELD_PREFIX}/Author.name`
+        ]
+
+        operationMetrics1.push(...fieldMetrics1)
+
+        const fieldMetrics2 = [`${ARG_PREFIX}/Mutation.addThing/name`]
+
+        operationMetrics2.push(...fieldMetrics2)
+      }
+
       t.metrics([...operationMetrics1, ...operationMetrics2])
     })
 
     executeQueryBatch(serverUrl, queries, (err) => {
+      t.error(err)
+      t.end()
+    })
+  })
+
+  t.test('input type query with multiple fields', (t) => {
+    const { helper, serverUrl } = t.context
+    const expectedName = 'FindBooks'
+    const path = 'searchByBook'
+
+    const query = `query ${expectedName} {
+      searchByBook(book: { author: { name: "10x Developer" }  } ) {
+        title
+        isbn
+      }
+    }`
+
+    helper.agent.once('transactionFinished', () => {
+      const operationPart = `query/${expectedName}/${path}`
+      const operationMetrics = [
+        `${OPERATION_PREFIX}/${operationPart}`,
+        `${RESOLVE_PREFIX}/${path}`,
+        `${TYPED_RESOLVE_PREFIX}/Query.${path}`
+      ]
+
+      if (captureFieldMetrics) {
+        const fieldMetrics = [
+          `${ARG_PREFIX}/Query.${path}/book.author.name`,
+          `${FIELD_PREFIX}/Book.title`,
+          `${FIELD_PREFIX}/Book.isbn`
+        ]
+        operationMetrics.push(...fieldMetrics)
+      }
+
+      t.metrics(operationMetrics)
+    })
+
+    executeQuery(serverUrl, query, (err) => {
       t.error(err)
       t.end()
     })
@@ -169,7 +258,7 @@ function createMetricsTests(t) {
     helper.agent.once('transactionFinished', () => {
       const operationPart = `query/${ANON_PLACEHOLDER}/${path}`
 
-      t.metrics([
+      const metrics = [
         `${OPERATION_PREFIX}/${operationPart}`,
         `${RESOLVE_PREFIX}/libraries`,
         `${RESOLVE_PREFIX}/books`,
@@ -177,7 +266,20 @@ function createMetricsTests(t) {
         `${TYPED_RESOLVE_PREFIX}/Query.libraries`,
         `${TYPED_RESOLVE_PREFIX}/Library.books`,
         `${TYPED_RESOLVE_PREFIX}/Book.author`
-      ])
+      ]
+
+      if (captureFieldMetrics) {
+        const fieldMetrics = [
+          `${FIELD_PREFIX}/Query.libraries`,
+          `${FIELD_PREFIX}/Library.books`,
+          `${FIELD_PREFIX}/Book.title`,
+          `${FIELD_PREFIX}/Book.author`,
+          `${FIELD_PREFIX}/Author.name`
+        ]
+        metrics.push(...fieldMetrics)
+      }
+
+      t.metrics(metrics)
     })
 
     // first make a request with persistedQuery extension enabled and the query to persist
@@ -241,7 +343,7 @@ function createMetricsTests(t) {
     helper.agent.once('transactionFinished', () => {
       const operationPart = `query/${expectedName}/${path}`
 
-      t.metrics([
+      const metrics = [
         `${OPERATION_PREFIX}/${operationPart}`,
         `${RESOLVE_PREFIX}/library`,
         `${RESOLVE_PREFIX}/books`,
@@ -249,7 +351,22 @@ function createMetricsTests(t) {
         `${TYPED_RESOLVE_PREFIX}/Query.libraries`,
         `${TYPED_RESOLVE_PREFIX}/Library.books`,
         `${TYPED_RESOLVE_PREFIX}/Book.author`
-      ])
+      ]
+
+      if (captureFieldMetrics) {
+        const fieldMetrics = [
+          `${FIELD_PREFIX}/Query.library`,
+          `${ARG_PREFIX}/Query.library/branch`,
+          `${FIELD_PREFIX}/Library.books`,
+          `${FIELD_PREFIX}/Book.title`,
+          `${FIELD_PREFIX}/Book.author`,
+          `${FIELD_PREFIX}/Author.name`
+        ]
+
+        metrics.push(...fieldMetrics)
+      }
+
+      t.metrics(metrics)
     })
 
     executeQuery(serverUrl, query, (err) => {
@@ -281,7 +398,7 @@ function createMetricsTests(t) {
     helper.agent.once('transactionFinished', () => {
       const operationPart = `query/${expectedName}/${path}`
 
-      t.metrics([
+      const metrics = [
         `${OPERATION_PREFIX}/${operationPart}`,
         `${RESOLVE_PREFIX}/library`,
         `${RESOLVE_PREFIX}/books`,
@@ -289,7 +406,22 @@ function createMetricsTests(t) {
         `${TYPED_RESOLVE_PREFIX}/Query.libraries`,
         `${TYPED_RESOLVE_PREFIX}/Library.books`,
         `${TYPED_RESOLVE_PREFIX}/Book.author`
-      ])
+      ]
+
+      if (captureFieldMetrics) {
+        const fieldMetrics = [
+          `${FIELD_PREFIX}/Query.library`,
+          `${ARG_PREFIX}/Query.library/branch`,
+          `${FIELD_PREFIX}/Library.books`,
+          `${FIELD_PREFIX}/Book.title`,
+          `${FIELD_PREFIX}/Book.author`,
+          `${FIELD_PREFIX}/Author.name`
+        ]
+
+        metrics.push(...fieldMetrics)
+      }
+
+      t.metrics(metrics)
     })
 
     executeQuery(serverUrl, query, (err) => {
