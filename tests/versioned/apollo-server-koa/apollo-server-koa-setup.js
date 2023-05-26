@@ -37,7 +37,7 @@ function setupApolloServerKoaTests({ suiteName, createTests, pluginConfig }, con
       app = new Koa()
 
       // TODO: eventually use proper function for instrumenting and not .shim
-      const plugin = createPlugin(nrApi.shim, pluginConfig)
+      const plugin = createPlugin(nrApi, pluginConfig)
 
       const graphqlPath = '/gql'
 

@@ -32,7 +32,7 @@ function setupApolloServerHapiTests({ suiteName, createTests, pluginConfig }, co
       const nrApi = helper.getAgentApi()
 
       // TODO: eventually use proper function for instrumenting and not .shim
-      const plugin = createPlugin(nrApi.shim, pluginConfig)
+      const plugin = createPlugin(nrApi, pluginConfig)
 
       const Hapi = require('@hapi/hapi')
 

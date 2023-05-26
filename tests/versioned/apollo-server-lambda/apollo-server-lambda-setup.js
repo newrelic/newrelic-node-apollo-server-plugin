@@ -48,7 +48,7 @@ function setupApolloServerLambdaTests({ suiteName, createTests, pluginConfig }, 
       const nrApi = helper.getAgentApi()
 
       // TODO: eventually use proper function for instrumenting and not .shim
-      const plugin = createPlugin(nrApi.shim, pluginConfig)
+      const plugin = createPlugin(nrApi, pluginConfig)
 
       ;(stubContext = {
         done: () => {},

@@ -666,7 +666,7 @@ function createTransactionTests(t, frameworkName) {
     }`
     let count = 0
 
-    let transactionHandler = (transaction) => {
+    const transactionHandler = (transaction) => {
       t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${expectedName}/hello`)
       count++
     }

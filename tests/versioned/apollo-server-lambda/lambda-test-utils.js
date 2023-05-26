@@ -206,7 +206,7 @@ utils.executeQueryAssertErrors = async function executeQueryAssertErrors({
  * @param {string} query to execute
  */
 utils.createApiEvent = function createApiEvent(query) {
-  const apiGatewayProxyEvent = {
+  return {
     path: '/graphql',
     headers: {
       'Accept': 'application/json',
@@ -256,6 +256,4 @@ utils.createApiEvent = function createApiEvent(query) {
     httpMethod: 'POST',
     body: query
   }
-
-  return apiGatewayProxyEvent
 }

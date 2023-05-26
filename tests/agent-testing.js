@@ -11,24 +11,20 @@
 // when extracted to a single location in the external module.
 
 function getErrorTraces(agent) {
-  const errorTraces = agent.errors.traceAggregator.errors
-  return errorTraces
+  return agent.errors.traceAggregator.errors
 }
 
 function getSpanEvents(agent) {
-  const spans = agent.spanEventAggregator.getEvents()
-  return spans
+  return agent.spanEventAggregator.getEvents()
 }
 
 function findSpanById(agent, spanId) {
   const spans = getSpanEvents(agent)
 
-  const matchingSpan = spans.find((value) => {
+  return spans.find((value) => {
     const { intrinsics } = value
     return intrinsics.guid === spanId
   })
-
-  return matchingSpan
 }
 
 function findSegmentByName(root, name) {
