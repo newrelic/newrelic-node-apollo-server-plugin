@@ -3,13 +3,9 @@
 set -x
 VERSIONED_MODE="${VERSIONED_MODE:---minor}"
 SAMPLES="${SAMPLES:-15}"
+C8_REPORTER="${C8_REPORTER:-lcov}"
 
-if [ $SAMPLES -le 10 ];
-then
-  C8="c8 -o ./coverage/versioned"
-else
-  C8=""
-fi
+C8="c8 -o ./coverage/versioned --merge-async -r $C8_REPORTER"
 
 if [[ "${NPM7}" = 1 ]];
 then
