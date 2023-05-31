@@ -317,7 +317,7 @@ npm run versioned
 
 Should you need assistance with New Relic products, you are in good hands with several support diagnostic tools and support channels.
 
-This [troubleshooting framework](https://discuss.newrelic.com/t/troubleshooting-frameworks/108787) steps you through common troubleshooting questions.
+This [troubleshooting framework](https://forum.newrelic.com/s/hubtopic/aAX8W0000008bSoWAI/troubleshooting-frameworks) steps you through common troubleshooting questions.
 
 New Relic offers NRDiag, [a client-side diagnostic utility](https://docs.newrelic.com/docs/using-new-relic/cross-product-functions/troubleshooting/new-relic-diagnostics) that automatically detects common problems with New Relic agents. If NRDiag detects a problem, it suggests troubleshooting steps. NRDiag can also automatically attach troubleshooting data to a New Relic Support ticket. Remove this section if it doesn't apply.
 
@@ -326,7 +326,7 @@ If the issue has been confirmed as a bug or is a feature request, file a GitHub 
 **Support Channels**
 
 * [New Relic Documentation](https://docs.newrelic.com/docs/agents/nodejs-agent/getting-started/introduction-new-relic-nodejs): Comprehensive guidance for using our platform
-* [New Relic Community](https://discuss.newrelic.com/tags/c/telemetry-data-platform/agents/nodeagent): The best place to engage in troubleshooting questions
+* [New Relic Community](https://forum.newrelic.com): The best place to engage in troubleshooting questions
 * [New Relic Developer](https://developer.newrelic.com/): Resources for building a custom observability applications
 * [New Relic University](https://learn.newrelic.com/): A range of online training for New Relic users of every level
 
