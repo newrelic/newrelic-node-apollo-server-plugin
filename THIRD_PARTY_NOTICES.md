@@ -62,7 +62,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 ### @newrelic/eslint-config
 
-This product includes source derived from [@newrelic/eslint-config](https://github.com/newrelic/eslint-config-newrelic) ([v0.0.2](https://github.com/newrelic/eslint-config-newrelic/tree/v0.0.2)), distributed under the [Apache-2.0 License](https://github.com/newrelic/eslint-config-newrelic/blob/v0.0.2/LICENSE):
+This product includes source derived from [@newrelic/eslint-config](https://github.com/newrelic/eslint-config-newrelic) ([v0.3.0](https://github.com/newrelic/eslint-config-newrelic/tree/v0.3.0)), distributed under the [Apache-2.0 License](https://github.com/newrelic/eslint-config-newrelic/blob/v0.3.0/LICENSE):
 
 ```
                                  Apache License
@@ -479,7 +479,7 @@ This product includes source derived from [@newrelic/newrelic-oss-cli](https://g
 
 ### @newrelic/test-utilities
 
-This product includes source derived from [@newrelic/test-utilities](https://github.com/newrelic/node-test-utilities) ([v7.3.0](https://github.com/newrelic/node-test-utilities/tree/v7.3.0)), distributed under the [Apache-2.0 License](https://github.com/newrelic/node-test-utilities/blob/v7.3.0/LICENSE):
+This product includes source derived from [@newrelic/test-utilities](https://github.com/newrelic/node-test-utilities) ([v7.3.1](https://github.com/newrelic/node-test-utilities/tree/v7.3.1)), distributed under the [Apache-2.0 License](https://github.com/newrelic/node-test-utilities/blob/v7.3.1/LICENSE):
 
 ```
                                  Apache License
@@ -717,7 +717,7 @@ SOFTWARE.
 
 ### c8
 
-This product includes source derived from [c8](https://github.com/bcoe/c8) ([v7.12.0](https://github.com/bcoe/c8/tree/v7.12.0)), distributed under the [ISC License](https://github.com/bcoe/c8/blob/v7.12.0/LICENSE.txt):
+This product includes source derived from [c8](https://github.com/bcoe/c8) ([v7.14.0](https://github.com/bcoe/c8/tree/v7.14.0)), distributed under the [ISC License](https://github.com/bcoe/c8/blob/v7.14.0/LICENSE.txt):
 
 ```
 Copyright (c) 2017, Contributors
@@ -846,10 +846,10 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 ### eslint
 
-This product includes source derived from [eslint](https://github.com/eslint/eslint) ([v7.32.0](https://github.com/eslint/eslint/tree/v7.32.0)), distributed under the [MIT License](https://github.com/eslint/eslint/blob/v7.32.0/LICENSE):
+This product includes source derived from [eslint](https://github.com/eslint/eslint) ([v8.24.0](https://github.com/eslint/eslint/tree/v8.24.0)), distributed under the [MIT License](https://github.com/eslint/eslint/blob/v8.24.0/LICENSE):
 
 ```
-Copyright JS Foundation and other contributors, https://js.foundation
+Copyright OpenJS Foundation and other contributors, <www.openjsf.org>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -7410,12 +7410,12 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ### tap
 
-This product includes source derived from [tap](https://github.com/tapjs/node-tap) ([v16.3.0](https://github.com/tapjs/node-tap/tree/v16.3.0)), distributed under the [ISC License](https://github.com/tapjs/node-tap/blob/v16.3.0/LICENSE):
+This product includes source derived from [tap](https://github.com/tapjs/node-tap) ([v16.3.4](https://github.com/tapjs/node-tap/tree/v16.3.4)), distributed under the [ISC License](https://github.com/tapjs/node-tap/blob/v16.3.4/LICENSE):
 
 ```
 The ISC License
 
-Copyright (c) 2011-2022 Isaac Z. Schlueter and Contributors
+Copyright (c) 2011-2023 Isaac Z. Schlueter and Contributors
 
 Permission to use, copy, modify, and/or distribute this software for any
 purpose with or without fee is hereby granted, provided that the above
