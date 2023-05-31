@@ -95,9 +95,15 @@ jobs:
     - name: Run Versioned Tests (npm v6 / Node 14)
       if: ${{ matrix.node-version == '14.x' }}
       run: npm run versioned:npm6
+      env:
+        VERSIONED_MODE: ${{ github.ref == 'refs/heads/main' && '--minor' || '--major' }}
+        C8_REPORTER: lcovonly
     - name: Run Versioned Tests (npm v7+ / Node 16+)
       if: ${{ matrix.node-version != '14.x' }}
       run: npm run versioned:npm7
+      env:
+        VERSIONED_MODE: ${{ github.ref == 'refs/heads/main' && '--minor' || '--major' }}
+        C8_REPORTER: lcovonly
     - name: Post Versioned Test Coverage
       uses: codecov/codecov-action@v3
       with:
