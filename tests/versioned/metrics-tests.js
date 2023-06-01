@@ -7,7 +7,6 @@
 
 const crypto = require('crypto')
 const { executeQuery, executeQueryBatch, makeRequest } = require('../test-client')
-const { setupEnvConfig } = require('../agent-testing')
 
 const ANON_PLACEHOLDER = '<anonymous>'
 const UNKNOWN_OPERATION = '<unknown>'
@@ -18,22 +17,9 @@ const RESOLVE_PREFIX = 'GraphQL/resolve/ApolloServer'
 const ARG_PREFIX = 'GraphQL/arg/ApolloServer'
 const TYPED_RESOLVE_PREFIX = 'GraphQL/typedResolve/ApolloServer'
 
-const { setupApolloServerTests } = require('./apollo-server-setup')
-
-setupApolloServerTests({
-  suiteName: 'metrics',
-  createTests: createMetricsTests.bind(null, false)
-})
-
-setupApolloServerTests({
-  suiteName: 'capture field metrics',
-  createTests: createMetricsTests.bind(null, true),
-  pluginConfig: { captureFieldMetrics: true }
-})
+module.exports = createMetricsTests
 
 function createMetricsTests(captureFieldMetrics, t) {
-  setupEnvConfig(t)
-
   t.test('anonymous query, single level metrics', (t) => {
     const { helper, serverUrl } = t.context
 

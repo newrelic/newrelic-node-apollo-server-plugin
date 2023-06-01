@@ -20,7 +20,8 @@
         "segments.test.js",
         "errors.test.js",
         "attributes.test.js",
-        "query-obfuscation.tests.js"
+        "query-obfuscation.test.js",
+        "metrics.test.js"
       ]
     },
     {
@@ -38,7 +39,8 @@
         "segments.test.js",
         "errors.test.js",
         "attributes.test.js",
-        "query-obfuscation.tests.js"
+        "query-obfuscation.test.js",
+        "metrics.test.js"
       ]
     }
   ],
