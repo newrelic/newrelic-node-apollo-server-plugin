@@ -6,7 +6,7 @@
 'use strict'
 
 const { setupApolloServerHapiTests } = require('./apollo-server-hapi-setup')
-const metricsTests = require('../metrics-tests')
+const metricsTests = require('../../metrics-tests')
 
 setupApolloServerHapiTests({
   suiteName: 'metrics',

@@ -6,7 +6,7 @@
 'use strict'
 
 const { setupApolloServerKoaTests } = require('./apollo-server-koa-setup')
-const metricsTests = require('../metrics-tests')
+const metricsTests = require('../../metrics-tests')
 
 setupApolloServerKoaTests({
   suiteName: 'metrics',

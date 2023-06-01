@@ -6,7 +6,7 @@
 'use strict'
 
 const { setupApolloServerTests } = require('./apollo-server-setup')
-const metricsTests = require('../metrics-tests')
+const metricsTests = require('../../metrics-tests')
 
 setupApolloServerTests({
   suiteName: 'metrics',

@@ -6,7 +6,7 @@
 'use strict'
 
 const crypto = require('crypto')
-const { executeQuery, executeQueryBatch, makeRequest } = require('../test-client')
+const { executeQuery, executeQueryBatch, makeRequest } = require('./test-client')
 
 const ANON_PLACEHOLDER = '<anonymous>'
 const UNKNOWN_OPERATION = '<unknown>'
