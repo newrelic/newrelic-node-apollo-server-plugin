@@ -38,7 +38,7 @@ FROM Metric SELECT count(newrelic.timeslice.value) where appName = '[YOUR APP NA
 
 * Updated README header image to latest OSS office required images.
 
-* Upgraded dev dependency `json5` from `2.2.1 to `2.2.3`.
+* Upgraded dev dependency `json5` from `2.2.1` to `2.2.3`.
 
 ### v3.0.0 (2023-01-05)
 
