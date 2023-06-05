@@ -1,6 +1,6 @@
 {
   "name": "@newrelic/apollo-server-plugin",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "Apollo Server plugin that adds New Relic Node.js agent instrumentation.",
   "main": "./index.js",
   "types": "./index.d.ts",

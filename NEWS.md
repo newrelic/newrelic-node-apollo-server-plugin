@@ -1,3 +1,45 @@
+### v3.1.0 (2023-06-05)
+
+* Added ability to define custom attributes in the context of the active operation and resolver.  
+
+```js
+const plugin = createPlugin({
+  customResolverAttributes({ source, args, context, info }) {
+    return {
+      allArgs: Object.keys(args).join(','),
+      returnType: info.returnType.name,
+      sourceBranch: source?.branch
+      stage: context.event.requestContext.stage
+    }
+  },
+  customOperationAttributes(requestContext) {
+    return {
+      clientName: requestContext.request.http.headers.get('graphql-client-name')
+    }
+  }
+})
+```
+
+* Added new metrics that specify the parent type for a given field.
+    * Format is as follows: `GraphQL/typedResolve/ApolloServer/<parentType>.<resolver>`
+    * See [metrics docs](https://github.com/newrelic/newrelic-node-apollo-server-plugin/blob/main/docs/metrics.md#field-resolve-metrics) for more info
+
+* Added ability to capture both fields and args seen during an Apollo query as metrics.
+    * To enable this feature, update your createPlugin configuration to specify `captureFieldMetrics: true`
+    * To see all fields and resolver arguments requested within the last day. Run the following NRQL:
+    
+```
+FROM Metric SELECT count(newrelic.timeslice.value) where appName = '[YOUR APP NAME]' WITH METRIC_FORMAT 'GraphQL/{kind}/ApolloServer/{field}' where kind = 'arg' or kind = 'field' FACET kind, field limit max since 1 day ago 
+```
+
+* Updated to latest version of c8 for realtime versioned test coverage.
+
+* Updated README links to point to new forum link due to repolinter ruleset change.
+
+* Updated README header image to latest OSS office required images.
+
+* Upgraded dev dependency `json5` from `2.2.1` to `2.2.3`.
+
 ### v3.0.0 (2023-01-05)
 
 * **BREAKING**: Updated types definition to use user provided type
