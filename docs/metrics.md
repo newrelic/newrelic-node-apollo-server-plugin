@@ -25,6 +25,21 @@ Resolve metrics capture the duration spent resolving a particular piece of reque
 
 These differ slightly in naming from their segment/span counterparts. To better visualize relationships, the full path to a field is represented in segments/spans (e.g. libraries.books.title). To understand the duration aggregated across all usages and transactions, these metrics use the field name without the full path.
 
+## Field and Argument Metrics
+
+`/GraphQL/field/ApolloServer/[parent-type].[field-name]`
+`/GraphQL/arg/ApolloServer/[parent-type].[field-name]/[arg-name]`
+
+Field metrics are only captured when `config.captureFieldMetrics` is `true`.  Unlike the Field Resolve Metrics, this will capture every time a field or resolver argument is seen.
+The intent of these metrics is to determine if a field in a GraphQL schema is still in use and is safe to remove.
+
+
+### All fields and args that have been requested within the last day
+
+```
+FROM Metric SELECT count(newrelic.timeslice.value) where appName = '[YOUR APP NAME]' WITH METRIC_FORMAT 'GraphQL/{kind}/ApolloServer/{field}' where kind = 'arg' or kind = 'field' FACET kind, field limit max since 1 day ago 
+```
+
 ## Visualizations
 
 Here is a collection of useful queries that leverage these new metrics to better understand the behaviors of your Apollo GraphQL applications.

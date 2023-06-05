@@ -42,6 +42,13 @@ const books = [
     author: '10x Developer',
     branch: 'downtown',
     category: 'COOKBOOK'
+  },
+  {
+    title: 'Breaking production for dummies',
+    isbn: 'a-fifth-fake-isbn',
+    author: '10x Developer',
+    branch: 'uptown',
+    category: 'TECH'
   }
 ]
 
@@ -90,6 +97,7 @@ function getTypeDefs(gql) {
     enum BookCategory {
       NOVEL
       COOKBOOK
+      TECH
     }
 
     type Author {
@@ -103,6 +111,7 @@ function getTypeDefs(gql) {
 
     type Query {
       search(contains: String): [SearchResult!]
+      searchByBook(book: BookInput): [Book!]
       books(category: BookCategory): [Book]!
       hello: String
       paramQuery(blah: String!, blee: String): String!
@@ -119,6 +128,15 @@ function getTypeDefs(gql) {
     type Mutation {
       addThing(name: String!): String!
       addToCollection(title: String!): Item!
+    }
+
+    input BookInput {
+      author: AuthorInput
+      title: String
+    }
+
+    input AuthorInput {
+      name: String
     }
   `
 }
@@ -150,6 +168,14 @@ const resolvers = {
     searchCollection: (_, { title }) => {
       const item = collection.filter((coll) => coll.title.includes(title))
       return item[0]
+    },
+    searchByBook: (_, { book: searchBook }) => {
+      const filteredBooks = books.filter((book) => book.author === searchBook.author.name)
+      if (searchBook.title) {
+        return filteredBooks.filter((book) => book.title === searchBook.title)
+      }
+
+      return filteredBooks
     }
   },
   Mutation: {

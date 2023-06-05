@@ -5,16 +5,16 @@
 
 'use strict'
 
-const createMetricsTests = require('../metrics-tests')
 const { setupApolloServerTests } = require('./apollo-server-setup')
+const metricsTests = require('../../metrics-tests')
 
 setupApolloServerTests({
   suiteName: 'metrics',
-  createTests: createMetricsTests.bind(null, false)
+  createTests: metricsTests.bind(null, false)
 })
 
 setupApolloServerTests({
   suiteName: 'capture field metrics',
-  createTests: createMetricsTests.bind(null, true),
+  createTests: metricsTests.bind(null, true),
   pluginConfig: { captureFieldMetrics: true }
 })

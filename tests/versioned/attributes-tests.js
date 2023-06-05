@@ -366,6 +366,42 @@ function createAttributesTests(t) {
     })
   })
 
+  t.test('query should capture nested args', (t) => {
+    const { helper, serverUrl } = t.context
+
+    helper.agent.config.attributes.include = ['graphql.field.args.*']
+    helper.agent.config.emit('attributes.include')
+
+    const expectedName = 'BlahQuery'
+    const query = `query ${expectedName} {
+      searchByBook(book: { title: "Breaking production for dummies", author: { name: "10x Developer" }  } ) {
+        title
+        isbn
+      }
+    }`
+
+    helper.agent.once('transactionFinished', (transaction) => {
+      const operationName = `${OPERATION_PREFIX}/query/${expectedName}/searchByBook`
+
+      const operationSegment = findSegmentByName(transaction.trace.root, operationName)
+      const resolveHelloSegment = operationSegment.children[0]
+
+      const expectedArgAttributes = {
+        'graphql.field.args.book.author.name': '10x Developer',
+        'graphql.field.args.book.title': 'Breaking production for dummies'
+      }
+      const resolveAttributes = resolveHelloSegment.attributes.get(SEGMENT_DESTINATION)
+      const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
+      t.match(resolveAttributes, expectedArgAttributes)
+      t.match(operationAttributes, expectedArgAttributes)
+    })
+
+    executeQuery(serverUrl, query, (err) => {
+      t.error(err)
+      t.end()
+    })
+  })
+
   t.test('query with variables should capture args when added to include list', (t) => {
     const { helper, serverUrl } = t.context
 
