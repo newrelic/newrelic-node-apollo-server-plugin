@@ -14,11 +14,9 @@
     "third-party-updates": "oss third-party manifest && oss third-party notices && git add THIRD_PARTY_NOTICES.md third_party_manifest.json",
     "unit": "c8 -o ./coverage/unit tap --test-regex='(\\/|^tests\\/unit\\/.*\\.test\\.js)$' --no-coverage",
     "type-check": "tsd",
-    "versioned": "npm run versioned:npm7",
+    "versioned": "NPM7=1 ./bin/run-versioned-tests.sh",
     "versioned:folder": "versioned-tests --minor --all -i 2",
-    "versioned:major": "VERSIONED_MODE=--major npm run versioned:npm7",
-    "versioned:npm6": "./bin/run-versioned-tests.sh",
-    "versioned:npm7": "NPM7=1 ./bin/run-versioned-tests.sh"
+    "versioned:major": "VERSIONED_MODE=--major npm run versioned"
   },
   "files": [
     "index.js",
