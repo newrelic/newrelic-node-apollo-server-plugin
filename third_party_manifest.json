@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "Tue Jul 11 2023 11:28:56 GMT-0400 (Eastern Daylight Time)",
+  "lastUpdated": "Tue Jul 18 2023 11:47:10 GMT-0400 (Eastern Daylight Time)",
   "projectName": "New Relic Node Apollo Server Plugin",
   "projectUrl": "https://github.com/newrelic/newrelic-node-apollo-server-plugin/",
   "includeOptDeps": false,
@@ -7,15 +7,15 @@
   "includeDev": true,
   "dependencies": {},
   "devDependencies": {
-    "@apollo/server@4.1.1": {
+    "@apollo/server@4.7.4": {
       "name": "@apollo/server",
-      "version": "4.1.1",
+      "version": "4.7.4",
       "range": "^4.1.1",
       "licenses": "MIT",
       "repoUrl": "https://github.com/apollographql/apollo-server",
-      "versionedRepoUrl": "https://github.com/apollographql/apollo-server/tree/v4.1.1",
+      "versionedRepoUrl": "https://github.com/apollographql/apollo-server/tree/v4.7.4",
       "licenseFile": "node_modules/@apollo/server/README.md",
-      "licenseUrl": "https://github.com/apollographql/apollo-server/blob/v4.1.1/README.md",
+      "licenseUrl": "https://github.com/apollographql/apollo-server/blob/v4.7.4/README.md",
       "licenseTextSource": "spdx",
       "publisher": "Apollo",
       "email": "packages@apollographql.com"
@@ -71,15 +71,15 @@
       "publisher": "Apollo",
       "email": "packages@apollographql.com"
     },
-    "c8@7.12.0": {
+    "c8@7.14.0": {
       "name": "c8",
-      "version": "7.12.0",
+      "version": "7.14.0",
       "range": "^7.14.0",
       "licenses": "ISC",
       "repoUrl": "https://github.com/bcoe/c8",
-      "versionedRepoUrl": "https://github.com/bcoe/c8/tree/v7.12.0",
+      "versionedRepoUrl": "https://github.com/bcoe/c8/tree/v7.14.0",
       "licenseFile": "node_modules/c8/LICENSE.txt",
-      "licenseUrl": "https://github.com/bcoe/c8/blob/v7.12.0/LICENSE.txt",
+      "licenseUrl": "https://github.com/bcoe/c8/blob/v7.14.0/LICENSE.txt",
       "licenseTextSource": "file",
       "publisher": "Ben Coe",
       "email": "ben@npmjs.com"
@@ -196,15 +196,15 @@
       "email": "liran.tal@gmail.com",
       "url": "https://github.com/lirantal"
     },
-    "newrelic@9.14.0": {
+    "newrelic@10.3.2": {
       "name": "newrelic",
-      "version": "9.14.0",
-      "range": "^9.14.0",
+      "version": "10.3.2",
+      "range": "^10.3.2",
       "licenses": "Apache-2.0",
       "repoUrl": "https://github.com/newrelic/node-newrelic",
-      "versionedRepoUrl": "https://github.com/newrelic/node-newrelic/tree/v9.14.0",
+      "versionedRepoUrl": "https://github.com/newrelic/node-newrelic/tree/v10.3.2",
       "licenseFile": "node_modules/newrelic/LICENSE",
-      "licenseUrl": "https://github.com/newrelic/node-newrelic/blob/v9.14.0/LICENSE",
+      "licenseUrl": "https://github.com/newrelic/node-newrelic/blob/v10.3.2/LICENSE",
       "licenseTextSource": "file",
       "publisher": "New Relic Node.js agent team",
       "email": "nodejs@newrelic.com"
