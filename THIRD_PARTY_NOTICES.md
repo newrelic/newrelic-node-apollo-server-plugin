@@ -46,7 +46,7 @@ code, the source code can be found at [https://github.com/newrelic/newrelic-node
 
 ### @apollo/server
 
-This product includes source derived from [@apollo/server](https://github.com/apollographql/apollo-server) ([v4.1.1](https://github.com/apollographql/apollo-server/tree/v4.1.1)), distributed under the [MIT License](https://github.com/apollographql/apollo-server/blob/v4.1.1/README.md):
+This product includes source derived from [@apollo/server](https://github.com/apollographql/apollo-server) ([v4.7.4](https://github.com/apollographql/apollo-server/tree/v4.7.4)), distributed under the [MIT License](https://github.com/apollographql/apollo-server/blob/v4.7.4/README.md):
 
 ```
 MIT License
@@ -1158,7 +1158,7 @@ This product includes source derived from [lockfile-lint](https://github.com/lir
 
 ### newrelic
 
-This product includes source derived from [newrelic](https://github.com/newrelic/node-newrelic) ([v9.14.0](https://github.com/newrelic/node-newrelic/tree/v9.14.0)), distributed under the [Apache-2.0 License](https://github.com/newrelic/node-newrelic/blob/v9.14.0/LICENSE):
+This product includes source derived from [newrelic](https://github.com/newrelic/node-newrelic) ([v10.3.2](https://github.com/newrelic/node-newrelic/tree/v10.3.2)), distributed under the [Apache-2.0 License](https://github.com/newrelic/node-newrelic/blob/v10.3.2/LICENSE):
 
 ```
                                  Apache License

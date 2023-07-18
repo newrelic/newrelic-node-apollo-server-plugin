@@ -50,8 +50,7 @@ function setupApolloServerHapiTests({ suiteName, createTests, pluginConfig }, co
       })
 
       hapiServer = Hapi.server({
-        host: 'localhost',
-        port: 5000
+        host: 'localhost'
       })
 
       await server.start()
@@ -59,7 +58,7 @@ function setupApolloServerHapiTests({ suiteName, createTests, pluginConfig }, co
 
       await hapiServer.start()
 
-      serverUrl = `http://localhost:${hapiServer.settings.port}${graphqlPath}`
+      serverUrl = `http://localhost:${hapiServer.info.port}${graphqlPath}`
       t.context.helper = helper
       t.context.serverUrl = serverUrl
     })
