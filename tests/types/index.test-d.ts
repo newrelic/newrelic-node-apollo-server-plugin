@@ -18,6 +18,9 @@ expectType<V3Plugin>(
     captureHealthCheckQueries: true,
     captureScalars: false,
     captureServiceDefinitionQueries: true,
+    captureFieldMetrics: true,
+    customOperationAttributes: (ctx: any) => ({ key: ctx.foo }),
+    customResolverAttributes: (ctx: any) => ({ attr: ctx.bar })
   })
 );
 
@@ -29,5 +32,8 @@ expectType<V4Plugin>(
     captureHealthCheckQueries: true,
     captureScalars: false,
     captureServiceDefinitionQueries: true,
+    captureFieldMetrics: true,
+    customOperationAttributes: (ctx: any) => ({ key: ctx.foo }),
+    customResolverAttributes: (ctx: any) => ({ attr: ctx.bar })
   })
 );
