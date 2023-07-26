@@ -1,3 +1,5 @@
+### v3.1.2 (2023-07-26)
+
 ### v3.1.1 (2023-07-26)
 
 * Added `captureFieldMetrics`, `customResolverAttributes`, and `customerOperationAttributes` to the type file.
