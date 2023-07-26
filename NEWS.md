@@ -1,3 +1,11 @@
+### v3.1.1 (2023-07-26)
+
+* Added `captureFieldMetrics`, `customResolverAttributes`, and `customerOperationAttributes` to the type file.
+
+* Updated CI to run against versions 16-20.
+
+* Bumped devDeps to fix CVEs. 
+
 ### v3.1.0 (2023-06-05)
 
 * Added ability to define custom attributes in the context of the active operation and resolver.  
