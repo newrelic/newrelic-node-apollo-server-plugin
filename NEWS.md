@@ -1,6 +1,10 @@
+### v3.1.2 (2023-07-27)
+
+* Updated types to be more specific for `customOperationAttributes` and `customResolverAttributes`.
+
 ### v3.1.1 (2023-07-26)
 
-* Added `captureFieldMetrics`, `customResolverAttributes`, and `customerOperationAttributes` to the type file.
+* Added `captureFieldMetrics`, `customResolverAttributes`, and `customOperationAttributes` to the type file.
 
 * Updated CI to run against versions 16-20.
 
