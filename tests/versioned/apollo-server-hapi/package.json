@@ -5,24 +5,6 @@
   "tests": [
     {
       "engines": {
-        "node": ">=14 <16"
-      },
-      "dependencies": {
-        "apollo-server-hapi": ">=2.14.0",
-        "@hapi/hapi": "18.4.1",
-        "graphql": "15.8.0"
-      },
-      "files": [
-        "segments.test.js",
-        "transaction-naming.test.js",
-        "errors.test.js",
-        "attributes.test.js",
-        "query-obfuscation.test.js",
-        "metrics.test.js"
-      ]
-    },
-    {
-      "engines": {
         "node": ">=16"
       },
       "dependencies": {

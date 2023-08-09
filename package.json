@@ -34,7 +34,7 @@
   },
   "homepage": "https://github.com/newrelic/newrelic-node-apollo-server-plugin#readme",
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=16.0.0"
   },
   "devDependencies": {
     "@apollo/server": "^4.1.1",
