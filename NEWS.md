@@ -1,3 +1,7 @@
+### v4.0.0 (2023-08-17)
+
+* **BREAKING**: Removed support for Node 14.
+
 ### v3.1.2 (2023-07-27)
 
 * Updated types to be more specific for `customOperationAttributes` and `customResolverAttributes`.
