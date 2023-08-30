@@ -479,7 +479,7 @@ This product includes source derived from [@newrelic/newrelic-oss-cli](https://g
 
 ### @newrelic/test-utilities
 
-This product includes source derived from [@newrelic/test-utilities](https://github.com/newrelic/node-test-utilities) ([v7.3.1](https://github.com/newrelic/node-test-utilities/tree/v7.3.1)), distributed under the [Apache-2.0 License](https://github.com/newrelic/node-test-utilities/blob/v7.3.1/LICENSE):
+This product includes source derived from [@newrelic/test-utilities](https://github.com/newrelic/node-test-utilities) ([v7.3.2](https://github.com/newrelic/node-test-utilities/tree/v7.3.2)), distributed under the [Apache-2.0 License](https://github.com/newrelic/node-test-utilities/blob/v7.3.2/LICENSE):
 
 ```
                                  Apache License
