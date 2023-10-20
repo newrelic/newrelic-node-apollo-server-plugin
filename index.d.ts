@@ -1,17 +1,7 @@
-export type NRPluginConfig<U = any, V = any> = {
-  captureScalars?: boolean;
-  captureIntrospectionQueries?: boolean;
-  captureServiceDefinitionQueries?: boolean;
-  captureHealthCheckQueries?: boolean;
-  customResolverAttributes?: (
-    resolverArguments: U
-  ) => Record<string, string | number | boolean> | null;
-  customOperationAttributes?: (
-    requestContext: V
-  ) => Record<string, string | number | boolean> | null;
-  captureFieldMetrics?: boolean;
-};
+import type { NRPluginConfig } from './config';
 
-export default function createPlugin<T, U = any, V = any>(
+declare function createPlugin<T, U = any, V = any>(
   config?: NRPluginConfig<U, V>
 ): T;
+
+export = createPlugin;
