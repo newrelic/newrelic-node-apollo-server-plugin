@@ -1,3 +1,8 @@
+### v4.0.1 (2023-10-25)
+
+* Fixed typescript type declarations to correctly define the exports for this package. Since there is only a single export, if you need to import the type for the plugin config explicitly you would need to import it from `/config`, eg, `import type { NRPluginConfig } from '@newrelic/apollo-server-plugin/config'`. Thank you to @bbeesley for the fix.
+* Bumped [@babel/traverse](https://github.com/babel/babel/tree/HEAD/packages/babel-traverse) from 7.17.3 and 7.20.1 to 7.23.2.
+
 ### v4.0.0 (2023-08-28)
 
 * **BREAKING**: Removed support for Node 14.
@@ -26,7 +31,7 @@ const plugin = createPlugin({
     return {
       allArgs: Object.keys(args).join(','),
       returnType: info.returnType.name,
-      sourceBranch: source?.branch
+      sourceBranch: source?.branch,
       stage: context.event.requestContext.stage
     }
   },
