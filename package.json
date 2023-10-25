@@ -21,6 +21,7 @@
   "files": [
     "index.js",
     "index.d.ts",
+    "config.d.ts",
     "lib/*.js"
   ],
   "repository": {
