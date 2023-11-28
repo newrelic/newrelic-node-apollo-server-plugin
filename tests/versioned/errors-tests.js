@@ -221,9 +221,10 @@ function createErrorTests(t, _, isApollo4) {
         t.equal(errorMessage, expectedErrorMessage)
         t.equal(errorType, expectedErrorType)
 
-        const { agentAttributes } = params
+        const { agentAttributes, userAttributes } = params
 
         t.ok(agentAttributes.spanId)
+        t.equal(userAttributes.code, code)
 
         const matchingSpan = agentTesting.findSpanById(helper.agent, agentAttributes.spanId)
 
