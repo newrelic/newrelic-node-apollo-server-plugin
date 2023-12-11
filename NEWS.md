@@ -1,3 +1,7 @@
+### v4.1.0 (2023-12-11)
+
+* Updated error handling to pass in [extensions](https://www.apollographql.com/docs/apollo-server/data/errors/) properties as custom attributes. (Thank you to @edds for this contribution!)
+
 ### v4.0.1 (2023-10-25)
 
 * Fixed typescript type declarations to correctly define the exports for this package. Since there is only a single export, if you need to import the type for the plugin config explicitly you would need to import it from `/config`, eg, `import type { NRPluginConfig } from '@newrelic/apollo-server-plugin/config'`. Thank you to @bbeesley for the fix.
