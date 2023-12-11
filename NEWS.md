@@ -1,6 +1,6 @@
 ### v4.1.0 (2023-12-11)
 
-* Updated error handling to pass in [extensions](https://www.apollographql.com/docs/apollo-server/data/errors/) properties through as custom attributes. (Thank you to @edds for this contribution!)
+* Updated error handling to pass in [extensions](https://www.apollographql.com/docs/apollo-server/data/errors/) properties as custom attributes. (Thank you to @edds for this contribution!)
 
 ## Changes included in this PR
 
