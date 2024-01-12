@@ -75,6 +75,13 @@ If you would like to have a list of the top 10 slowest resolves, the following q
 
 ```
 FROM Metric
+SELECT average(newrelic.timeslice.value) * 1000 as 'Average Duration (MS)' WHERE appName = '[YOUR APP NAME]' WITH METRIC_FORMAT 'GraphQL/resolve/ApolloServer/{type}.{field}' FACET field LIMIT 20
+```
+
+If you would like to include the parent type.
+
+```
+FROM Metric
 SELECT average(newrelic.timeslice.value) * 1000 as 'Average Duration (MS)' WHERE appName = '[YOUR APP NAME]' WITH METRIC_FORMAT 'GraphQL/resolve/ApolloServer/{field}' FACET field LIMIT 20
 ```
 
