@@ -15,7 +15,6 @@ const OPERATION_PREFIX = 'GraphQL/operation/ApolloServer'
 const FIELD_PREFIX = 'GraphQL/field/ApolloServer'
 const RESOLVE_PREFIX = 'GraphQL/resolve/ApolloServer'
 const ARG_PREFIX = 'GraphQL/arg/ApolloServer'
-const TYPED_RESOLVE_PREFIX = 'GraphQL/typedResolve/ApolloServer'
 
 module.exports = createMetricsTests
 
@@ -29,7 +28,7 @@ function createMetricsTests(captureFieldMetrics, t) {
 
     helper.agent.once('transactionFinished', () => {
       const operationPart = `query/${ANON_PLACEHOLDER}/hello`
-      const metrics = [`${OPERATION_PREFIX}/${operationPart}`, `${RESOLVE_PREFIX}/hello`]
+      const metrics = [`${OPERATION_PREFIX}/${operationPart}`, `${RESOLVE_PREFIX}/Query.hello`]
 
       if (captureFieldMetrics) {
         metrics.push(`${FIELD_PREFIX}/Query.hello`)
@@ -54,11 +53,7 @@ function createMetricsTests(captureFieldMetrics, t) {
 
     helper.agent.once('transactionFinished', () => {
       const operationPart = `query/${expectedName}/hello`
-      const metrics = [
-        `${OPERATION_PREFIX}/${operationPart}`,
-        `${RESOLVE_PREFIX}/hello`,
-        `${TYPED_RESOLVE_PREFIX}/Query.hello`
-      ]
+      const metrics = [`${OPERATION_PREFIX}/${operationPart}`, `${RESOLVE_PREFIX}/Query.hello`]
 
       if (captureFieldMetrics) {
         metrics.push(`${FIELD_PREFIX}/Query.hello`)
@@ -94,12 +89,9 @@ function createMetricsTests(captureFieldMetrics, t) {
 
       const metrics = [
         `${OPERATION_PREFIX}/${operationPart}`,
-        `${RESOLVE_PREFIX}/libraries`,
-        `${RESOLVE_PREFIX}/books`,
-        `${RESOLVE_PREFIX}/author`,
-        `${TYPED_RESOLVE_PREFIX}/Query.libraries`,
-        `${TYPED_RESOLVE_PREFIX}/Library.books`,
-        `${TYPED_RESOLVE_PREFIX}/Book.author`
+        `${RESOLVE_PREFIX}/Query.libraries`,
+        `${RESOLVE_PREFIX}/Library.books`,
+        `${RESOLVE_PREFIX}/Book.author`
       ]
 
       if (captureFieldMetrics) {
@@ -152,18 +144,14 @@ function createMetricsTests(captureFieldMetrics, t) {
 
       const operationMetrics1 = [
         `${OPERATION_PREFIX}/${operationPart1}`,
-        `${RESOLVE_PREFIX}/library`,
-        `${RESOLVE_PREFIX}/books`,
-        `${RESOLVE_PREFIX}/author`,
-        `${TYPED_RESOLVE_PREFIX}/Query.library`,
-        `${TYPED_RESOLVE_PREFIX}/Library.books`,
-        `${TYPED_RESOLVE_PREFIX}/Book.author`
+        `${RESOLVE_PREFIX}/Query.library`,
+        `${RESOLVE_PREFIX}/Library.books`,
+        `${RESOLVE_PREFIX}/Book.author`
       ]
 
       const operationMetrics2 = [
         `${OPERATION_PREFIX}/${operationPart2}`,
-        `${RESOLVE_PREFIX}/addThing`,
-        `${TYPED_RESOLVE_PREFIX}/Mutation.addThing`
+        `${RESOLVE_PREFIX}/Mutation.addThing`
       ]
 
       if (captureFieldMetrics) {
@@ -208,8 +196,7 @@ function createMetricsTests(captureFieldMetrics, t) {
       const operationPart = `query/${expectedName}/${path}`
       const operationMetrics = [
         `${OPERATION_PREFIX}/${operationPart}`,
-        `${RESOLVE_PREFIX}/${path}`,
-        `${TYPED_RESOLVE_PREFIX}/Query.${path}`
+        `${RESOLVE_PREFIX}/Query.${path}`
       ]
 
       if (captureFieldMetrics) {
@@ -246,12 +233,9 @@ function createMetricsTests(captureFieldMetrics, t) {
 
       const metrics = [
         `${OPERATION_PREFIX}/${operationPart}`,
-        `${RESOLVE_PREFIX}/libraries`,
-        `${RESOLVE_PREFIX}/books`,
-        `${RESOLVE_PREFIX}/author`,
-        `${TYPED_RESOLVE_PREFIX}/Query.libraries`,
-        `${TYPED_RESOLVE_PREFIX}/Library.books`,
-        `${TYPED_RESOLVE_PREFIX}/Book.author`
+        `${RESOLVE_PREFIX}/Query.libraries`,
+        `${RESOLVE_PREFIX}/Library.books`,
+        `${RESOLVE_PREFIX}/Book.author`
       ]
 
       if (captureFieldMetrics) {
@@ -331,12 +315,9 @@ function createMetricsTests(captureFieldMetrics, t) {
 
       const metrics = [
         `${OPERATION_PREFIX}/${operationPart}`,
-        `${RESOLVE_PREFIX}/library`,
-        `${RESOLVE_PREFIX}/books`,
-        `${RESOLVE_PREFIX}/author`,
-        `${TYPED_RESOLVE_PREFIX}/Query.library`,
-        `${TYPED_RESOLVE_PREFIX}/Library.books`,
-        `${TYPED_RESOLVE_PREFIX}/Book.author`
+        `${RESOLVE_PREFIX}/Query.library`,
+        `${RESOLVE_PREFIX}/Library.books`,
+        `${RESOLVE_PREFIX}/Book.author`
       ]
 
       if (captureFieldMetrics) {
@@ -386,12 +367,9 @@ function createMetricsTests(captureFieldMetrics, t) {
 
       const metrics = [
         `${OPERATION_PREFIX}/${operationPart}`,
-        `${RESOLVE_PREFIX}/library`,
-        `${RESOLVE_PREFIX}/books`,
-        `${RESOLVE_PREFIX}/author`,
-        `${TYPED_RESOLVE_PREFIX}/Query.library`,
-        `${TYPED_RESOLVE_PREFIX}/Library.books`,
-        `${TYPED_RESOLVE_PREFIX}/Book.author`
+        `${RESOLVE_PREFIX}/Query.library`,
+        `${RESOLVE_PREFIX}/Library.books`,
+        `${RESOLVE_PREFIX}/Book.author`
       ]
 
       if (captureFieldMetrics) {
