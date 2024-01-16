@@ -1,4 +1,15 @@
 {
   "repository": "newrelic/newrelic-node-apollo-server-plugin",
-  "entries": []
+  "entries": [
+    {
+      "version": "5.0.0",
+      "changes": {
+        "security": [],
+        "bugfixes": [],
+        "features": [
+          "Removed GraphQL/typedResolve/ApolloServer/<parentType>.<resolver> in lieu of including the <parentType> in GraphQL/resolve/ApolloServer metrics"
+        ]
+      }
+    }
+  ]
 }
