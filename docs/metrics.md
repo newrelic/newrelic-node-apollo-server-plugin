@@ -18,10 +18,9 @@ Operation metrics include the operation type, operation name and deepest-path. T
 
 ## Field Resolve Metrics
 
-`/GraphQL/resolve/ApolloServer/[field-name]`
-`/GraphQL/typedResolve/ApolloServer/[parent-type].[field-name]`
+`/GraphQL/resolve/ApolloServer/[parent-type].[field-name]`
 
-Resolve metrics capture the duration spent resolving a particular piece of requested GraphQL data. These can be useful to find specific resolvers that may contribute to slowing down incoming queries. The metric with `typedResolve` in its prefix can be helpful for distinguishing field resolvers that happen to have the same name but are on different types. The metric without the parent type can be helpful in case of the same resolver being used across different types. 
+Resolve metrics capture the duration spent resolving a particular piece of requested GraphQL data. These can be useful to find specific resolvers that may contribute to slowing down incoming queries. It can be helpful for distinguishing field resolvers that happen to have the same name but are on different types. It can also be can be helpful in case of the same resolver being used across different types. 
 
 These differ slightly in naming from their segment/span counterparts. To better visualize relationships, the full path to a field is represented in segments/spans (e.g. libraries.books.title). To understand the duration aggregated across all usages and transactions, these metrics use the field name without the full path.
 
@@ -73,6 +72,13 @@ This is best viewed with the 'Line' chart type which allows for viewing all oper
 ### Top 10 Resolvers
 
 If you would like to have a list of the top 10 slowest resolves, the following query can be used to pull the data on demand or as a part of a dashboard.
+
+```
+FROM Metric
+SELECT average(newrelic.timeslice.value) * 1000 as 'Average Duration (MS)' WHERE appName = '[YOUR APP NAME]' WITH METRIC_FORMAT 'GraphQL/resolve/ApolloServer/{type}.{field}' FACET field LIMIT 20
+```
+
+If you would like to include the parent type.
 
 ```
 FROM Metric
