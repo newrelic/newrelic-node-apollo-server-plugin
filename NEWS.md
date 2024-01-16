@@ -1,15 +1,22 @@
 ### v5.0.0 (2024-01-16)
 #### ⚠ BREAKING CHANGES
 
-* Removed GraphQL/typedResolve/ApolloServer/<parentType>.<resolver> in lieu of including the <parentType> in GraphQL/resolve/ApolloServer metrics
+* Removed `GraphQL/typedResolve/ApolloServer/<parentType>.<resolver>` in lieu of including the <parentType> in `GraphQL/resolve/ApolloServer/<parentType>.<resolver>` metrics.
+
+If you were querying metrics before this release to get resolver names, you may have to update it to separate parent type from the resolve name:
+
+```
+FROM Metric
+SELECT average(newrelic.timeslice.value) * 1000 as 'Average Duration (MS)' WHERE appName = '[YOUR APP NAME]' WITH METRIC_FORMAT 'GraphQL/resolve/ApolloServer/{type}.{field}' FACET field LIMIT 20
+```
 
 #### Features
 
-* Removed GraphQL/typedResolve/ApolloServer/<parentType>.<resolver> in lieu of including the <parentType> in GraphQL/resolve/ApolloServer metrics ([#285](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/285)) ([4411798](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/44117985cc3865ad532757b471b556eb55af4cc2))
+* Removed `GraphQL/typedResolve/ApolloServer/<parentType>.<resolver>` in lieu of including the <parentType> in `GraphQL/resolve/ApolloServer/<parentType>.<resolver>` metrics ([#285](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/285)) ([4411798](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/44117985cc3865ad532757b471b556eb55af4cc2))
 
 #### Documentation
 
-* updated metrics docs to show how to now query resolves to include/not include type ([#285](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/285)) ([f59c7c7](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/f59c7c704231229a8762bcb69139e1f0eb93855f))
+* Updated metrics docs to show how to now query resolves to include/not include type ([#285](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/285)) ([f59c7c7](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/f59c7c704231229a8762bcb69139e1f0eb93855f))
 
 #### Miscellaneous chores
 
@@ -18,7 +25,7 @@
 
 #### Continuous integration
 
-* updated repo to use conventional commit style for preparation of releases ([#286](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/286)) ([723af71](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/723af71c7fa44f6e1ede4f078a6bfcddcff3fd66))
+* Updated repo to use conventional commit style for preparation of releases ([#286](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/286)) ([723af71](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/723af71c7fa44f6e1ede4f078a6bfcddcff3fd66))
 
 ### v4.1.0 (2023-12-11)
 
