@@ -2,6 +2,14 @@
   "repository": "newrelic/newrelic-node-apollo-server-plugin",
   "entries": [
     {
+      "version": "5.1.0",
+      "changes": {
+        "security": [],
+        "bugfixes": [],
+        "features": []
+      }
+    },
+    {
       "version": "5.0.0",
       "changes": {
         "security": [],
