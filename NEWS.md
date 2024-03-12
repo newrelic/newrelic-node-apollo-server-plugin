@@ -1,3 +1,9 @@
+### v5.1.0 (2024-03-12)
+
+#### Code refactoring
+
+* Updated apollo server plugin to break out relevant functions into helpers ([#288](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/288)) ([f5ef40f](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/f5ef40fac9602500865e007898371b926d572b71))
+
 ### v5.0.0 (2024-01-16)
 #### ⚠ BREAKING CHANGES
 
