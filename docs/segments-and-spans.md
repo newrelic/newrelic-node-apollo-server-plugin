@@ -35,7 +35,7 @@ Resolve segments/spans leverage the resolution path of the individual field to b
 | graphql.field.returnType | Return type (`Book!`, `[String]`, etc. ) of the resolved field | included |
 | graphql.field.parentType | Type of the parent of this field (`[Book]`) | included |
 | graphql.field.path | Full resolve path of the field (`libraries.books`) | included |
-| graphql.field.args | Arg passed to the GraphQL query for this resolver captured as key/value pairs | excluded |
+| graphql.field.args | Arg passed to the GraphQL query or mutation for this resolver captured as key/value pairs | excluded |
 
 To include capture of args attributes, `graphql.field.args.*` (to capture all) will need to be added to the 'attributes' include list or segment/span attributes include lists individually.
 
