@@ -1,6 +1,7 @@
 {
   "name": "apollo-server-tests",
   "version": "0.0.0",
+  "targets": ["apollo-server-express"],
   "private": true,
   "engines": {
     "node": ">=16"
