@@ -1,7 +1,7 @@
 {
   "name": "apollo-server-tests",
   "version": "0.0.0",
-  "targets": ["apollo-server-koa"],
+  "targets": [{"name":"apollo-server-koa","minAgentVersion":"@newrelic/apollo-server-plugin@1.0.0"}],
   "private": true,
   "tests": [
     {

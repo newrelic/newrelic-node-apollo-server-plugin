@@ -1,6 +1,9 @@
 {
   "name": "apollo-server-tests",
-  "targets": ["@apollo/server", "apollo-server"],
+  "targets": [
+    {"name":"@apollo/server","minAgentVersion":"@newrelic/apollo-server-plugin@2.1.0"},
+    {"name":"apollo-server","minAgentVersion":"@newrelic/apollo-server-plugin@1.0.0"}
+  ],
   "version": "0.0.0",
   "private": true,
   "engines": {

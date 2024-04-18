@@ -1,6 +1,6 @@
 {
   "name": "apollo-server-tests",
-  "targets": ["apollo-server-lambda"],
+  "targets": [{"name":"apollo-server-lambda","minAgentVersion":"@newrelic/apollo-server-plugin@1.0.0"}],
   "version": "0.0.0",
   "private": true,
   "tests": [
