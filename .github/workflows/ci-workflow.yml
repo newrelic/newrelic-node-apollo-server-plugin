@@ -24,7 +24,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - name: Install Dependencies
-      run: npm ci
+      run: npm install
     - name: Run Linting
       run: npm run lint
     - name: Inspect Lockfile
@@ -35,7 +35,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x, 18.x, 20.x]
+        node-version: [16.x, 18.x, 20.x, 22.x]
 
     steps:
       - uses: actions/checkout@v3
@@ -44,7 +44,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Install Dependencies
-        run: npm ci
+        run: npm install
       - name: Run Unit Tests
         run: npm run unit
       - name: Post Unit Test Coverage
@@ -61,7 +61,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x, 18.x, 20.x]
+        node-version: [16.x, 18.x, 20.x, 22.x]
 
     steps:
       - uses: actions/checkout@v3
@@ -70,7 +70,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Install Dependencies
-        run: npm ci
+        run: npm install
       - name: Run Integration Tests
         run: npm run integration
       - name: Post Integration Test Coverage
@@ -86,7 +86,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x, 18.x, 20.x]
+        node-version: [16.x, 18.x, 20.x, 22.x]
 
     steps:
     - uses: actions/checkout@v3
@@ -95,7 +95,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - name: Install Dependencies
-      run: npm ci
+      run: npm install
     - name: Run Versioned Tests
       run: npm run versioned
       env:
