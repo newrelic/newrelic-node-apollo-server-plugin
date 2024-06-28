@@ -1,3 +1,32 @@
+### v5.2.0 (2024-06-28)
+
+#### Features
+
+* Added support for Node 22.
+
+#### Documentation
+
+* clarified how to configure capturing args passed to mutations ([#295](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/295)) ([7e6e265](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/7e6e2651d5e0c79798c9c989d588869732443466))
+* Updated targets to include minimum agent version for compatibility repo ([#299](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/299)) ([2d9808b](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/2d9808b486caeac4cc4821c3dad014d477eb158c))
+
+#### Miscellaneous chores
+
+* Add targets for compatibility package parsing ([#297](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/297)) ([2ac8553](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/2ac8553a1f7b5a431a2accb9b9adc46b99fe5fc2))
+* Added Node 22 to CI ([#301](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/301)) ([57922a3](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/57922a31d96e21cfff3012b9158debbea1206187))
+* Updated minimum versions of dev dependencies.([#290](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/290)) ([8b77476](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/8b7747643205f894575ed42f2ac8e99251ba1799))([#291](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/291)) ([2eb3183](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/2eb31839bcb57ab8991d5c7e699faae198363e9f))([#306](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/306)) ([82fa6da](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/82fa6da4da2efedc855daaed2315733e59990619))([#307](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/307)) ([6d1ac62](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/6d1ac62a1efa710e15598ced6b65686752be5407))([#309](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/309)) ([533628d](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/533628d8c55180ae45b949dc3bb3ba31b483237e))
+* Enabled quiet mode for CI runs ([#298](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/298)) ([d190a9a](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/d190a9a0141a94708e3acd04d29beb1af2880a29))
+* Made pre-commit hook require dependency changes ([#300](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/300)) ([cd1869b](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/cd1869b7b26e350fdd50eb862870caaa9f9c8e1f))
+* Removed outdated Slack reference ([#303](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/303)) ([abfb3ed](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/abfb3ede982169c4e1b1bcf9974ff3f6b01c68ea))
+
+#### Tests
+
+* Updated the version range for @apollo/gateway as it was finally stabilized. ([#296](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/296)) ([76c743f](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/76c743f94f92276f16fee19875bd2c20c4bc8b37))
+
+#### Continuous integration
+
+* Removed `use_new_release` input from prepare release workflow ([#293](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/293)) ([2436f8e](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/2436f8eb1094e5045fd272dc8984f35f3befe363))
+* removed changelog.json file ([#292](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/292)) ([9d716ba](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/9d716ba14bb3e39e0eee52776625736840d177a4))
+
 ### v5.1.0 (2024-03-12)
 
 #### Code refactoring
