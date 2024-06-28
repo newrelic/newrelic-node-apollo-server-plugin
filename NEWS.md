@@ -1,9 +1,8 @@
 ### v5.2.0 (2024-06-28)
 
-#### Security improvements
+#### Features
 
-* **deps:** bump ws ([#309](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/309)) ([533628d](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/533628d8c55180ae45b949dc3bb3ba31b483237e))
-    * Signed-off-by: dependabot[bot] <support@github.com> Co-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
+* Added support for Node 22.
 
 #### Documentation
 
@@ -12,16 +11,9 @@
 
 #### Miscellaneous chores
 
-* Add targets for compatiblity package parsing ([#297](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/297)) ([2ac8553](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/2ac8553a1f7b5a431a2accb9b9adc46b99fe5fc2))
+* Add targets for compatibility package parsing ([#297](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/297)) ([2ac8553](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/2ac8553a1f7b5a431a2accb9b9adc46b99fe5fc2))
 * Added Node 22 to CI ([#301](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/301)) ([57922a3](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/57922a31d96e21cfff3012b9158debbea1206187))
-* **deps-dev:** bump @grpc/grpc-js from 1.9.9 to 1.10.9 ([#306](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/306)) ([82fa6da](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/82fa6da4da2efedc855daaed2315733e59990619))
-    * Signed-off-by: dependabot[bot] <support@github.com> Co-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
-* **deps-dev:** bump braces from 3.0.2 to 3.0.3 ([#307](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/307)) ([6d1ac62](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/6d1ac62a1efa710e15598ced6b65686752be5407))
-    * Signed-off-by: dependabot[bot] <support@github.com> Co-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
-* **deps-dev:** bump express from 4.18.2 to 4.19.2 ([#291](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/291)) ([2eb3183](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/2eb31839bcb57ab8991d5c7e699faae198363e9f))
-    * Signed-off-by: dependabot[bot] <support@github.com> Co-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
-* **deps-dev:** bump follow-redirects from 1.15.4 to 1.15.6 ([#290](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/290)) ([8b77476](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/8b7747643205f894575ed42f2ac8e99251ba1799))
-    * Signed-off-by: dependabot[bot] <support@github.com> Co-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
+* Updated minimum versions of dev dependencies.([#290](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/290)) ([8b77476](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/8b7747643205f894575ed42f2ac8e99251ba1799))([#291](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/291)) ([2eb3183](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/2eb31839bcb57ab8991d5c7e699faae198363e9f))([#306](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/306)) ([82fa6da](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/82fa6da4da2efedc855daaed2315733e59990619))([#307](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/307)) ([6d1ac62](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/6d1ac62a1efa710e15598ced6b65686752be5407))([#309](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/309)) ([533628d](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/533628d8c55180ae45b949dc3bb3ba31b483237e))
 * Enabled quiet mode for CI runs ([#298](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/298)) ([d190a9a](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/d190a9a0141a94708e3acd04d29beb1af2880a29))
 * Made pre-commit hook require dependency changes ([#300](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/300)) ([cd1869b](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/cd1869b7b26e350fdd50eb862870caaa9f9c8e1f))
 * Removed outdated Slack reference ([#303](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/303)) ([abfb3ed](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/abfb3ede982169c4e1b1bcf9974ff3f6b01c68ea))
