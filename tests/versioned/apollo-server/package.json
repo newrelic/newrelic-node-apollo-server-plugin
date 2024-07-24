@@ -15,7 +15,10 @@
         "node": ">=16"
       },
       "dependencies": {
-        "apollo-server": ">=2.14.0",
+        "apollo-server": {
+          "versions": ">=3.0.0",
+          "samples": 3 
+        },
         "graphql": "15.8.0"
       },
       "files": [

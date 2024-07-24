@@ -12,7 +12,10 @@
         "node": ">=16"
       },
       "dependencies": {
-        "apollo-server-express": ">=2.14.0",
+        "apollo-server-express": {
+          "versions": ">=3.0.0",
+          "samples": 3 
+        },
         "express": "4.17.1",
         "graphql": "15.8.0"
       },
