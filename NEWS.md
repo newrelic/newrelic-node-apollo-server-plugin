@@ -1,3 +1,17 @@
+### v6.0.0 (2024-07-31)
+#### ⚠ BREAKING CHANGES
+
+* Dropped support for Node.js 16
+* Updated minimum test version of `apollo-server` and `apollo-server-express` to 3.0.0. Removed testing against `apollo-server-fastify`, `apollo-server-hapi`, `apollo-server-koa`, `apollo-server-lambda` as we found the plugin instrumentation had no effect on the relevant, deprecated pacakges
+
+#### Features
+
+* Dropped support for Node.js 16 ([#317](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/317)) ([60c2805](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/60c280564bbfd3f71ad15839175ed2468a2b728f))
+
+#### Tests
+
+* Updated minimum test version of `apollo-server` and `apollo-server-express` to 3.0.0. Removed testing against `apollo-server-fastify`, `apollo-server-hapi`, `apollo-server-koa`, `apollo-server-lambda` as we found the plugin instrumentation had no effect on the relevant, deprecated pacakges ([#317](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/317)) ([6d8d80d](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/6d8d80de84d85012ddde7e7e4da1e96b159d10c5))
+
 ### v5.2.0 (2024-06-28)
 
 #### Features
