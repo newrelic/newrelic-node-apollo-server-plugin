@@ -11,8 +11,7 @@
       "dependencies": {
         "@apollo/subgraph": "latest",
         "@apollo/gateway": ">=2.3.0",
-        "apollo-server": "latest",
-        "graphql": "latest"
+        "apollo-server": "latest"
       },
       "files": [
         "segments.test.js",

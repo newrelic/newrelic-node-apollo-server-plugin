@@ -18,8 +18,7 @@
         "apollo-server": {
           "versions": ">=3.0.0",
           "samples": 3 
-        },
-        "graphql": "15.8.0"
+        }
       },
       "files": [
         "transaction-naming.test.js",
@@ -36,9 +35,7 @@
         "node": ">=18"
       },
       "dependencies": {
-        "@apollo/server": ">=4.0.0",
-        "graphql": "16.6.0",
-        "graphql-tag": "latest"
+        "@apollo/server": ">=4.0.0"
       },
       "files": [
         "transaction-naming.test.js",
