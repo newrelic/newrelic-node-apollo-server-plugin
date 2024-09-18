@@ -31,7 +31,8 @@
         "node": ">=18"
       },
       "dependencies": {
-        "@apollo/server": ">=4.0.0"
+        "@apollo/server": ">=4.0.0",
+        "graphql-tag": "latest"
       },
       "files": [
         "transaction-naming.test.js",
