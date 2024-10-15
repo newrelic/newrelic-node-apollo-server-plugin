@@ -30,6 +30,9 @@ class MockedInstrumentationApi {
     }
 
     this.getActiveSegment = () => {}
+    this.tracer = {
+      getTransaction: () => {}
+    }
   }
 }
 

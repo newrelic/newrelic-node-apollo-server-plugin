@@ -34,6 +34,9 @@ test('createPlugin edge cases', async (t) => {
           }
         },
         getActiveSegment: sinon.stub().returns({}),
+        tracer: {
+          getTransaction: sinon.stub().returns({ nameState: { setName: sinon.stub() } })
+        },
         createSegment: sinon.stub().callsFake((name) => {
           ctx.nr.operationSegment.name = name
           return ctx.nr.operationSegment
