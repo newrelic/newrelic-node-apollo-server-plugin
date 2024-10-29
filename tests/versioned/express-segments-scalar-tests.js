@@ -20,17 +20,17 @@ const RESOLVE_PREFIX = 'GraphQL/resolve/ApolloServer'
  * It is required that t.context.helper and t.context.serverUrl are set.
  * @param {*} t a tap test instance
  */
-function createSegmentsTests(t, frameworkName, isApollo4) {
+function createSegmentsTests(t, frameworkName, isApollo4, isApolloServerExpress) {
   const TRANSACTION_PREFIX = `WebTransaction/${frameworkName}/POST`
+  const MW_SEGMENT = isApolloServerExpress
+    ? 'Nodejs/Middleware/Expressjs/<anonymous>//graphql'
+    : 'Nodejs/Middleware/Expressjs/<anonymous>'
 
   /**
    * Creates the root segment based on a prefix and operation part
    */
-  function baseSegment(operationPart, prefix = TRANSACTION_PREFIX) {
-    return {
-      name: `${prefix}//${operationPart}`,
-      children: []
-    }
+  function baseSegment(operationPart, prefix = TRANSACTION_PREFIX, separator = '//') {
+    return [`${prefix}${separator}${operationPart}`]
   }
 
   /**
@@ -40,12 +40,9 @@ function createSegmentsTests(t, frameworkName, isApollo4) {
    */
   function constructSegments(expectedSegments, operationSegments) {
     if (isApollo4) {
-      expectedSegments.children.push(operationSegments)
+      expectedSegments.push([MW_SEGMENT, operationSegments])
     } else {
-      expectedSegments.children.push({
-        name: 'Expressjs/Router: /',
-        children: operationSegments
-      })
+      expectedSegments.push(['Expressjs/Router: /', [MW_SEGMENT, operationSegments]])
     }
   }
 
@@ -60,23 +57,14 @@ function createSegmentsTests(t, frameworkName, isApollo4) {
       const operationPart = `query/${ANON_PLACEHOLDER}/hello`
       const expectedSegments = baseSegment(operationPart)
       const operationSegments = [
-        {
-          name: 'Nodejs/Middleware/Expressjs/<anonymous>',
-          children: [
-            {
-              name: `${OPERATION_PREFIX}/${operationPart}`,
-              children: [
-                {
-                  name: `${RESOLVE_PREFIX}/hello`
-                }
-              ]
-            }
-          ]
-        }
+        `${OPERATION_PREFIX}/${operationPart}`,
+        [`${RESOLVE_PREFIX}/hello`]
       ]
       constructSegments(expectedSegments, operationSegments)
 
-      t.segments(transaction.trace.root, expectedSegments)
+      t.assertSegments(transaction.trace, transaction.trace.root, expectedSegments, {
+        exact: false
+      })
     })
 
     executeQuery(serverUrl, query, (err, result) => {
@@ -99,23 +87,13 @@ function createSegmentsTests(t, frameworkName, isApollo4) {
       const operationPart = `query/${expectedName}/hello`
       const expectedSegments = baseSegment(operationPart)
       const operationSegments = [
-        {
-          name: 'Nodejs/Middleware/Expressjs/<anonymous>',
-          children: [
-            {
-              name: `${OPERATION_PREFIX}/${operationPart}`,
-              children: [
-                {
-                  name: `${RESOLVE_PREFIX}/hello`
-                }
-              ]
-            }
-          ]
-        }
+        `${OPERATION_PREFIX}/${operationPart}`,
+        [`${RESOLVE_PREFIX}/hello`]
       ]
       constructSegments(expectedSegments, operationSegments)
-
-      t.segments(transaction.trace.root, expectedSegments)
+      t.assertSegments(transaction.trace, transaction.trace.root, expectedSegments, {
+        exact: false
+      })
     })
 
     executeQuery(serverUrl, query, (err, result) => {
@@ -132,7 +110,6 @@ function createSegmentsTests(t, frameworkName, isApollo4) {
     const query = `query {
       libraries {
         books {
-          title
           author {
             name
           }
@@ -140,30 +117,25 @@ function createSegmentsTests(t, frameworkName, isApollo4) {
       }
     }`
 
-    const path = 'libraries.books'
+    const path = 'libraries.books.author.name'
 
     helper.agent.once('transactionFinished', (transaction) => {
       const operationPart = `query/${ANON_PLACEHOLDER}/${path}`
       const expectedSegments = baseSegment(operationPart)
       const operationSegments = [
-        {
-          name: 'Nodejs/Middleware/Expressjs/<anonymous>',
-          children: [
-            {
-              name: `${OPERATION_PREFIX}/${operationPart}`,
-              children: [
-                { name: `${RESOLVE_PREFIX}/libraries` },
-                { name: `${RESOLVE_PREFIX}/libraries.books` },
-                { name: `${RESOLVE_PREFIX}/libraries.books.author` },
-                { name: `${RESOLVE_PREFIX}/libraries.books.author.name` }
-              ]
-            }
-          ]
-        }
+        `${OPERATION_PREFIX}/${operationPart}`,
+        [
+          `${RESOLVE_PREFIX}/libraries`,
+          `${RESOLVE_PREFIX}/libraries.books`,
+          `${RESOLVE_PREFIX}/libraries.books.author`,
+          `${RESOLVE_PREFIX}/libraries.books.author.name`
+        ]
       ]
       constructSegments(expectedSegments, operationSegments)
 
-      t.segments(transaction.trace.root, expectedSegments)
+      t.assertSegments(transaction.trace, transaction.trace.root, expectedSegments, {
+        exact: false
+      })
     })
 
     executeQuery(serverUrl, query, (err, result) => {
@@ -195,30 +167,65 @@ function createSegmentsTests(t, frameworkName, isApollo4) {
       const operationPart = `query/${expectedName}/${path}`
       const expectedSegments = baseSegment(operationPart)
       const operationSegments = [
-        {
-          name: 'Nodejs/Middleware/Expressjs/<anonymous>',
-          children: [
-            {
-              name: `${OPERATION_PREFIX}/${operationPart}`,
-              children: [
-                {
-                  name: `${OPERATION_PREFIX}/${operationPart}`,
-                  children: [
-                    { name: `${RESOLVE_PREFIX}/libraries` },
-                    { name: `${RESOLVE_PREFIX}/libraries.books` },
-                    { name: `${RESOLVE_PREFIX}/libraries.books.title` },
-                    { name: `${RESOLVE_PREFIX}/libraries.books.author` },
-                    { name: `${RESOLVE_PREFIX}/libraries.books.author.name` }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
+        `${OPERATION_PREFIX}/${operationPart}`,
+        [
+          `${RESOLVE_PREFIX}/libraries`,
+          `${RESOLVE_PREFIX}/libraries.books`,
+          `${RESOLVE_PREFIX}/libraries.books.title`,
+          `${RESOLVE_PREFIX}/libraries.books.author`,
+          `${RESOLVE_PREFIX}/libraries.books.author.name`
+        ]
       ]
       constructSegments(expectedSegments, operationSegments)
 
-      t.segments(transaction.trace.root, expectedSegments)
+      t.assertSegments(transaction.trace, transaction.trace.root, expectedSegments, {
+        exact: false
+      })
+    })
+
+    executeQuery(serverUrl, query, (err, result) => {
+      t.error(err)
+      checkResult(t, result, () => {
+        t.end()
+      })
+    })
+  })
+
+  t.test('named query with aliases should use alias in segment naming', (t) => {
+    const { helper, serverUrl } = t.context
+
+    const expectedName = 'GetBooksByLibrary'
+    const query = `query ${expectedName} {
+      alias: libraries {
+        books {
+          title
+          author {
+            name
+          }
+        }
+      }
+    }`
+
+    const path = 'libraries.books'
+
+    helper.agent.once('transactionFinished', (transaction) => {
+      const operationPart = `query/${expectedName}/${path}`
+      const expectedSegments = baseSegment(operationPart)
+      const operationSegments = [
+        `${OPERATION_PREFIX}/${operationPart}`,
+        [
+          `${RESOLVE_PREFIX}/alias`,
+          `${RESOLVE_PREFIX}/alias.books`,
+          `${RESOLVE_PREFIX}/alias.books.title`,
+          `${RESOLVE_PREFIX}/alias.books.author`,
+          `${RESOLVE_PREFIX}/alias.books.author.name`
+        ]
+      ]
+      constructSegments(expectedSegments, operationSegments)
+
+      t.assertSegments(transaction.trace, transaction.trace.root, expectedSegments, {
+        exact: false
+      })
     })
 
     executeQuery(serverUrl, query, (err, result) => {
@@ -240,38 +247,14 @@ function createSegmentsTests(t, frameworkName, isApollo4) {
       const operationPart = `mutation/${ANON_PLACEHOLDER}/addThing`
       const expectedSegments = baseSegment(operationPart)
       const operationSegments = [
-        {
-          name: 'Nodejs/Middleware/Expressjs/<anonymous>',
-          children: [
-            {
-              name: `${OPERATION_PREFIX}/${operationPart}`,
-              children: [
-                {
-                  name: `${OPERATION_PREFIX}/${operationPart}`,
-                  children: [
-                    {
-                      name: `${RESOLVE_PREFIX}/addThing`,
-                      children: [
-                        {
-                          name: 'timers.setTimeout',
-                          children: [
-                            {
-                              name: 'Callback: namedCallback'
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
+        `${OPERATION_PREFIX}/${operationPart}`,
+        [`${RESOLVE_PREFIX}/addThing`, ['timers.setTimeout', ['Callback: namedCallback']]]
       ]
       constructSegments(expectedSegments, operationSegments)
 
-      t.segments(transaction.trace.root, expectedSegments)
+      t.assertSegments(transaction.trace, transaction.trace.root, expectedSegments, {
+        exact: false
+      })
     })
 
     executeQuery(serverUrl, query, (err, result) => {
@@ -294,33 +277,14 @@ function createSegmentsTests(t, frameworkName, isApollo4) {
       const operationPart = `mutation/${expectedName}/addThing`
       const expectedSegments = baseSegment(operationPart)
       const operationSegments = [
-        {
-          name: 'Nodejs/Middleware/Expressjs/<anonymous>',
-          children: [
-            {
-              name: `${OPERATION_PREFIX}/${operationPart}`,
-              children: [
-                {
-                  name: `${RESOLVE_PREFIX}/addThing`,
-                  children: [
-                    {
-                      name: 'timers.setTimeout',
-                      children: [
-                        {
-                          name: 'Callback: namedCallback'
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
+        `${OPERATION_PREFIX}/${operationPart}`,
+        [`${RESOLVE_PREFIX}/addThing`, ['timers.setTimeout', ['Callback: namedCallback']]]
       ]
       constructSegments(expectedSegments, operationSegments)
 
-      t.segments(transaction.trace.root, expectedSegments)
+      t.assertSegments(transaction.trace, transaction.trace.root, expectedSegments, {
+        exact: false
+      })
     })
 
     executeQuery(serverUrl, query, (err, result) => {
@@ -342,19 +306,14 @@ function createSegmentsTests(t, frameworkName, isApollo4) {
       const operationPart = `query/${ANON_PLACEHOLDER}/paramQuery`
       const expectedSegments = baseSegment(operationPart)
       const operationSegments = [
-        {
-          name: 'Nodejs/Middleware/Expressjs/<anonymous>',
-          children: [
-            {
-              name: `${OPERATION_PREFIX}/${operationPart}`,
-              children: [{ name: `${RESOLVE_PREFIX}/paramQuery` }]
-            }
-          ]
-        }
+        `${OPERATION_PREFIX}/${operationPart}`,
+        [`${RESOLVE_PREFIX}/paramQuery`]
       ]
       constructSegments(expectedSegments, operationSegments)
 
-      t.segments(transaction.trace.root, expectedSegments)
+      t.assertSegments(transaction.trace, transaction.trace.root, expectedSegments, {
+        exact: false
+      })
     })
 
     executeQuery(serverUrl, query, (err, result) => {
@@ -377,19 +336,14 @@ function createSegmentsTests(t, frameworkName, isApollo4) {
       const operationPart = `query/${expectedName}/paramQuery`
       const expectedSegments = baseSegment(operationPart)
       const operationSegments = [
-        {
-          name: 'Nodejs/Middleware/Expressjs/<anonymous>',
-          children: [
-            {
-              name: `${OPERATION_PREFIX}/${operationPart}`,
-              children: [{ name: `${RESOLVE_PREFIX}/paramQuery` }]
-            }
-          ]
-        }
+        `${OPERATION_PREFIX}/${operationPart}`,
+        [`${RESOLVE_PREFIX}/paramQuery`]
       ]
       constructSegments(expectedSegments, operationSegments)
 
-      t.segments(transaction.trace.root, expectedSegments)
+      t.assertSegments(transaction.trace, transaction.trace.root, expectedSegments, {
+        exact: false
+      })
     })
 
     executeQuery(serverUrl, query, (err, result) => {
@@ -421,37 +375,21 @@ function createSegmentsTests(t, frameworkName, isApollo4) {
       const operationPart = `query/${expectedName}/${path}`
       const expectedSegments = baseSegment(operationPart)
       const operationSegments = [
-        {
-          name: 'Nodejs/Middleware/Expressjs/<anonymous>',
-          children: [
-            {
-              name: `${OPERATION_PREFIX}/${operationPart}`,
-              children: [
-                {
-                  name: `${RESOLVE_PREFIX}/library`,
-                  children: [
-                    {
-                      name: 'timers.setTimeout',
-                      children: [
-                        {
-                          name: 'Callback: <anonymous>'
-                        }
-                      ]
-                    }
-                  ]
-                },
-                { name: `${RESOLVE_PREFIX}/library.books` },
-                { name: `${RESOLVE_PREFIX}/library.books.title` },
-                { name: `${RESOLVE_PREFIX}/library.books.author` },
-                { name: `${RESOLVE_PREFIX}/library.books.author.name` }
-              ]
-            }
-          ]
-        }
+        `${OPERATION_PREFIX}/${operationPart}`,
+        [
+          `${RESOLVE_PREFIX}/library`,
+          ['timers.setTimeout', ['Callback: <anonymous>']],
+          `${RESOLVE_PREFIX}/library.books`,
+          `${RESOLVE_PREFIX}/library.books.title`,
+          `${RESOLVE_PREFIX}/library.books.author`,
+          `${RESOLVE_PREFIX}/library.books.author.name`
+        ]
       ]
       constructSegments(expectedSegments, operationSegments)
 
-      t.segments(transaction.trace.root, expectedSegments)
+      t.assertSegments(transaction.trace, transaction.trace.root, expectedSegments, {
+        exact: false
+      })
     })
 
     executeQuery(serverUrl, query, (err, result) => {
@@ -486,37 +424,21 @@ function createSegmentsTests(t, frameworkName, isApollo4) {
       const operationPart = `query/${expectedName}/${path}`
       const expectedSegments = baseSegment(operationPart)
       const operationSegments = [
-        {
-          name: 'Nodejs/Middleware/Expressjs/<anonymous>',
-          children: [
-            {
-              name: `${OPERATION_PREFIX}/${operationPart}`,
-              children: [
-                {
-                  name: `${RESOLVE_PREFIX}/library`,
-                  children: [
-                    {
-                      name: 'timers.setTimeout',
-                      children: [
-                        {
-                          name: 'Callback: <anonymous>'
-                        }
-                      ]
-                    }
-                  ]
-                },
-                { name: `${RESOLVE_PREFIX}/library.books` },
-                { name: `${RESOLVE_PREFIX}/library.books.title` },
-                { name: `${RESOLVE_PREFIX}/library.books.author` },
-                { name: `${RESOLVE_PREFIX}/library.books.author.name` }
-              ]
-            }
-          ]
-        }
+        `${OPERATION_PREFIX}/${operationPart}`,
+        [
+          `${RESOLVE_PREFIX}/library`,
+          ['timers.setTimeout', ['Callback: <anonymous>']],
+          `${RESOLVE_PREFIX}/library.books`,
+          `${RESOLVE_PREFIX}/library.books.title`,
+          `${RESOLVE_PREFIX}/library.books.author`,
+          `${RESOLVE_PREFIX}/library.books.author.name`
+        ]
       ]
       constructSegments(expectedSegments, operationSegments)
 
-      t.segments(transaction.trace.root, expectedSegments)
+      t.assertSegments(transaction.trace, transaction.trace.root, expectedSegments, {
+        exact: false
+      })
     })
 
     executeQuery(serverUrl, query, (err) => {
@@ -549,37 +471,21 @@ function createSegmentsTests(t, frameworkName, isApollo4) {
       const operationPart = `query/${expectedName}/${path}`
       const expectedSegments = baseSegment(operationPart)
       const operationSegments = [
-        {
-          name: 'Nodejs/Middleware/Expressjs/<anonymous>',
-          children: [
-            {
-              name: `${OPERATION_PREFIX}/${operationPart}`,
-              children: [
-                {
-                  name: `${RESOLVE_PREFIX}/library`,
-                  children: [
-                    {
-                      name: 'timers.setTimeout',
-                      children: [
-                        {
-                          name: 'Callback: <anonymous>'
-                        }
-                      ]
-                    }
-                  ]
-                },
-                { name: `${RESOLVE_PREFIX}/library.books` },
-                { name: `${RESOLVE_PREFIX}/library.books.title` },
-                { name: `${RESOLVE_PREFIX}/library.books.author` },
-                { name: `${RESOLVE_PREFIX}/library.books.author.name` }
-              ]
-            }
-          ]
-        }
+        `${OPERATION_PREFIX}/${operationPart}`,
+        [
+          `${RESOLVE_PREFIX}/library`,
+          ['timers.setTimeout', ['Callback: <anonymous>']],
+          `${RESOLVE_PREFIX}/library.books`,
+          `${RESOLVE_PREFIX}/library.books.title`,
+          `${RESOLVE_PREFIX}/library.books.author`,
+          `${RESOLVE_PREFIX}/library.books.author.name`
+        ]
       ]
       constructSegments(expectedSegments, operationSegments)
 
-      t.segments(transaction.trace.root, expectedSegments)
+      t.assertSegments(transaction.trace, transaction.trace.root, expectedSegments, {
+        exact: false
+      })
     })
 
     executeQuery(serverUrl, query, (err) => {
@@ -619,58 +525,25 @@ function createSegmentsTests(t, frameworkName, isApollo4) {
 
       const batchTransactionPrefix = `${TRANSACTION_PREFIX}//batch`
       const operationPart = `${expectedQuery1Name}/${expectedQuery2Name}`
-
-      const expectedSegments = baseSegment(operationPart, batchTransactionPrefix)
+      const expectedSegments = baseSegment(operationPart, batchTransactionPrefix, '/')
       const operationSegments = [
-        {
-          name: 'Nodejs/Middleware/Expressjs/<anonymous>',
-          children: [
-            {
-              name: `${OPERATION_PREFIX}/${operationPart1}`,
-              children: [
-                {
-                  name: `${RESOLVE_PREFIX}/library`,
-                  children: [
-                    {
-                      name: 'timers.setTimeout',
-                      children: [
-                        {
-                          name: 'Callback: <anonymous>'
-                        }
-                      ]
-                    }
-                  ]
-                },
-                { name: `${RESOLVE_PREFIX}/library.books` },
-                { name: `${RESOLVE_PREFIX}/library.books.title` },
-                { name: `${RESOLVE_PREFIX}/library.books.author` },
-                { name: `${RESOLVE_PREFIX}/library.books.author.name` }
-              ]
-            },
-            {
-              name: `${OPERATION_PREFIX}/${operationPart2}`,
-              children: [
-                {
-                  name: `${RESOLVE_PREFIX}/addThing`,
-                  children: [
-                    {
-                      name: 'timers.setTimeout',
-                      children: [
-                        {
-                          name: 'Callback: namedCallback'
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
+        `${OPERATION_PREFIX}/${operationPart1}`,
+        [
+          `${RESOLVE_PREFIX}/library`,
+          ['timers.setTimeout', ['Callback: <anonymous>']],
+          `${RESOLVE_PREFIX}/library.books`,
+          `${RESOLVE_PREFIX}/library.books.title`,
+          `${RESOLVE_PREFIX}/library.books.author`,
+          `${RESOLVE_PREFIX}/library.books.author.name`
+        ],
+        `${OPERATION_PREFIX}/${operationPart2}`,
+        [`${RESOLVE_PREFIX}/addThing`['timers.setTimeout'['Callback: namedCallback']]]
       ]
       constructSegments(expectedSegments, operationSegments)
 
-      t.segments(transaction.trace.root, expectedSegments)
+      t.assertSegments(transaction.trace, transaction.trace.root, expectedSegments, {
+        exact: false
+      })
     })
 
     executeQueryBatch(serverUrl, queries, (err, result) => {
@@ -678,6 +551,81 @@ function createSegmentsTests(t, frameworkName, isApollo4) {
       checkResult(t, result, () => {
         t.equal(result.length, 2)
 
+        t.end()
+      })
+    })
+  })
+
+  t.test('union, single level', (t) => {
+    const { helper, serverUrl } = t.context
+
+    const expectedName = 'GetSearchResult'
+    const query = `query ${expectedName} {
+      search(contains: "Ollies") {
+        __typename
+        ... on Book {
+          title
+        }
+      }
+    }`
+
+    const deepestPath = 'search<Book>.title'
+
+    helper.agent.once('transactionFinished', (transaction) => {
+      const operationPart = `query/${expectedName}/${deepestPath}`
+      const expectedSegments = baseSegment(operationPart)
+      const operationSegments = [
+        `${OPERATION_PREFIX}/${operationPart}`,
+        [`${RESOLVE_PREFIX}/search`]
+      ]
+      constructSegments(expectedSegments, operationSegments)
+      t.assertSegments(transaction.trace, transaction.trace.root, expectedSegments, {
+        exact: false
+      })
+    })
+
+    executeQuery(serverUrl, query, (err, result) => {
+      t.error(err)
+      checkResult(t, result, () => {
+        t.end()
+      })
+    })
+  })
+
+  t.test('union, multiple inline fragments, single level', (t) => {
+    const { helper, serverUrl } = t.context
+
+    const expectedName = 'GetSearchResult'
+    const query = `query ${expectedName} {
+      search(contains: "Node") {
+        __typename
+        ... on Magazine {
+          title
+        }
+        ... on Book {
+          title
+        }
+      }
+    }`
+
+    const deepestPath = 'search'
+
+    helper.agent.once('transactionFinished', (transaction) => {
+      const operationPart = `query/${expectedName}/${deepestPath}`
+      const expectedSegments = baseSegment(operationPart)
+      const operationSegments = [
+        `${OPERATION_PREFIX}/${operationPart}`,
+        [`${RESOLVE_PREFIX}/search`]
+      ]
+      constructSegments(expectedSegments, operationSegments)
+      t.assertSegments(transaction.trace, transaction.trace.root, expectedSegments, {
+        exact: false
+      })
+    })
+
+    executeQuery(serverUrl, query, (err, result) => {
+      t.error(err)
+      checkResult(t, result, () => {
         t.end()
       })
     })
@@ -700,19 +648,12 @@ function createSegmentsTests(t, frameworkName, isApollo4) {
 
     helper.agent.once('transactionFinished', (transaction) => {
       const expectedSegments = baseSegment('*')
-      const operationSegments = [
-        {
-          name: 'Nodejs/Middleware/Expressjs/<anonymous>',
-          children: [
-            {
-              name: `${OPERATION_PREFIX}/${UNKNOWN_OPERATION}`
-            }
-          ]
-        }
-      ]
+      const operationSegments = [`${OPERATION_PREFIX}/${UNKNOWN_OPERATION}`]
       constructSegments(expectedSegments, operationSegments)
 
-      t.segments(transaction.trace.root, expectedSegments)
+      t.assertSegments(transaction.trace, transaction.trace.root, expectedSegments, {
+        exact: false
+      })
     })
 
     executeQuery(serverUrl, invalidQuery, (err, result) => {
@@ -749,20 +690,13 @@ function createSegmentsTests(t, frameworkName, isApollo4) {
 
     helper.agent.once('transactionFinished', (transaction) => {
       const operationPart = `query/${ANON_PLACEHOLDER}/${path}`
-      const expectedSegments = baseSegment('*')
-      const operationSegments = [
-        {
-          name: 'Nodejs/Middleware/Expressjs/<anonymous>',
-          children: [
-            {
-              name: `${OPERATION_PREFIX}/${operationPart}`
-            }
-          ]
-        }
-      ]
+      const expectedSegments = baseSegment(operationPart)
+      const operationSegments = [`${OPERATION_PREFIX}/${operationPart}`]
       constructSegments(expectedSegments, operationSegments)
 
-      t.segments(transaction.trace.root, expectedSegments)
+      t.assertSegments(transaction.trace, transaction.trace.root, expectedSegments, {
+        exact: false
+      })
     })
 
     executeQuery(serverUrl, invalidQuery, (err, result) => {

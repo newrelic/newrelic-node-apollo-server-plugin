@@ -57,32 +57,22 @@ function createFederatedSegmentsTests(t, frameworkName) {
 
       const operationPart = `query/${ANON_PLACEHOLDER}/libraries`
       const expectedSegments = [
-        {
-          name: `${TRANSACTION_PREFIX}//${operationPart}`,
-          children: [
-            {
-              name: 'Expressjs/Router: /',
-              children: [
-                {
-                  name: 'Nodejs/Middleware/Expressjs/<anonymous>',
-                  children: [
-                    {
-                      name: `${OPERATION_PREFIX}/${operationPart}`,
-                      children: [
-                        { name: libraryExternal },
-                        { name: bookExternal },
-                        { name: magazineExternal }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
+        `${TRANSACTION_PREFIX}//${operationPart}`,
+        [
+          'Expressjs/Router: /',
+          [
+            'Nodejs/Middleware/Expressjs/<anonymous>',
+            [
+              `${OPERATION_PREFIX}/${operationPart}`,
+              [libraryExternal, bookExternal, magazineExternal]
+            ]
           ]
-        }
+        ]
       ]
 
-      t.segments(transaction.trace.root, expectedSegments)
+      t.assertSegments(transaction.trace, transaction.trace.root, expectedSegments, {
+        exact: false
+      })
     })
 
     executeQuery(serverUrl, query, (err, result) => {
@@ -136,32 +126,24 @@ function createFederatedSegmentsTests(t, frameworkName) {
       const batchTransactionPrefix = `${TRANSACTION_PREFIX}//batch`
 
       const expectedSegments = [
-        {
-          name: `${batchTransactionPrefix}/${expectedQuery1Name}/${expectedQuery2Name}`,
-          children: [
-            {
-              name: 'Expressjs/Router: /',
-              children: [
-                {
-                  name: 'Nodejs/Middleware/Expressjs/<anonymous>',
-                  children: [
-                    {
-                      name: `${OPERATION_PREFIX}/${operationPart1}`,
-                      children: [{ name: libraryExternal }, { name: bookExternal }]
-                    },
-                    {
-                      name: `${OPERATION_PREFIX}/${operationPart2}`,
-                      children: [{ name: libraryExternal }, { name: magazineExternal }]
-                    }
-                  ]
-                }
-              ]
-            }
+        `${batchTransactionPrefix}/${expectedQuery1Name}/${expectedQuery2Name}`,
+        [
+          'Expressjs/Router: /',
+          [
+            'Nodejs/Middleware/Expressjs/<anonymous>',
+            [
+              `${OPERATION_PREFIX}/${operationPart1}`,
+              [libraryExternal, bookExternal],
+              `${OPERATION_PREFIX}/${operationPart2}`,
+              [libraryExternal, magazineExternal]
+            ]
           ]
-        }
+        ]
       ]
 
-      t.segments(transaction.trace.root, expectedSegments)
+      t.assertSegments(transaction.trace, transaction.trace.root, expectedSegments, {
+        exact: false
+      })
     })
 
     executeQueryBatch(serverUrl, queries, (err, result) => {

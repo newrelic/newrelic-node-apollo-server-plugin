@@ -15,10 +15,9 @@ tap.test('createPlugin edge cases', (t) => {
 
   t.beforeEach(function () {
     operationSegment = {
-      start: sinon.stub(),
       addAttribute: sinon.stub(),
-      transaction: { nameState: { setName: sinon.stub() } },
-      end: sinon.stub()
+      end: sinon.stub(),
+      start: sinon.stub()
     }
 
     instrumentationApi = {
@@ -34,6 +33,9 @@ tap.test('createPlugin edge cases', (t) => {
           }
         },
         getActiveSegment: sinon.stub().returns({}),
+        tracer: {
+          getTransaction: sinon.stub().returns({ nameState: { setName: sinon.stub() } })
+        },
         createSegment: sinon.stub().callsFake((name) => {
           operationSegment.name = name
           return operationSegment

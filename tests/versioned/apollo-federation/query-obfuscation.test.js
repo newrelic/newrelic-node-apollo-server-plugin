@@ -9,6 +9,7 @@ const { setupFederatedGatewayServerTests } = require('./federated-gateway-server
 
 const { executeQuery } = require('../../test-client')
 const { checkResult } = require('../common')
+const { findSegmentByName } = require('../../agent-testing')
 
 const SEGMENT_DESTINATION = 0x20
 
@@ -45,7 +46,11 @@ function createQueryObfuscaionTests(t) {
 
     helper.agent.on('transactionFinished', (transaction) => {
       const operationName = `${OPERATION_PREFIX}/${ANON_PLACEHOLDER}/${path}`
-      const operationSegment = findSegmentByName(transaction.trace.root, operationName)
+      const operationSegment = findSegmentByName(
+        transaction.trace,
+        transaction.trace.root,
+        operationName
+      )
 
       // only test one operation segment of three federated server transactions
       if (operationSegment) {
@@ -62,20 +67,4 @@ function createQueryObfuscaionTests(t) {
       })
     })
   })
-}
-
-function findSegmentByName(root, name) {
-  if (root.name === name) {
-    return root
-  } else if (root.children && root.children.length) {
-    for (let i = 0; i < root.children.length; i++) {
-      const child = root.children[i]
-      const found = findSegmentByName(child, name)
-      if (found) {
-        return found
-      }
-    }
-  }
-
-  return null
 }

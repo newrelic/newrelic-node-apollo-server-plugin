@@ -7,10 +7,9 @@
 
 const { existsSync } = require('fs')
 const tap = require('tap')
-
 const utils = require('@newrelic/test-utilities')
 utils.assert.extendTap(tap)
-
+require('../../agent-testing')
 const { getTypeDefs, resolvers } = require('../../data-definitions')
 const setupErrorSchema = require('../error-setup')
 const { clearCachedModules } = require('../../utils')
@@ -116,7 +115,7 @@ function setupApolloServerExpressTests({ suiteName, createTests, pluginConfig },
       )
     })
 
-    createTests(t, WEB_FRAMEWORK, isApollo4)
+    createTests(t, WEB_FRAMEWORK, isApollo4, true)
   })
 }
 

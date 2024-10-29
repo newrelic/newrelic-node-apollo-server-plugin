@@ -8,8 +8,7 @@
 const tap = require('tap')
 
 const utils = require('@newrelic/test-utilities')
-utils.assert.extendTap(tap)
-
+require('../../agent-testing')
 const federatedData = require('./federated-data-definitions')
 const { clearCachedModules } = require('../../utils')
 

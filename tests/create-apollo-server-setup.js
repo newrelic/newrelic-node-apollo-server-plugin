@@ -6,10 +6,9 @@
 'use strict'
 
 const tap = require('tap')
-
 const utils = require('@newrelic/test-utilities')
 utils.assert.extendTap(tap)
-
+require('./agent-testing')
 const { getTypeDefs, resolvers } = require('./data-definitions')
 const setupErrorSchema = require('./versioned/error-setup')
 const { clearCachedModules } = require('./utils')
@@ -78,7 +77,13 @@ function setupApolloServerTests(loadApolloServer, testDir, options, agentConfig)
       serverUrl = null
       helper = null
       clearCachedModules(
-        ['express', 'apollo-server', '@apollo/server', '@apollo/server/express4'],
+        [
+          'express',
+          'apollo-server',
+          '@apollo/server',
+          '@apollo/server/express4',
+          '@apollo/server/standalone'
+        ],
         testDir
       )
     })

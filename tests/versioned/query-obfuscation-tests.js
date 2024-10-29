@@ -7,6 +7,7 @@
 
 const { executeQuery, executeJson } = require('../test-client')
 const { checkResult } = require('./common')
+const { findSegmentByName } = require('../agent-testing')
 
 const SEGMENT_DESTINATION = 0x20
 
@@ -42,7 +43,11 @@ function createQueryObfuscaionTests(t) {
 
     helper.agent.once('transactionFinished', (transaction) => {
       const operationName = `${OPERATION_PREFIX}/${ANON_PLACEHOLDER}/${path}`
-      const operationSegment = findSegmentByName(transaction.trace.root, operationName)
+      const operationSegment = findSegmentByName(
+        transaction.trace,
+        transaction.trace.root,
+        operationName
+      )
 
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
 
@@ -73,7 +78,11 @@ function createQueryObfuscaionTests(t) {
 
     helper.agent.once('transactionFinished', (transaction) => {
       const operationName = `${OPERATION_PREFIX}/${ANON_PLACEHOLDER}/${path}`
-      const operationSegment = findSegmentByName(transaction.trace.root, operationName)
+      const operationSegment = findSegmentByName(
+        transaction.trace,
+        transaction.trace.root,
+        operationName
+      )
 
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
 
@@ -111,7 +120,11 @@ function createQueryObfuscaionTests(t) {
 
     helper.agent.once('transactionFinished', (transaction) => {
       const operationName = `${OPERATION_PREFIX}/${expectedName}/${path}`
-      const operationSegment = findSegmentByName(transaction.trace.root, operationName)
+      const operationSegment = findSegmentByName(
+        transaction.trace,
+        transaction.trace.root,
+        operationName
+      )
 
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
 
@@ -144,7 +157,11 @@ function createQueryObfuscaionTests(t) {
 
     helper.agent.once('transactionFinished', (transaction) => {
       const operationName = `${OPERATION_PREFIX}/${ANON_PLACEHOLDER}/${path}`
-      const operationSegment = findSegmentByName(transaction.trace.root, operationName)
+      const operationSegment = findSegmentByName(
+        transaction.trace,
+        transaction.trace.root,
+        operationName
+      )
 
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
 
@@ -175,7 +192,11 @@ function createQueryObfuscaionTests(t) {
 
     helper.agent.once('transactionFinished', (transaction) => {
       const operationName = UNKNOWN_OPERATION_NAME
-      const operationSegment = findSegmentByName(transaction.trace.root, operationName)
+      const operationSegment = findSegmentByName(
+        transaction.trace,
+        transaction.trace.root,
+        operationName
+      )
 
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
 
@@ -193,22 +214,6 @@ function createQueryObfuscaionTests(t) {
       t.end()
     })
   })
-}
-
-function findSegmentByName(root, name) {
-  if (root.name === name) {
-    return root
-  } else if (root.children && root.children.length) {
-    for (let i = 0; i < root.children.length; i++) {
-      const child = root.children[i]
-      const found = findSegmentByName(child, name)
-      if (found) {
-        return found
-      }
-    }
-  }
-
-  return null
 }
 
 module.exports = {

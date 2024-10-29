@@ -62,51 +62,32 @@ function createNoScalarTests(t) {
     helper.agent.once('transactionFinished', (transaction) => {
       const operationPart = `query/${expectedName}/${path}`
       const expectedSegments = [
-        {
-          name: `${TRANSACTION_PREFIX}//${operationPart}`,
-          children: [
-            { name: 'Nodejs/Middleware/Expressjs/query' },
-            { name: 'Nodejs/Middleware/Expressjs/expressInit' },
-            {
-              name: 'Expressjs/Router: /',
-              children: [
-                { name: 'Nodejs/Middleware/Expressjs/corsMiddleware' },
-                { name: 'Nodejs/Middleware/Expressjs/jsonParser' },
-                {
-                  name: 'Nodejs/Middleware/Expressjs/<anonymous>',
-                  children: [
-                    {
-                      name: `${OPERATION_PREFIX}/${operationPart}`,
-                      children: [
-                        {
-                          name: `${RESOLVE_PREFIX}/library`,
-                          children: [
-                            {
-                              name: 'timers.setTimeout',
-                              children: [
-                                {
-                                  name: 'Callback: <anonymous>'
-                                }
-                              ]
-                            }
-                          ]
-                        },
-                        { name: `${RESOLVE_PREFIX}/library.books` },
-                        { name: `${RESOLVE_PREFIX}/library.books.author` },
-                        { name: `${RESOLVE_PREFIX}/library.books.author` },
-                        { name: `${RESOLVE_PREFIX}/library.magazines` }
-                      ]
-                    }
-                  ]
-                }
+        `${TRANSACTION_PREFIX}//${operationPart}`,
+        [
+          'Nodejs/Middleware/Expressjs/query',
+          'Nodejs/Middleware/Expressjs/expressInit',
+          'Expressjs/Router: /',
+          [
+            'Nodejs/Middleware/Expressjs/corsMiddleware',
+            'Nodejs/Middleware/Expressjs/jsonParser',
+            'Nodejs/Middleware/Expressjs/<anonymous>',
+            [
+              `${OPERATION_PREFIX}/${operationPart}`,
+              [
+                `${RESOLVE_PREFIX}/library`,
+                ['timers.setTimeout', ['Callback: <anonymous>']],
+                `${RESOLVE_PREFIX}/library.books`,
+                `${RESOLVE_PREFIX}/library.books.author`,
+                `${RESOLVE_PREFIX}/library.books.author`,
+                `${RESOLVE_PREFIX}/library.magazines`
               ]
-            }
+            ]
           ]
-        }
+        ]
       ]
 
       // Exact match to ensure no extra fields snuck in
-      t.exactSegments(transaction.trace.root, expectedSegments)
+      t.assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: true })
     })
 
     executeQuery(serverUrl, query, (err) => {
@@ -143,57 +124,38 @@ function createScalarTests(t) {
     helper.agent.once('transactionFinished', (transaction) => {
       const operationPart = `query/${expectedName}/${path}`
       const expectedSegments = [
-        {
-          name: `${TRANSACTION_PREFIX}//${operationPart}`,
-          children: [
-            { name: 'Nodejs/Middleware/Expressjs/query' },
-            { name: 'Nodejs/Middleware/Expressjs/expressInit' },
-            {
-              name: 'Expressjs/Router: /',
-              children: [
-                { name: 'Nodejs/Middleware/Expressjs/corsMiddleware' },
-                { name: 'Nodejs/Middleware/Expressjs/jsonParser' },
-                {
-                  name: 'Nodejs/Middleware/Expressjs/<anonymous>',
-                  children: [
-                    {
-                      name: `${OPERATION_PREFIX}/${operationPart}`,
-                      children: [
-                        {
-                          name: `${RESOLVE_PREFIX}/library`,
-                          children: [
-                            {
-                              name: 'timers.setTimeout',
-                              children: [
-                                {
-                                  name: 'Callback: <anonymous>'
-                                }
-                              ]
-                            }
-                          ]
-                        },
-                        { name: `${RESOLVE_PREFIX}/library.books` },
-                        { name: `${RESOLVE_PREFIX}/library.books.title` },
-                        { name: `${RESOLVE_PREFIX}/library.books.author` },
-                        { name: `${RESOLVE_PREFIX}/library.books.author.name` },
-                        { name: `${RESOLVE_PREFIX}/library.books.title` },
-                        { name: `${RESOLVE_PREFIX}/library.books.author` },
-                        { name: `${RESOLVE_PREFIX}/library.books.author.name` },
-                        { name: `${RESOLVE_PREFIX}/library.magazines` },
-                        { name: `${RESOLVE_PREFIX}/library.magazines.title` },
-                        { name: `${RESOLVE_PREFIX}/library.magazines.issue` }
-                      ]
-                    }
-                  ]
-                }
+        `${TRANSACTION_PREFIX}//${operationPart}`,
+        [
+          'Nodejs/Middleware/Expressjs/query',
+          'Nodejs/Middleware/Expressjs/expressInit',
+          'Expressjs/Router: /',
+          [
+            'Nodejs/Middleware/Expressjs/corsMiddleware',
+            'Nodejs/Middleware/Expressjs/jsonParser',
+            'Nodejs/Middleware/Expressjs/<anonymous>',
+            [
+              `${OPERATION_PREFIX}/${operationPart}`,
+              [
+                `${RESOLVE_PREFIX}/library`,
+                ['timers.setTimeout', ['Callback: <anonymous>']],
+                `${RESOLVE_PREFIX}/library.books`,
+                `${RESOLVE_PREFIX}/library.books.title`,
+                `${RESOLVE_PREFIX}/library.books.author`,
+                `${RESOLVE_PREFIX}/library.books.author.name`,
+                `${RESOLVE_PREFIX}/library.books.title`,
+                `${RESOLVE_PREFIX}/library.books.author`,
+                `${RESOLVE_PREFIX}/library.books.author.name`,
+                `${RESOLVE_PREFIX}/library.magazines`,
+                `${RESOLVE_PREFIX}/library.magazines.title`,
+                `${RESOLVE_PREFIX}/library.magazines.issue`
               ]
-            }
+            ]
           ]
-        }
+        ]
       ]
 
       // Exact match to ensure no extra fields snuck in
-      t.exactSegments(transaction.trace.root, expectedSegments)
+      t.assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: true })
     })
 
     executeQuery(serverUrl, query, (err) => {
