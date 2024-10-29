@@ -1,0 +1,792 @@
+TAP version 13
+# Subtest: non-scalar: anonymous query, single level
+not ok 1 - non-scalar: anonymous query, single level
+  ---
+  duration_ms: 238.989792
+  location: '/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/apollo-server-express/segments.test.js:19:3'
+  failureType: 'uncaughtException'
+  error: 'segment "Expressjs/Router: /" should have child "Nodejs/Middleware/Expressjs/<anonymous>"'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:211:16)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    Agent.<anonymous> (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/express-segments-tests.js:65:7)
+    Object.onceWrapper (node:events:634:26)
+    Agent.emit (node:events:531:35)
+    Transaction.end (/Users/revans/code/release/node-newrelic/lib/transaction/index.js:220:14)
+    ServerResponse.instrumentedFinish (/Users/revans/code/release/node-newrelic/lib/instrumentation/core/http.js:206:15)
+    Object.onceWrapper (node:events:633:28)
+    ServerResponse.emit (node:events:531:35)
+  ...
+# Subtest: non-scalar: named query, single level
+not ok 2 - non-scalar: named query, single level
+  ---
+  duration_ms: 19.743333
+  location: '/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/apollo-server-express/segments.test.js:19:3'
+  failureType: 'uncaughtException'
+  error: 'segment "Expressjs/Router: /" should have child "Nodejs/Middleware/Expressjs/<anonymous>"'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:211:16)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    Agent.<anonymous> (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/express-segments-tests.js:103:7)
+    Object.onceWrapper (node:events:634:26)
+    Agent.emit (node:events:531:35)
+    Transaction.end (/Users/revans/code/release/node-newrelic/lib/transaction/index.js:220:14)
+    ServerResponse.instrumentedFinish (/Users/revans/code/release/node-newrelic/lib/instrumentation/core/http.js:206:15)
+    Object.onceWrapper (node:events:633:28)
+    ServerResponse.emit (node:events:531:35)
+  ...
+# Subtest: non-scalar: anonymous query, multi-level
+not ok 3 - non-scalar: anonymous query, multi-level
+  ---
+  duration_ms: 18.592583
+  location: '/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/apollo-server-express/segments.test.js:19:3'
+  failureType: 'uncaughtException'
+  error: 'segment "Expressjs/Router: /" should have child "Nodejs/Middleware/Expressjs/<anonymous>"'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:211:16)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    Agent.<anonymous> (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/express-segments-tests.js:159:7)
+    Object.onceWrapper (node:events:634:26)
+    Agent.emit (node:events:531:35)
+    Transaction.end (/Users/revans/code/release/node-newrelic/lib/transaction/index.js:220:14)
+    ServerResponse.instrumentedFinish (/Users/revans/code/release/node-newrelic/lib/instrumentation/core/http.js:206:15)
+    Object.onceWrapper (node:events:633:28)
+    ServerResponse.emit (node:events:531:35)
+  ...
+# Subtest: non-scalar: named query, multi-level should return deepest unique path
+not ok 4 - non-scalar: named query, multi-level should return deepest unique path
+  ---
+  duration_ms: 14.167334
+  location: '/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/apollo-server-express/segments.test.js:19:3'
+  failureType: 'uncaughtException'
+  error: 'segment "Expressjs/Router: /" should have child "Nodejs/Middleware/Expressjs/<anonymous>"'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:211:16)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    Agent.<anonymous> (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/express-segments-tests.js:216:7)
+    Object.onceWrapper (node:events:634:26)
+    Agent.emit (node:events:531:35)
+    Transaction.end (/Users/revans/code/release/node-newrelic/lib/transaction/index.js:220:14)
+    ServerResponse.instrumentedFinish (/Users/revans/code/release/node-newrelic/lib/instrumentation/core/http.js:206:15)
+    Object.onceWrapper (node:events:633:28)
+    ServerResponse.emit (node:events:531:35)
+  ...
+# Subtest: non-scalar: named query with aliases should use alias in segment naming
+not ok 5 - non-scalar: named query with aliases should use alias in segment naming
+  ---
+  duration_ms: 16.263042
+  location: '/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/apollo-server-express/segments.test.js:19:3'
+  failureType: 'uncaughtException'
+  error: 'segment "Expressjs/Router: /" should have child "Nodejs/Middleware/Expressjs/<anonymous>"'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:211:16)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    Agent.<anonymous> (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/express-segments-tests.js:271:7)
+    Object.onceWrapper (node:events:634:26)
+    Agent.emit (node:events:531:35)
+    Transaction.end (/Users/revans/code/release/node-newrelic/lib/transaction/index.js:220:14)
+    ServerResponse.instrumentedFinish (/Users/revans/code/release/node-newrelic/lib/instrumentation/core/http.js:206:15)
+    Object.onceWrapper (node:events:633:28)
+    ServerResponse.emit (node:events:531:35)
+  ...
+# Subtest: non-scalar: anonymous mutation, single level
+not ok 6 - non-scalar: anonymous mutation, single level
+  ---
+  duration_ms: 13.999209
+  location: '/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/apollo-server-express/segments.test.js:19:3'
+  failureType: 'uncaughtException'
+  error: 'segment "Expressjs/Router: /" should have child "Nodejs/Middleware/Expressjs/<anonymous>"'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:211:16)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    Agent.<anonymous> (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/express-segments-tests.js:312:7)
+    Object.onceWrapper (node:events:634:26)
+    Agent.emit (node:events:531:35)
+    Transaction.end (/Users/revans/code/release/node-newrelic/lib/transaction/index.js:220:14)
+    ServerResponse.instrumentedFinish (/Users/revans/code/release/node-newrelic/lib/instrumentation/core/http.js:206:15)
+    Object.onceWrapper (node:events:633:28)
+    ServerResponse.emit (node:events:531:35)
+  ...
+# Subtest: non-scalar: named mutation, single level, should use mutation name
+not ok 7 - non-scalar: named mutation, single level, should use mutation name
+  ---
+  duration_ms: 14.846459
+  location: '/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/apollo-server-express/segments.test.js:19:3'
+  failureType: 'uncaughtException'
+  error: 'segment "Expressjs/Router: /" should have child "Nodejs/Middleware/Expressjs/<anonymous>"'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:211:16)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    Agent.<anonymous> (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/express-segments-tests.js:354:7)
+    Object.onceWrapper (node:events:634:26)
+    Agent.emit (node:events:531:35)
+    Transaction.end (/Users/revans/code/release/node-newrelic/lib/transaction/index.js:220:14)
+    ServerResponse.instrumentedFinish (/Users/revans/code/release/node-newrelic/lib/instrumentation/core/http.js:206:15)
+    Object.onceWrapper (node:events:633:28)
+    ServerResponse.emit (node:events:531:35)
+  ...
+# Subtest: non-scalar: anonymous query, with params
+not ok 8 - non-scalar: anonymous query, with params
+  ---
+  duration_ms: 12.270875
+  location: '/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/apollo-server-express/segments.test.js:19:3'
+  failureType: 'uncaughtException'
+  error: 'segment "Expressjs/Router: /" should have child "Nodejs/Middleware/Expressjs/<anonymous>"'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:211:16)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    Agent.<anonymous> (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/express-segments-tests.js:392:7)
+    Object.onceWrapper (node:events:634:26)
+    Agent.emit (node:events:531:35)
+    Transaction.end (/Users/revans/code/release/node-newrelic/lib/transaction/index.js:220:14)
+    ServerResponse.instrumentedFinish (/Users/revans/code/release/node-newrelic/lib/instrumentation/core/http.js:206:15)
+    Object.onceWrapper (node:events:633:28)
+    ServerResponse.emit (node:events:531:35)
+  ...
+# Subtest: non-scalar: named query, with params
+not ok 9 - non-scalar: named query, with params
+  ---
+  duration_ms: 17.763542
+  location: '/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/apollo-server-express/segments.test.js:19:3'
+  failureType: 'uncaughtException'
+  error: 'segment "Expressjs/Router: /" should have child "Nodejs/Middleware/Expressjs/<anonymous>"'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:211:16)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    Agent.<anonymous> (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/express-segments-tests.js:431:7)
+    Object.onceWrapper (node:events:634:26)
+    Agent.emit (node:events:531:35)
+    Transaction.end (/Users/revans/code/release/node-newrelic/lib/transaction/index.js:220:14)
+    ServerResponse.instrumentedFinish (/Users/revans/code/release/node-newrelic/lib/instrumentation/core/http.js:206:15)
+    Object.onceWrapper (node:events:633:28)
+    ServerResponse.emit (node:events:531:35)
+  ...
+# Subtest: non-scalar: named query, with params, multi-level
+not ok 10 - non-scalar: named query, with params, multi-level
+  ---
+  duration_ms: 13.886208
+  location: '/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/apollo-server-express/segments.test.js:19:3'
+  failureType: 'uncaughtException'
+  error: 'segment "Expressjs/Router: /" should have child "Nodejs/Middleware/Expressjs/<anonymous>"'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:211:16)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    Agent.<anonymous> (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/express-segments-tests.js:488:7)
+    Object.onceWrapper (node:events:634:26)
+    Agent.emit (node:events:531:35)
+    Transaction.end (/Users/revans/code/release/node-newrelic/lib/transaction/index.js:220:14)
+    ServerResponse.instrumentedFinish (/Users/revans/code/release/node-newrelic/lib/instrumentation/core/http.js:206:15)
+    Object.onceWrapper (node:events:633:28)
+    ServerResponse.emit (node:events:531:35)
+  ...
+# Subtest: non-scalar: named query with fragment, query first
+not ok 11 - non-scalar: named query with fragment, query first
+  ---
+  duration_ms: 14.226375
+  location: '/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/apollo-server-express/segments.test.js:19:3'
+  failureType: 'uncaughtException'
+  error: 'segment "Expressjs/Router: /" should have child "Nodejs/Middleware/Expressjs/<anonymous>"'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:211:16)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    Agent.<anonymous> (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/express-segments-tests.js:548:7)
+    Object.onceWrapper (node:events:634:26)
+    Agent.emit (node:events:531:35)
+    Transaction.end (/Users/revans/code/release/node-newrelic/lib/transaction/index.js:220:14)
+    ServerResponse.instrumentedFinish (/Users/revans/code/release/node-newrelic/lib/instrumentation/core/http.js:206:15)
+    Object.onceWrapper (node:events:633:28)
+    ServerResponse.emit (node:events:531:35)
+  ...
+# Subtest: non-scalar: named query with fragment, fragment first
+not ok 12 - non-scalar: named query with fragment, fragment first
+  ---
+  duration_ms: 10.669958
+  location: '/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/apollo-server-express/segments.test.js:19:3'
+  failureType: 'uncaughtException'
+  error: 'segment "Expressjs/Router: /" should have child "Nodejs/Middleware/Expressjs/<anonymous>"'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:211:16)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    Agent.<anonymous> (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/express-segments-tests.js:606:7)
+    Object.onceWrapper (node:events:634:26)
+    Agent.emit (node:events:531:35)
+    Transaction.end (/Users/revans/code/release/node-newrelic/lib/transaction/index.js:220:14)
+    ServerResponse.instrumentedFinish (/Users/revans/code/release/node-newrelic/lib/instrumentation/core/http.js:206:15)
+    Object.onceWrapper (node:events:633:28)
+    ServerResponse.emit (node:events:531:35)
+  ...
+# Subtest: non-scalar: batch query should include segments for nested queries
+not ok 13 - non-scalar: batch query should include segments for nested queries
+  ---
+  duration_ms: 13.714875
+  location: '/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/apollo-server-express/segments.test.js:19:3'
+  failureType: 'uncaughtException'
+  error: 'segment "Expressjs/Router: /" should have child "Nodejs/Middleware/Expressjs/<anonymous>"'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:211:16)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    Agent.<anonymous> (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/express-segments-tests.js:682:7)
+    Object.onceWrapper (node:events:634:26)
+    Agent.emit (node:events:531:35)
+    Transaction.end (/Users/revans/code/release/node-newrelic/lib/transaction/index.js:220:14)
+    ServerResponse.instrumentedFinish (/Users/revans/code/release/node-newrelic/lib/instrumentation/core/http.js:206:15)
+    Object.onceWrapper (node:events:633:28)
+    ServerResponse.emit (node:events:531:35)
+  ...
+# Subtest: non-scalar: union, single level
+not ok 14 - non-scalar: union, single level
+  ---
+  duration_ms: 10.129709
+  location: '/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/apollo-server-express/segments.test.js:19:3'
+  failureType: 'uncaughtException'
+  error: 'segment "Expressjs/Router: /" should have child "Nodejs/Middleware/Expressjs/<anonymous>"'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:211:16)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    Agent.<anonymous> (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/express-segments-tests.js:729:7)
+    Object.onceWrapper (node:events:634:26)
+    Agent.emit (node:events:531:35)
+    Transaction.end (/Users/revans/code/release/node-newrelic/lib/transaction/index.js:220:14)
+    ServerResponse.instrumentedFinish (/Users/revans/code/release/node-newrelic/lib/instrumentation/core/http.js:206:15)
+    Object.onceWrapper (node:events:633:28)
+    ServerResponse.emit (node:events:531:35)
+  ...
+# Subtest: non-scalar: union, multiple inline fragments, single level
+not ok 15 - non-scalar: union, multiple inline fragments, single level
+  ---
+  duration_ms: 11.22775
+  location: '/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/apollo-server-express/segments.test.js:19:3'
+  failureType: 'uncaughtException'
+  error: 'segment "Expressjs/Router: /" should have child "Nodejs/Middleware/Expressjs/<anonymous>"'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:211:16)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    Agent.<anonymous> (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/express-segments-tests.js:777:7)
+    Object.onceWrapper (node:events:634:26)
+    Agent.emit (node:events:531:35)
+    Transaction.end (/Users/revans/code/release/node-newrelic/lib/transaction/index.js:220:14)
+    ServerResponse.instrumentedFinish (/Users/revans/code/release/node-newrelic/lib/instrumentation/core/http.js:206:15)
+    Object.onceWrapper (node:events:633:28)
+    ServerResponse.emit (node:events:531:35)
+  ...
+# Subtest: non-scalar: when the query cannot be parsed, should have operation placeholder
+not ok 16 - non-scalar: when the query cannot be parsed, should have operation placeholder
+  ---
+  duration_ms: 10.694375
+  location: '/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/apollo-server-express/segments.test.js:19:3'
+  failureType: 'uncaughtException'
+  error: 'segment "Expressjs/Router: /" should have child "Nodejs/Middleware/Expressjs/<anonymous>"'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:211:16)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    Agent.<anonymous> (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/express-segments-tests.js:822:7)
+    Object.onceWrapper (node:events:634:26)
+    Agent.emit (node:events:531:35)
+    Transaction.end (/Users/revans/code/release/node-newrelic/lib/transaction/index.js:220:14)
+    ServerResponse.instrumentedFinish (/Users/revans/code/release/node-newrelic/lib/instrumentation/core/http.js:206:15)
+    Object.onceWrapper (node:events:633:28)
+    ServerResponse.emit (node:events:531:35)
+  ...
+# Subtest: non-scalar: when cannot validate, should include operation segment
+not ok 17 - non-scalar: when cannot validate, should include operation segment
+  ---
+  duration_ms: 11.655542
+  location: '/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/apollo-server-express/segments.test.js:19:3'
+  failureType: 'uncaughtException'
+  error: 'segment "Expressjs/Router: /" should have child "Nodejs/Middleware/Expressjs/<anonymous>"'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:211:16)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    Agent.<anonymous> (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/express-segments-tests.js:876:7)
+    Object.onceWrapper (node:events:634:26)
+    Agent.emit (node:events:531:35)
+    Transaction.end (/Users/revans/code/release/node-newrelic/lib/transaction/index.js:220:14)
+    ServerResponse.instrumentedFinish (/Users/revans/code/release/node-newrelic/lib/instrumentation/core/http.js:206:15)
+    Object.onceWrapper (node:events:633:28)
+    ServerResponse.emit (node:events:531:35)
+  ...
+# Subtest: scalar: anonymous query, single level
+not ok 18 - scalar: anonymous query, single level
+  ---
+  duration_ms: 9.595125
+  location: '/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/apollo-server-express/segments.test.js:28:3'
+  failureType: 'uncaughtException'
+  error: 'segment "Expressjs/Router: /" should have child "Nodejs/Middleware/Expressjs/<anonymous>"'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:211:16)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    Agent.<anonymous> (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/express-segments-tests.js:65:7)
+    Object.onceWrapper (node:events:634:26)
+    Agent.emit (node:events:531:35)
+    Transaction.end (/Users/revans/code/release/node-newrelic/lib/transaction/index.js:220:14)
+    ServerResponse.instrumentedFinish (/Users/revans/code/release/node-newrelic/lib/instrumentation/core/http.js:206:15)
+    Object.onceWrapper (node:events:633:28)
+    ServerResponse.emit (node:events:531:35)
+  ...
+# Subtest: scalar: named query, single level
+not ok 19 - scalar: named query, single level
+  ---
+  duration_ms: 10.90425
+  location: '/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/apollo-server-express/segments.test.js:28:3'
+  failureType: 'uncaughtException'
+  error: 'segment "Expressjs/Router: /" should have child "Nodejs/Middleware/Expressjs/<anonymous>"'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:211:16)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    Agent.<anonymous> (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/express-segments-tests.js:103:7)
+    Object.onceWrapper (node:events:634:26)
+    Agent.emit (node:events:531:35)
+    Transaction.end (/Users/revans/code/release/node-newrelic/lib/transaction/index.js:220:14)
+    ServerResponse.instrumentedFinish (/Users/revans/code/release/node-newrelic/lib/instrumentation/core/http.js:206:15)
+    Object.onceWrapper (node:events:633:28)
+    ServerResponse.emit (node:events:531:35)
+  ...
+# Subtest: scalar: anonymous query, multi-level
+not ok 20 - scalar: anonymous query, multi-level
+  ---
+  duration_ms: 11.329875
+  location: '/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/apollo-server-express/segments.test.js:28:3'
+  failureType: 'uncaughtException'
+  error: 'segment "Expressjs/Router: /" should have child "Nodejs/Middleware/Expressjs/<anonymous>"'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:211:16)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    Agent.<anonymous> (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/express-segments-tests.js:159:7)
+    Object.onceWrapper (node:events:634:26)
+    Agent.emit (node:events:531:35)
+    Transaction.end (/Users/revans/code/release/node-newrelic/lib/transaction/index.js:220:14)
+    ServerResponse.instrumentedFinish (/Users/revans/code/release/node-newrelic/lib/instrumentation/core/http.js:206:15)
+    Object.onceWrapper (node:events:633:28)
+    ServerResponse.emit (node:events:531:35)
+  ...
+# Subtest: scalar: named query, multi-level should return deepest unique path
+not ok 21 - scalar: named query, multi-level should return deepest unique path
+  ---
+  duration_ms: 11.507208
+  location: '/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/apollo-server-express/segments.test.js:28:3'
+  failureType: 'uncaughtException'
+  error: 'segment "Expressjs/Router: /" should have child "Nodejs/Middleware/Expressjs/<anonymous>"'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:211:16)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    Agent.<anonymous> (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/express-segments-tests.js:216:7)
+    Object.onceWrapper (node:events:634:26)
+    Agent.emit (node:events:531:35)
+    Transaction.end (/Users/revans/code/release/node-newrelic/lib/transaction/index.js:220:14)
+    ServerResponse.instrumentedFinish (/Users/revans/code/release/node-newrelic/lib/instrumentation/core/http.js:206:15)
+    Object.onceWrapper (node:events:633:28)
+    ServerResponse.emit (node:events:531:35)
+  ...
+# Subtest: scalar: named query with aliases should use alias in segment naming
+not ok 22 - scalar: named query with aliases should use alias in segment naming
+  ---
+  duration_ms: 10.198833
+  location: '/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/apollo-server-express/segments.test.js:28:3'
+  failureType: 'uncaughtException'
+  error: 'segment "Expressjs/Router: /" should have child "Nodejs/Middleware/Expressjs/<anonymous>"'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:211:16)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    Agent.<anonymous> (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/express-segments-tests.js:271:7)
+    Object.onceWrapper (node:events:634:26)
+    Agent.emit (node:events:531:35)
+    Transaction.end (/Users/revans/code/release/node-newrelic/lib/transaction/index.js:220:14)
+    ServerResponse.instrumentedFinish (/Users/revans/code/release/node-newrelic/lib/instrumentation/core/http.js:206:15)
+    Object.onceWrapper (node:events:633:28)
+    ServerResponse.emit (node:events:531:35)
+  ...
+# Subtest: scalar: anonymous mutation, single level
+not ok 23 - scalar: anonymous mutation, single level
+  ---
+  duration_ms: 12.273375
+  location: '/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/apollo-server-express/segments.test.js:28:3'
+  failureType: 'uncaughtException'
+  error: 'segment "Expressjs/Router: /" should have child "Nodejs/Middleware/Expressjs/<anonymous>"'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:211:16)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    Agent.<anonymous> (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/express-segments-tests.js:312:7)
+    Object.onceWrapper (node:events:634:26)
+    Agent.emit (node:events:531:35)
+    Transaction.end (/Users/revans/code/release/node-newrelic/lib/transaction/index.js:220:14)
+    ServerResponse.instrumentedFinish (/Users/revans/code/release/node-newrelic/lib/instrumentation/core/http.js:206:15)
+    Object.onceWrapper (node:events:633:28)
+    ServerResponse.emit (node:events:531:35)
+  ...
+# Subtest: scalar: named mutation, single level, should use mutation name
+not ok 24 - scalar: named mutation, single level, should use mutation name
+  ---
+  duration_ms: 11.036583
+  location: '/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/apollo-server-express/segments.test.js:28:3'
+  failureType: 'uncaughtException'
+  error: 'segment "Expressjs/Router: /" should have child "Nodejs/Middleware/Expressjs/<anonymous>"'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:211:16)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    Agent.<anonymous> (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/express-segments-tests.js:354:7)
+    Object.onceWrapper (node:events:634:26)
+    Agent.emit (node:events:531:35)
+    Transaction.end (/Users/revans/code/release/node-newrelic/lib/transaction/index.js:220:14)
+    ServerResponse.instrumentedFinish (/Users/revans/code/release/node-newrelic/lib/instrumentation/core/http.js:206:15)
+    Object.onceWrapper (node:events:633:28)
+    ServerResponse.emit (node:events:531:35)
+  ...
+# Subtest: scalar: anonymous query, with params
+not ok 25 - scalar: anonymous query, with params
+  ---
+  duration_ms: 10.120208
+  location: '/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/apollo-server-express/segments.test.js:28:3'
+  failureType: 'uncaughtException'
+  error: 'segment "Expressjs/Router: /" should have child "Nodejs/Middleware/Expressjs/<anonymous>"'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:211:16)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    Agent.<anonymous> (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/express-segments-tests.js:392:7)
+    Object.onceWrapper (node:events:634:26)
+    Agent.emit (node:events:531:35)
+    Transaction.end (/Users/revans/code/release/node-newrelic/lib/transaction/index.js:220:14)
+    ServerResponse.instrumentedFinish (/Users/revans/code/release/node-newrelic/lib/instrumentation/core/http.js:206:15)
+    Object.onceWrapper (node:events:633:28)
+    ServerResponse.emit (node:events:531:35)
+  ...
+# Subtest: scalar: named query, with params
+not ok 26 - scalar: named query, with params
+  ---
+  duration_ms: 9.273166
+  location: '/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/apollo-server-express/segments.test.js:28:3'
+  failureType: 'uncaughtException'
+  error: 'segment "Expressjs/Router: /" should have child "Nodejs/Middleware/Expressjs/<anonymous>"'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:211:16)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    Agent.<anonymous> (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/express-segments-tests.js:431:7)
+    Object.onceWrapper (node:events:634:26)
+    Agent.emit (node:events:531:35)
+    Transaction.end (/Users/revans/code/release/node-newrelic/lib/transaction/index.js:220:14)
+    ServerResponse.instrumentedFinish (/Users/revans/code/release/node-newrelic/lib/instrumentation/core/http.js:206:15)
+    Object.onceWrapper (node:events:633:28)
+    ServerResponse.emit (node:events:531:35)
+  ...
+# Subtest: scalar: named query, with params, multi-level
+not ok 27 - scalar: named query, with params, multi-level
+  ---
+  duration_ms: 11.0235
+  location: '/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/apollo-server-express/segments.test.js:28:3'
+  failureType: 'uncaughtException'
+  error: 'segment "Expressjs/Router: /" should have child "Nodejs/Middleware/Expressjs/<anonymous>"'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:211:16)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    Agent.<anonymous> (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/express-segments-tests.js:488:7)
+    Object.onceWrapper (node:events:634:26)
+    Agent.emit (node:events:531:35)
+    Transaction.end (/Users/revans/code/release/node-newrelic/lib/transaction/index.js:220:14)
+    ServerResponse.instrumentedFinish (/Users/revans/code/release/node-newrelic/lib/instrumentation/core/http.js:206:15)
+    Object.onceWrapper (node:events:633:28)
+    ServerResponse.emit (node:events:531:35)
+  ...
+# Subtest: scalar: named query with fragment, query first
+not ok 28 - scalar: named query with fragment, query first
+  ---
+  duration_ms: 11.848208
+  location: '/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/apollo-server-express/segments.test.js:28:3'
+  failureType: 'uncaughtException'
+  error: 'segment "Expressjs/Router: /" should have child "Nodejs/Middleware/Expressjs/<anonymous>"'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:211:16)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    Agent.<anonymous> (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/express-segments-tests.js:548:7)
+    Object.onceWrapper (node:events:634:26)
+    Agent.emit (node:events:531:35)
+    Transaction.end (/Users/revans/code/release/node-newrelic/lib/transaction/index.js:220:14)
+    ServerResponse.instrumentedFinish (/Users/revans/code/release/node-newrelic/lib/instrumentation/core/http.js:206:15)
+    Object.onceWrapper (node:events:633:28)
+    ServerResponse.emit (node:events:531:35)
+  ...
+# Subtest: scalar: named query with fragment, fragment first
+not ok 29 - scalar: named query with fragment, fragment first
+  ---
+  duration_ms: 11.946834
+  location: '/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/apollo-server-express/segments.test.js:28:3'
+  failureType: 'uncaughtException'
+  error: 'segment "Expressjs/Router: /" should have child "Nodejs/Middleware/Expressjs/<anonymous>"'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:211:16)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    Agent.<anonymous> (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/express-segments-tests.js:606:7)
+    Object.onceWrapper (node:events:634:26)
+    Agent.emit (node:events:531:35)
+    Transaction.end (/Users/revans/code/release/node-newrelic/lib/transaction/index.js:220:14)
+    ServerResponse.instrumentedFinish (/Users/revans/code/release/node-newrelic/lib/instrumentation/core/http.js:206:15)
+    Object.onceWrapper (node:events:633:28)
+    ServerResponse.emit (node:events:531:35)
+  ...
+# Subtest: scalar: batch query should include segments for nested queries
+not ok 30 - scalar: batch query should include segments for nested queries
+  ---
+  duration_ms: 12.2155
+  location: '/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/apollo-server-express/segments.test.js:28:3'
+  failureType: 'uncaughtException'
+  error: 'segment "Expressjs/Router: /" should have child "Nodejs/Middleware/Expressjs/<anonymous>"'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:211:16)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    Agent.<anonymous> (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/express-segments-tests.js:682:7)
+    Object.onceWrapper (node:events:634:26)
+    Agent.emit (node:events:531:35)
+    Transaction.end (/Users/revans/code/release/node-newrelic/lib/transaction/index.js:220:14)
+    ServerResponse.instrumentedFinish (/Users/revans/code/release/node-newrelic/lib/instrumentation/core/http.js:206:15)
+    Object.onceWrapper (node:events:633:28)
+    ServerResponse.emit (node:events:531:35)
+  ...
+# Subtest: scalar: union, single level
+not ok 31 - scalar: union, single level
+  ---
+  duration_ms: 10.594333
+  location: '/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/apollo-server-express/segments.test.js:28:3'
+  failureType: 'uncaughtException'
+  error: 'segment "Expressjs/Router: /" should have child "Nodejs/Middleware/Expressjs/<anonymous>"'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:211:16)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    Agent.<anonymous> (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/express-segments-tests.js:729:7)
+    Object.onceWrapper (node:events:634:26)
+    Agent.emit (node:events:531:35)
+    Transaction.end (/Users/revans/code/release/node-newrelic/lib/transaction/index.js:220:14)
+    ServerResponse.instrumentedFinish (/Users/revans/code/release/node-newrelic/lib/instrumentation/core/http.js:206:15)
+    Object.onceWrapper (node:events:633:28)
+    ServerResponse.emit (node:events:531:35)
+  ...
+# Subtest: scalar: union, multiple inline fragments, single level
+not ok 32 - scalar: union, multiple inline fragments, single level
+  ---
+  duration_ms: 9.667
+  location: '/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/apollo-server-express/segments.test.js:28:3'
+  failureType: 'uncaughtException'
+  error: 'segment "Expressjs/Router: /" should have child "Nodejs/Middleware/Expressjs/<anonymous>"'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:211:16)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    Agent.<anonymous> (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/express-segments-tests.js:777:7)
+    Object.onceWrapper (node:events:634:26)
+    Agent.emit (node:events:531:35)
+    Transaction.end (/Users/revans/code/release/node-newrelic/lib/transaction/index.js:220:14)
+    ServerResponse.instrumentedFinish (/Users/revans/code/release/node-newrelic/lib/instrumentation/core/http.js:206:15)
+    Object.onceWrapper (node:events:633:28)
+    ServerResponse.emit (node:events:531:35)
+  ...
+# Subtest: scalar: when the query cannot be parsed, should have operation placeholder
+not ok 33 - scalar: when the query cannot be parsed, should have operation placeholder
+  ---
+  duration_ms: 10.714417
+  location: '/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/apollo-server-express/segments.test.js:28:3'
+  failureType: 'uncaughtException'
+  error: 'segment "Expressjs/Router: /" should have child "Nodejs/Middleware/Expressjs/<anonymous>"'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:211:16)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    Agent.<anonymous> (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/express-segments-tests.js:822:7)
+    Object.onceWrapper (node:events:634:26)
+    Agent.emit (node:events:531:35)
+    Transaction.end (/Users/revans/code/release/node-newrelic/lib/transaction/index.js:220:14)
+    ServerResponse.instrumentedFinish (/Users/revans/code/release/node-newrelic/lib/instrumentation/core/http.js:206:15)
+    Object.onceWrapper (node:events:633:28)
+    ServerResponse.emit (node:events:531:35)
+  ...
+# Subtest: scalar: when cannot validate, should include operation segment
+not ok 34 - scalar: when cannot validate, should include operation segment
+  ---
+  duration_ms: 9.63075
+  location: '/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/apollo-server-express/segments.test.js:28:3'
+  failureType: 'uncaughtException'
+  error: 'segment "Expressjs/Router: /" should have child "Nodejs/Middleware/Expressjs/<anonymous>"'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:211:16)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    assertSegments (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/lib/custom-assertions.js:213:11)
+    Agent.<anonymous> (/Users/revans/code/newrelic-node-apollo-server-plugin/tests/versioned/express-segments-tests.js:876:7)
+    Object.onceWrapper (node:events:634:26)
+    Agent.emit (node:events:531:35)
+    Transaction.end (/Users/revans/code/release/node-newrelic/lib/transaction/index.js:220:14)
+    ServerResponse.instrumentedFinish (/Users/revans/code/release/node-newrelic/lib/instrumentation/core/http.js:206:15)
+    Object.onceWrapper (node:events:633:28)
+    ServerResponse.emit (node:events:531:35)
+  ...
+1..34
+# tests 34
+# suites 0
+# pass 0
+# fail 34
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 652.1945

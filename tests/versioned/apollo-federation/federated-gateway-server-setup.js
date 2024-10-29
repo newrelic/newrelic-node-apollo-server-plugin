@@ -5,7 +5,6 @@
 
 'use strict'
 const utils = require('@newrelic/test-utilities')
-
 const federatedData = require('./federated-data-definitions')
 const { unloadModules } = require('../../lib/test-tools')
 

@@ -63,6 +63,64 @@ function assertMetrics(
 }
 
 /**
+ * This function is used to verify that a tree of trace segments matches an
+ * expected tree of segment names. For example, if the trace looks like (i.e
+ * the `parent` parameter):
+ *
+ * ```js
+ * {
+ *   name: 'root-segment',
+ *   children: [
+ *    {
+ *      name: 'child 1',
+ *      children: [
+ *        {
+ *          name: 'grandchild 1',
+ *          children: [
+ *            {
+ *              name: 'great-grandchild',
+ *              children: []
+ *            }
+ *          ]
+ *        },
+ *        {
+ *          name: 'grandchild 2',
+ *          children: []
+ *        }
+ *      ]
+ *    },
+ *    {
+ *      name: 'child 2',
+ *      children: []
+ *    }
+ *   ]
+ * }
+ * ```
+ *
+ * Then the provided `expected` parameter should look like:
+ *
+ * ```js
+ * [
+ *   'root-segment',
+ *   [
+ *     'child 1',
+ *     [
+ *      'grandchild 1',
+ *      ['great-grandchild],
+ *      'grandchild 2'
+ *     ],
+ *     'child 2'
+ *   ],
+ * ]
+ * ```
+ *
+ * Ordering of the elements in the `expected` parameter is significant when
+ * `options.exact = true`. Regardless of the `exact` value, ordering of elements
+ * is significant to indicate the nesting order. Any string immediately
+ * followed by an array of strings indicates that the first string is a parent
+ * element, and the subsequent array of strings is its child elements.
+ *
+ * @param {Trace} trace             Transaction trace
  * @param {TraceSegment} parent     Parent segment
  * @param {Array} expected          Array of strings that represent segment names.
  *                                  If an item in the array is another array, it
@@ -78,7 +136,13 @@ function assertMetrics(
  * @param {object} [deps] Injected dependencies.
  * @param {object} [deps.assert] Assertion library to use.
  */
-function assertSegments(parent, expected, options, { assert = require('node:assert') } = {}) {
+function assertSegments(
+  trace,
+  parent,
+  expected,
+  options,
+  { assert = require('node:assert') } = {}
+) {
   let child
   let childCount = 0
 
@@ -91,7 +155,8 @@ function assertSegments(parent, expected, options, { assert = require('node:asse
   }
 
   function getChildren(_parent) {
-    return _parent.children.filter(function (item) {
+    const children = trace.getChildren(_parent.id)
+    return children.filter(function (item) {
       if (exact && options && options.exclude) {
         return options.exclude.indexOf(item.name) === -1
       }
@@ -126,7 +191,7 @@ function assertSegments(parent, expected, options, { assert = require('node:asse
           )
         }
       } else if (typeof sequenceItem === 'object') {
-        assertSegments(child, sequenceItem, options, { assert })
+        assertSegments(trace, child, sequenceItem, options, { assert })
       }
     }
 
@@ -138,14 +203,14 @@ function assertSegments(parent, expected, options, { assert = require('node:asse
 
       if (typeof sequenceItem === 'string') {
         // find corresponding child in parent
-        for (let j = 0; j < parent.children.length; j++) {
-          if (parent.children[j].name.startsWith(sequenceItem) === true) {
-            child = parent.children[j]
+        for (let j = 0; j < children.length; j++) {
+          if (children[j].name.startsWith(sequenceItem) === true) {
+            child = children[j]
           }
         }
         assert.ok(child, 'segment "' + parent.name + '" should have child "' + sequenceItem + '"')
         if (typeof expected[i + 1] === 'object') {
-          assertSegments(child, expected[i + 1], { exact }, { assert })
+          assertSegments(trace, child, expected[i + 1], { exact }, { assert })
         }
       }
     }

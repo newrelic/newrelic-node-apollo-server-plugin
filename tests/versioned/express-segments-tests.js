@@ -62,7 +62,7 @@ tests.push({
       ]
       const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
 
-      assertSegments(transaction.trace.root, expectedSegments, { exact: false })
+      assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
     })
 
     executeQuery(serverUrl, query, (err, result) => {
@@ -100,7 +100,7 @@ tests.push({
         [`${OPERATION_PREFIX}/${operationPart}`, [`${RESOLVE_PREFIX}/hello`]]
       ]
       const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
-      assertSegments(transaction.trace.root, expectedSegments, { exact: false })
+      assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
     })
 
     executeQuery(serverUrl, query, (err, result) => {
@@ -156,7 +156,7 @@ tests.push({
 
       const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
 
-      assertSegments(transaction.trace.root, expectedSegments, { exact: false })
+      assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
     })
 
     executeQuery(serverUrl, query, (err, result) => {
@@ -213,7 +213,7 @@ tests.push({
       ]
       const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
 
-      assertSegments(transaction.trace.root, expectedSegments, { exact: false })
+      assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
     })
 
     executeQuery(serverUrl, query, (err, result) => {
@@ -268,7 +268,7 @@ tests.push({
       ]
       const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
 
-      assertSegments(transaction.trace.root, expectedSegments, { exact: false })
+      assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
     })
 
     executeQuery(serverUrl, query, (err, result) => {
@@ -309,7 +309,7 @@ tests.push({
       ]
       const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
 
-      assertSegments(transaction.trace.root, expectedSegments, { exact: false })
+      assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
     })
 
     executeQuery(serverUrl, query, (err, result) => {
@@ -351,7 +351,7 @@ tests.push({
       ]
       const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
 
-      assertSegments(transaction.trace.root, expectedSegments, { exact: false })
+      assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
     })
 
     executeQuery(serverUrl, query, (err, result) => {
@@ -389,7 +389,7 @@ tests.push({
       ]
       const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
 
-      assertSegments(transaction.trace.root, expectedSegments, { exact: false })
+      assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
     })
 
     executeQuery(serverUrl, query, (err, result) => {
@@ -428,7 +428,7 @@ tests.push({
       ]
       const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
 
-      assertSegments(transaction.trace.root, expectedSegments, { exact: false })
+      assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
     })
 
     executeQuery(serverUrl, query, (err, result) => {
@@ -485,7 +485,7 @@ tests.push({
       ]
       const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
 
-      assertSegments(transaction.trace.root, expectedSegments, { exact: false })
+      assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
     })
 
     executeQuery(serverUrl, query, (err, result) => {
@@ -545,7 +545,7 @@ tests.push({
       ]
       const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
 
-      assertSegments(transaction.trace.root, expectedSegments, { exact: false })
+      assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
     })
 
     executeQuery(serverUrl, query, (err) => {
@@ -603,7 +603,7 @@ tests.push({
       ]
       const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
 
-      assertSegments(transaction.trace.root, expectedSegments, { exact: false })
+      assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
     })
 
     executeQuery(serverUrl, query, (err) => {
@@ -679,7 +679,7 @@ tests.push({
       ]
       const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
 
-      assertSegments(transaction.trace.root, expectedSegments, { exact: false })
+      assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
     })
 
     executeQueryBatch(serverUrl, queries, (err, result) => {
@@ -726,7 +726,7 @@ tests.push({
         [`${OPERATION_PREFIX}/${operationPart}`, [`${RESOLVE_PREFIX}/search`]]
       ]
       const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
-      assertSegments(transaction.trace.root, expectedSegments, { exact: false })
+      assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
     })
 
     executeQuery(serverUrl, query, (err, result) => {
@@ -774,7 +774,7 @@ tests.push({
         [`${OPERATION_PREFIX}/${operationPart}`, [`${RESOLVE_PREFIX}/search`]]
       ]
       const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
-      assertSegments(transaction.trace.root, expectedSegments, { exact: false })
+      assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
     })
 
     executeQuery(serverUrl, query, (err, result) => {
@@ -819,7 +819,7 @@ tests.push({
       ]
       const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
 
-      assertSegments(transaction.trace.root, expectedSegments, { exact: false })
+      assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
     })
 
     executeQuery(serverUrl, invalidQuery, (err, result) => {
@@ -873,7 +873,7 @@ tests.push({
       ]
       const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
 
-      assertSegments(transaction.trace.root, expectedSegments, { exact: false })
+      assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
     })
 
     executeQuery(serverUrl, invalidQuery, (err, result) => {

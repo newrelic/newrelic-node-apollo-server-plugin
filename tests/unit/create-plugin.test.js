@@ -17,8 +17,8 @@ test('createPlugin edge cases', async (t) => {
     ctx.nr.operationSegment = {
       start: sinon.stub(),
       addAttribute: sinon.stub(),
-      transaction: { nameState: { setName: sinon.stub() } },
-      end: sinon.stub()
+      end: sinon.stub(),
+      start: sinon.stub()
     }
 
     ctx.nr.instrumentationApi = {

@@ -10,28 +10,12 @@ const assert = require('node:assert')
 const { executeQuery, executeJson } = require('../lib/test-client')
 const { checkResult } = require('./common')
 const promiseReolvers = require('../lib/promise-resolvers')
-
+const findSegmentByName = require('../lib/find-segment')
 const SEGMENT_DESTINATION = 0x20
 const ANON_PLACEHOLDER = '<anonymous>'
 const QUERY_ATTRIBUTE_NAME = 'graphql.operation.query'
 const OPERATION_PREFIX = 'GraphQL/operation/ApolloServer/query'
 const UNKNOWN_OPERATION_NAME = 'GraphQL/operation/ApolloServer/<unknown>'
-
-function findSegmentByName(root, name) {
-  if (root.name === name) {
-    return root
-  } else if (root.children && root.children.length) {
-    for (let i = 0; i < root.children.length; i++) {
-      const child = root.children[i]
-      const found = findSegmentByName(child, name)
-      if (found) {
-        return found
-      }
-    }
-  }
-
-  return null
-}
 
 const tests = []
 
@@ -56,7 +40,11 @@ tests.push({
 
     helper.agent.once('transactionFinished', (transaction) => {
       const operationName = `${OPERATION_PREFIX}/${ANON_PLACEHOLDER}/${path}`
-      const operationSegment = findSegmentByName(transaction.trace.root, operationName)
+      const operationSegment = findSegmentByName(
+        transaction.trace,
+        transaction.trace.root,
+        operationName
+      )
 
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
 
@@ -93,7 +81,11 @@ tests.push({
 
     helper.agent.once('transactionFinished', (transaction) => {
       const operationName = `${OPERATION_PREFIX}/${ANON_PLACEHOLDER}/${path}`
-      const operationSegment = findSegmentByName(transaction.trace.root, operationName)
+      const operationSegment = findSegmentByName(
+        transaction.trace,
+        transaction.trace.root,
+        operationName
+      )
 
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
 
@@ -137,7 +129,11 @@ tests.push({
 
     helper.agent.once('transactionFinished', (transaction) => {
       const operationName = `${OPERATION_PREFIX}/${expectedName}/${path}`
-      const operationSegment = findSegmentByName(transaction.trace.root, operationName)
+      const operationSegment = findSegmentByName(
+        transaction.trace,
+        transaction.trace.root,
+        operationName
+      )
 
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
 
@@ -176,7 +172,11 @@ tests.push({
 
     helper.agent.once('transactionFinished', (transaction) => {
       const operationName = `${OPERATION_PREFIX}/${ANON_PLACEHOLDER}/${path}`
-      const operationSegment = findSegmentByName(transaction.trace.root, operationName)
+      const operationSegment = findSegmentByName(
+        transaction.trace,
+        transaction.trace.root,
+        operationName
+      )
 
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
 
@@ -213,7 +213,11 @@ tests.push({
 
     helper.agent.once('transactionFinished', (transaction) => {
       const operationName = UNKNOWN_OPERATION_NAME
-      const operationSegment = findSegmentByName(transaction.trace.root, operationName)
+      const operationSegment = findSegmentByName(
+        transaction.trace,
+        transaction.trace.root,
+        operationName
+      )
 
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
 
