@@ -113,7 +113,7 @@ tests.push({
       }
 
       // Exact match to ensure no extra fields snuck in
-      assertSegments(transaction.trace.root, expectedSegments, { exact: true })
+      assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: true })
     })
 
     executeQuery(serverUrl, query, (err) => {
