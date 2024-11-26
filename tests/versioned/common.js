@@ -4,6 +4,9 @@
  */
 
 'use strict'
+
+const assert = require('node:assert')
+
 const common = module.exports
 
 /**
@@ -11,11 +14,11 @@ const common = module.exports
  * test is setup correctly for functioning calls.
  */
 common.checkResult = function checkResult(t, result, callback) {
-  t.ok(result)
+  assert.ok(result)
 
   if (result.errors) {
     result.errors.forEach((error) => {
-      t.error(error)
+      assert.ifError(error)
     })
   }
 
