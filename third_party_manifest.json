@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "Tue Apr 16 2024 07:41:31 GMT-0400 (Eastern Daylight Time)",
+  "lastUpdated": "Tue Nov 26 2024 15:00:58 GMT-0500 (Eastern Standard Time)",
   "projectName": "New Relic Node Apollo Server Plugin",
   "projectUrl": "https://github.com/newrelic/newrelic-node-apollo-server-plugin/",
   "includeOptDeps": false,
@@ -19,6 +19,19 @@
       "licenseTextSource": "spdx",
       "publisher": "Apollo",
       "email": "packages@apollographql.com"
+    },
+    "@matteo.collina/tspl@0.1.1": {
+      "name": "@matteo.collina/tspl",
+      "version": "0.1.1",
+      "range": "^0.1.1",
+      "licenses": "MIT",
+      "repoUrl": "https://github.com/mcollina/tspl",
+      "versionedRepoUrl": "https://github.com/mcollina/tspl/tree/v0.1.1",
+      "licenseFile": "node_modules/@matteo.collina/tspl/LICENSE",
+      "licenseUrl": "https://github.com/mcollina/tspl/blob/v0.1.1/LICENSE",
+      "licenseTextSource": "file",
+      "publisher": "Matteo Collina",
+      "email": "hello@matteocollina.com"
     },
     "@newrelic/eslint-config@0.3.0": {
       "name": "@newrelic/eslint-config",

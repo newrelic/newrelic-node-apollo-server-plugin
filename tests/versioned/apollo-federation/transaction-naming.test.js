@@ -5,6 +5,8 @@
 
 'use strict'
 
+const assert = require('node:assert')
+
 const { executeQuery, executeQueryBatch } = require('../../test-client')
 
 const ANON_PLACEHOLDER = '<anonymous>'
@@ -23,11 +25,11 @@ setupFederatedGatewayServerTests({
  * It is required that t.context.helper and t.context.serverUrl are set.
  * @param {*} t a tap test instance
  */
-function createFederatedTransactionNamingTests(t, frameworkName) {
+async function createFederatedTransactionNamingTests(t, frameworkName) {
   const TRANSACTION_PREFIX = `WebTransaction/${frameworkName}/POST`
 
-  t.test('anonymous query, multi selections should return deepest unique path', (t) => {
-    const { helper, serverUrl } = t.context
+  await t.test('anonymous query, multi selections should return deepest unique path', (t, end) => {
+    const { helper, serverUrl } = t.nr
 
     const query = `query {
       libraries {
@@ -50,19 +52,19 @@ function createFederatedTransactionNamingTests(t, frameworkName) {
       }
 
       const operationPart = `query/${ANON_PLACEHOLDER}/libraries`
-      t.equal(transaction.name, `${TRANSACTION_PREFIX}//${operationPart}`)
+      assert.equal(transaction.name, `${TRANSACTION_PREFIX}//${operationPart}`)
     })
 
     executeQuery(serverUrl, query, (err, result) => {
-      t.error(err)
+      assert.ifError(err)
       checkResult(t, result, () => {
-        t.end()
+        end()
       })
     })
   })
 
-  t.test('anonymous query, single selections should return deepest unique path', (t) => {
-    const { helper, serverUrl } = t.context
+  await t.test('anonymous query, single selections should return deepest unique path', (t, end) => {
+    const { helper, serverUrl } = t.nr
 
     const query = `query {
       libraries {
@@ -78,19 +80,19 @@ function createFederatedTransactionNamingTests(t, frameworkName) {
       }
 
       const operationPart = `query/${ANON_PLACEHOLDER}/libraries.booksInStock.title`
-      t.equal(transaction.name, `${TRANSACTION_PREFIX}//${operationPart}`)
+      assert.equal(transaction.name, `${TRANSACTION_PREFIX}//${operationPart}`)
     })
 
     executeQuery(serverUrl, query, (err, result) => {
-      t.error(err)
+      assert.ifError(err)
       checkResult(t, result, () => {
-        t.end()
+        end()
       })
     })
   })
 
-  t.test('named query, multi selections should return deepest unique path', (t) => {
-    const { helper, serverUrl } = t.context
+  await t.test('named query, multi selections should return deepest unique path', (t, end) => {
+    const { helper, serverUrl } = t.nr
 
     const query = `query booksInStock {
       libraries {
@@ -108,19 +110,19 @@ function createFederatedTransactionNamingTests(t, frameworkName) {
       }
 
       const operationPart = 'query/booksInStock/libraries'
-      t.equal(transaction.name, `${TRANSACTION_PREFIX}//${operationPart}`)
+      assert.equal(transaction.name, `${TRANSACTION_PREFIX}//${operationPart}`)
     })
 
     executeQuery(serverUrl, query, (err, result) => {
-      t.error(err)
+      assert.ifError(err)
       checkResult(t, result, () => {
-        t.end()
+        end()
       })
     })
   })
 
-  t.test('named query, single selections should return deepest unique path', (t) => {
-    const { helper, serverUrl } = t.context
+  await t.test('named query, single selections should return deepest unique path', (t, end) => {
+    const { helper, serverUrl } = t.nr
 
     const query = `query booksInStock {
       libraries {
@@ -136,19 +138,19 @@ function createFederatedTransactionNamingTests(t, frameworkName) {
       }
 
       const operationPart = 'query/booksInStock/libraries.booksInStock.title'
-      t.equal(transaction.name, `${TRANSACTION_PREFIX}//${operationPart}`)
+      assert.equal(transaction.name, `${TRANSACTION_PREFIX}//${operationPart}`)
     })
 
     executeQuery(serverUrl, query, (err, result) => {
-      t.error(err)
+      assert.ifError(err)
       checkResult(t, result, () => {
-        t.end()
+        end()
       })
     })
   })
 
-  t.test('should properly name transaction when a named, batch federated query', (t) => {
-    const { helper, serverUrl } = t.context
+  await t.test('should properly name transaction when a named, batch federated query', (t, end) => {
+    const { helper, serverUrl } = t.nr
 
     const booksQueryName = 'GetBooksForLibraries'
     const booksQuery = `query ${booksQueryName} {
@@ -182,15 +184,17 @@ function createFederatedTransactionNamingTests(t, frameworkName) {
 
       const batchTransactionPrefix = `${TRANSACTION_PREFIX}//batch`
 
-      t.equal(transaction.name, `${batchTransactionPrefix}/${operationPart1}/${operationPart2}`)
+      assert.equal(
+        transaction.name,
+        `${batchTransactionPrefix}/${operationPart1}/${operationPart2}`
+      )
     })
 
     executeQueryBatch(serverUrl, queries, (err, result) => {
-      t.error(err)
+      assert.ifError(err)
       checkResult(t, result, () => {
-        t.equal(result.length, 2)
-
-        t.end()
+        assert.equal(result.length, 2)
+        end()
       })
     })
   })

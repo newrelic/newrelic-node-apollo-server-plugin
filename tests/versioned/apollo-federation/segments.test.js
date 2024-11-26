@@ -5,6 +5,9 @@
 
 'use strict'
 
+const assert = require('node:assert')
+
+const segments = require('../assert/segments')
 const { executeQuery, executeQueryBatch } = require('../../test-client')
 
 const ANON_PLACEHOLDER = '<anonymous>'
@@ -22,14 +25,16 @@ setupFederatedGatewayServerTests({
 /**
  * Creates a set of standard segment naming and nesting tests to run
  * against express-based apollo-server libraries.
- * It is required that t.context.helper and t.context.serverUrl are set.
- * @param {*} t a tap test instance
+ *
+ * It is required that t.nr.helper and t.nr.serverUrl are set.
+ *
+ * @param {*} t a `node:test` context instance
  */
-function createFederatedSegmentsTests(t, frameworkName) {
+async function createFederatedSegmentsTests(t, frameworkName) {
   const TRANSACTION_PREFIX = `WebTransaction/${frameworkName}/POST`
 
-  t.test('should nest sub graphs under operation', (t) => {
-    const { helper, serverUrl } = t.context
+  await t.test('should nest sub graphs under operation', (t, end) => {
+    const { helper, serverUrl } = t.nr
 
     const query = `query {
       libraries {
@@ -51,9 +56,9 @@ function createFederatedSegmentsTests(t, frameworkName) {
         return
       }
 
-      const libraryExternal = formatExternalSegment(t.context.libraryUrl)
-      const bookExternal = formatExternalSegment(t.context.bookUrl)
-      const magazineExternal = formatExternalSegment(t.context.magazineUrl)
+      const libraryExternal = formatExternalSegment(t.nr.libraryUrl)
+      const bookExternal = formatExternalSegment(t.nr.bookUrl)
+      const magazineExternal = formatExternalSegment(t.nr.magazineUrl)
 
       const operationPart = `query/${ANON_PLACEHOLDER}/libraries`
       const expectedSegments = [
@@ -82,19 +87,19 @@ function createFederatedSegmentsTests(t, frameworkName) {
         }
       ]
 
-      t.segments(transaction.trace.root, expectedSegments)
+      segments(transaction.trace.root, expectedSegments)
     })
 
     executeQuery(serverUrl, query, (err, result) => {
-      t.error(err)
+      assert.ifError(err)
       checkResult(t, result, () => {
-        t.end()
+        end()
       })
     })
   })
 
-  t.test('batch query should nest sub graphs under appropriate operations', (t) => {
-    const { helper, serverUrl } = t.context
+  await t.test('batch query should nest sub graphs under appropriate operations', (t, end) => {
+    const { helper, serverUrl } = t.nr
 
     const booksQueryName = 'GetBooksForLibraries'
     const booksQuery = `query ${booksQueryName} {
@@ -119,9 +124,9 @@ function createFederatedSegmentsTests(t, frameworkName) {
 
     const queries = [booksQuery, magazineQuery]
 
-    const libraryExternal = formatExternalSegment(t.context.libraryUrl)
-    const bookExternal = formatExternalSegment(t.context.bookUrl)
-    const magazineExternal = formatExternalSegment(t.context.magazineUrl)
+    const libraryExternal = formatExternalSegment(t.nr.libraryUrl)
+    const bookExternal = formatExternalSegment(t.nr.bookUrl)
+    const magazineExternal = formatExternalSegment(t.nr.magazineUrl)
 
     helper.agent.on('transactionFinished', (transaction) => {
       if (shouldSkipTransaction(transaction)) {
@@ -161,15 +166,14 @@ function createFederatedSegmentsTests(t, frameworkName) {
         }
       ]
 
-      t.segments(transaction.trace.root, expectedSegments)
+      segments(transaction.trace.root, expectedSegments)
     })
 
     executeQueryBatch(serverUrl, queries, (err, result) => {
-      t.error(err)
+      assert.ifError(err)
       checkResult(t, result, () => {
-        t.equal(result.length, 2)
-
-        t.end()
+        assert.equal(result.length, 2)
+        end()
       })
     })
   })

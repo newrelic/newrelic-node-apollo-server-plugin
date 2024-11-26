@@ -5,10 +5,8 @@
 
 'use strict'
 
-const tap = require('tap')
-
+const test = require('node:test')
 const utils = require('@newrelic/test-utilities')
-utils.assert.extendTap(tap)
 
 const federatedData = require('./federated-data-definitions')
 const { clearCachedModules } = require('../../utils')
@@ -18,19 +16,10 @@ const WEB_FRAMEWORK = 'Expressjs'
 function setupFederatedGatewayServerTests(options, agentConfig) {
   const { suiteName, createTests, pluginConfig } = options
 
-  tap.test(`apollo-federation: ${suiteName}`, (t) => {
-    t.autoend()
-
-    let gatewayServer = null
-    let libraryServer = null
-    let bookServer = null
-    let magazineServer = null
-
-    let helper = null
-
-    t.beforeEach(async () => {
+  test(`apollo-federation: ${suiteName}`, async (t) => {
+    t.beforeEach(async (ctx) => {
       // load default instrumentation. express being critical
-      helper = utils.TestAgent.makeFullyInstrumented(agentConfig)
+      const helper = utils.TestAgent.makeFullyInstrumented(agentConfig)
       const createPlugin = require('../../../lib/create-plugin')
       const nrApi = helper.getAgentApi()
 
@@ -55,13 +44,13 @@ function setupFederatedGatewayServerTests(options, agentConfig) {
 
       // Services are not instrumented
       const libraryService = await loadLibraries(apollo, subGraphPlugins)
-      libraryServer = libraryService.server
+      const libraryServer = libraryService.server
 
       const bookService = await loadBooks(apollo, subGraphPlugins)
-      bookServer = bookService.server
+      const bookServer = bookService.server
 
       const magazineService = await loadMagazines(apollo, subGraphPlugins)
-      magazineServer = magazineService.server
+      const magazineServer = magazineService.server
 
       const services = [
         { name: libraryService.name, url: libraryService.url },
@@ -72,29 +61,29 @@ function setupFederatedGatewayServerTests(options, agentConfig) {
       const plugins = [...startingPlugins, instrumentationPlugin]
 
       const gatewayService = await loadGateway(apollo, services, plugins)
+      const gatewayServer = gatewayService.server
 
-      gatewayServer = gatewayService.server
-
-      t.context.helper = helper
-      t.context.serverUrl = gatewayService.url
-      t.context.libraryUrl = libraryService.url
-      t.context.bookUrl = bookService.url
-      t.context.magazineUrl = magazineService.url
+      ctx.nr = {
+        helper,
+        gatewayServer,
+        magazineServer,
+        bookServer,
+        libraryServer,
+        serverUrl: gatewayService.url,
+        libraryUrl: libraryService.url,
+        bookUrl: bookService.url,
+        magazineUrl: magazineService.url
+      }
     })
 
-    t.afterEach(() => {
+    t.afterEach((ctx) => {
+      const { gatewayServer, magazineServer, bookServer, libraryServer, helper } = ctx.nr
       gatewayServer.stop()
       magazineServer.stop()
       bookServer.stop()
       libraryServer.stop()
 
-      gatewayServer = null
-      magazineServer = null
-      bookServer = null
-      libraryServer = null
-
       helper.unload()
-      helper = null
 
       clearCachedModules(
         ['express', 'apollo-server', '@apollo/gateway', '@apollo/subgraph'],
@@ -102,7 +91,7 @@ function setupFederatedGatewayServerTests(options, agentConfig) {
       )
     })
 
-    createTests(t, WEB_FRAMEWORK)
+    await createTests(t, WEB_FRAMEWORK)
   })
 }
 

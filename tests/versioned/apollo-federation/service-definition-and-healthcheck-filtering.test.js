@@ -5,39 +5,27 @@
 
 'use strict'
 
-const tap = require('tap')
+const test = require('node:test')
+const tspl = require('@matteo.collina/tspl')
+
 const utils = require('@newrelic/test-utilities')
 const createPlugin = require('../../../lib/create-plugin')
 
 const { loadLibraries, loadGateway } = require('./federated-gateway-server-setup')
 
-tap.test(
+test(
   'Capture/Ignore Service Definition and Health Check ' +
     'query transaction from sub-graph servers',
-  (t) => {
-    t.autoend()
+  async (t) => {
+    await t.test('Should ignore Service Definiion query by default', async (t) => {
+      const plan = tspl(t, { plan: 1 })
 
-    let gatewayServer = null
-    let libraryServer = null
-    let helper = null
-    let agentConfig = null
-
-    t.afterEach(() => {
-      helper.unload()
-
-      gatewayServer = null
-      libraryServer = null
-      helper = null
-      agentConfig = null
-    })
-
-    t.test('Should ignore Service Definiion query by default', async (t) => {
       // load default instrumentation. express being critical
-      helper = utils.TestAgent.makeFullyInstrumented(agentConfig)
+      const helper = utils.TestAgent.makeFullyInstrumented()
       const ignore = true
 
       helper.agent.on('transactionFinished', (transaction) => {
-        t.equal(transaction.ignore, ignore, `should set transaction.ignore to ${ignore}`)
+        plan.equal(transaction.ignore, ignore, `should set transaction.ignore to ${ignore}`)
       })
 
       const pluginConfig = {}
@@ -51,28 +39,32 @@ tap.test(
       const apollo = require('apollo-server')
 
       const libraryService = await loadLibraries(apollo, plugins)
-      libraryServer = libraryService.server
+      const libraryServer = libraryService.server
 
       const services = [{ name: libraryService.name, url: libraryService.url }]
 
       const gatewayService = await loadGateway(apollo, services, plugins)
 
-      gatewayServer = gatewayService.server
+      const gatewayServer = gatewayService.server
 
       gatewayServer.stop()
       libraryServer.stop()
+      helper.unload()
+
+      await plan.completed
     })
 
-    t.test(
+    await t.test(
       'Should not ignore Service Definition query ' +
         'when captureServiceDefinitionQueries set to true',
       async (t) => {
+        const plan = tspl(t, { plan: 1 })
         // load default instrumentation. express being critical
-        helper = utils.TestAgent.makeFullyInstrumented(agentConfig)
+        const helper = utils.TestAgent.makeFullyInstrumented()
         const ignore = false
 
         helper.agent.on('transactionFinished', (transaction) => {
-          t.equal(transaction.ignore, ignore, `should set transaction.ignore to ${ignore}`)
+          plan.equal(transaction.ignore, ignore, `should set transaction.ignore to ${ignore}`)
         })
 
         const pluginConfig = {
@@ -88,27 +80,31 @@ tap.test(
         const apollo = require('apollo-server')
 
         const libraryService = await loadLibraries(apollo, plugins)
-        libraryServer = libraryService.server
+        const libraryServer = libraryService.server
 
         const services = [{ name: libraryService.name, url: libraryService.url }]
 
         const gatewayService = await loadGateway(apollo, services, plugins)
 
-        gatewayServer = gatewayService.server
+        const gatewayServer = gatewayService.server
 
         gatewayServer.stop()
         libraryServer.stop()
+        helper.unload()
+
+        await plan.completed
       }
     )
 
-    t.test('Should ignore Health Check query by default', async (t) => {
+    await t.test('Should ignore Health Check query by default', async (t) => {
+      const plan = tspl(t, { plan: 1 })
       // load default instrumentation. express being critical
-      helper = utils.TestAgent.makeFullyInstrumented(agentConfig)
+      const helper = utils.TestAgent.makeFullyInstrumented()
       const ignore = true
 
       helper.agent.on('transactionFinished', (transaction) => {
         if (transaction.name.includes('__ApolloServiceHealthCheck__')) {
-          t.equal(transaction.ignore, ignore, `should set transaction.ignore to ${ignore}`)
+          plan.equal(transaction.ignore, ignore, `should set transaction.ignore to ${ignore}`)
         }
       })
 
@@ -123,7 +119,7 @@ tap.test(
       const apollo = require('apollo-server')
 
       const libraryService = await loadLibraries(apollo, plugins)
-      libraryServer = libraryService.server
+      const libraryServer = libraryService.server
 
       const services = [{ name: libraryService.name, url: libraryService.url }]
 
@@ -132,22 +128,26 @@ tap.test(
       // trigger the healthcheck
       await gatewayService.gateway.serviceHealthCheck()
 
-      gatewayServer = gatewayService.server
+      const gatewayServer = gatewayService.server
 
       gatewayServer.stop()
       libraryServer.stop()
+      helper.unload()
+
+      await plan.completed
     })
 
-    t.test(
+    await t.test(
       'Should not ignore Health Check query when ' + 'captureHealthCheckQueries set to true',
       async (t) => {
+        const plan = tspl(t, { plan: 1 })
         // load default instrumentation. express being critical
-        helper = utils.TestAgent.makeFullyInstrumented(agentConfig)
+        const helper = utils.TestAgent.makeFullyInstrumented()
         const ignore = false
 
         helper.agent.on('transactionFinished', (transaction) => {
           if (transaction.name.includes('__ApolloServiceHealthCheck__')) {
-            t.equal(transaction.ignore, ignore, `should set transaction.ignore to ${ignore}`)
+            plan.equal(transaction.ignore, ignore, `should set transaction.ignore to ${ignore}`)
           }
         })
 
@@ -164,7 +164,7 @@ tap.test(
         const apollo = require('apollo-server')
 
         const libraryService = await loadLibraries(apollo, plugins)
-        libraryServer = libraryService.server
+        const libraryServer = libraryService.server
 
         const services = [{ name: libraryService.name, url: libraryService.url }]
 
@@ -173,10 +173,13 @@ tap.test(
         // trigger the healthcheck
         await gatewayService.gateway.serviceHealthCheck()
 
-        gatewayServer = gatewayService.server
+        const gatewayServer = gatewayService.server
 
         gatewayServer.stop()
         libraryServer.stop()
+        helper.unload()
+
+        await plan.completed
       }
     )
   }

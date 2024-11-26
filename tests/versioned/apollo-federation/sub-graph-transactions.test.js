@@ -5,6 +5,8 @@
 
 'use strict'
 
+const assert = require('node:assert')
+
 const { executeQuery } = require('../../test-client')
 
 const { setupFederatedGatewayServerTests } = require('./federated-gateway-server-setup')
@@ -22,9 +24,9 @@ setupFederatedGatewayServerTests({
  * It is required that t.context.helper and t.context.serverUrl are set.
  * @param {*} t a tap test instance
  */
-function createFederatedSegmentsTests(t) {
-  t.test('should properly name when inline fragments exist', (t) => {
-    const { helper, serverUrl } = t.context
+async function createFederatedSegmentsTests(t) {
+  await t.test('should properly name when inline fragments exist', (t, end) => {
+    const { helper, serverUrl } = t.nr
 
     /**
      * This query gets deconstructed as such
@@ -82,23 +84,23 @@ function createFederatedSegmentsTests(t) {
     })
 
     executeQuery(serverUrl, query, (err, result) => {
-      t.equal(transactions.length, 4, 'should create 4 transactions')
+      assert.equal(transactions.length, 4, 'should create 4 transactions')
       const transactionMatches = transactions.filter((transaction) => {
         return expectedTransactions.some((expectedTransaction) =>
           transaction.match(expectedTransaction)
         )
       })
-      t.equal(transactionMatches.length, 4, 'transactions should match proper names')
+      assert.equal(transactionMatches.length, 4, 'transactions should match proper names')
 
-      t.error(err)
+      assert.ifError(err)
       checkResult(t, result, () => {
-        t.end()
+        end()
       })
     })
   })
 
-  t.test('should filter id and __typename fields from unique naming', (t) => {
-    const { helper, serverUrl } = t.context
+  await t.test('should filter id and __typename fields from unique naming', (t, end) => {
+    const { helper, serverUrl } = t.nr
 
     /**
      * The 'libraries' sub graph service gets queried as:
@@ -139,11 +141,11 @@ function createFederatedSegmentsTests(t) {
     executeQuery(serverUrl, query, (err, result) => {
       const hasTransaction = transactions.indexOf(expectedTransaction) >= 0
 
-      t.ok(hasTransaction, `should have a transaction named: '${expectedTransaction}'`)
+      assert.ok(hasTransaction, `should have a transaction named: '${expectedTransaction}'`)
 
-      t.error(err)
+      assert.ifError(err)
       checkResult(t, result, () => {
-        t.end()
+        end()
       })
     })
   })

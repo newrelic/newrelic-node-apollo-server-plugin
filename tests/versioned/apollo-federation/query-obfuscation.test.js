@@ -5,6 +5,8 @@
 
 'use strict'
 
+const assert = require('node:assert')
+
 const { setupFederatedGatewayServerTests } = require('./federated-gateway-server-setup')
 
 const { executeQuery } = require('../../test-client')
@@ -22,16 +24,18 @@ setupFederatedGatewayServerTests({
 })
 
 /**
- * Creates a set of standard transction tests to run against various
+ * Creates a set of standard transaction tests to run against various
  * apollo-server libraries.
- * It is required that t.context.helper and t.context.serverUrl are set.
- * @param {*} t a tap test instance
+ *
+ * It is required that t.nr.helper and t.nr.serverUrl are set.
+ *
+ * @param {*} t a `node:test` context instance
  */
-function createQueryObfuscaionTests(t) {
+async function createQueryObfuscaionTests(t) {
   const OPERATION_PREFIX = 'GraphQL/operation/ApolloServer/query'
 
-  t.test('Obfuscates query arguments', (t) => {
-    const { helper, serverUrl } = t.context
+  await t.test('Obfuscates query arguments', (t, end) => {
+    const { helper, serverUrl } = t.nr
 
     const query = `query {
       library(id: 3) {
@@ -51,14 +55,14 @@ function createQueryObfuscaionTests(t) {
       if (operationSegment) {
         const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
 
-        t.ok(operationAttributes[QUERY_ATTRIBUTE_NAME].includes('library(***)') > 0)
+        assert.ok(operationAttributes[QUERY_ATTRIBUTE_NAME].includes('library(***)') > 0)
       }
     })
 
     executeQuery(serverUrl, query, (err, result) => {
-      t.error(err)
+      assert.ifError(err)
       checkResult(t, result, () => {
-        t.end()
+        end()
       })
     })
   })
