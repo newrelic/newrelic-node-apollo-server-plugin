@@ -4,24 +4,24 @@
  */
 
 'use strict'
-const tap = require('tap')
+
+const test = require('node:test')
+const assert = require('node:assert')
+
 const createPlugin = require('../../lib/create-plugin')
 const sinon = require('sinon')
 
-tap.test('createPlugin edge cases', (t) => {
-  t.autoend()
-  let operationSegment
-  let instrumentationApi
-
-  t.beforeEach(function () {
-    operationSegment = {
+test('createPlugin edge cases', async (t) => {
+  t.beforeEach((ctx) => {
+    ctx.nr = {}
+    ctx.nr.operationSegment = {
       start: sinon.stub(),
       addAttribute: sinon.stub(),
       transaction: { nameState: { setName: sinon.stub() } },
       end: sinon.stub()
     }
 
-    instrumentationApi = {
+    ctx.nr.instrumentationApi = {
       shim: {
         logger: {
           child: sinon
@@ -35,8 +35,8 @@ tap.test('createPlugin edge cases', (t) => {
         },
         getActiveSegment: sinon.stub().returns({}),
         createSegment: sinon.stub().callsFake((name) => {
-          operationSegment.name = name
-          return operationSegment
+          ctx.nr.operationSegment.name = name
+          return ctx.nr.operationSegment
         }),
         setActiveSegment: sinon.stub(),
         isFunction: () => false
@@ -45,7 +45,8 @@ tap.test('createPlugin edge cases', (t) => {
     }
   })
 
-  t.test('should set deepest path to empty when not present', (t) => {
+  await t.test('should set deepest path to empty when not present', (t) => {
+    const { instrumentationApi, operationSegment } = t.nr
     const responseContext = {
       document: {
         definitions: [
@@ -62,38 +63,37 @@ tap.test('createPlugin edge cases', (t) => {
     const hooks = createPlugin(instrumentationApi)
     const operationHooks = hooks.requestDidStart({})
     operationHooks.willSendResponse(responseContext)
-    t.equal(
+    assert.equal(
       operationSegment.name,
       'GraphQL/operation/ApolloServer/undefined/<anonymous>',
       'should set path to undefined'
     )
-    t.end()
   })
 
-  t.test('should not update operation name when document is null', (t) => {
+  await t.test('should not update operation name when document is null', (t) => {
+    const { instrumentationApi, operationSegment } = t.nr
     const responseContext = {}
     const hooks = createPlugin(instrumentationApi)
     const operationHooks = hooks.requestDidStart({})
-    t.equal(
+    assert.equal(
       operationSegment.name,
       'GraphQL/operation/ApolloServer/<unknown>',
       'should default operation name'
     )
     operationHooks.willSendResponse(responseContext)
-    t.equal(
+    assert.equal(
       operationSegment.name,
       'GraphQL/operation/ApolloServer/<unknown>',
       'should not update operation name'
     )
-    t.end()
   })
 
-  t.test('should not crash when ctx.operation is undefined in didResolveOperation', (t) => {
+  await t.test('should not crash when ctx.operation is undefined in didResolveOperation', (t) => {
+    const { instrumentationApi } = t.nr
     const hooks = createPlugin(instrumentationApi)
     const operationHooks = hooks.requestDidStart({})
-    t.doesNotThrow(() => {
+    assert.doesNotThrow(() => {
       operationHooks.didResolveOperation({})
     })
-    t.end()
   })
 })

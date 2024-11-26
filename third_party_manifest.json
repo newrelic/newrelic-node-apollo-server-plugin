@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "Tue Apr 16 2024 07:41:31 GMT-0400 (Eastern Daylight Time)",
+  "lastUpdated": "Tue Nov 26 2024 12:17:31 GMT-0500 (Eastern Standard Time)",
   "projectName": "New Relic Node Apollo Server Plugin",
   "projectUrl": "https://github.com/newrelic/newrelic-node-apollo-server-plugin/",
   "includeOptDeps": false,
@@ -70,6 +70,19 @@
       "licenseTextSource": "file",
       "publisher": "Apollo",
       "email": "packages@apollographql.com"
+    },
+    "borp@0.19.0": {
+      "name": "borp",
+      "version": "0.19.0",
+      "range": "^0.19.0",
+      "licenses": "MIT",
+      "repoUrl": "https://github.com/mcollina/borp",
+      "versionedRepoUrl": "https://github.com/mcollina/borp/tree/v0.19.0",
+      "licenseFile": "node_modules/borp/LICENSE",
+      "licenseUrl": "https://github.com/mcollina/borp/blob/v0.19.0/LICENSE",
+      "licenseTextSource": "file",
+      "publisher": "Matteo Collina",
+      "email": "hello@matteocollina.com"
     },
     "c8@7.14.0": {
       "name": "c8",
