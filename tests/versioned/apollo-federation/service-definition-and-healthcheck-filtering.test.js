@@ -4,179 +4,129 @@
  */
 
 'use strict'
-
-const tap = require('tap')
+const test = require('node:test')
+const assert = require('node:assert')
 const utils = require('@newrelic/test-utilities')
 const createPlugin = require('../../../lib/create-plugin')
 
 const { loadLibraries, loadGateway } = require('./federated-gateway-server-setup')
 
-tap.test(
+async function setup(pluginConfig) {
+  const helper = utils.TestAgent.makeInstrumented()
+
+  const nrApi = helper.getAgentApi()
+
+  const instrumentationPlugin = createPlugin(nrApi, pluginConfig)
+  const plugins = [instrumentationPlugin]
+
+  // Do after instrumentation to ensure express isn't loaded too soon.
+  const apollo = require('apollo-server')
+
+  const libraryService = await loadLibraries(apollo, plugins)
+  const libraryServer = libraryService.server
+
+  const services = [{ name: libraryService.name, url: libraryService.url }]
+  return { apollo, helper, plugins, services, libraryServer }
+}
+
+test(
   'Capture/Ignore Service Definition and Health Check ' +
     'query transaction from sub-graph servers',
-  (t) => {
-    t.autoend()
-
-    let gatewayServer = null
-    let libraryServer = null
-    let helper = null
-    let agentConfig = null
-
-    t.afterEach(() => {
-      helper.unload()
-
-      gatewayServer = null
-      libraryServer = null
-      helper = null
-      agentConfig = null
-    })
-
-    t.test('Should ignore Service Definiion query by default', async (t) => {
-      // load default instrumentation. express being critical
-      helper = utils.TestAgent.makeFullyInstrumented(agentConfig)
+  async (t) => {
+    await t.test('Should ignore Service Definiion query by default', async (t) => {
+      const pluginConfig = {}
+      const { helper, apollo, services, plugins, libraryServer } = await setup(pluginConfig)
       const ignore = true
 
+      let tx
       helper.agent.on('transactionFinished', (transaction) => {
-        t.equal(transaction.ignore, ignore, `should set transaction.ignore to ${ignore}`)
+        tx = transaction
       })
 
-      const pluginConfig = {}
-
-      const nrApi = helper.getAgentApi()
-
-      const instrumentationPlugin = createPlugin(nrApi, pluginConfig)
-      const plugins = [instrumentationPlugin]
-
-      // Do after instrumentation to ensure express isn't loaded too soon.
-      const apollo = require('apollo-server')
-
-      const libraryService = await loadLibraries(apollo, plugins)
-      libraryServer = libraryService.server
-
-      const services = [{ name: libraryService.name, url: libraryService.url }]
-
       const gatewayService = await loadGateway(apollo, services, plugins)
-
-      gatewayServer = gatewayService.server
-
-      gatewayServer.stop()
-      libraryServer.stop()
+      t.after(() => {
+        helper.unload()
+        libraryServer.stop()
+        gatewayService.server.stop()
+      })
+      assert.equal(tx.ignore, ignore, `should set transaction.ignore to ${ignore}`)
     })
 
-    t.test(
+    await t.test(
       'Should not ignore Service Definition query ' +
         'when captureServiceDefinitionQueries set to true',
       async (t) => {
-        // load default instrumentation. express being critical
-        helper = utils.TestAgent.makeFullyInstrumented(agentConfig)
-        const ignore = false
-
-        helper.agent.on('transactionFinished', (transaction) => {
-          t.equal(transaction.ignore, ignore, `should set transaction.ignore to ${ignore}`)
-        })
-
         const pluginConfig = {
           captureServiceDefinitionQueries: true
         }
+        const { helper, apollo, services, plugins, libraryServer } = await setup(pluginConfig)
+        const ignore = false
 
-        const nrApi = helper.getAgentApi()
-
-        const instrumentationPlugin = createPlugin(nrApi, pluginConfig)
-        const plugins = [instrumentationPlugin]
-
-        // Do after instrumentation to ensure express isn't loaded too soon.
-        const apollo = require('apollo-server')
-
-        const libraryService = await loadLibraries(apollo, plugins)
-        libraryServer = libraryService.server
-
-        const services = [{ name: libraryService.name, url: libraryService.url }]
+        let tx
+        helper.agent.on('transactionFinished', (transaction) => {
+          tx = transaction
+        })
 
         const gatewayService = await loadGateway(apollo, services, plugins)
-
-        gatewayServer = gatewayService.server
-
-        gatewayServer.stop()
-        libraryServer.stop()
+        t.after(() => {
+          helper.unload()
+          libraryServer.stop()
+          gatewayService.server.stop()
+        })
+        assert.equal(tx.ignore, ignore, `should set transaction.ignore to ${ignore}`)
       }
     )
 
-    t.test('Should ignore Health Check query by default', async (t) => {
-      // load default instrumentation. express being critical
-      helper = utils.TestAgent.makeFullyInstrumented(agentConfig)
+    await t.test('Should ignore Health Check query by default', async (t) => {
+      const pluginConfig = {}
+      const { helper, apollo, services, plugins, libraryServer } = await setup(pluginConfig)
       const ignore = true
 
+      let tx
       helper.agent.on('transactionFinished', (transaction) => {
         if (transaction.name.includes('__ApolloServiceHealthCheck__')) {
-          t.equal(transaction.ignore, ignore, `should set transaction.ignore to ${ignore}`)
+          tx = transaction
         }
       })
 
-      const pluginConfig = {}
-
-      const nrApi = helper.getAgentApi()
-
-      const instrumentationPlugin = createPlugin(nrApi, pluginConfig)
-      const plugins = [instrumentationPlugin]
-
-      // Do after instrumentation to ensure express isn't loaded too soon.
-      const apollo = require('apollo-server')
-
-      const libraryService = await loadLibraries(apollo, plugins)
-      libraryServer = libraryService.server
-
-      const services = [{ name: libraryService.name, url: libraryService.url }]
-
       const gatewayService = await loadGateway(apollo, services, plugins)
+      t.after(() => {
+        helper.unload()
+        libraryServer.stop()
+        gatewayService.server.stop()
+      })
 
       // trigger the healthcheck
       await gatewayService.gateway.serviceHealthCheck()
-
-      gatewayServer = gatewayService.server
-
-      gatewayServer.stop()
-      libraryServer.stop()
+      assert.equal(tx.ignore, ignore, `should set transaction.ignore to ${ignore}`)
     })
 
-    t.test(
+    await t.test(
       'Should not ignore Health Check query when ' + 'captureHealthCheckQueries set to true',
       async (t) => {
-        // load default instrumentation. express being critical
-        helper = utils.TestAgent.makeFullyInstrumented(agentConfig)
-        const ignore = false
-
-        helper.agent.on('transactionFinished', (transaction) => {
-          if (transaction.name.includes('__ApolloServiceHealthCheck__')) {
-            t.equal(transaction.ignore, ignore, `should set transaction.ignore to ${ignore}`)
-          }
-        })
-
         const pluginConfig = {
           captureHealthCheckQueries: true
         }
+        const { helper, apollo, services, plugins, libraryServer } = await setup(pluginConfig)
+        const ignore = false
 
-        const nrApi = helper.getAgentApi()
-
-        const instrumentationPlugin = createPlugin(nrApi, pluginConfig)
-        const plugins = [instrumentationPlugin]
-
-        // Do after instrumentation to ensure express isn't loaded too soon.
-        const apollo = require('apollo-server')
-
-        const libraryService = await loadLibraries(apollo, plugins)
-        libraryServer = libraryService.server
-
-        const services = [{ name: libraryService.name, url: libraryService.url }]
+        let tx
+        helper.agent.on('transactionFinished', (transaction) => {
+          if (transaction.name.includes('__ApolloServiceHealthCheck__')) {
+            tx = transaction
+          }
+        })
 
         const gatewayService = await loadGateway(apollo, services, plugins)
+        t.after(() => {
+          helper.unload()
+          libraryServer.stop()
+          gatewayService.server.stop()
+        })
 
         // trigger the healthcheck
         await gatewayService.gateway.serviceHealthCheck()
-
-        gatewayServer = gatewayService.server
-
-        gatewayServer.stop()
-        libraryServer.stop()
+        assert.equal(tx.ignore, ignore, `should set transaction.ignore to ${ignore}`)
       }
     )
   }

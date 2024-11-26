@@ -10,12 +10,12 @@ const common = module.exports
  * Verify we didn't break anything outright and
  * test is setup correctly for functioning calls.
  */
-common.checkResult = function checkResult(t, result, callback) {
-  t.ok(result)
+common.checkResult = function checkResult(assert, result, callback) {
+  assert.ok(result)
 
   if (result.errors) {
     result.errors.forEach((error) => {
-      t.error(error)
+      assert.ok(!error)
     })
   }
 

@@ -4,32 +4,32 @@
  */
 
 'use strict'
-
+const test = require('node:test')
+const { tspl } = require('@matteo.collina/tspl')
 const { executeQuery, executeQueryBatch } = require('../../test-client')
+const { assertSegments } = require('../../custom-assertions')
 
 const ANON_PLACEHOLDER = '<anonymous>'
 const OPERATION_PREFIX = 'GraphQL/operation/ApolloServer'
 const EXTERNAL_PREFIX = 'External'
+const TRANSACTION_PREFIX = `WebTransaction/Expressjs/POST`
 
-const { setupFederatedGatewayServerTests } = require('./federated-gateway-server-setup')
+const { setupFederatedGateway, teardownGateway } = require('./federated-gateway-server-setup')
 const { checkResult, shouldSkipTransaction } = require('../common')
 
-setupFederatedGatewayServerTests({
-  suiteName: 'federated segments',
-  createTests: createFederatedSegmentsTests
-})
+test('apollo-federation: federated segments', async (t) => {
+  t.beforeEach(async (ctx) => {
+    await setupFederatedGateway({ ctx })
+  })
 
-/**
- * Creates a set of standard segment naming and nesting tests to run
- * against express-based apollo-server libraries.
- * It is required that t.context.helper and t.context.serverUrl are set.
- * @param {*} t a tap test instance
- */
-function createFederatedSegmentsTests(t, frameworkName) {
-  const TRANSACTION_PREFIX = `WebTransaction/${frameworkName}/POST`
+  t.afterEach((ctx) => {
+    teardownGateway({ ctx })
+  })
 
-  t.test('should nest sub graphs under operation', (t) => {
-    const { helper, serverUrl } = t.context
+  await t.test('should nest sub graphs under operation', async (t) => {
+    const plan = tspl(t, { plan: 9 })
+    const { helper, gatewayService, libraryService, magazineService, bookService } = t.nr
+    const serverUrl = gatewayService.url
 
     const query = `query {
       libraries {
@@ -46,55 +46,45 @@ function createFederatedSegmentsTests(t, frameworkName) {
       }
     }`
 
+    let tx
+    const libraryExternal = formatExternalSegment(libraryService.url)
+    const bookExternal = formatExternalSegment(bookService.url)
+    const magazineExternal = formatExternalSegment(magazineService.url)
+    const operationPart = `query/${ANON_PLACEHOLDER}/libraries`
     helper.agent.on('transactionFinished', (transaction) => {
       if (shouldSkipTransaction(transaction)) {
         return
       }
-
-      const libraryExternal = formatExternalSegment(t.context.libraryUrl)
-      const bookExternal = formatExternalSegment(t.context.bookUrl)
-      const magazineExternal = formatExternalSegment(t.context.magazineUrl)
-
-      const operationPart = `query/${ANON_PLACEHOLDER}/libraries`
-      const expectedSegments = [
-        {
-          name: `${TRANSACTION_PREFIX}//${operationPart}`,
-          children: [
-            {
-              name: 'Expressjs/Router: /',
-              children: [
-                {
-                  name: 'Nodejs/Middleware/Expressjs/<anonymous>',
-                  children: [
-                    {
-                      name: `${OPERATION_PREFIX}/${operationPart}`,
-                      children: [
-                        { name: libraryExternal },
-                        { name: bookExternal },
-                        { name: magazineExternal }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-
-      t.segments(transaction.trace.root, expectedSegments)
+      tx = transaction
     })
 
     executeQuery(serverUrl, query, (err, result) => {
-      t.error(err)
-      checkResult(t, result, () => {
-        t.end()
-      })
+      plan.ok(!err)
+
+      const expectedSegments = [
+        `${TRANSACTION_PREFIX}//${operationPart}`,
+        [
+          'Expressjs/Router: /',
+          [
+            'Nodejs/Middleware/Expressjs/<anonymous>',
+            [
+              `${OPERATION_PREFIX}/${operationPart}`,
+              [libraryExternal, bookExternal, magazineExternal]
+            ]
+          ]
+        ]
+      ]
+
+      assertSegments(tx.trace.root, expectedSegments, { exact: false }, { assert: plan })
+      checkResult(plan, result, () => {})
     })
+    await plan.completed
   })
 
-  t.test('batch query should nest sub graphs under appropriate operations', (t) => {
-    const { helper, serverUrl } = t.context
+  await t.test('batch query should nest sub graphs under appropriate operations', async (t) => {
+    const plan = tspl(t, { plan: 12 })
+    const { helper, gatewayService, libraryService, bookService, magazineService } = t.nr
+    const serverUrl = gatewayService.url
 
     const booksQueryName = 'GetBooksForLibraries'
     const booksQuery = `query ${booksQueryName} {
@@ -119,61 +109,52 @@ function createFederatedSegmentsTests(t, frameworkName) {
 
     const queries = [booksQuery, magazineQuery]
 
-    const libraryExternal = formatExternalSegment(t.context.libraryUrl)
-    const bookExternal = formatExternalSegment(t.context.bookUrl)
-    const magazineExternal = formatExternalSegment(t.context.magazineUrl)
+    const libraryExternal = formatExternalSegment(libraryService.url)
+    const bookExternal = formatExternalSegment(bookService.url)
+    const magazineExternal = formatExternalSegment(magazineService.url)
+    const operationPart1 = `query/${booksQueryName}/libraries.booksInStock`
+    const expectedQuery1Name = `${operationPart1}`
+    const operationPart2 = `query/${magazineQueryName}/libraries.magazinesInStock`
+    const expectedQuery2Name = `${operationPart2}`
 
+    const batchTransactionPrefix = `${TRANSACTION_PREFIX}//batch`
+
+    let tx
     helper.agent.on('transactionFinished', (transaction) => {
       if (shouldSkipTransaction(transaction)) {
         return
       }
 
-      const operationPart1 = `query/${booksQueryName}/libraries.booksInStock`
-      const expectedQuery1Name = `${operationPart1}`
-      const operationPart2 = `query/${magazineQueryName}/libraries.magazinesInStock`
-      const expectedQuery2Name = `${operationPart2}`
-
-      const batchTransactionPrefix = `${TRANSACTION_PREFIX}//batch`
-
-      const expectedSegments = [
-        {
-          name: `${batchTransactionPrefix}/${expectedQuery1Name}/${expectedQuery2Name}`,
-          children: [
-            {
-              name: 'Expressjs/Router: /',
-              children: [
-                {
-                  name: 'Nodejs/Middleware/Expressjs/<anonymous>',
-                  children: [
-                    {
-                      name: `${OPERATION_PREFIX}/${operationPart1}`,
-                      children: [{ name: libraryExternal }, { name: bookExternal }]
-                    },
-                    {
-                      name: `${OPERATION_PREFIX}/${operationPart2}`,
-                      children: [{ name: libraryExternal }, { name: magazineExternal }]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-
-      t.segments(transaction.trace.root, expectedSegments)
+      tx = transaction
     })
 
     executeQueryBatch(serverUrl, queries, (err, result) => {
-      t.error(err)
-      checkResult(t, result, () => {
-        t.equal(result.length, 2)
+      plan.ok(!err)
 
-        t.end()
+      const expectedSegments = [
+        `${batchTransactionPrefix}/${expectedQuery1Name}/${expectedQuery2Name}`,
+        [
+          'Expressjs/Router: /',
+          [
+            'Nodejs/Middleware/Expressjs/<anonymous>',
+            [
+              `${OPERATION_PREFIX}/${operationPart1}`,
+              [libraryExternal, bookExternal],
+              `${OPERATION_PREFIX}/${operationPart2}`,
+              [libraryExternal, magazineExternal]
+            ]
+          ]
+        ]
+      ]
+
+      assertSegments(tx.trace.root, expectedSegments, { exact: false }, { assert: plan })
+      checkResult(plan, result, () => {
+        plan.equal(result.length, 2)
       })
     })
+    await plan.completed
   })
-}
+})
 
 function formatExternalSegment(url) {
   const hostAndPort = url.replace('http://', '')

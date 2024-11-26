@@ -4,106 +4,68 @@
  */
 
 'use strict'
-
-const tap = require('tap')
-
 const utils = require('@newrelic/test-utilities')
-utils.assert.extendTap(tap)
 
 const federatedData = require('./federated-data-definitions')
 const { clearCachedModules } = require('../../utils')
 
-const WEB_FRAMEWORK = 'Expressjs'
+async function setupFederatedGateway({ instrumentSubGraphs, pluginConfig, agentConfig, ctx }) {
+  // load default instrumentation. express being critical
+  const helper = utils.TestAgent.makeFullyInstrumented(agentConfig)
+  const createPlugin = require('../../../lib/create-plugin')
+  const nrApi = helper.getAgentApi()
 
-function setupFederatedGatewayServerTests(options, agentConfig) {
-  const { suiteName, createTests, pluginConfig } = options
+  const startingPlugins = initializePlugins(nrApi)
 
-  tap.test(`apollo-federation: ${suiteName}`, (t) => {
-    t.autoend()
+  const instrumentationPlugin = createPlugin(nrApi, pluginConfig)
 
-    let gatewayServer = null
-    let libraryServer = null
-    let bookServer = null
-    let magazineServer = null
+  // Do after instrumentation to ensure express isn't loaded too soon.
+  const apollo = require('apollo-server')
 
-    let helper = null
+  const subGraphPlugins = []
 
-    t.beforeEach(async () => {
-      // load default instrumentation. express being critical
-      helper = utils.TestAgent.makeFullyInstrumented(agentConfig)
-      const createPlugin = require('../../../lib/create-plugin')
-      const nrApi = helper.getAgentApi()
+  if (instrumentSubGraphs) {
+    subGraphPlugins.push(instrumentationPlugin)
+  } else {
+    // Sub-graph services are currently auto-instrumented via express.
+    // Ignore transaction plugin will prevent creation of standard data and indicate
+    // to tests we do not intend to assert on these transactions.
+    const ignoreTransactionPlugin = createIgnoreTransactionPlugin(nrApi)
+    subGraphPlugins.push(ignoreTransactionPlugin)
+  }
 
-      const startingPlugins = initializePlugins(nrApi, options.startingPlugins)
+  // Services are not instrumented
+  const libraryService = await loadLibraries(apollo, subGraphPlugins)
+  const bookService = await loadBooks(apollo, subGraphPlugins)
+  const magazineService = await loadMagazines(apollo, subGraphPlugins)
 
-      const instrumentationPlugin = createPlugin(nrApi, pluginConfig)
+  const services = [
+    { name: libraryService.name, url: libraryService.url },
+    { name: bookService.name, url: bookService.url },
+    { name: magazineService.name, url: magazineService.url }
+  ]
 
-      // Do after instrumentation to ensure express isn't loaded too soon.
-      const apollo = require('apollo-server')
+  const plugins = [...startingPlugins, instrumentationPlugin]
 
-      const subGraphPlugins = []
+  const gatewayService = await loadGateway(apollo, services, plugins)
+  ctx.nr = {
+    helper,
+    gatewayService,
+    libraryService,
+    magazineService,
+    bookService
+  }
+}
 
-      if (options.instrumentSubGraphs) {
-        subGraphPlugins.push(instrumentationPlugin)
-      } else {
-        // Sub-graph services are currently auto-instrumented via express.
-        // Ignore transaction plugin will prevent creation of standard data and indicate
-        // to tests we do not intend to assert on these transactions.
-        const ignoreTransactionPlugin = createIgnoreTransactionPlugin(nrApi)
-        subGraphPlugins.push(ignoreTransactionPlugin)
-      }
+function teardownGateway({ ctx }) {
+  const { helper, gatewayService, libraryService, magazineService, bookService } = ctx.nr
+  gatewayService.server.stop()
+  magazineService.server.stop()
+  bookService.server.stop()
+  libraryService.server.stop()
+  helper.unload()
 
-      // Services are not instrumented
-      const libraryService = await loadLibraries(apollo, subGraphPlugins)
-      libraryServer = libraryService.server
-
-      const bookService = await loadBooks(apollo, subGraphPlugins)
-      bookServer = bookService.server
-
-      const magazineService = await loadMagazines(apollo, subGraphPlugins)
-      magazineServer = magazineService.server
-
-      const services = [
-        { name: libraryService.name, url: libraryService.url },
-        { name: bookService.name, url: bookService.url },
-        { name: magazineService.name, url: magazineService.url }
-      ]
-
-      const plugins = [...startingPlugins, instrumentationPlugin]
-
-      const gatewayService = await loadGateway(apollo, services, plugins)
-
-      gatewayServer = gatewayService.server
-
-      t.context.helper = helper
-      t.context.serverUrl = gatewayService.url
-      t.context.libraryUrl = libraryService.url
-      t.context.bookUrl = bookService.url
-      t.context.magazineUrl = magazineService.url
-    })
-
-    t.afterEach(() => {
-      gatewayServer.stop()
-      magazineServer.stop()
-      bookServer.stop()
-      libraryServer.stop()
-
-      gatewayServer = null
-      magazineServer = null
-      bookServer = null
-      libraryServer = null
-
-      helper.unload()
-      helper = null
-
-      clearCachedModules(
-        ['express', 'apollo-server', '@apollo/gateway', '@apollo/subgraph'],
-        __dirname
-      )
-    })
-
-    createTests(t, WEB_FRAMEWORK)
-  })
+  clearCachedModules(['express', 'apollo-server', '@apollo/gateway', '@apollo/subgraph'], __dirname)
 }
 
 async function loadGateway({ ApolloServer }, services, plugins) {
@@ -185,7 +147,8 @@ function initializePlugins(instrumentationApi, plugins) {
 }
 
 module.exports = {
-  setupFederatedGatewayServerTests,
+  setupFederatedGateway,
+  teardownGateway,
   loadLibraries,
   loadGateway
 }
