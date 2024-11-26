@@ -4,7 +4,9 @@
  */
 
 'use strict'
-const tap = require('tap')
+
+const test = require('node:test')
+const assert = require('node:assert')
 
 const ErrorHelper = require('../../lib/error-helper')
 
@@ -33,18 +35,18 @@ class MockedInstrumentationApi {
 
 const mockInstrumentationApi = new MockedInstrumentationApi()
 
-tap.test('ErrorHelper tests', (t) => {
+test('ErrorHelper tests', () => {
   const errorHelper = new ErrorHelper()
 
   const fixture1 = false
-  t.equal(
+  assert.equal(
     false,
     errorHelper.isValidRequestContext(mockInstrumentationApi, fixture1),
     'returns false when requestContext is false'
   )
 
   const fixture2 = {}
-  t.equal(
+  assert.equal(
     false,
     errorHelper.isValidRequestContext(mockInstrumentationApi, fixture2),
     'returns false when errors not set'
@@ -53,7 +55,7 @@ tap.test('ErrorHelper tests', (t) => {
   const fixture3 = {
     errors: null
   }
-  t.equal(
+  assert.equal(
     false,
     errorHelper.isValidRequestContext(mockInstrumentationApi, fixture3),
     'returns false when errors not an array'
@@ -62,7 +64,7 @@ tap.test('ErrorHelper tests', (t) => {
   const fixture4 = {
     errors: [new Error(), new Error()]
   }
-  t.equal(
+  assert.equal(
     true,
     errorHelper.isValidRequestContext(mockInstrumentationApi, fixture4),
     'returns true when errors array set'
@@ -72,13 +74,11 @@ tap.test('ErrorHelper tests', (t) => {
   errorHelper.addErrorsFromApolloRequestContext(mockInstrumentationApi, fixture2)
   errorHelper.addErrorsFromApolloRequestContext(mockInstrumentationApi, fixture3)
   errorHelper.addErrorsFromApolloRequestContext(mockInstrumentationApi, fixture4)
-  t.equal(mockInstrumentationApi.mockedCollectedErrors.length, 2, 'captures only valid errors')
+  assert.equal(mockInstrumentationApi.mockedCollectedErrors.length, 2, 'captures only valid errors')
 
-  t.equal(
+  assert.equal(
     mockInstrumentationApi.mockedLogsTrace.length,
     6,
     'six invaid calls mean six trace log messages'
   )
-
-  t.end()
 })

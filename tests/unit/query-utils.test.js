@@ -5,12 +5,13 @@
 
 'use strict'
 
-const tap = require('tap')
+const test = require('node:test')
+const assert = require('node:assert')
 
 const cleanQuery = require('../../lib/query-utils')
 
-tap.test('Obfuscate GraphQL query args tests', (t) => {
-  t.test('Should obfuscate query args', (t) => {
+test('Obfuscate GraphQL query args tests', async (t) => {
+  await t.test('Should obfuscate query args', () => {
     const query = `query logans(run: "(333") {
       runner
     }`
@@ -24,13 +25,11 @@ tap.test('Obfuscate GraphQL query args tests', (t) => {
 
     const newQuery = cleanQuery(query, argLocations)
 
-    t.notOk(newQuery.includes('333'))
-    t.ok(newQuery.includes('logans(***)'))
-
-    t.end()
+    assert.equal(newQuery.includes('333'), false)
+    assert.ok(newQuery.includes('logans(***)'))
   })
 
-  t.test('Should obfuscate aliased query args for aliased', (t) => {
+  await t.test('Should obfuscate aliased query args for aliased', () => {
     const query = `query thing: logans(run: "(333") {
       runner
     }`
@@ -44,14 +43,12 @@ tap.test('Obfuscate GraphQL query args tests', (t) => {
 
     const newQuery = cleanQuery(query, argLocations)
 
-    t.notOk(newQuery.includes('333'))
-    t.ok(newQuery.includes('thing: logans', 'alias is intact'))
-    t.ok(newQuery.includes('logans(***)', 'args obfuscated'))
-
-    t.end()
+    assert.equal(newQuery.includes('333'), false)
+    assert.ok(newQuery.includes('thing: logans', 'alias is intact'))
+    assert.ok(newQuery.includes('logans(***)', 'args obfuscated'))
   })
 
-  t.test('Should obfuscate mutation args', (t) => {
+  await t.test('Should obfuscate mutation args', () => {
     const argLocations = [
       {
         start: 14,
@@ -66,12 +63,10 @@ tap.test('Obfuscate GraphQL query args tests', (t) => {
 
     const newQuery = cleanQuery(query, argLocations)
 
-    t.ok(newQuery.includes('corn(***)'))
-
-    t.end()
+    assert.ok(newQuery.includes('corn(***)'))
   })
 
-  t.test('Should obfuscate multiple args', (t) => {
+  await t.test('Should obfuscate multiple args', () => {
     const query = `query chickens(hens: 'yes') {
       eggs(yolk: 'yes') {
         yolk
@@ -91,13 +86,9 @@ tap.test('Obfuscate GraphQL query args tests', (t) => {
 
     const newQuery = cleanQuery(query, argLocations)
 
-    t.notOk(newQuery.includes('hens'))
-    t.notOk(newQuery.includes('yolk:'))
-    t.ok(newQuery.includes('chickens(***)'))
-    t.ok(newQuery.includes('eggs(***)'))
-
-    t.end()
+    assert.equal(newQuery.includes('hens'), false)
+    assert.equal(newQuery.includes('yolk:'), false)
+    assert.ok(newQuery.includes('chickens(***)'))
+    assert.ok(newQuery.includes('eggs(***)'))
   })
-
-  t.end()
 })
