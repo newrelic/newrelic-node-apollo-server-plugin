@@ -12,7 +12,7 @@
     "prepare": "husky install",
     "test": "npm run unit && npm run integration && npm run versioned && npm run type-check",
     "third-party-updates": "oss third-party manifest && oss third-party notices && git add THIRD_PARTY_NOTICES.md third_party_manifest.json",
-    "unit": "c8 -o ./coverage/unit borp 'test/unit/**/*.test.js'",
+    "unit": "c8 -o ./coverage/unit borp 'tests/unit/**/*.test.js'",
     "type-check": "tsd",
     "versioned": "NPM7=1 ./bin/run-versioned-tests.sh",
     "versioned:folder": "versioned-tests --minor --all -i 2",
