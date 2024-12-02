@@ -4,27 +4,24 @@
  */
 
 'use strict'
-
+const test = require('node:test')
+const assert = require('node:assert')
 const { executeQuery } = require('../../test-client')
-
-const { setupFederatedGatewayServerTests } = require('./federated-gateway-server-setup')
+const { setupFederatedGateway, teardownGateway } = require('./federated-gateway-server-setup')
 const { checkResult } = require('../common')
 
-setupFederatedGatewayServerTests({
-  suiteName: 'sub graph transaction naming',
-  createTests: createFederatedSegmentsTests,
-  instrumentSubGraphs: true
-})
+test('apollo-federation: sub graph transaction naming ', async (t) => {
+  t.beforeEach(async (ctx) => {
+    await setupFederatedGateway({ ctx, instrumentSubGraphs: true })
+  })
 
-/**
- * Creates a federated server that instruments all sub graphs and makes a
- * query that will contain InlineFragments to a subgraph
- * It is required that t.context.helper and t.context.serverUrl are set.
- * @param {*} t a tap test instance
- */
-function createFederatedSegmentsTests(t) {
-  t.test('should properly name when inline fragments exist', (t) => {
-    const { helper, serverUrl } = t.context
+  t.afterEach((ctx) => {
+    teardownGateway({ ctx })
+  })
+
+  await t.test('should properly name when inline fragments exist', (t, end) => {
+    const { helper, gatewayService } = t.nr
+    const serverUrl = gatewayService.url
 
     /**
      * This query gets deconstructed as such
@@ -48,7 +45,7 @@ function createFederatedSegmentsTests(t) {
      *   }
      * }`
      * The ones with `...on Library` are [InlineFragments](https://graphql.org/learn/queries/#inline-fragments)
-     * which lack name properites on all the selections within document.
+     * which lack name properties on all the selections within document.
      * Without the fix in https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/100
      * they would crash and not properly name the transactions, also the query request
      * would fail.
@@ -82,23 +79,24 @@ function createFederatedSegmentsTests(t) {
     })
 
     executeQuery(serverUrl, query, (err, result) => {
-      t.equal(transactions.length, 4, 'should create 4 transactions')
+      assert.equal(transactions.length, 4, 'should create 4 transactions')
       const transactionMatches = transactions.filter((transaction) => {
         return expectedTransactions.some((expectedTransaction) =>
           transaction.match(expectedTransaction)
         )
       })
-      t.equal(transactionMatches.length, 4, 'transactions should match proper names')
+      assert.equal(transactionMatches.length, 4, 'transactions should match proper names')
 
-      t.error(err)
-      checkResult(t, result, () => {
-        t.end()
+      assert.ok(!err)
+      checkResult(assert, result, () => {
+        end()
       })
     })
   })
 
-  t.test('should filter id and __typename fields from unique naming', (t) => {
-    const { helper, serverUrl } = t.context
+  await t.test('should filter id and __typename fields from unique naming', (t, end) => {
+    const { helper, gatewayService } = t.nr
+    const serverUrl = gatewayService.url
 
     /**
      * The 'libraries' sub graph service gets queried as:
@@ -139,12 +137,12 @@ function createFederatedSegmentsTests(t) {
     executeQuery(serverUrl, query, (err, result) => {
       const hasTransaction = transactions.indexOf(expectedTransaction) >= 0
 
-      t.ok(hasTransaction, `should have a transaction named: '${expectedTransaction}'`)
+      assert.ok(hasTransaction, `should have a transaction named: '${expectedTransaction}'`)
 
-      t.error(err)
-      checkResult(t, result, () => {
-        t.end()
+      assert.ok(!err)
+      checkResult(assert, result, () => {
+        end()
       })
     })
   })
-}
+})

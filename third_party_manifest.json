@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "Tue Nov 26 2024 12:17:31 GMT-0500 (Eastern Standard Time)",
+  "lastUpdated": "Mon Dec 02 2024 17:33:20 GMT-0500 (Eastern Standard Time)",
   "projectName": "New Relic Node Apollo Server Plugin",
   "projectUrl": "https://github.com/newrelic/newrelic-node-apollo-server-plugin/",
   "includeOptDeps": false,
@@ -7,18 +7,31 @@
   "includeDev": true,
   "dependencies": {},
   "devDependencies": {
-    "@apollo/server@4.10.3": {
+    "@apollo/server@4.11.2": {
       "name": "@apollo/server",
-      "version": "4.10.3",
+      "version": "4.11.2",
       "range": "^4.1.1",
       "licenses": "MIT",
       "repoUrl": "https://github.com/apollographql/apollo-server",
-      "versionedRepoUrl": "https://github.com/apollographql/apollo-server/tree/v4.10.3",
+      "versionedRepoUrl": "https://github.com/apollographql/apollo-server/tree/v4.11.2",
       "licenseFile": "node_modules/@apollo/server/README.md",
-      "licenseUrl": "https://github.com/apollographql/apollo-server/blob/v4.10.3/README.md",
+      "licenseUrl": "https://github.com/apollographql/apollo-server/blob/v4.11.2/README.md",
       "licenseTextSource": "spdx",
       "publisher": "Apollo",
       "email": "packages@apollographql.com"
+    },
+    "@matteo.collina/tspl@0.1.1": {
+      "name": "@matteo.collina/tspl",
+      "version": "0.1.1",
+      "range": "^0.1.1",
+      "licenses": "MIT",
+      "repoUrl": "https://github.com/mcollina/tspl",
+      "versionedRepoUrl": "https://github.com/mcollina/tspl/tree/v0.1.1",
+      "licenseFile": "node_modules/@matteo.collina/tspl/LICENSE",
+      "licenseUrl": "https://github.com/mcollina/tspl/blob/v0.1.1/LICENSE",
+      "licenseTextSource": "file",
+      "publisher": "Matteo Collina",
+      "email": "hello@matteocollina.com"
     },
     "@newrelic/eslint-config@0.3.0": {
       "name": "@newrelic/eslint-config",
@@ -45,15 +58,15 @@
       "licenseTextSource": "file",
       "publisher": "New Relic"
     },
-    "@newrelic/test-utilities@8.5.0": {
+    "@newrelic/test-utilities@8.7.0": {
       "name": "@newrelic/test-utilities",
-      "version": "8.5.0",
+      "version": "8.7.0",
       "range": "^8.5.0",
       "licenses": "Apache-2.0",
       "repoUrl": "https://github.com/newrelic/node-test-utilities",
-      "versionedRepoUrl": "https://github.com/newrelic/node-test-utilities/tree/v8.5.0",
+      "versionedRepoUrl": "https://github.com/newrelic/node-test-utilities/tree/v8.7.0",
       "licenseFile": "node_modules/@newrelic/test-utilities/LICENSE",
-      "licenseUrl": "https://github.com/newrelic/node-test-utilities/blob/v8.5.0/LICENSE",
+      "licenseUrl": "https://github.com/newrelic/node-test-utilities/blob/v8.7.0/LICENSE",
       "licenseTextSource": "file",
       "publisher": "New Relic Node.js agent team",
       "email": "nodejs@newrelic.com"
@@ -145,28 +158,28 @@
       "licenseTextSource": "file",
       "publisher": "Teddy Katz"
     },
-    "eslint@8.57.0": {
+    "eslint@8.57.1": {
       "name": "eslint",
-      "version": "8.57.0",
+      "version": "8.57.1",
       "range": "^8.24.0",
       "licenses": "MIT",
       "repoUrl": "https://github.com/eslint/eslint",
-      "versionedRepoUrl": "https://github.com/eslint/eslint/tree/v8.57.0",
+      "versionedRepoUrl": "https://github.com/eslint/eslint/tree/v8.57.1",
       "licenseFile": "node_modules/eslint/LICENSE",
-      "licenseUrl": "https://github.com/eslint/eslint/blob/v8.57.0/LICENSE",
+      "licenseUrl": "https://github.com/eslint/eslint/blob/v8.57.1/LICENSE",
       "licenseTextSource": "file",
       "publisher": "Nicholas C. Zakas",
       "email": "nicholas+npm@nczconsulting.com"
     },
-    "graphql@16.8.1": {
+    "graphql@16.9.0": {
       "name": "graphql",
-      "version": "16.8.1",
+      "version": "16.9.0",
       "range": "^16.6.0",
       "licenses": "MIT",
       "repoUrl": "https://github.com/graphql/graphql-js",
-      "versionedRepoUrl": "https://github.com/graphql/graphql-js/tree/v16.8.1",
+      "versionedRepoUrl": "https://github.com/graphql/graphql-js/tree/v16.9.0",
       "licenseFile": "node_modules/graphql/LICENSE",
-      "licenseUrl": "https://github.com/graphql/graphql-js/blob/v16.8.1/LICENSE",
+      "licenseUrl": "https://github.com/graphql/graphql-js/blob/v16.9.0/LICENSE",
       "licenseTextSource": "file"
     },
     "husky@6.0.0": {
@@ -195,29 +208,29 @@
       "publisher": "Andrey Okonetchnikov",
       "email": "andrey@okonet.ru"
     },
-    "lockfile-lint@4.13.2": {
+    "lockfile-lint@4.14.0": {
       "name": "lockfile-lint",
-      "version": "4.13.2",
+      "version": "4.14.0",
       "range": "^4.9.6",
       "licenses": "Apache-2.0",
       "repoUrl": "https://github.com/lirantal/lockfile-lint",
-      "versionedRepoUrl": "https://github.com/lirantal/lockfile-lint/tree/v4.13.2",
+      "versionedRepoUrl": "https://github.com/lirantal/lockfile-lint/tree/v4.14.0",
       "licenseFile": "node_modules/lockfile-lint/LICENSE",
-      "licenseUrl": "https://github.com/lirantal/lockfile-lint/blob/v4.13.2/LICENSE",
+      "licenseUrl": "https://github.com/lirantal/lockfile-lint/blob/v4.14.0/LICENSE",
       "licenseTextSource": "file",
       "publisher": "Liran Tal",
       "email": "liran.tal@gmail.com",
       "url": "https://github.com/lirantal"
     },
-    "newrelic@11.15.0": {
+    "newrelic@11.23.2": {
       "name": "newrelic",
-      "version": "11.15.0",
-      "range": "^11.5.0",
+      "version": "11.23.2",
+      "range": "^11.15.0",
       "licenses": "Apache-2.0",
       "repoUrl": "https://github.com/newrelic/node-newrelic",
-      "versionedRepoUrl": "https://github.com/newrelic/node-newrelic/tree/v11.15.0",
+      "versionedRepoUrl": "https://github.com/newrelic/node-newrelic/tree/v11.23.2",
       "licenseFile": "node_modules/newrelic/LICENSE",
-      "licenseUrl": "https://github.com/newrelic/node-newrelic/blob/v11.15.0/LICENSE",
+      "licenseUrl": "https://github.com/newrelic/node-newrelic/blob/v11.23.2/LICENSE",
       "licenseTextSource": "file",
       "publisher": "New Relic Node.js agent team",
       "email": "nodejs@newrelic.com"
