@@ -59,7 +59,9 @@ async function setupCoreTest({ t, agentConfig = {}, pluginConfig = {} } = {}) {
     helper,
     server,
     serverUrl,
-    apolloServerPkg
+    apolloServerPkg,
+    agentConfig,
+    pluginConfig
   }
 }
 
