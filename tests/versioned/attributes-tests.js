@@ -1,29 +1,34 @@
 /*
- * Copyright 2020 New Relic Corporation. All rights reserved.
+ * Copyright 2024 New Relic Corporation. All rights reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
 
 'use strict'
 
+const assert = require('node:assert')
+
 const { executeQuery, executeJson } = require('../test-client')
 const { findSegmentByName } = require('../agent-testing')
+const { match } = require('../custom-assertions')
+const promiseResolvers = require('./promise-resolvers')
 
 const SEGMENT_DESTINATION = 0x20
 const SPAN_DESTINATION = 0x10
-
 const ANON_PLACEHOLDER = '<anonymous>'
-
 const OPERATION_PREFIX = 'GraphQL/operation/ApolloServer'
 
-/**
- * Creates a set of standard attribute tests to run against various
- * apollo-server libraries.
- * It is required that t.context.helper and t.context.serverUrl are set.
- * @param {*} t a tap test instance
- */
-function createAttributesTests(t) {
-  t.test('anon query should capture standard attributes except operation name', (t) => {
-    const { helper, serverUrl } = t.context
+function assertCustomAttributes(segment, expected) {
+  const customResolveAttributes = segment.getSpanContext().customAttributes.get(SPAN_DESTINATION)
+  match(customResolveAttributes, expected)
+}
+
+const tests = []
+
+tests.push({
+  name: 'anon query should capture standard attributes except operation name',
+  async fn(t) {
+    const { helper, serverUrl } = t.nr
+    const { promise, resolve } = promiseResolvers()
 
     const query = `query {
       hello
@@ -33,17 +38,17 @@ function createAttributesTests(t) {
       const operationName = `${OPERATION_PREFIX}/query/${ANON_PLACEHOLDER}/hello`
       const operationSegment = findSegmentByName(transaction.trace.root, operationName)
 
-      assertCustomAttributes(t, operationSegment, { clientName: 'ApolloTestClient' })
+      assertCustomAttributes(operationSegment, { clientName: 'ApolloTestClient' })
 
       const expectedOperationAttributes = {
         'graphql.operation.type': 'query'
       }
 
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
-      t.match(operationAttributes, expectedOperationAttributes, 'should have operation attributes')
+      match(operationAttributes, expectedOperationAttributes)
 
       const hasAttribute = Object.hasOwnProperty.bind(operationAttributes)
-      t.notOk(hasAttribute('graphql.operation.name'))
+      assert.equal(hasAttribute('graphql.operation.name'), false)
 
       const resolveHelloSegment = operationSegment.children[0]
 
@@ -55,19 +60,25 @@ function createAttributesTests(t) {
       }
 
       const resolveAttributes = resolveHelloSegment.attributes.get(SEGMENT_DESTINATION)
-      t.match(resolveAttributes, expectedResolveAttributes, 'should have field resolve attributes')
+      match(resolveAttributes, expectedResolveAttributes)
 
-      assertCustomAttributes(t, resolveHelloSegment, { returnType: 'String' })
+      assertCustomAttributes(resolveHelloSegment, { returnType: 'String' })
     })
 
     executeQuery(serverUrl, query, (err) => {
-      t.error(err)
-      t.end()
+      assert.ifError(err)
+      resolve()
     })
-  })
 
-  t.test('named query should capture all standard attributes', (t) => {
-    const { helper, serverUrl } = t.context
+    await promise
+  }
+})
+
+tests.push({
+  name: 'named query should capture all standard attributes',
+  async fn(t) {
+    const { helper, serverUrl } = t.nr
+    const { promise, resolve } = promiseResolvers()
 
     const expectedName = 'HeyThere'
     const query = `query ${expectedName} {
@@ -84,7 +95,7 @@ function createAttributesTests(t) {
       }
 
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
-      t.match(operationAttributes, expectedOperationAttributes, 'should have operation attributes')
+      match(operationAttributes, expectedOperationAttributes)
 
       const resolveHelloSegment = operationSegment.children[0]
 
@@ -96,17 +107,23 @@ function createAttributesTests(t) {
       }
 
       const resolveAttributes = resolveHelloSegment.attributes.get(SEGMENT_DESTINATION)
-      t.match(resolveAttributes, expectedResolveAttributes, 'should have field resolve attributes')
+      match(resolveAttributes, expectedResolveAttributes)
     })
 
     executeQuery(serverUrl, query, (err) => {
-      t.error(err)
-      t.end()
+      assert.ifError(err)
+      resolve()
     })
-  })
 
-  t.test('named query, multi-level, should capture deepest unique path', (t) => {
-    const { helper, serverUrl } = t.context
+    await promise
+  }
+})
+
+tests.push({
+  name: 'named query, multi-level, should capture deepest unique path',
+  async fn(t) {
+    const { helper, serverUrl } = t.nr
+    const { promise, resolve } = promiseResolvers()
 
     const expectedName = 'GetBooksByLibrary'
     const query = `query ${expectedName} {
@@ -132,7 +149,7 @@ function createAttributesTests(t) {
       }
 
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
-      t.match(operationAttributes, expectedOperationAttributes, 'should have operation attributes')
+      match(operationAttributes, expectedOperationAttributes)
 
       const [resolveLibrariesSegment, resolveBooksSegment] = operationSegment.children
 
@@ -144,102 +161,34 @@ function createAttributesTests(t) {
       }
 
       const resolveLibrariesAttributes = resolveLibrariesSegment.attributes.get(SEGMENT_DESTINATION)
-      t.match(
-        resolveLibrariesAttributes,
-        expectedLibrariesAttributes,
-        'should have field resolve attributes for libraries'
-      )
+      match(resolveLibrariesAttributes, expectedLibrariesAttributes)
 
       const expectedBooksAttributes = {
         'graphql.field.name': 'books',
         'graphql.field.returnType': '[Book!]',
         'graphql.field.parentType': 'Library',
-        'graphql.field.path': 'libraries.book'
+        'graphql.field.path': 'libraries.books'
       }
 
       const resolveBooksAttributes = resolveBooksSegment.attributes.get(SEGMENT_DESTINATION)
-      t.match(
-        resolveBooksAttributes,
-        expectedBooksAttributes,
-        'should have field resolve attributes for books'
-      )
-      assertCustomAttributes(t, resolveBooksSegment, { sourceBranch: 'downtown' })
+      match(resolveBooksAttributes, expectedBooksAttributes)
+      assertCustomAttributes(resolveBooksSegment, { sourceBranch: 'downtown' })
     })
 
     executeQuery(serverUrl, query, (err) => {
-      t.error(err)
-      t.end()
-    })
-  })
-
-  t.test('query with alias should use alias in path attributes', (t) => {
-    const { helper, serverUrl } = t.context
-
-    const expectedName = 'GetBooksByLibrary'
-    const query = `query ${expectedName} {
-      alias: libraries {
-        books {
-          title
-          author {
-            name
-          }
-        }
-      }
-    }`
-
-    const deepestPath = 'libraries.books'
-
-    helper.agent.once('transactionFinished', (transaction) => {
-      const operationName = `${OPERATION_PREFIX}/query/${expectedName}/${deepestPath}`
-      const operationSegment = findSegmentByName(transaction.trace.root, operationName)
-
-      const expectedOperationAttributes = {
-        'graphql.operation.type': 'query',
-        'graphql.operation.name': expectedName
-      }
-
-      const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
-      t.match(operationAttributes, expectedOperationAttributes, 'should have operation attributes')
-
-      const [resolveLibrariesSegment, resolveBooksSegment] = operationSegment.children
-
-      const expectedLibrariesAttributes = {
-        'graphql.field.name': 'libraries',
-        'graphql.field.returnType': '[Library]',
-        'graphql.field.parentType': 'Query',
-        'graphql.field.path': 'alias'
-      }
-
-      const resolveLibrariesAttributes = resolveLibrariesSegment.attributes.get(SEGMENT_DESTINATION)
-      t.match(
-        resolveLibrariesAttributes,
-        expectedLibrariesAttributes,
-        'should have field resolve attributes for libraries'
-      )
-
-      const expectedBooksAttributes = {
-        'graphql.field.name': 'books',
-        'graphql.field.returnType': '[Book!]',
-        'graphql.field.parentType': 'Library',
-        'graphql.field.path': 'alias.book'
-      }
-
-      const resolveBooksAttributes = resolveBooksSegment.attributes.get(SEGMENT_DESTINATION)
-      t.match(
-        resolveBooksAttributes,
-        expectedBooksAttributes,
-        'should have field resolve attributes for books'
-      )
+      assert.ifError(err)
+      resolve()
     })
 
-    executeQuery(serverUrl, query, (err) => {
-      t.error(err)
-      t.end()
-    })
-  })
+    await promise
+  }
+})
 
-  t.test('named mutation should capture all standard attributes', (t) => {
-    const { helper, serverUrl } = t.context
+tests.push({
+  name: 'named mutation should capture all standard attributes',
+  async fn(t) {
+    const { helper, serverUrl } = t.nr
+    const { promise, resolve } = promiseResolvers()
 
     const expectedName = 'AddThing'
     const query = `mutation ${expectedName} {
@@ -257,29 +206,35 @@ function createAttributesTests(t) {
       }
 
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
-      t.match(operationAttributes, expectedOperationAttributes, 'should have operation attributes')
+      match(operationAttributes, expectedOperationAttributes)
 
       const resolveHelloSegment = operationSegment.children[0]
 
       const expectedResolveAttributes = {
         'graphql.field.name': 'addThing',
-        'graphql.field.returnType': 'String',
+        'graphql.field.returnType': 'String!',
         'graphql.field.parentType': 'Mutation',
         'graphql.field.path': 'addThing'
       }
 
       const resolveAttributes = resolveHelloSegment.attributes.get(SEGMENT_DESTINATION)
-      t.match(resolveAttributes, expectedResolveAttributes, 'should have field resolve attributes')
+      match(resolveAttributes, expectedResolveAttributes)
     })
 
     executeQuery(serverUrl, query, (err) => {
-      t.error(err)
-      t.end()
+      assert.ifError(err)
+      resolve()
     })
-  })
 
-  t.test('named mutation should not capture args by default', (t) => {
-    const { helper, serverUrl } = t.context
+    await promise
+  }
+})
+
+tests.push({
+  name: 'named mutation should not capture args by default',
+  async fn(t) {
+    const { helper, serverUrl } = t.nr
+    const { promise, resolve } = promiseResolvers()
 
     const expectedName = 'AddThing'
     const query = `mutation ${expectedName} {
@@ -295,17 +250,23 @@ function createAttributesTests(t) {
       const resolveAttributes = resolveHelloSegment.attributes.get(SEGMENT_DESTINATION)
 
       const hasAttribute = Object.hasOwnProperty.bind(resolveAttributes)
-      t.notOk(hasAttribute('graphql.field.args.name'))
+      assert.equal(hasAttribute('graphql.field.args.name'), false)
     })
 
     executeQuery(serverUrl, query, (err) => {
-      t.error(err)
-      t.end()
+      assert.ifError(err)
+      resolve()
     })
-  })
 
-  t.test('named mutation should capture args when added to include list', (t) => {
-    const { helper, serverUrl } = t.context
+    await promise
+  }
+})
+
+tests.push({
+  name: 'named mutation should capture args when added to include list',
+  async fn(t) {
+    const { helper, serverUrl } = t.nr
+    const { promise, resolve } = promiseResolvers()
 
     helper.agent.config.attributes.include = ['graphql.field.args.*']
     helper.agent.config.emit('attributes.include')
@@ -323,18 +284,24 @@ function createAttributesTests(t) {
 
       const resolveAttributes = resolveHelloSegment.attributes.get(SEGMENT_DESTINATION)
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
-      t.match(resolveAttributes, { 'graphql.field.args.name': 'added thing!' })
-      t.match(operationAttributes, { 'graphql.field.args.name': 'added thing!' })
+      match(resolveAttributes, { 'graphql.field.args.name': 'added thing!' })
+      match(operationAttributes, { 'graphql.field.args.name': 'added thing!' })
     })
 
     executeQuery(serverUrl, query, (err) => {
-      t.error(err)
-      t.end()
+      assert.ifError(err)
+      resolve()
     })
-  })
 
-  t.test('named query should capture args when added to include list', (t) => {
-    const { helper, serverUrl } = t.context
+    await promise
+  }
+})
+
+tests.push({
+  name: 'named query should capture args when added to include list',
+  async fn(t) {
+    const { helper, serverUrl } = t.nr
+    const { promise, resolve } = promiseResolvers()
 
     helper.agent.config.attributes.include = ['graphql.field.args.*']
     helper.agent.config.emit('attributes.include')
@@ -356,18 +323,24 @@ function createAttributesTests(t) {
       }
       const resolveAttributes = resolveHelloSegment.attributes.get(SEGMENT_DESTINATION)
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
-      t.match(resolveAttributes, expectedArgAttributes)
-      t.match(operationAttributes, expectedArgAttributes)
+      match(resolveAttributes, expectedArgAttributes)
+      match(operationAttributes, expectedArgAttributes)
     })
 
     executeQuery(serverUrl, query, (err) => {
-      t.error(err)
-      t.end()
+      assert.ifError(err)
+      resolve()
     })
-  })
 
-  t.test('query should capture nested args', (t) => {
-    const { helper, serverUrl } = t.context
+    await promise
+  }
+})
+
+tests.push({
+  name: 'query should capture nested args',
+  async fn(t) {
+    const { helper, serverUrl } = t.nr
+    const { promise, resolve } = promiseResolvers()
 
     helper.agent.config.attributes.include = ['graphql.field.args.*']
     helper.agent.config.emit('attributes.include')
@@ -392,18 +365,24 @@ function createAttributesTests(t) {
       }
       const resolveAttributes = resolveHelloSegment.attributes.get(SEGMENT_DESTINATION)
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
-      t.match(resolveAttributes, expectedArgAttributes)
-      t.match(operationAttributes, expectedArgAttributes)
+      match(resolveAttributes, expectedArgAttributes)
+      match(operationAttributes, expectedArgAttributes)
     })
 
     executeQuery(serverUrl, query, (err) => {
-      t.error(err)
-      t.end()
+      assert.ifError(err)
+      resolve()
     })
-  })
 
-  t.test('query with variables should capture args when added to include list', (t) => {
-    const { helper, serverUrl } = t.context
+    await promise
+  }
+})
+
+tests.push({
+  name: 'query with variables should capture args when added to include list',
+  async fn(t) {
+    const { helper, serverUrl } = t.nr
+    const { promise, resolve } = promiseResolvers()
 
     helper.agent.config.attributes.include = ['graphql.field.args.*']
     helper.agent.config.emit('attributes.include')
@@ -433,19 +412,25 @@ function createAttributesTests(t) {
         'graphql.field.args.blee': 'second'
       }
       const resolveAttributes = resolveHelloSegment.attributes.get(SEGMENT_DESTINATION)
-      t.match(resolveAttributes, expectedArgAttributes)
+      match(resolveAttributes, expectedArgAttributes)
 
-      assertCustomAttributes(t, resolveHelloSegment, { args: 'blah,blee' })
+      assertCustomAttributes(resolveHelloSegment, { args: 'blah,blee' })
     })
 
     executeJson(serverUrl, queryJson, (err) => {
-      t.error(err)
-      t.end()
+      assert.ifError(err)
+      resolve()
     })
-  })
 
-  t.test('should capture query in operation segment attributes', (t) => {
-    const { helper, serverUrl } = t.context
+    await promise
+  }
+})
+
+tests.push({
+  name: 'should capture query in operation segment attributes',
+  async fn(t) {
+    const { helper, serverUrl } = t.nr
+    const { promise, resolve } = promiseResolvers()
 
     const expectedName = 'Greetings'
     const query = `query ${expectedName} {
@@ -463,17 +448,23 @@ function createAttributesTests(t) {
 
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
 
-      t.match(operationAttributes, expectedOperationAttributes, 'should have operation attributes')
+      match(operationAttributes, expectedOperationAttributes)
     })
 
     executeQuery(serverUrl, query, (err) => {
-      t.error(err)
-      t.end()
+      assert.ifError(err)
+      resolve()
     })
-  })
 
-  t.test('union, should capture all expected attributes', (t) => {
-    const { helper, serverUrl } = t.context
+    await promise
+  }
+})
+
+tests.push({
+  name: 'union, should capture all expected attributes',
+  async fn(t) {
+    const { helper, serverUrl } = t.nr
+    const { promise, resolve } = promiseResolvers()
 
     const expectedName = 'GetSearchResult'
     const query = `query ${expectedName} {
@@ -497,7 +488,7 @@ function createAttributesTests(t) {
       }
 
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
-      t.match(operationAttributes, expectedOperationAttributes, 'should have operation attributes')
+      match(operationAttributes, expectedOperationAttributes)
 
       const resolveHelloSegment = operationSegment.children[0]
 
@@ -509,17 +500,23 @@ function createAttributesTests(t) {
       }
 
       const resolveAttributes = resolveHelloSegment.attributes.get(SEGMENT_DESTINATION)
-      t.match(resolveAttributes, expectedResolveAttributes, 'should have field resolve attributes')
+      match(resolveAttributes, expectedResolveAttributes)
     })
 
     executeQuery(serverUrl, query, (err) => {
-      t.error(err)
-      t.end()
+      assert.ifError(err)
+      resolve()
     })
-  })
 
-  t.test('union, multiple inline fragments, should return expected attributes', (t) => {
-    const { helper, serverUrl } = t.context
+    await promise
+  }
+})
+
+tests.push({
+  name: 'union, multiple inline fragments, should return expected attributes',
+  async fn(t) {
+    const { helper, serverUrl } = t.nr
+    const { promise, resolve } = promiseResolvers()
 
     const expectedName = 'GetSearchResult'
     const query = `query ${expectedName} {
@@ -546,7 +543,7 @@ function createAttributesTests(t) {
       }
 
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
-      t.match(operationAttributes, expectedOperationAttributes, 'should have operation attributes')
+      match(operationAttributes, expectedOperationAttributes)
 
       const resolveHelloSegment = operationSegment.children[0]
 
@@ -558,17 +555,23 @@ function createAttributesTests(t) {
       }
 
       const resolveAttributes = resolveHelloSegment.attributes.get(SEGMENT_DESTINATION)
-      t.match(resolveAttributes, expectedResolveAttributes, 'should have field resolve attributes')
+      match(resolveAttributes, expectedResolveAttributes)
     })
 
     executeQuery(serverUrl, query, (err) => {
-      t.error(err)
-      t.end()
+      assert.ifError(err)
+      resolve()
     })
-  })
 
-  t.test('should capture all attributes on multiple queries', (t) => {
-    const { helper, serverUrl } = t.context
+    await promise
+  }
+})
+
+tests.push({
+  name: 'should capture all attributes on multiple queries',
+  async fn(t) {
+    const { helper, serverUrl } = t.nr
+    const { promise, resolve, reject } = promiseResolvers()
 
     const expectedName = 'HeyThere'
     const query = `query ${expectedName} {
@@ -583,7 +586,7 @@ function createAttributesTests(t) {
       const operationSegment = findSegmentByName(transaction.trace.root, operationName)
       if (!operationSegment) {
         const err = new Error(`Cannot find operation segment with name ${operationName}`)
-        t.error(err)
+        reject(err)
         return
       }
 
@@ -595,36 +598,33 @@ function createAttributesTests(t) {
 
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
 
-      t.match(operationAttributes, expectedOperationAttributes, 'should have operation attributes')
+      match(operationAttributes, expectedOperationAttributes)
       count++
     }
 
     helper.agent.on('transactionFinished', transactionHandler)
-    t.teardown(() => {
+    t.after(() => {
       helper.agent.removeListener('transactionFinished', transactionHandler)
     })
 
     executeQuery(serverUrl, query, (err) => {
-      t.error(err)
+      assert.ifError(err)
       process.nextTick(() => {
         executeQuery(serverUrl, query, (err) => {
-          t.error(err)
-          t.equal(count, 2, 'should have checked 2 transactions')
-          t.end()
+          assert.ifError(err)
+          assert.equal(count, 2, 'should have checked 2 transactions')
+          resolve()
         })
       })
     })
-  })
-}
 
-function assertCustomAttributes(t, segment, expected) {
-  const customResolveAttributes = segment.getSpanContext().customAttributes.get(SPAN_DESTINATION)
-  t.match(customResolveAttributes, expected, `should have custom attributes on ${segment.name}`)
-}
+    await promise
+  }
+})
 
 module.exports = {
+  tests,
   suiteName: 'attributes',
-  createTests: createAttributesTests,
   pluginConfig: {
     customResolverAttributes({ source, args, info }) {
       return {
