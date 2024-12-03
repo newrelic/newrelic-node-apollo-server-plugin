@@ -19,8 +19,8 @@ test('apollo-federation: query obfuscation', async (t) => {
     await setupFederatedGateway({ ctx })
   })
 
-  t.afterEach((ctx) => {
-    teardownGateway({ ctx })
+  t.afterEach(async (ctx) => {
+    await teardownGateway({ ctx })
   })
 
   await t.test('Obfuscates query arguments', (t, end) => {
