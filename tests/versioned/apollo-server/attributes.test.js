@@ -9,11 +9,6 @@ const test = require('node:test')
 
 const { afterEach, setupCoreTest, teardown } = require('../test-tools')
 
-// const { setupApolloServerTests } = require('./apollo-server-setup')
-// const attributesTests = require('../attributes-tests')
-//
-// setupApolloServerTests(attributesTests)
-
 const attributesTestSuite = require('../attributes-tests')
 const { pluginConfig } = attributesTestSuite
 
