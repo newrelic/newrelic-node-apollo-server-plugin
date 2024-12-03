@@ -33,7 +33,7 @@ test(
   'Capture/Ignore Service Definition and Health Check ' +
     'query transaction from sub-graph servers',
   async (t) => {
-    await t.test('Should ignore Service Definiion query by default', async (t) => {
+    await t.test('Should ignore Service Definition query by default', async (t) => {
       const pluginConfig = {}
       const { helper, apollo, services, plugins, libraryServer } = await setup(pluginConfig)
       const ignore = true
