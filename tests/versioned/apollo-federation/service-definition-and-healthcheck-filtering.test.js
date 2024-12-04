@@ -20,13 +20,15 @@ async function setup(pluginConfig) {
   const plugins = [instrumentationPlugin]
 
   // Do after instrumentation to ensure express isn't loaded too soon.
-  const apollo = require('apollo-server')
+  const { ApolloServer } = require('@apollo/server')
+  const gql = require('graphql-tag')
+  const { startStandaloneServer } = require('@apollo/server/standalone')
 
-  const libraryService = await loadLibraries(apollo, plugins)
+  const libraryService = await loadLibraries({ ApolloServer, startStandaloneServer, gql, plugins })
   const libraryServer = libraryService.server
 
   const services = [{ name: libraryService.name, url: libraryService.url }]
-  return { apollo, helper, plugins, services, libraryServer }
+  return { ApolloServer, gql, startStandaloneServer, helper, plugins, services, libraryServer }
 }
 
 test(
@@ -35,7 +37,8 @@ test(
   async (t) => {
     await t.test('Should ignore Service Definition query by default', async (t) => {
       const pluginConfig = {}
-      const { helper, apollo, services, plugins, libraryServer } = await setup(pluginConfig)
+      const { helper, ApolloServer, gql, startStandaloneServer, services, plugins, libraryServer } =
+        await setup(pluginConfig)
       const ignore = true
 
       let tx
@@ -43,11 +46,16 @@ test(
         tx = transaction
       })
 
-      const gatewayService = await loadGateway(apollo, services, plugins)
-      t.after(() => {
+      const gatewayService = await loadGateway({
+        ApolloServer,
+        gql,
+        startStandaloneServer,
+        services,
+        plugins
+      })
+      t.after(async () => {
         helper.unload()
-        libraryServer.stop()
-        gatewayService.server.stop()
+        await Promise.all([libraryServer.stop(), gatewayService.server.stop()])
       })
       assert.equal(tx.ignore, ignore, `should set transaction.ignore to ${ignore}`)
     })
@@ -59,7 +67,15 @@ test(
         const pluginConfig = {
           captureServiceDefinitionQueries: true
         }
-        const { helper, apollo, services, plugins, libraryServer } = await setup(pluginConfig)
+        const {
+          helper,
+          ApolloServer,
+          gql,
+          startStandaloneServer,
+          services,
+          plugins,
+          libraryServer
+        } = await setup(pluginConfig)
         const ignore = false
 
         let tx
@@ -67,11 +83,16 @@ test(
           tx = transaction
         })
 
-        const gatewayService = await loadGateway(apollo, services, plugins)
-        t.after(() => {
+        const gatewayService = await loadGateway({
+          ApolloServer,
+          gql,
+          startStandaloneServer,
+          services,
+          plugins
+        })
+        t.after(async () => {
           helper.unload()
-          libraryServer.stop()
-          gatewayService.server.stop()
+          await Promise.all([libraryServer.stop(), gatewayService.server.stop()])
         })
         assert.equal(tx.ignore, ignore, `should set transaction.ignore to ${ignore}`)
       }
@@ -79,7 +100,8 @@ test(
 
     await t.test('Should ignore Health Check query by default', async (t) => {
       const pluginConfig = {}
-      const { helper, apollo, services, plugins, libraryServer } = await setup(pluginConfig)
+      const { helper, ApolloServer, gql, startStandaloneServer, services, plugins, libraryServer } =
+        await setup(pluginConfig)
       const ignore = true
 
       let tx
@@ -89,11 +111,16 @@ test(
         }
       })
 
-      const gatewayService = await loadGateway(apollo, services, plugins)
-      t.after(() => {
+      const gatewayService = await loadGateway({
+        ApolloServer,
+        gql,
+        startStandaloneServer,
+        services,
+        plugins
+      })
+      t.after(async () => {
         helper.unload()
-        libraryServer.stop()
-        gatewayService.server.stop()
+        await Promise.all([libraryServer.stop(), gatewayService.server.stop()])
       })
 
       // trigger the healthcheck
@@ -107,7 +134,15 @@ test(
         const pluginConfig = {
           captureHealthCheckQueries: true
         }
-        const { helper, apollo, services, plugins, libraryServer } = await setup(pluginConfig)
+        const {
+          helper,
+          ApolloServer,
+          gql,
+          startStandaloneServer,
+          services,
+          plugins,
+          libraryServer
+        } = await setup(pluginConfig)
         const ignore = false
 
         let tx
@@ -117,11 +152,16 @@ test(
           }
         })
 
-        const gatewayService = await loadGateway(apollo, services, plugins)
-        t.after(() => {
+        const gatewayService = await loadGateway({
+          ApolloServer,
+          gql,
+          startStandaloneServer,
+          services,
+          plugins
+        })
+        t.after(async () => {
           helper.unload()
-          libraryServer.stop()
-          gatewayService.server.stop()
+          await Promise.all([libraryServer.stop(), gatewayService.server.stop()])
         })
 
         // trigger the healthcheck

@@ -16,8 +16,8 @@ test('apollo-federation: transaction names', async (t) => {
     await setupFederatedGateway({ ctx })
   })
 
-  t.afterEach((ctx) => {
-    teardownGateway({ ctx })
+  t.afterEach(async (ctx) => {
+    await teardownGateway({ ctx })
   })
 
   const TRANSACTION_PREFIX = `WebTransaction/Expressjs/POST`

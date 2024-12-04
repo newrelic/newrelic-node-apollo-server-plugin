@@ -15,8 +15,8 @@ test('apollo-federation: sub graph transaction naming ', async (t) => {
     await setupFederatedGateway({ ctx, instrumentSubGraphs: true })
   })
 
-  t.afterEach((ctx) => {
-    teardownGateway({ ctx })
+  t.afterEach(async (ctx) => {
+    await teardownGateway({ ctx })
   })
 
   await t.test('should properly name when inline fragments exist', (t, end) => {

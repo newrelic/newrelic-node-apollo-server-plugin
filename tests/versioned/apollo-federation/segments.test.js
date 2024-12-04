@@ -22,12 +22,12 @@ test('apollo-federation: federated segments', async (t) => {
     await setupFederatedGateway({ ctx })
   })
 
-  t.afterEach((ctx) => {
-    teardownGateway({ ctx })
+  t.afterEach(async (ctx) => {
+    await teardownGateway({ ctx })
   })
 
   await t.test('should nest sub graphs under operation', async (t) => {
-    const plan = tspl(t, { plan: 9 })
+    const plan = tspl(t, { plan: 8 })
     const { helper, gatewayService, libraryService, magazineService, bookService } = t.nr
     const serverUrl = gatewayService.url
 
@@ -64,13 +64,10 @@ test('apollo-federation: federated segments', async (t) => {
       const expectedSegments = [
         `${TRANSACTION_PREFIX}//${operationPart}`,
         [
-          'Expressjs/Router: /',
+          'Nodejs/Middleware/Expressjs/<anonymous>',
           [
-            'Nodejs/Middleware/Expressjs/<anonymous>',
-            [
-              `${OPERATION_PREFIX}/${operationPart}`,
-              [libraryExternal, bookExternal, magazineExternal]
-            ]
+            `${OPERATION_PREFIX}/${operationPart}`,
+            [libraryExternal, bookExternal, magazineExternal]
           ]
         ]
       ]
@@ -82,7 +79,7 @@ test('apollo-federation: federated segments', async (t) => {
   })
 
   await t.test('batch query should nest sub graphs under appropriate operations', async (t) => {
-    const plan = tspl(t, { plan: 12 })
+    const plan = tspl(t, { plan: 11 })
     const { helper, gatewayService, libraryService, bookService, magazineService } = t.nr
     const serverUrl = gatewayService.url
 
@@ -134,15 +131,12 @@ test('apollo-federation: federated segments', async (t) => {
       const expectedSegments = [
         `${batchTransactionPrefix}/${expectedQuery1Name}/${expectedQuery2Name}`,
         [
-          'Expressjs/Router: /',
+          'Nodejs/Middleware/Expressjs/<anonymous>',
           [
-            'Nodejs/Middleware/Expressjs/<anonymous>',
-            [
-              `${OPERATION_PREFIX}/${operationPart1}`,
-              [libraryExternal, bookExternal],
-              `${OPERATION_PREFIX}/${operationPart2}`,
-              [libraryExternal, magazineExternal]
-            ]
+            `${OPERATION_PREFIX}/${operationPart1}`,
+            [libraryExternal, bookExternal],
+            `${OPERATION_PREFIX}/${operationPart2}`,
+            [libraryExternal, magazineExternal]
           ]
         ]
       ]

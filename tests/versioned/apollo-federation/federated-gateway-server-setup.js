@@ -20,7 +20,9 @@ async function setupFederatedGateway({ instrumentSubGraphs, pluginConfig, agentC
   const instrumentationPlugin = createPlugin(nrApi, pluginConfig)
 
   // Do after instrumentation to ensure express isn't loaded too soon.
-  const apollo = require('apollo-server')
+  const { ApolloServer } = require('@apollo/server')
+  const { startStandaloneServer } = require('@apollo/server/standalone')
+  const gql = require('graphql-tag')
 
   const subGraphPlugins = []
 
@@ -35,9 +37,24 @@ async function setupFederatedGateway({ instrumentSubGraphs, pluginConfig, agentC
   }
 
   // Services are not instrumented
-  const libraryService = await loadLibraries(apollo, subGraphPlugins)
-  const bookService = await loadBooks(apollo, subGraphPlugins)
-  const magazineService = await loadMagazines(apollo, subGraphPlugins)
+  const libraryService = await loadLibraries({
+    ApolloServer,
+    gql,
+    startStandaloneServer,
+    plugins: subGraphPlugins
+  })
+  const bookService = await loadBooks({
+    ApolloServer,
+    gql,
+    startStandaloneServer,
+    plugins: subGraphPlugins
+  })
+  const magazineService = await loadMagazines({
+    ApolloServer,
+    gql,
+    startStandaloneServer,
+    plugins: subGraphPlugins
+  })
 
   const services = [
     { name: libraryService.name, url: libraryService.url },
@@ -47,7 +64,13 @@ async function setupFederatedGateway({ instrumentSubGraphs, pluginConfig, agentC
 
   const plugins = [...startingPlugins, instrumentationPlugin]
 
-  const gatewayService = await loadGateway(apollo, services, plugins)
+  const gatewayService = await loadGateway({
+    ApolloServer,
+    gql,
+    startStandaloneServer,
+    services,
+    plugins
+  })
   ctx.nr = {
     helper,
     gatewayService,
@@ -57,18 +80,31 @@ async function setupFederatedGateway({ instrumentSubGraphs, pluginConfig, agentC
   }
 }
 
-function teardownGateway({ ctx }) {
+async function teardownGateway({ ctx }) {
   const { helper, gatewayService, libraryService, magazineService, bookService } = ctx.nr
-  gatewayService.server.stop()
-  magazineService.server.stop()
-  bookService.server.stop()
-  libraryService.server.stop()
+  await Promise.all([
+    gatewayService.server.stop(),
+    magazineService.server.stop(),
+    bookService.server.stop(),
+    libraryService.server.stop()
+  ])
   helper.unload()
 
-  clearCachedModules(['express', 'apollo-server', '@apollo/gateway', '@apollo/subgraph'], __dirname)
+  clearCachedModules(
+    [
+      'express',
+      'apollo-server',
+      '@apollo/server',
+      '@apollo/server/express4',
+      '@apollo/server/standalone',
+      '@apollo/gateway',
+      '@apollo/subgraph'
+    ],
+    __dirname
+  )
 }
 
-async function loadGateway({ ApolloServer }, services, plugins) {
+async function loadGateway({ ApolloServer, startStandaloneServer, services, plugins }) {
   const name = 'Gateway'
 
   const { ApolloGateway, IntrospectAndCompose } = require('@apollo/gateway')
@@ -80,12 +116,13 @@ async function loadGateway({ ApolloServer }, services, plugins) {
   })
 
   const server = new ApolloServer({
+    allowBatchedHttpRequests: true,
     gateway,
     subscriptions: false,
-    plugins: plugins
+    plugins
   })
 
-  const { url } = await server.listen({ port: 0 })
+  const { url } = await startStandaloneServer(server, { listen: { port: 0 } })
 
   // eslint-disable-next-line no-console
   console.log(`${name} ready at ${url}`)
@@ -93,22 +130,22 @@ async function loadGateway({ ApolloServer }, services, plugins) {
   return { name, url, server, gateway }
 }
 
-async function loadLibraries({ ApolloServer, gql }, plugins) {
+async function loadLibraries({ ApolloServer, gql, startStandaloneServer, plugins }) {
   const config = federatedData.getLibraryConfiguration(gql)
-  return await loadServer(ApolloServer, config, plugins)
+  return await loadServer({ ApolloServer, startStandaloneServer, config, plugins })
 }
 
-async function loadBooks({ ApolloServer, gql }, plugins) {
+async function loadBooks({ ApolloServer, gql, startStandaloneServer, plugins }) {
   const config = federatedData.getBookConfiguration(gql)
-  return await loadServer(ApolloServer, config, plugins)
+  return await loadServer({ ApolloServer, startStandaloneServer, config, plugins })
 }
 
-async function loadMagazines({ ApolloServer, gql }, plugins) {
+async function loadMagazines({ ApolloServer, gql, startStandaloneServer, plugins }) {
   const config = federatedData.getMagazineConfiguration(gql)
-  return await loadServer(ApolloServer, config, plugins)
+  return await loadServer({ ApolloServer, startStandaloneServer, config, plugins })
 }
 
-async function loadServer(ApolloServer, config, plugins) {
+async function loadServer({ ApolloServer, config, plugins, startStandaloneServer }) {
   const { buildSubgraphSchema } = require('@apollo/subgraph')
 
   const { name, typeDefs, resolvers } = config
@@ -118,7 +155,7 @@ async function loadServer(ApolloServer, config, plugins) {
     plugins
   })
 
-  const { url } = await server.listen({ port: 0 })
+  const { url } = await startStandaloneServer(server, { listen: { port: 0 } })
 
   // eslint-disable-next-line no-console
   console.log(`${name} service ready at ${url}`)
