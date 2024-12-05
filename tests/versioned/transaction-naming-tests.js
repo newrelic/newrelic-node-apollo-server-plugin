@@ -1,45 +1,50 @@
 /*
- * Copyright 2020 New Relic Corporation. All rights reserved.
+ * Copyright 2024 New Relic Corporation. All rights reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
 
 'use strict'
 
+const assert = require('node:assert')
+
 const { executeQuery, executeQueryBatch } = require('../test-client')
 const { checkResult } = require('./common')
+const promiseResolvers = require('./promise-resolvers')
 
 const ANON_PLACEHOLDER = '<anonymous>'
 
-/**
- * Creates a set of standard transaction tests to run against various
- * apollo-server libraries.
- * It is required that t.context.helper and t.context.serverUrl are set.
- * @param {*} t a tap test instance
- */
-function createTransactionTests(t, frameworkName) {
-  const EXPECTED_PREFIX = `WebTransaction/${frameworkName}/POST`
+const tests = []
 
-  t.test('anonymous query, single level, should use anonymous placeholder', (t) => {
-    const { helper, serverUrl } = t.context
+tests.push({
+  name: 'anonymous query, single level, should use anonymous placeholder',
+  async fn(t) {
+    const { helper, serverUrl, EXPECTED_PREFIX } = t.nr
+    const { promise, resolve } = promiseResolvers()
 
     const query = `query {
       hello
     }`
 
     helper.agent.once('transactionFinished', (transaction) => {
-      t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${ANON_PLACEHOLDER}/hello`)
+      assert.equal(transaction.name, `${EXPECTED_PREFIX}//query/${ANON_PLACEHOLDER}/hello`)
     })
 
     executeQuery(serverUrl, query, (err, result) => {
-      t.error(err)
-      checkResult(t, result, () => {
-        t.end()
+      assert.ifError(err)
+      checkResult(assert, result, () => {
+        resolve()
       })
     })
-  })
 
-  t.test('named query, single level, should use query name', (t) => {
-    const { helper, serverUrl } = t.context
+    await promise
+  }
+})
+
+tests.push({
+  name: 'named query, single level, should use query name',
+  async fn(t) {
+    const { helper, serverUrl, EXPECTED_PREFIX } = t.nr
+    const { promise, resolve } = promiseResolvers()
 
     const expectedName = 'HeyThere'
     const query = `query ${expectedName} {
@@ -47,41 +52,49 @@ function createTransactionTests(t, frameworkName) {
     }`
 
     helper.agent.once('transactionFinished', (transaction) => {
-      t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${expectedName}/hello`)
+      assert.equal(transaction.name, `${EXPECTED_PREFIX}//query/${expectedName}/hello`)
     })
 
     executeQuery(serverUrl, query, (err, result) => {
-      t.error(err)
-      checkResult(t, result, () => {
-        t.end()
+      assert.ifError(err)
+      checkResult(assert, result, () => {
+        resolve()
       })
     })
-  })
 
-  t.test(
-    'Federated Server health check query with only __typename ' +
-      'in selection set should omit deepest unique path',
-    (t) => {
-      const { helper, serverUrl } = t.context
+    await promise
+  }
+})
 
-      const expectedName = '__ApolloServiceHealthCheck__'
-      const query = `query ${expectedName} { __typename }`
+tests.push({
+  name: 'Federated Server health check query with only __typename in selection set should omit deepest unique path',
+  async fn(t) {
+    const { helper, serverUrl, EXPECTED_PREFIX } = t.nr
+    const { promise, resolve } = promiseResolvers()
 
-      helper.agent.once('transactionFinished', (transaction) => {
-        t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${expectedName}`)
+    const expectedName = '__ApolloServiceHealthCheck__'
+    const query = `query ${expectedName} { __typename }`
+
+    helper.agent.once('transactionFinished', (transaction) => {
+      assert.equal(transaction.name, `${EXPECTED_PREFIX}//query/${expectedName}`)
+    })
+
+    executeQuery(serverUrl, query, (err, result) => {
+      assert.ifError(err)
+      checkResult(assert, result, () => {
+        resolve()
       })
+    })
 
-      executeQuery(serverUrl, query, (err, result) => {
-        t.error(err)
-        checkResult(t, result, () => {
-          t.end()
-        })
-      })
-    }
-  )
+    await promise
+  }
+})
 
-  t.test('Nested queries with arguments', (t) => {
-    const { helper, serverUrl } = t.context
+tests.push({
+  name: 'Nested queries with arguments',
+  async fn(t) {
+    const { helper, serverUrl, EXPECTED_PREFIX } = t.nr
+    const { promise, resolve } = promiseResolvers()
 
     const query = `query {
       library(branch: "riverside") {
@@ -97,19 +110,25 @@ function createTransactionTests(t, frameworkName) {
     const path = 'library'
 
     helper.agent.once('transactionFinished', (transaction) => {
-      t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${ANON_PLACEHOLDER}/${path}`)
+      assert.equal(transaction.name, `${EXPECTED_PREFIX}//query/${ANON_PLACEHOLDER}/${path}`)
     })
 
     executeQuery(serverUrl, query, (err, result) => {
-      t.error(err)
-      checkResult(t, result, () => {
-        t.end()
+      assert.ifError(err)
+      checkResult(assert, result, () => {
+        resolve()
       })
     })
-  })
 
-  t.test('anonymous query, multi-level should return deepest unique path', (t) => {
-    const { helper, serverUrl } = t.context
+    await promise
+  }
+})
+
+tests.push({
+  name: 'anonymous query, multi-level should return deepest unique path',
+  async fn(t) {
+    const { helper, serverUrl, EXPECTED_PREFIX } = t.nr
+    const { promise, resolve } = promiseResolvers()
 
     const query = `query {
       libraries {
@@ -125,43 +144,55 @@ function createTransactionTests(t, frameworkName) {
     const path = 'libraries.books'
 
     helper.agent.once('transactionFinished', (transaction) => {
-      t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${ANON_PLACEHOLDER}/${path}`)
+      assert.equal(transaction.name, `${EXPECTED_PREFIX}//query/${ANON_PLACEHOLDER}/${path}`)
     })
 
     executeQuery(serverUrl, query, (err, result) => {
-      t.error(err)
-      checkResult(t, result, () => {
-        t.end()
+      assert.ifError(err)
+      checkResult(assert, result, () => {
+        resolve()
       })
     })
-  })
 
-  t.test(
-    'anonymous query, only returns reserved field(id) should return deepest unique path',
-    (t) => {
-      const { helper, serverUrl } = t.context
+    await promise
+  }
+})
 
-      const query = `query {
+tests.push({
+  name: 'anonymous query, only returns reserved field(id) should return deepest unique path',
+  async fn(t) {
+    const { helper, serverUrl, EXPECTED_PREFIX } = t.nr
+    const { promise, resolve } = promiseResolvers()
+
+    const query = `query {
         searchCollection(title: "True life") {
           id
         }
       }`
 
-      helper.agent.once('transactionFinished', (transaction) => {
-        t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${ANON_PLACEHOLDER}/searchCollection`)
-      })
+    helper.agent.once('transactionFinished', (transaction) => {
+      assert.equal(
+        transaction.name,
+        `${EXPECTED_PREFIX}//query/${ANON_PLACEHOLDER}/searchCollection`
+      )
+    })
 
-      executeQuery(serverUrl, query, (err, result) => {
-        t.error(err)
-        checkResult(t, result, () => {
-          t.end()
-        })
+    executeQuery(serverUrl, query, (err, result) => {
+      assert.ifError(err)
+      checkResult(assert, result, () => {
+        resolve()
       })
-    }
-  )
+    })
 
-  t.test('named query, multi-level should return deepest unique path', (t) => {
-    const { helper, serverUrl } = t.context
+    await promise
+  }
+})
+
+tests.push({
+  name: 'named query, multi-level should return deepest unique path',
+  async fn(t) {
+    const { helper, serverUrl, EXPECTED_PREFIX } = t.nr
+    const { promise, resolve } = promiseResolvers()
 
     const expectedName = 'GetBooksByLibrary'
     const query = `query ${expectedName} {
@@ -178,19 +209,25 @@ function createTransactionTests(t, frameworkName) {
     const path = 'libraries.books'
 
     helper.agent.once('transactionFinished', (transaction) => {
-      t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${expectedName}/${path}`)
+      assert.equal(transaction.name, `${EXPECTED_PREFIX}//query/${expectedName}/${path}`)
     })
 
     executeQuery(serverUrl, query, (err, result) => {
-      t.error(err)
-      checkResult(t, result, () => {
-        t.end()
+      assert.ifError(err)
+      checkResult(assert, result, () => {
+        resolve()
       })
     })
-  })
 
-  t.test('named query, multi-level with aliases should ignore aliases in naming', (t) => {
-    const { helper, serverUrl } = t.context
+    await promise
+  }
+})
+
+tests.push({
+  name: 'named query, multi-level with aliases should ignore aliases in naming',
+  async fn(t) {
+    const { helper, serverUrl, EXPECTED_PREFIX } = t.nr
+    const { promise, resolve } = promiseResolvers()
 
     const expectedName = 'GetBooksByLibrary'
     const query = `query ${expectedName} {
@@ -207,65 +244,80 @@ function createTransactionTests(t, frameworkName) {
     const path = 'libraries.books'
 
     helper.agent.once('transactionFinished', (transaction) => {
-      t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${expectedName}/${path}`)
+      assert.equal(transaction.name, `${EXPECTED_PREFIX}//query/${expectedName}/${path}`)
     })
 
     executeQuery(serverUrl, query, (err, result) => {
-      t.error(err)
-      checkResult(t, result, () => {
-        t.end()
+      assert.ifError(err)
+      checkResult(assert, result, () => {
+        resolve()
       })
     })
-  })
 
-  t.test(
-    'anonymous mutation, single level, reserved field, should use anonymous placeholder',
-    (t) => {
-      const { helper, serverUrl } = t.context
+    await promise
+  }
+})
 
-      const query = `mutation {
+tests.push({
+  name: 'anonymous mutation, single level, reserved field, should use anonymous placeholder',
+  async fn(t) {
+    const { helper, serverUrl, EXPECTED_PREFIX } = t.nr
+    const { promise, resolve } = promiseResolvers()
+
+    const query = `mutation {
         addToCollection(title: "Don Quixote") {
           id
         }
       }`
 
-      helper.agent.once('transactionFinished', (transaction) => {
-        t.equal(
-          transaction.name,
-          `${EXPECTED_PREFIX}//mutation/${ANON_PLACEHOLDER}/addToCollection`
-        )
-      })
+    helper.agent.once('transactionFinished', (transaction) => {
+      assert.equal(
+        transaction.name,
+        `${EXPECTED_PREFIX}//mutation/${ANON_PLACEHOLDER}/addToCollection`
+      )
+    })
 
-      executeQuery(serverUrl, query, (err, result) => {
-        t.error(err)
-        checkResult(t, result, () => {
-          t.end()
-        })
+    executeQuery(serverUrl, query, (err, result) => {
+      assert.ifError(err)
+      checkResult(assert, result, () => {
+        resolve()
       })
-    }
-  )
+    })
 
-  t.test('anonymous mutation, single level, should use anonymous placeholder', (t) => {
-    const { helper, serverUrl } = t.context
+    await promise
+  }
+})
+
+tests.push({
+  name: 'anonymous mutation, single level, should use anonymous placeholder',
+  async fn(t) {
+    const { helper, serverUrl, EXPECTED_PREFIX } = t.nr
+    const { promise, resolve } = promiseResolvers()
 
     const query = `mutation {
       addThing(name: "added thing!")
     }`
 
     helper.agent.once('transactionFinished', (transaction) => {
-      t.equal(transaction.name, `${EXPECTED_PREFIX}//mutation/${ANON_PLACEHOLDER}/addThing`)
+      assert.equal(transaction.name, `${EXPECTED_PREFIX}//mutation/${ANON_PLACEHOLDER}/addThing`)
     })
 
     executeQuery(serverUrl, query, (err, result) => {
-      t.error(err)
-      checkResult(t, result, () => {
-        t.end()
+      assert.ifError(err)
+      checkResult(assert, result, () => {
+        resolve()
       })
     })
-  })
 
-  t.test('named mutation, single level, reserved field, should use mutation name', (t) => {
-    const { helper, serverUrl } = t.context
+    await promise
+  }
+})
+
+tests.push({
+  name: 'named mutation, single level, reserved field, should use mutation name',
+  async fn(t) {
+    const { helper, serverUrl, EXPECTED_PREFIX } = t.nr
+    const { promise, resolve } = promiseResolvers()
 
     const expectedName = 'addIt'
     const query = `mutation ${expectedName} {
@@ -275,19 +327,25 @@ function createTransactionTests(t, frameworkName) {
     }`
 
     helper.agent.once('transactionFinished', (transaction) => {
-      t.equal(transaction.name, `${EXPECTED_PREFIX}//mutation/${expectedName}/addToCollection`)
+      assert.equal(transaction.name, `${EXPECTED_PREFIX}//mutation/${expectedName}/addToCollection`)
     })
 
     executeQuery(serverUrl, query, (err, result) => {
-      t.error(err)
-      checkResult(t, result, () => {
-        t.end()
+      assert.ifError(err)
+      checkResult(assert, result, () => {
+        resolve()
       })
     })
-  })
 
-  t.test('named mutation, single level, should use mutation name', (t) => {
-    const { helper, serverUrl } = t.context
+    await promise
+  }
+})
+
+tests.push({
+  name: 'named mutation, single level, should use mutation name',
+  async fn(t) {
+    const { helper, serverUrl, EXPECTED_PREFIX } = t.nr
+    const { promise, resolve } = promiseResolvers()
 
     const expectedName = 'AddThing'
     const query = `mutation ${expectedName} {
@@ -295,38 +353,50 @@ function createTransactionTests(t, frameworkName) {
     }`
 
     helper.agent.once('transactionFinished', (transaction) => {
-      t.equal(transaction.name, `${EXPECTED_PREFIX}//mutation/${expectedName}/addThing`)
+      assert.equal(transaction.name, `${EXPECTED_PREFIX}//mutation/${expectedName}/addThing`)
     })
 
     executeQuery(serverUrl, query, (err, result) => {
-      t.error(err)
-      checkResult(t, result, () => {
-        t.end()
+      assert.ifError(err)
+      checkResult(assert, result, () => {
+        resolve()
       })
     })
-  })
 
-  t.test('anonymous query, with params, should use anonymous placeholder', (t) => {
-    const { helper, serverUrl } = t.context
+    await promise
+  }
+})
+
+tests.push({
+  name: 'anonymous query, with params, should use anonymous placeholder',
+  async fn(t) {
+    const { helper, serverUrl, EXPECTED_PREFIX } = t.nr
+    const { promise, resolve } = promiseResolvers()
 
     const query = `query {
       paramQuery(blah: "blah", blee: "blee")
     }`
 
     helper.agent.once('transactionFinished', (transaction) => {
-      t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${ANON_PLACEHOLDER}/paramQuery`)
+      assert.equal(transaction.name, `${EXPECTED_PREFIX}//query/${ANON_PLACEHOLDER}/paramQuery`)
     })
 
     executeQuery(serverUrl, query, (err, result) => {
-      t.error(err)
-      checkResult(t, result, () => {
-        t.end()
+      assert.ifError(err)
+      checkResult(assert, result, () => {
+        resolve()
       })
     })
-  })
 
-  t.test('named query, with params, should use query name', (t) => {
-    const { helper, serverUrl } = t.context
+    await promise
+  }
+})
+
+tests.push({
+  name: 'named query, with params, should use query name',
+  async fn(t) {
+    const { helper, serverUrl, EXPECTED_PREFIX } = t.nr
+    const { promise, resolve } = promiseResolvers()
 
     const expectedName = 'BlahQuery'
     const query = `query ${expectedName} {
@@ -334,19 +404,25 @@ function createTransactionTests(t, frameworkName) {
     }`
 
     helper.agent.once('transactionFinished', (transaction) => {
-      t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${expectedName}/paramQuery`)
+      assert.equal(transaction.name, `${EXPECTED_PREFIX}//query/${expectedName}/paramQuery`)
     })
 
     executeQuery(serverUrl, query, (err, result) => {
-      t.error(err)
-      checkResult(t, result, () => {
-        t.end()
+      assert.ifError(err)
+      checkResult(assert, result, () => {
+        resolve()
       })
     })
-  })
 
-  t.test('named query, with params, should return deepest unique path', (t) => {
-    const { helper, serverUrl } = t.context
+    await promise
+  }
+})
+
+tests.push({
+  name: 'named query, with params, should return deepest unique path',
+  async fn(t) {
+    const { helper, serverUrl, EXPECTED_PREFIX } = t.nr
+    const { promise, resolve } = promiseResolvers()
 
     const expectedName = 'GetBookForLibrary'
     const query = `query ${expectedName} {
@@ -363,19 +439,25 @@ function createTransactionTests(t, frameworkName) {
     const path = 'library.books'
 
     helper.agent.once('transactionFinished', (transaction) => {
-      t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${expectedName}/${path}`)
+      assert.equal(transaction.name, `${EXPECTED_PREFIX}//query/${expectedName}/${path}`)
     })
 
     executeQuery(serverUrl, query, (err, result) => {
-      t.error(err)
-      checkResult(t, result, () => {
-        t.end()
+      assert.ifError(err)
+      checkResult(assert, result, () => {
+        resolve()
       })
     })
-  })
 
-  t.test('batch query should include "batch" all queries separated by delimeter', (t) => {
-    const { helper, serverUrl } = t.context
+    await promise
+  }
+})
+
+tests.push({
+  name: 'batch query should include "batch" all queries separated by delimeter',
+  async fn(t) {
+    const { helper, serverUrl, EXPECTED_PREFIX } = t.nr
+    const { promise, resolve } = promiseResolvers()
 
     const expectedName1 = 'GetBookForLibrary'
     const query1 = `query ${expectedName1} {
@@ -400,24 +482,30 @@ function createTransactionTests(t, frameworkName) {
     helper.agent.once('transactionFinished', (transaction) => {
       const expectedQuery1Name = `query/${expectedName1}/${path1}`
       const expectedQuery2Name = `mutation/${ANON_PLACEHOLDER}/addThing`
-      t.equal(
+      assert.equal(
         transaction.name,
         `${EXPECTED_PREFIX}//batch/${expectedQuery1Name}/${expectedQuery2Name}`
       )
     })
 
     executeQueryBatch(serverUrl, queries, (err, result) => {
-      t.error(err)
-      checkResult(t, result, () => {
-        t.equal(result.length, 2)
+      assert.ifError(err)
+      checkResult(assert, result, () => {
+        assert.equal(result.length, 2)
 
-        t.end()
+        resolve()
       })
     })
-  })
 
-  t.test('union, should return deepest unique path', (t) => {
-    const { helper, serverUrl } = t.context
+    await promise
+  }
+})
+
+tests.push({
+  name: 'union, should return deepest unique path',
+  async fn(t) {
+    const { helper, serverUrl, EXPECTED_PREFIX } = t.nr
+    const { promise, resolve } = promiseResolvers()
 
     const expectedName = 'GetSearchResult'
     const query = `query ${expectedName} {
@@ -432,7 +520,7 @@ function createTransactionTests(t, frameworkName) {
     const deepestPath = 'search<Book>.title'
 
     helper.agent.once('transactionFinished', (transaction) => {
-      t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${expectedName}/${deepestPath}`)
+      assert.equal(transaction.name, `${EXPECTED_PREFIX}//query/${expectedName}/${deepestPath}`)
     })
 
     const expectedResult = [
@@ -442,20 +530,26 @@ function createTransactionTests(t, frameworkName) {
       }
     ]
     executeQuery(serverUrl, query, (err, result) => {
-      t.error(err)
-      t.same(
+      assert.ifError(err)
+      assert.deepStrictEqual(
         result.data.search,
         expectedResult,
         'should return expected results with union search query'
       )
-      checkResult(t, result, () => {
-        t.end()
+      checkResult(assert, result, () => {
+        resolve()
       })
     })
-  })
 
-  t.test('union, multiple inline fragments, should return deepest unique path', (t) => {
-    const { helper, serverUrl } = t.context
+    await promise
+  }
+})
+
+tests.push({
+  name: 'union, multiple inline fragments, should return deepest unique path',
+  async fn(t) {
+    const { helper, serverUrl, EXPECTED_PREFIX } = t.nr
+    const { promise, resolve } = promiseResolvers()
 
     const expectedName = 'GetSearchResult'
     const query = `query ${expectedName} {
@@ -473,7 +567,7 @@ function createTransactionTests(t, frameworkName) {
     const deepestPath = 'search'
 
     helper.agent.once('transactionFinished', (transaction) => {
-      t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${expectedName}/${deepestPath}`)
+      assert.equal(transaction.name, `${EXPECTED_PREFIX}//query/${expectedName}/${deepestPath}`)
     })
 
     const expectedResult = [
@@ -481,20 +575,26 @@ function createTransactionTests(t, frameworkName) {
       { __typename: 'Magazine', title: 'Node Weekly' }
     ]
     executeQuery(serverUrl, query, (err, result) => {
-      t.same(
+      assert.deepStrictEqual(
         result.data.search,
         expectedResult,
         'should return expected results with union search query'
       )
-      t.error(err)
-      checkResult(t, result, () => {
-        t.end()
+      assert.ifError(err)
+      checkResult(assert, result, () => {
+        resolve()
       })
     })
-  })
 
-  t.test('named query with fragment, query first', (t) => {
-    const { helper, serverUrl } = t.context
+    await promise
+  }
+})
+
+tests.push({
+  name: 'named query with fragment, query first',
+  async fn(t) {
+    const { helper, serverUrl, EXPECTED_PREFIX } = t.nr
+    const { promise, resolve } = promiseResolvers()
 
     const expectedName = 'GetBookForLibrary'
     const query = `query ${expectedName} {
@@ -514,17 +614,23 @@ function createTransactionTests(t, frameworkName) {
     const path = 'library.books.LibraryBook'
 
     helper.agent.once('transactionFinished', (transaction) => {
-      t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${expectedName}/${path}`)
+      assert.equal(transaction.name, `${EXPECTED_PREFIX}//query/${expectedName}/${path}`)
     })
 
     executeQuery(serverUrl, query, (err) => {
-      t.error(err)
-      t.end()
+      assert.ifError(err)
+      resolve()
     })
-  })
 
-  t.test('named query with fragment, fragment first', (t) => {
-    const { helper, serverUrl } = t.context
+    await promise
+  }
+})
+
+tests.push({
+  name: 'named query with fragment, fragment first',
+  async fn(t) {
+    const { helper, serverUrl, EXPECTED_PREFIX } = t.nr
+    const { promise, resolve } = promiseResolvers()
 
     const expectedName = 'GetBookForLibrary'
     const query = `fragment LibraryBook on Book {
@@ -544,18 +650,24 @@ function createTransactionTests(t, frameworkName) {
     const path = 'library.books.LibraryBook'
 
     helper.agent.once('transactionFinished', (transaction) => {
-      t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${expectedName}/${path}`)
+      assert.equal(transaction.name, `${EXPECTED_PREFIX}//query/${expectedName}/${path}`)
     })
 
     executeQuery(serverUrl, query, (err) => {
-      t.error(err)
-      t.end()
+      assert.ifError(err)
+      resolve()
     })
-  })
 
-  // there will be no document/AST nor resolved operation
-  t.test('if the query cannot be parsed, should be named /*', (t) => {
-    const { helper, serverUrl } = t.context
+    await promise
+  }
+})
+
+tests.push({
+  name: 'if the query cannot be parsed, should be named /*',
+  async fn(t) {
+    // there will be no document/AST nor resolved operation
+    const { helper, serverUrl, EXPECTED_PREFIX } = t.nr
+    const { promise, resolve } = promiseResolvers()
 
     const invalidQuery = `query {
       libraries {
@@ -569,27 +681,33 @@ function createTransactionTests(t, frameworkName) {
     ` // missing closing }
 
     helper.agent.once('transactionFinished', (transaction) => {
-      t.equal(transaction.name, `${EXPECTED_PREFIX}//*`)
+      assert.equal(transaction.name, `${EXPECTED_PREFIX}//*`)
     })
 
     executeQuery(serverUrl, invalidQuery, (err, result) => {
-      t.error(err)
+      assert.ifError(err)
 
-      t.ok(result)
-      t.ok(result.errors)
-      t.equal(result.errors.length, 1) // should have one parsing error
+      assert.ok(result)
+      assert.ok(result.errors)
+      assert.equal(result.errors.length, 1) // should have one parsing error
 
       const [parseError] = result.errors
-      t.equal(parseError.extensions.code, 'GRAPHQL_PARSE_FAILED')
+      assert.equal(parseError.extensions.code, 'GRAPHQL_PARSE_FAILED')
 
-      t.end()
+      resolve()
     })
-  })
 
-  // if parse succeeds but validation fails, there will not be a resolved operation
-  // but the document/AST can still be leveraged for what was intended.
-  t.test('anonymous query, when cant validate, should use document/AST', (t) => {
-    const { helper, serverUrl } = t.context
+    await promise
+  }
+})
+
+tests.push({
+  name: 'anonymous query, when cant validate, should use document/AST',
+  async fn(t) {
+    // if parse succeeds but validation fails, there will not be a resolved operation
+    // but the document/AST can still be leveraged for what was intended.
+    const { helper, serverUrl, EXPECTED_PREFIX } = t.nr
+    const { promise, resolve } = promiseResolvers()
 
     const invalidQuery = `query {
       libraries {
@@ -604,27 +722,33 @@ function createTransactionTests(t, frameworkName) {
     const path = 'libraries.books.doesnotexist.name'
 
     helper.agent.once('transactionFinished', (transaction) => {
-      t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${ANON_PLACEHOLDER}/${path}`)
+      assert.equal(transaction.name, `${EXPECTED_PREFIX}//query/${ANON_PLACEHOLDER}/${path}`)
     })
 
     executeQuery(serverUrl, invalidQuery, (err, result) => {
-      t.error(err)
+      assert.ifError(err)
 
-      t.ok(result)
-      t.ok(result.errors)
-      t.equal(result.errors.length, 1) // should have one parsing error
+      assert.ok(result)
+      assert.ok(result.errors)
+      assert.equal(result.errors.length, 1) // should have one parsing error
 
       const [parseError] = result.errors
-      t.equal(parseError.extensions.code, 'GRAPHQL_VALIDATION_FAILED')
+      assert.equal(parseError.extensions.code, 'GRAPHQL_VALIDATION_FAILED')
 
-      t.end()
+      resolve()
     })
-  })
 
-  // if parse succeeds but validation fails, there will not be a resolved operation
-  // but the document/AST can still be leveraged for what was intended.
-  t.test('named query, when cant validate, should use document/AST', (t) => {
-    const { helper, serverUrl } = t.context
+    await promise
+  }
+})
+
+tests.push({
+  name: 'named query, when cant validate, should use document/AST',
+  async fn(t) {
+    // if parse succeeds but validation fails, there will not be a resolved operation
+    // but the document/AST can still be leveraged for what was intended.
+    const { helper, serverUrl, EXPECTED_PREFIX } = t.nr
+    const { promise, resolve } = promiseResolvers()
 
     const expectedName = 'FailsToValidate'
     const invalidQuery = `query ${expectedName} {
@@ -640,25 +764,31 @@ function createTransactionTests(t, frameworkName) {
     const path = 'libraries.books.doesnotexist.name'
 
     helper.agent.once('transactionFinished', (transaction) => {
-      t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${expectedName}/${path}`)
+      assert.equal(transaction.name, `${EXPECTED_PREFIX}//query/${expectedName}/${path}`)
     })
 
     executeQuery(serverUrl, invalidQuery, (err, result) => {
-      t.error(err)
+      assert.ifError(err)
 
-      t.ok(result)
-      t.ok(result.errors)
-      t.equal(result.errors.length, 1) // should have one parsing error
+      assert.ok(result)
+      assert.ok(result.errors)
+      assert.equal(result.errors.length, 1) // should have one parsing error
 
       const [parseError] = result.errors
-      t.equal(parseError.extensions.code, 'GRAPHQL_VALIDATION_FAILED')
+      assert.equal(parseError.extensions.code, 'GRAPHQL_VALIDATION_FAILED')
 
-      t.end()
+      resolve()
     })
-  })
 
-  t.test('multiple queries do not affect transaction naming', (t) => {
-    const { helper, serverUrl } = t.context
+    await promise
+  }
+})
+
+tests.push({
+  name: 'multiple queries do not affect transaction naming',
+  async fn(t) {
+    const { helper, serverUrl, EXPECTED_PREFIX } = t.nr
+    const { promise, resolve } = promiseResolvers()
 
     const expectedName = 'HeyThere'
     const query = `query ${expectedName} {
@@ -667,31 +797,33 @@ function createTransactionTests(t, frameworkName) {
     let count = 0
 
     const transactionHandler = (transaction) => {
-      t.equal(transaction.name, `${EXPECTED_PREFIX}//query/${expectedName}/hello`)
+      assert.equal(transaction.name, `${EXPECTED_PREFIX}//query/${expectedName}/hello`)
       count++
     }
 
     helper.agent.on('transactionFinished', transactionHandler)
-    t.teardown(() => {
+    t.after(() => {
       helper.agent.removeListener('transactionFinished', transactionHandler)
     })
 
     executeQuery(serverUrl, query, (err, result) => {
-      t.error(err)
-      checkResult(t, result, () => {
+      assert.ifError(err)
+      checkResult(assert, result, () => {
         executeQuery(serverUrl, query, (err2, result2) => {
-          t.error(err2)
-          checkResult(t, result2, () => {
-            t.equal(count, 2, 'should have checked 2 transactions')
-            t.end()
+          assert.ifError(err2)
+          checkResult(assert, result2, () => {
+            assert.equal(count, 2, 'should have checked 2 transactions')
+            resolve()
           })
         })
       })
     })
-  })
-}
+
+    await promise
+  }
+})
 
 module.exports = {
-  suiteName: 'transaction naming',
-  createTests: createTransactionTests
+  tests,
+  suiteName: 'transaction naming'
 }
