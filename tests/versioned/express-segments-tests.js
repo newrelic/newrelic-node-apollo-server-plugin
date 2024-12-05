@@ -475,8 +475,7 @@ tests.push({
         [
           `${OPERATION_PREFIX}/${operationPart}`,
           [
-            `${RESOLVE_PREFIX}/library`,
-            ['timers.setTimeout', ['Callback: <anonymous>']],
+            [`${RESOLVE_PREFIX}/library`, ['timers.setTimeout', ['Callback: <anonymous>']]],
             `${RESOLVE_PREFIX}/library.books`,
             `${RESOLVE_PREFIX}/library.books.title`,
             `${RESOLVE_PREFIX}/library.books.author`,
@@ -536,8 +535,7 @@ tests.push({
         [
           `${OPERATION_PREFIX}/${operationPart}`,
           [
-            `${RESOLVE_PREFIX}/library`,
-            ['timers.setTimeout', ['Callback: <anonymous>']],
+            [`${RESOLVE_PREFIX}/library`, ['timers.setTimeout', ['Callback: <anonymous>']]],
             `${RESOLVE_PREFIX}/library.books`,
             `${RESOLVE_PREFIX}/library.books.title`,
             `${RESOLVE_PREFIX}/library.books.author`,
@@ -595,8 +593,7 @@ tests.push({
         [
           `${OPERATION_PREFIX}/${operationPart}`,
           [
-            `${RESOLVE_PREFIX}/library`,
-            ['timers.setTimeout', ['Callback: <anonymous>']],
+            [`${RESOLVE_PREFIX}/library`, ['timers.setTimeout', ['Callback: <anonymous>']]],
             `${RESOLVE_PREFIX}/library.books`,
             `${RESOLVE_PREFIX}/library.books.title`,
             `${RESOLVE_PREFIX}/library.books.author`,

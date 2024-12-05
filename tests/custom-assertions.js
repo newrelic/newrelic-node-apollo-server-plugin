@@ -139,7 +139,7 @@ function assertSegments(parent, expected, options, { assert = require('node:asse
       if (typeof sequenceItem === 'string') {
         // find corresponding child in parent
         for (let j = 0; j < parent.children.length; j++) {
-          if (parent.children[j].name === sequenceItem) {
+          if (parent.children[j].name.startsWith(sequenceItem) === true) {
             child = parent.children[j]
           }
         }

@@ -5,7 +5,17 @@
 
 'use strict'
 
-const { setupApolloServerExpressTests } = require('./apollo-server-express-setup')
-const queryObfuscationTests = require('../query-obfuscation-tests')
+const test = require('node:test')
 
-setupApolloServerExpressTests(queryObfuscationTests)
+const { afterEach, setupExpressTest } = require('../test-tools')
+
+const queryObfuscationTests = require('../query-obfuscation-tests')
+const { pluginConfig } = queryObfuscationTests
+
+for (const qoTest of queryObfuscationTests.tests) {
+  test(qoTest.name, async (t) => {
+    await setupExpressTest({ t, pluginConfig, testDir: __dirname })
+    await qoTest.fn(t)
+    await afterEach({ t, testDir: __dirname })
+  })
+}

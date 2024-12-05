@@ -9,9 +9,8 @@
 
 module.exports = {
   afterEach,
-  requireApolloServer,
   setupCoreTest,
-  unloadModules
+  setupExpressTest
 }
 
 const fs = require('node:fs')
@@ -21,9 +20,17 @@ const setupErrorSchema = require('./error-setup')
 const { getTypeDefs, resolvers } = require('../data-definitions')
 
 async function afterEach({ t, testDir }) {
-  await t.nr.server.stop()
-  t.nr.helper.agent.errors.traceAggregator.clear()
-  t.nr.helper.unload()
+  const { helper, expressServer, server } = t.nr
+
+  if (server) {
+    await server.stop()
+  }
+  if (expressServer) {
+    await expressServer.close()
+  }
+
+  helper.agent.errors.traceAggregator.clear()
+  helper.unload()
   unloadModules(testDir)
 }
 
@@ -60,25 +67,100 @@ async function setupCoreTest({ t, testDir, agentConfig = {}, pluginConfig = {} }
   }
 }
 
+async function setupExpressTest({ t, testDir, agentConfig = {}, pluginConfig = {} } = {}) {
+  const helper = utils.TestAgent.makeFullyInstrumented(agentConfig)
+  const createPlugin = require('../../lib/create-plugin')
+  const nrApi = helper.getAgentApi()
+  const instrumentationPlugin = createPlugin(nrApi, pluginConfig)
+
+  const express = require('express')
+  const apolloServerPkg = requireApolloServer(testDir, true)
+  const { gql, ApolloServer, isApollo4 } = apolloServerPkg
+
+  const schema = getTypeDefs(gql)
+  const errorSchema = setupErrorSchema(apolloServerPkg, resolvers, isApollo4)
+  const server = new ApolloServer({
+    typeDefs: [schema, errorSchema],
+    resolvers,
+    plugins: [instrumentationPlugin],
+    allowBatchedHttpRequests: true
+  })
+
+  const app = express()
+  await server.start()
+
+  if (isApollo4 === true) {
+    const { bodyParser, expressMiddleware } = apolloServerPkg
+    app.use('/graphql', bodyParser.json(), expressMiddleware(server))
+  } else {
+    server.applyMiddleware({ app })
+  }
+
+  await new Promise((resolve, reject) => {
+    const expressServer = app.listen(0, (error) => {
+      if (error) {
+        return reject(error)
+      }
+
+      const serverUrl = `http://localhost:${expressServer.address().port}${
+        server.graphqlPath || '/graphql'
+      }`
+
+      t.nr = {
+        helper,
+        server,
+        serverUrl,
+        apolloServerPkg,
+        agentConfig,
+        pluginConfig,
+        expressServer
+      }
+
+      return resolve()
+    })
+  })
+}
+
 /**
  * This function is utilized to require the appropriate Apollo server modules
  * for the version of Apollo server that is under test (versioned tests cover
  * multiple versions, and the package has changed names over time).
  *
+ * @param {string} testDir The path to the versioned test directory, e.g.
+ * the path to the `apollo-server` tests.
+ * @param {boolean} [express=false] Indicates if the in-built server should be
+ * used (`express = false`), or if the "external" `express` module should be
+ * used.
+ *
  * @returns {{isApollo4: boolean, ApolloServer, gql, startStandaloneServer, graphql}}
  */
-function requireApolloServer(testDir) {
+function requireApolloServer(testDir, express = false) {
   const isApollo4 = fs.existsSync('./node_modules/@apollo/server')
 
   if (isApollo4 === false) {
-    const ApolloServer = loadModule('apollo-server', testDir)
+    const ApolloServer =
+      express === false ? loadModule('apollo-server', testDir) : loadModule('apollo-server-express')
     return { isApollo4, ApolloServer }
   }
 
   const gql = loadModule('graphql-tag', testDir)
   const apolloServer = loadModule('@apollo/server', testDir)
-  const { startStandaloneServer } = loadModule('@apollo/server/standalone', testDir)
   const graphql = loadModule('graphql', testDir)
+
+  if (express === true) {
+    const bodyParser = loadModule('body-parser', testDir)
+    const { expressMiddleware } = loadModule('@apollo/server/express4', testDir)
+    return {
+      isApollo4,
+      ApolloServer: apolloServer.ApolloServer,
+      gql,
+      graphql,
+      bodyParser,
+      expressMiddleware
+    }
+  }
+
+  const { startStandaloneServer } = loadModule('@apollo/server/standalone', testDir)
   return {
     isApollo4,
     ApolloServer: apolloServer.ApolloServer,
@@ -111,7 +193,9 @@ function loadModule(name, rootDir) {
 function unloadModules(testDir) {
   const modules = [
     'express',
+    'body-parser',
     'apollo-server',
+    'apollo-server-express',
     '@apollo/server',
     '@apollo/server/express4',
     '@apollo/server/standalone'

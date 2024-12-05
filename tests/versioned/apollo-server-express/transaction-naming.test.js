@@ -5,7 +5,17 @@
 
 'use strict'
 
-const { setupApolloServerExpressTests } = require('./apollo-server-express-setup')
+const test = require('node:test')
+
+const { afterEach, setupExpressTest } = require('../test-tools')
+
 const transactionNamingTests = require('../transaction-naming-tests')
 
-setupApolloServerExpressTests(transactionNamingTests)
+for (const txTest of transactionNamingTests.tests) {
+  test(txTest.name, async (t) => {
+    await setupExpressTest({ t, testDir: __dirname })
+    t.nr.EXPECTED_PREFIX = `WebTransaction/Expressjs/POST`
+    await txTest.fn(t)
+    await afterEach({ t, testDir: __dirname })
+  })
+}
