@@ -5,20 +5,6 @@
 
 'use strict'
 
-// const { setupApolloServerTests } = require('./apollo-server-setup')
-// const metricsTests = require('../../metrics-tests')
-//
-// setupApolloServerTests({
-//   suiteName: 'metrics',
-//   createTests: metricsTests.bind(null, false)
-// })
-//
-// setupApolloServerTests({
-//   suiteName: 'capture field metrics',
-//   createTests: metricsTests.bind(null, true),
-//   pluginConfig: { captureFieldMetrics: true }
-// })
-
 const test = require('node:test')
 
 const { afterEach, setupCoreTest, teardown } = require('../test-tools')

@@ -5,9 +5,33 @@
 
 'use strict'
 
-const { setupApolloServerTests } = require('./apollo-server-setup')
-const expressSegmentsDefaultTests = require('../express-segments-default-tests')
-const expressSegmentsScalarTests = require('../express-segments-scalar-tests')
+const test = require('node:test')
 
-setupApolloServerTests(expressSegmentsDefaultTests)
-setupApolloServerTests(expressSegmentsScalarTests)
+const { afterEach, setupCoreTest } = require('../test-tools')
+
+const expressSegmentsTests = require('../express-segments-tests')
+
+testDefaultTests(expressSegmentsTests.tests).then(() => testScalarTests(expressSegmentsTests.tests))
+
+async function testDefaultTests(tests) {
+  for (const defTest of tests) {
+    test(`non-scalar: ${defTest.name}`, async (t) => {
+      await setupCoreTest({ t, testDir: __dirname })
+      t.nr.TRANSACTION_PREFIX = 'WebTransaction/Expressjs/POST'
+      await defTest.fn(t)
+      await afterEach({ t, testDir: __dirname })
+    })
+  }
+}
+
+async function testScalarTests(tests) {
+  const { pluginConfig } = { captureScalars: true }
+  for (const scalarTest of tests) {
+    test(`scalar: ${scalarTest.name}`, async (t) => {
+      await setupCoreTest({ t, testDir: __dirname })
+      t.nr.TRANSACTION_PREFIX = 'WebTransaction/Expressjs/POST'
+      await scalarTest.fn(t)
+      await afterEach({ t, testDir: __dirname, pluginConfig })
+    })
+  }
+}

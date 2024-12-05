@@ -9,7 +9,6 @@
 
 module.exports = {
   afterEach,
-  teardown,
   requireApolloServer,
   setupCoreTest,
   unloadModules
@@ -20,24 +19,21 @@ const fs = require('node:fs')
 const utils = require('@newrelic/test-utilities')
 const setupErrorSchema = require('./error-setup')
 const { getTypeDefs, resolvers } = require('../data-definitions')
-const { clearCachedModules } = require('../utils')
 
-function afterEach(ctx) {
-  ctx.nr.helper.agent.errors.traceAggregator.clear()
+async function afterEach({ t, testDir }) {
+  await t.nr.server.stop()
+  t.nr.helper.agent.errors.traceAggregator.clear()
+  t.nr.helper.unload()
+  unloadModules(testDir)
 }
 
-async function teardown(ctx) {
-  await ctx.nr.server.stop()
-  ctx.nr.helper.unload()
-}
-
-async function setupCoreTest({ t, agentConfig = {}, pluginConfig = {} } = {}) {
+async function setupCoreTest({ t, testDir, agentConfig = {}, pluginConfig = {} } = {}) {
   const helper = utils.TestAgent.makeFullyInstrumented(agentConfig)
   const createPlugin = require('../../lib/create-plugin')
   const nrApi = helper.getAgentApi()
   const instrumentationPlugin = createPlugin(nrApi, pluginConfig)
 
-  const apolloServerPkg = requireApolloServer()
+  const apolloServerPkg = requireApolloServer(testDir)
   const { isApollo4, ApolloServer, gql, startStandaloneServer } = apolloServerPkg
   const schema = getTypeDefs(gql)
   const errorSchema = setupErrorSchema(apolloServerPkg, resolvers, isApollo4)
@@ -49,11 +45,10 @@ async function setupCoreTest({ t, agentConfig = {}, pluginConfig = {} } = {}) {
     allowBatchedHttpRequests: true
   })
 
-  const { url } =
+  const { url: serverUrl } =
     isApollo4 === true
       ? await startStandaloneServer(server, { listen: { port: 0 } })
       : await server.listen({ port: 0 })
-  const serverUrl = url
 
   t.nr = {
     helper,
@@ -72,18 +67,18 @@ async function setupCoreTest({ t, agentConfig = {}, pluginConfig = {} } = {}) {
  *
  * @returns {{isApollo4: boolean, ApolloServer, gql, startStandaloneServer, graphql}}
  */
-function requireApolloServer() {
+function requireApolloServer(testDir) {
   const isApollo4 = fs.existsSync('./node_modules/@apollo/server')
 
   if (isApollo4 === false) {
-    const ApolloServer = require('apollo-server')
+    const ApolloServer = loadModule('apollo-server', testDir)
     return { isApollo4, ApolloServer }
   }
 
-  const gql = require('graphql-tag')
-  const apolloServer = require('@apollo/server')
-  const { startStandaloneServer } = require('@apollo/server/standalone')
-  const graphql = require('graphql')
+  const gql = loadModule('graphql-tag', testDir)
+  const apolloServer = loadModule('@apollo/server', testDir)
+  const { startStandaloneServer } = loadModule('@apollo/server/standalone', testDir)
+  const graphql = loadModule('graphql', testDir)
   return {
     isApollo4,
     ApolloServer: apolloServer.ApolloServer,
@@ -94,6 +89,19 @@ function requireApolloServer() {
 }
 
 /**
+ * Require a module relative to the tests being run.
+ *
+ * @param {string} name The module to load.
+ * @param {string} rootDir The path to the versioned test directory, e.g.
+ * the path to the `apollo-server` tests.
+ *
+ * @returns {*}
+ */
+function loadModule(name, rootDir) {
+  return require(require.resolve(name, { paths: [rootDir] }))
+}
+
+/**
  * Removes all Apollo server related modules from the require cache.
  *
  * @param {string} testDir The parent directory for the tests being run. This
@@ -101,8 +109,17 @@ function requireApolloServer() {
  * Simply passing `__dirname` from the test suite should be sufficient.
  */
 function unloadModules(testDir) {
-  clearCachedModules(
-    ['express', 'apollo-server', '@apollo/server', '@apollo/server/express4'],
-    testDir
-  )
+  const modules = [
+    'express',
+    'apollo-server',
+    '@apollo/server',
+    '@apollo/server/express4',
+    '@apollo/server/standalone'
+  ]
+  for (const mod of modules) {
+    try {
+      const found = require.resolve(mod, { paths: [testDir] })
+      delete require.cache[found]
+    } catch {}
+  }
 }
