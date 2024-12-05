@@ -7,7 +7,7 @@
 
 const test = require('node:test')
 
-const { afterEach, setupCoreTest, teardown } = require('../test-tools')
+const { afterEach, setupCoreTest } = require('../test-tools')
 
 const errorsTests = require('../errors-tests')
 const { pluginConfig } = errorsTests
@@ -17,9 +17,8 @@ const agentConfig = {
 
 for (const errorTest of errorsTests.tests) {
   test(errorTest.name, async (t) => {
-    await setupCoreTest({ t, agentConfig, pluginConfig })
+    await setupCoreTest({ t, agentConfig, pluginConfig, testDir: __dirname })
     await errorTest.fn(t)
-    afterEach(t)
-    await teardown(t)
+    await afterEach({ t, testDir: __dirname })
   })
 }

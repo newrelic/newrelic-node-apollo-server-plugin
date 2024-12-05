@@ -7,16 +7,15 @@
 
 const test = require('node:test')
 
-const { afterEach, setupCoreTest, teardown } = require('../test-tools')
+const { afterEach, setupCoreTest } = require('../test-tools')
 
 const queryObfuscationTests = require('../query-obfuscation-tests')
 const { pluginConfig } = queryObfuscationTests
 
 for (const qoTest of queryObfuscationTests.tests) {
   test(qoTest.name, async (t) => {
-    await setupCoreTest({ t, pluginConfig })
+    await setupCoreTest({ t, pluginConfig, testDir: __dirname })
     await qoTest.fn(t)
-    afterEach(t)
-    await teardown(t)
+    await afterEach({ t, testDir: __dirname })
   })
 }

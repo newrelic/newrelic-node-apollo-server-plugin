@@ -7,7 +7,7 @@
 
 const test = require('node:test')
 
-const { afterEach, setupCoreTest, teardown } = require('../test-tools')
+const { afterEach, setupCoreTest } = require('../test-tools')
 
 const metricsTests = require('../../metrics-tests')
 
@@ -16,10 +16,9 @@ testWithoutCapture(metricsTests.tests).then(() => testWithCapture(metricsTests.t
 async function testWithoutCapture(tests) {
   for (const metricTest of tests) {
     test(metricTest.name, async (t) => {
-      await setupCoreTest({ t })
+      await setupCoreTest({ t, testDir: __dirname })
       await metricTest.fn(t)
-      afterEach(t)
-      await teardown(t)
+      await afterEach({ t, testDir: __dirname })
     })
   }
 }
@@ -27,10 +26,9 @@ async function testWithoutCapture(tests) {
 async function testWithCapture(metricsTests) {
   for (const metricTest of metricsTests) {
     test(`capture field metrics: ${metricTest.name}`, async (t) => {
-      await setupCoreTest({ t, pluginConfig: { captureFieldMetrics: true } })
+      await setupCoreTest({ t, pluginConfig: { captureFieldMetrics: true }, testDir: __dirname })
       await metricTest.fn(t)
-      afterEach(t)
-      await teardown(t)
+      await afterEach({ t, testDir: __dirname })
     })
   }
 }
