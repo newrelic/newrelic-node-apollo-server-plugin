@@ -10,7 +10,8 @@
 module.exports = {
   afterEach,
   setupCoreTest,
-  setupExpressTest
+  setupExpressTest,
+  unloadModules
 }
 
 const fs = require('node:fs')
@@ -202,9 +203,11 @@ function unloadModules(testDir) {
     'body-parser',
     'apollo-server',
     'apollo-server-express',
+    '@apollo/gateway',
     '@apollo/server',
     '@apollo/server/express4',
-    '@apollo/server/standalone'
+    '@apollo/server/standalone',
+    '@apollo/subgraph'
   ]
   for (const mod of modules) {
     try {

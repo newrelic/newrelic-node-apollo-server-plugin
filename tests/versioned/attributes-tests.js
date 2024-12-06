@@ -8,7 +8,6 @@
 const assert = require('node:assert')
 
 const { executeQuery, executeJson } = require('../test-client')
-const { findSegmentByName } = require('../agent-testing')
 const { match } = require('../custom-assertions')
 const promiseResolvers = require('../promise-resolvers')
 
@@ -20,6 +19,22 @@ const OPERATION_PREFIX = 'GraphQL/operation/ApolloServer'
 function assertCustomAttributes(segment, expected) {
   const customResolveAttributes = segment.getSpanContext().customAttributes.get(SPAN_DESTINATION)
   match(customResolveAttributes, expected)
+}
+
+function findSegmentByName(root, name) {
+  if (root.name === name) {
+    return root
+  } else if (root.children && root.children.length) {
+    for (let i = 0; i < root.children.length; i++) {
+      const child = root.children[i]
+      const found = findSegmentByName(child, name)
+      if (found) {
+        return found
+      }
+    }
+  }
+
+  return null
 }
 
 const tests = []

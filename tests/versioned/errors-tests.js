@@ -8,13 +8,29 @@
 const assert = require('node:assert')
 
 const { executeQuery, makeRequest } = require('../test-client')
-const agentTesting = require('../agent-testing')
 const promiseResolvers = require('../promise-resolvers')
 
 const ANON_PLACEHOLDER = '<anonymous>'
 const UNKNOWN_OPERATION = '<unknown>'
 const OPERATION_PREFIX = 'GraphQL/operation/ApolloServer'
 const RESOLVE_PREFIX = 'GraphQL/resolve/ApolloServer'
+
+function getErrorTraces(agent) {
+  return agent.errors.traceAggregator.errors
+}
+
+function getSpanEvents(agent) {
+  return agent.spanEventAggregator.getEvents()
+}
+
+function findSpanById(agent, spanId) {
+  const spans = getSpanEvents(agent)
+
+  return spans.find((value) => {
+    const { intrinsics } = value
+    return intrinsics.guid === spanId
+  })
+}
 
 const tests = []
 
@@ -39,7 +55,7 @@ tests.push({
     ` // missing closing }
 
     helper.agent.once('transactionFinished', (transaction) => {
-      const errorTraces = agentTesting.getErrorTraces(helper.agent)
+      const errorTraces = getErrorTraces(helper.agent)
       assert.equal(errorTraces.length, 1)
 
       const errorTrace = errorTraces[0]
@@ -53,7 +69,7 @@ tests.push({
 
       assert.ok(agentAttributes.spanId)
 
-      const matchingSpan = agentTesting.findSpanById(helper.agent, agentAttributes.spanId)
+      const matchingSpan = findSpanById(helper.agent, agentAttributes.spanId)
 
       const { attributes, intrinsics } = matchingSpan
       assert.equal(intrinsics.name, `${OPERATION_PREFIX}/${UNKNOWN_OPERATION}`)
@@ -101,7 +117,7 @@ tests.push({
     const expectedOperationName = `${OPERATION_PREFIX}/query/${ANON_PLACEHOLDER}/${deepestPath}`
 
     helper.agent.once('transactionFinished', (transaction) => {
-      const errorTraces = agentTesting.getErrorTraces(helper.agent)
+      const errorTraces = getErrorTraces(helper.agent)
       assert.equal(errorTraces.length, 1)
 
       const errorTrace = errorTraces[0]
@@ -115,7 +131,7 @@ tests.push({
 
       assert.ok(agentAttributes.spanId)
 
-      const matchingSpan = agentTesting.findSpanById(helper.agent, agentAttributes.spanId)
+      const matchingSpan = findSpanById(helper.agent, agentAttributes.spanId)
 
       const { attributes, intrinsics } = matchingSpan
       assert.equal(intrinsics.name, expectedOperationName)
@@ -157,7 +173,7 @@ tests.push({
     const expectedResolveName = `${RESOLVE_PREFIX}/boom`
 
     helper.agent.once('transactionFinished', (transaction) => {
-      const errorTraces = agentTesting.getErrorTraces(helper.agent)
+      const errorTraces = getErrorTraces(helper.agent)
       assert.equal(errorTraces.length, 1)
 
       const errorTrace = errorTraces[0]
@@ -171,7 +187,7 @@ tests.push({
 
       assert.ok(agentAttributes.spanId)
 
-      const matchingSpan = agentTesting.findSpanById(helper.agent, agentAttributes.spanId)
+      const matchingSpan = findSpanById(helper.agent, agentAttributes.spanId)
 
       const { attributes, intrinsics } = matchingSpan
       assert.equal(intrinsics.name, expectedResolveName)
@@ -229,7 +245,7 @@ for (const errorTest of errorTests) {
       }`
 
       helper.agent.once('transactionFinished', (transaction) => {
-        const errorTraces = agentTesting.getErrorTraces(helper.agent)
+        const errorTraces = getErrorTraces(helper.agent)
         assert.equal(errorTraces.length, 1)
 
         const errorTrace = errorTraces[0]
@@ -244,7 +260,7 @@ for (const errorTest of errorTests) {
         assert.ok(agentAttributes.spanId)
         assert.equal(userAttributes.code, code)
 
-        const matchingSpan = agentTesting.findSpanById(helper.agent, agentAttributes.spanId)
+        const matchingSpan = findSpanById(helper.agent, agentAttributes.spanId)
 
         const { attributes } = matchingSpan
         assert.equal(attributes['error.message'], expectedErrorMessage)
@@ -281,7 +297,7 @@ tests.push({
     const expectedErrorType = 'GraphQLError'
 
     helper.agent.once('transactionFinished', (transaction) => {
-      const errorTraces = agentTesting.getErrorTraces(helper.agent)
+      const errorTraces = getErrorTraces(helper.agent)
       assert.equal(errorTraces.length, 1)
 
       const errorTrace = errorTraces[0]
@@ -295,7 +311,7 @@ tests.push({
 
       assert.ok(agentAttributes.spanId)
 
-      const matchingSpan = agentTesting.findSpanById(helper.agent, agentAttributes.spanId)
+      const matchingSpan = findSpanById(helper.agent, agentAttributes.spanId)
 
       const { attributes } = matchingSpan
       assert.equal(attributes['error.message'], expectedErrorMessage)
