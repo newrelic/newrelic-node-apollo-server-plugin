@@ -10,7 +10,7 @@ const crypto = require('node:crypto')
 
 const { executeQuery, executeQueryBatch, makeRequest } = require('./test-client')
 const { assertMetrics } = require('./custom-assertions')
-const promiseResolvers = require('./versioned/promise-resolvers')
+const promiseResolvers = require('./promise-resolvers')
 
 const ANON_PLACEHOLDER = '<anonymous>'
 const UNKNOWN_OPERATION = '<unknown>'

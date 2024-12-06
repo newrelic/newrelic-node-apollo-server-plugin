@@ -1,51 +1,67 @@
 /*
- * Copyright 2020 New Relic Corporation. All rights reserved.
+ * Copyright 2024 New Relic Corporation. All rights reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
 
 'use strict'
 
-const tap = require('tap')
-
-const { setupEnvConfig } = require('../agent-testing')
+const test = require('node:test')
+const assert = require('node:assert')
 
 const INDEX_PATH = '../..'
 
-tap.test('Should export createPlugin when loaded', (t) => {
+test.beforeEach(() => {
+  process.env.NEW_RELIC_APP_NAME = 'test'
+  process.env.NEW_RELIC_LICENSE_KEY = 'test'
+  process.env.NEW_RELIC_ENABLED = false
+})
+
+test.afterEach(() => {
+  delete process.env.NEW_RELIC_APP_NAME
+  delete process.env.NEW_RELIC_LICENSE_KEY
+  delete process.env.NEW_RELIC_ENABLED
+})
+
+test('Should export createPlugin when loaded', (t, end) => {
   const createPlugin = require(INDEX_PATH)
-  t.ok(createPlugin)
+  assert.ok(createPlugin)
 
   resetModuleCache(() => {
-    t.end()
+    end()
   })
 })
 
-tap.test('should create noop plugin when agent disabled', (t) => {
+test('should create noop plugin when agent disabled', (t, end) => {
   // w/o a config file the agent will be disabled by default
   const createPlugin = require('../..')
-  t.ok(createPlugin)
+  assert.ok(createPlugin)
 
   const plugin = createPlugin()
-  t.ok(plugin)
-  t.notOk(plugin.requestDidStart)
+  assert.ok(plugin)
+  assert.equal(plugin.requestDidStart, undefined)
 
   resetModuleCache(() => {
-    t.end()
+    end()
   })
 })
 
-tap.test('should create full plugin when agent enabled', (t) => {
-  setupEnvConfig(t)
+test('should create full plugin when agent enabled', (t, end) => {
+  process.env.NEW_RELIC_NO_CONFIG_FILE = true
+  process.env.NEW_RELIC_ENABLED = true
+
+  t.after(() => {
+    delete process.env.NEW_RELIC_NO_CONFIG_FILE
+  })
 
   const createPlugin = require('../..')
-  t.ok(createPlugin)
+  assert.ok(createPlugin)
 
   const plugin = createPlugin()
-  t.ok(plugin)
-  t.ok(plugin.requestDidStart)
+  assert.ok(plugin)
+  assert.ok(plugin.requestDidStart)
 
   resetModuleCache(() => {
-    t.end()
+    end()
   })
 })
 

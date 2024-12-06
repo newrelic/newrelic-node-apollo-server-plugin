@@ -7,7 +7,7 @@
 
 const test = require('node:test')
 
-const { afterEach, setupExpressTest } = require('../test-tools')
+const { afterEach, setupExpressTest } = require('../../test-tools')
 
 const attributesTests = require('../attributes-tests')
 const { pluginConfig } = attributesTests

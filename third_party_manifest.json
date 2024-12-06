@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "Mon Dec 02 2024 17:33:20 GMT-0500 (Eastern Standard Time)",
+  "lastUpdated": "Fri Dec 06 2024 07:57:39 GMT-0500 (Eastern Standard Time)",
   "projectName": "New Relic Node Apollo Server Plugin",
   "projectUrl": "https://github.com/newrelic/newrelic-node-apollo-server-plugin/",
   "includeOptDeps": false,
@@ -7,15 +7,15 @@
   "includeDev": true,
   "dependencies": {},
   "devDependencies": {
-    "@apollo/server@4.11.2": {
+    "@apollo/server@4.10.3": {
       "name": "@apollo/server",
-      "version": "4.11.2",
+      "version": "4.10.3",
       "range": "^4.1.1",
       "licenses": "MIT",
       "repoUrl": "https://github.com/apollographql/apollo-server",
-      "versionedRepoUrl": "https://github.com/apollographql/apollo-server/tree/v4.11.2",
+      "versionedRepoUrl": "https://github.com/apollographql/apollo-server/tree/v4.10.3",
       "licenseFile": "node_modules/@apollo/server/README.md",
-      "licenseUrl": "https://github.com/apollographql/apollo-server/blob/v4.11.2/README.md",
+      "licenseUrl": "https://github.com/apollographql/apollo-server/blob/v4.10.3/README.md",
       "licenseTextSource": "spdx",
       "publisher": "Apollo",
       "email": "packages@apollographql.com"
@@ -58,15 +58,15 @@
       "licenseTextSource": "file",
       "publisher": "New Relic"
     },
-    "@newrelic/test-utilities@8.7.0": {
+    "@newrelic/test-utilities@8.5.0": {
       "name": "@newrelic/test-utilities",
-      "version": "8.7.0",
+      "version": "8.5.0",
       "range": "^8.5.0",
       "licenses": "Apache-2.0",
       "repoUrl": "https://github.com/newrelic/node-test-utilities",
-      "versionedRepoUrl": "https://github.com/newrelic/node-test-utilities/tree/v8.7.0",
+      "versionedRepoUrl": "https://github.com/newrelic/node-test-utilities/tree/v8.5.0",
       "licenseFile": "node_modules/@newrelic/test-utilities/LICENSE",
-      "licenseUrl": "https://github.com/newrelic/node-test-utilities/blob/v8.7.0/LICENSE",
+      "licenseUrl": "https://github.com/newrelic/node-test-utilities/blob/v8.5.0/LICENSE",
       "licenseTextSource": "file",
       "publisher": "New Relic Node.js agent team",
       "email": "nodejs@newrelic.com"
@@ -158,28 +158,28 @@
       "licenseTextSource": "file",
       "publisher": "Teddy Katz"
     },
-    "eslint@8.57.1": {
+    "eslint@8.57.0": {
       "name": "eslint",
-      "version": "8.57.1",
+      "version": "8.57.0",
       "range": "^8.24.0",
       "licenses": "MIT",
       "repoUrl": "https://github.com/eslint/eslint",
-      "versionedRepoUrl": "https://github.com/eslint/eslint/tree/v8.57.1",
+      "versionedRepoUrl": "https://github.com/eslint/eslint/tree/v8.57.0",
       "licenseFile": "node_modules/eslint/LICENSE",
-      "licenseUrl": "https://github.com/eslint/eslint/blob/v8.57.1/LICENSE",
+      "licenseUrl": "https://github.com/eslint/eslint/blob/v8.57.0/LICENSE",
       "licenseTextSource": "file",
       "publisher": "Nicholas C. Zakas",
       "email": "nicholas+npm@nczconsulting.com"
     },
-    "graphql@16.9.0": {
+    "graphql@16.8.1": {
       "name": "graphql",
-      "version": "16.9.0",
+      "version": "16.8.1",
       "range": "^16.6.0",
       "licenses": "MIT",
       "repoUrl": "https://github.com/graphql/graphql-js",
-      "versionedRepoUrl": "https://github.com/graphql/graphql-js/tree/v16.9.0",
+      "versionedRepoUrl": "https://github.com/graphql/graphql-js/tree/v16.8.1",
       "licenseFile": "node_modules/graphql/LICENSE",
-      "licenseUrl": "https://github.com/graphql/graphql-js/blob/v16.9.0/LICENSE",
+      "licenseUrl": "https://github.com/graphql/graphql-js/blob/v16.8.1/LICENSE",
       "licenseTextSource": "file"
     },
     "husky@6.0.0": {
@@ -208,29 +208,29 @@
       "publisher": "Andrey Okonetchnikov",
       "email": "andrey@okonet.ru"
     },
-    "lockfile-lint@4.14.0": {
+    "lockfile-lint@4.13.2": {
       "name": "lockfile-lint",
-      "version": "4.14.0",
+      "version": "4.13.2",
       "range": "^4.9.6",
       "licenses": "Apache-2.0",
       "repoUrl": "https://github.com/lirantal/lockfile-lint",
-      "versionedRepoUrl": "https://github.com/lirantal/lockfile-lint/tree/v4.14.0",
+      "versionedRepoUrl": "https://github.com/lirantal/lockfile-lint/tree/v4.13.2",
       "licenseFile": "node_modules/lockfile-lint/LICENSE",
-      "licenseUrl": "https://github.com/lirantal/lockfile-lint/blob/v4.14.0/LICENSE",
+      "licenseUrl": "https://github.com/lirantal/lockfile-lint/blob/v4.13.2/LICENSE",
       "licenseTextSource": "file",
       "publisher": "Liran Tal",
       "email": "liran.tal@gmail.com",
       "url": "https://github.com/lirantal"
     },
-    "newrelic@11.23.2": {
+    "newrelic@11.15.0": {
       "name": "newrelic",
-      "version": "11.23.2",
+      "version": "11.15.0",
       "range": "^11.15.0",
       "licenses": "Apache-2.0",
       "repoUrl": "https://github.com/newrelic/node-newrelic",
-      "versionedRepoUrl": "https://github.com/newrelic/node-newrelic/tree/v11.23.2",
+      "versionedRepoUrl": "https://github.com/newrelic/node-newrelic/tree/v11.15.0",
       "licenseFile": "node_modules/newrelic/LICENSE",
-      "licenseUrl": "https://github.com/newrelic/node-newrelic/blob/v11.23.2/LICENSE",
+      "licenseUrl": "https://github.com/newrelic/node-newrelic/blob/v11.15.0/LICENSE",
       "licenseTextSource": "file",
       "publisher": "New Relic Node.js agent team",
       "email": "nodejs@newrelic.com"
@@ -258,20 +258,6 @@
       "licenseUrl": "https://github.com/sinonjs/sinon/blob/v11.1.2/LICENSE",
       "licenseTextSource": "file",
       "publisher": "Christian Johansen"
-    },
-    "tap@16.3.10": {
-      "name": "tap",
-      "version": "16.3.10",
-      "range": "^16.3.4",
-      "licenses": "ISC",
-      "repoUrl": "https://github.com/tapjs/node-tap",
-      "versionedRepoUrl": "https://github.com/tapjs/node-tap/tree/v16.3.10",
-      "licenseFile": "node_modules/tap/LICENSE",
-      "licenseUrl": "https://github.com/tapjs/node-tap/blob/v16.3.10/LICENSE",
-      "licenseTextSource": "file",
-      "publisher": "Isaac Z. Schlueter",
-      "email": "i@izs.me",
-      "url": "http://blog.izs.me"
     },
     "tsd@0.18.0": {
       "name": "tsd",

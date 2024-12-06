@@ -9,7 +9,7 @@ const assert = require('node:assert')
 
 const { executeQuery, makeRequest } = require('../test-client')
 const agentTesting = require('../agent-testing')
-const promiseResolvers = require('./promise-resolvers')
+const promiseResolvers = require('../promise-resolvers')
 
 const ANON_PLACEHOLDER = '<anonymous>'
 const UNKNOWN_OPERATION = '<unknown>'

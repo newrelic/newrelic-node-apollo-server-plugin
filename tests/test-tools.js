@@ -16,8 +16,8 @@ module.exports = {
 const fs = require('node:fs')
 
 const utils = require('@newrelic/test-utilities')
-const setupErrorSchema = require('./error-setup')
-const { getTypeDefs, resolvers } = require('../data-definitions')
+const setupErrorSchema = require('./versioned/error-setup')
+const { getTypeDefs, resolvers } = require('./data-definitions')
 
 async function afterEach({ t, testDir }) {
   const { helper, expressServer, server } = t.nr
@@ -36,7 +36,7 @@ async function afterEach({ t, testDir }) {
 
 async function setupCoreTest({ t, testDir, agentConfig = {}, pluginConfig = {} } = {}) {
   const helper = utils.TestAgent.makeFullyInstrumented(agentConfig)
-  const createPlugin = require('../../lib/create-plugin')
+  const createPlugin = require('../lib/create-plugin')
   const nrApi = helper.getAgentApi()
   const instrumentationPlugin = createPlugin(nrApi, pluginConfig)
 
@@ -69,11 +69,11 @@ async function setupCoreTest({ t, testDir, agentConfig = {}, pluginConfig = {} }
 
 async function setupExpressTest({ t, testDir, agentConfig = {}, pluginConfig = {} } = {}) {
   const helper = utils.TestAgent.makeFullyInstrumented(agentConfig)
-  const createPlugin = require('../../lib/create-plugin')
+  const createPlugin = require('../lib/create-plugin')
   const nrApi = helper.getAgentApi()
   const instrumentationPlugin = createPlugin(nrApi, pluginConfig)
 
-  const express = require('express')
+  const express = loadModule('express', testDir)
   const apolloServerPkg = requireApolloServer(testDir, true)
   const { gql, ApolloServer, isApollo4 } = apolloServerPkg
 

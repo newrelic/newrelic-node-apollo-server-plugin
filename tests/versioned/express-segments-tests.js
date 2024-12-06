@@ -10,7 +10,7 @@ const assert = require('node:assert')
 const { executeQuery, executeQueryBatch } = require('../test-client')
 const { checkResult } = require('./common')
 const { assertSegments } = require('../custom-assertions')
-const promiseResolvers = require('./promise-resolvers')
+const promiseResolvers = require('../promise-resolvers')
 
 const ANON_PLACEHOLDER = '<anonymous>'
 const UNKNOWN_OPERATION = '<unknown>'
