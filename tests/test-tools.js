@@ -14,6 +14,7 @@ module.exports = {
 }
 
 const fs = require('node:fs')
+const path = require('node:path')
 
 const utils = require('@newrelic/test-utilities')
 const setupErrorSchema = require('./versioned/error-setup')
@@ -135,12 +136,17 @@ async function setupExpressTest({ t, testDir, agentConfig = {}, pluginConfig = {
  * @returns {{isApollo4: boolean, ApolloServer, gql, startStandaloneServer, graphql}}
  */
 function requireApolloServer(testDir, express = false) {
-  const isApollo4 = fs.existsSync('./node_modules/@apollo/server')
+  const isApollo4 = fs.existsSync(path.join(testDir, 'node_modules/@apollo/server'))
 
   if (isApollo4 === false) {
-    const ApolloServer =
-      express === false ? loadModule('apollo-server', testDir) : loadModule('apollo-server-express')
-    return { isApollo4, ApolloServer }
+    const apolloServer =
+      express === false
+        ? loadModule('apollo-server', testDir)
+        : loadModule('apollo-server-express', testDir)
+    return {
+      isApollo4,
+      ...apolloServer
+    }
   }
 
   const gql = loadModule('graphql-tag', testDir)

@@ -33,7 +33,7 @@ function constructSegments(firstSegmentName, operationSegments, isApollo4) {
   if (isApollo4) {
     return [firstSegmentName, [...operationSegments]]
   }
-  return ['Express/Router: /', [...operationSegments]]
+  return [firstSegmentName, ['Expressjs/Router: /', [...operationSegments]]]
 }
 
 const tests = []

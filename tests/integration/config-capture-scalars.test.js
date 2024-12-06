@@ -22,7 +22,7 @@ const tests = []
 tests.push({
   name: 'multi-level, should not capture scalar fields',
   async fn(t) {
-    const { helper, serverUrl, pluginConfig } = t.nr
+    const { helper, serverUrl, pluginConfig, isApollo4 } = t.nr
     const { promise, resolve } = promiseResolvers()
 
     const expectedName = 'GetAllForLibrary'
@@ -67,25 +67,50 @@ tests.push({
               `${RESOLVE_PREFIX}/library.magazines.issue`
             ]
 
-      const expectedSegments = [
-        `${TRANSACTION_PREFIX}//${operationPart}`,
-        [
-          'Nodejs/Middleware/Expressjs/query',
-          'Nodejs/Middleware/Expressjs/expressInit',
-          'Nodejs/Middleware/Expressjs/corsMiddleware',
-          'Nodejs/Middleware/Expressjs/jsonParser',
-
-          'Nodejs/Middleware/Expressjs/<anonymous>',
+      let expectedSegments
+      if (isApollo4 === true) {
+        expectedSegments = [
+          `${TRANSACTION_PREFIX}//${operationPart}`,
           [
-            `${OPERATION_PREFIX}/${operationPart}`,
+            'Nodejs/Middleware/Expressjs/query',
+            'Nodejs/Middleware/Expressjs/expressInit',
+            'Nodejs/Middleware/Expressjs/corsMiddleware',
+            'Nodejs/Middleware/Expressjs/jsonParser',
+            'Nodejs/Middleware/Expressjs/<anonymous>',
             [
-              `${RESOLVE_PREFIX}/library`,
-              ['timers.setTimeout', ['Callback: <anonymous>']],
-              ...librarySiblings
+              `${OPERATION_PREFIX}/${operationPart}`,
+              [
+                `${RESOLVE_PREFIX}/library`,
+                ['timers.setTimeout', ['Callback: <anonymous>']],
+                ...librarySiblings
+              ]
             ]
           ]
         ]
-      ]
+      } else {
+        // Less than Apollo4 has a different structure.
+        expectedSegments = [
+          `${TRANSACTION_PREFIX}//${operationPart}`,
+          [
+            'Nodejs/Middleware/Expressjs/query',
+            'Nodejs/Middleware/Expressjs/expressInit',
+            'Expressjs/Router: /',
+            [
+              'Nodejs/Middleware/Expressjs/corsMiddleware',
+              'Nodejs/Middleware/Expressjs/jsonParser',
+              'Nodejs/Middleware/Expressjs/<anonymous>',
+              [
+                `${OPERATION_PREFIX}/${operationPart}`,
+                [
+                  `${RESOLVE_PREFIX}/library`,
+                  ['timers.setTimeout', ['Callback: <anonymous>']],
+                  ...librarySiblings
+                ]
+              ]
+            ]
+          ]
+        ]
+      }
 
       // Exact match to ensure no extra fields snuck in
       assertSegments(transaction.trace.root, expectedSegments, { exact: true })
