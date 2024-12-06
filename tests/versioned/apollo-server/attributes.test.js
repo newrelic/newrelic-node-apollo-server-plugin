@@ -5,7 +5,17 @@
 
 'use strict'
 
-const { setupApolloServerTests } = require('./apollo-server-setup')
-const attributesTests = require('../attributes-tests')
+const test = require('node:test')
 
-setupApolloServerTests(attributesTests)
+const { afterEach, setupCoreTest } = require('../../test-tools')
+
+const attributesTestSuite = require('../attributes-tests')
+const { pluginConfig } = attributesTestSuite
+
+for (const attrTest of attributesTestSuite.tests) {
+  test(attrTest.name, async (t) => {
+    await setupCoreTest({ t, pluginConfig, testDir: __dirname })
+    await attrTest.fn(t)
+    await afterEach({ t, testDir: __dirname })
+  })
+}

@@ -7,7 +7,7 @@
 const utils = require('@newrelic/test-utilities')
 
 const federatedData = require('./federated-data-definitions')
-const { clearCachedModules } = require('../../utils')
+const { unloadModules } = require('../../test-tools')
 
 async function setupFederatedGateway({ instrumentSubGraphs, pluginConfig, agentConfig, ctx }) {
   // load default instrumentation. express being critical
@@ -90,18 +90,7 @@ async function teardownGateway({ ctx }) {
   ])
   helper.unload()
 
-  clearCachedModules(
-    [
-      'express',
-      'apollo-server',
-      '@apollo/server',
-      '@apollo/server/express4',
-      '@apollo/server/standalone',
-      '@apollo/gateway',
-      '@apollo/subgraph'
-    ],
-    __dirname
-  )
+  unloadModules(__dirname)
 }
 
 async function loadGateway({ ApolloServer, startStandaloneServer, services, plugins }) {

@@ -1,36 +1,27 @@
 /*
- * Copyright 2020 New Relic Corporation. All rights reserved.
+ * Copyright 2024 New Relic Corporation. All rights reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
 
 'use strict'
 
+const test = require('node:test')
+const assert = require('node:assert')
+
 const { executeQuery } = require('../test-client')
-const { setupEnvConfig } = require('../agent-testing')
-
-const { setupApolloServerTests } = require('./apollo-server-setup')
-
+const { afterEach, setupCoreTest } = require('../test-tools')
+const promiseResolvers = require('../promise-resolvers')
 const PluginStateLossTester = require('./plugin-state-loss-tester')
-const stateLossTester = new PluginStateLossTester()
 
-setupApolloServerTests({
-  suiteName: 'State Loss',
-  createTests: createStateLossTests,
-  startingPlugins: [stateLossTester.getCreatePlugin()]
-})
+const tests = []
 
-function createStateLossTests(t) {
-  setupEnvConfig(t)
-
-  t.afterEach(() => {
-    stateLossTester.clearStateLoss()
-  })
-
-  t.test('should not error when state loss prior to query', (t) => {
+tests.push({
+  name: 'should not error when state loss prior to query',
+  async fn(t) {
+    const { serverUrl, stateLossTester } = t.nr
+    const { promise, resolve } = promiseResolvers()
     stateLossTester.triggerOnRequestDidStart()
 
-    const { serverUrl } = t.context
-
     const expectedName = 'GetAllForLibrary'
     const query = `query ${expectedName} {
       library(branch: "downtown") {
@@ -48,26 +39,31 @@ function createStateLossTests(t) {
     }`
 
     executeQuery(serverUrl, query, (err, result) => {
-      t.error(err)
+      assert.ifError(err)
 
       if (result.errors) {
         result.errors.forEach((error) => {
-          t.error(error)
+          assert.ifError(error)
         })
       }
 
-      t.ok(result.data)
-      t.ok(result.data.library)
+      assert.ok(result.data)
+      assert.ok(result.data.library)
 
-      t.end()
+      resolve()
     })
-  })
 
-  t.test('should not error when state loss just before sending response', (t) => {
+    await promise
+  }
+})
+
+tests.push({
+  name: 'should not error when state loss just before sending response',
+  async fn(t) {
+    const { serverUrl, stateLossTester } = t.nr
+    const { promise, resolve } = promiseResolvers()
     stateLossTester.tiggerOnWillSendResponse()
 
-    const { serverUrl } = t.context
-
     const expectedName = 'GetAllForLibrary'
     const query = `query ${expectedName} {
       library(branch: "downtown") {
@@ -85,18 +81,29 @@ function createStateLossTests(t) {
     }`
 
     executeQuery(serverUrl, query, (err, result) => {
-      t.error(err)
+      assert.ifError(err)
 
       if (result.errors) {
         result.errors.forEach((error) => {
-          t.error(error)
+          assert.ifError(error)
         })
       }
 
-      t.ok(result.data)
-      t.ok(result.data.library)
+      assert.ok(result.data)
+      assert.ok(result.data.library)
 
-      t.end()
+      resolve()
     })
+
+    await promise
+  }
+})
+
+for (const stateTest of tests) {
+  test(stateTest.name, async (t) => {
+    await setupCoreTest({ t, testDir: __dirname })
+    t.nr.stateLossTester = new PluginStateLossTester()
+    await stateTest.fn(t)
+    await afterEach({ t, testDir: __dirname })
   })
 }

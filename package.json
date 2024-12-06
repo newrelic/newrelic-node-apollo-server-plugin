@@ -5,7 +5,7 @@
   "main": "./index.js",
   "types": "./index.d.ts",
   "scripts": {
-    "integration": "rm -f newrelic_agent.log && time c8 -o ./coverage/integration tap --test-regex='(\\/|^tests\\/integration\\/.*\\.test\\.js)$' --no-coverage",
+    "integration": "rm -f newrelic_agent.log && time c8 -o ./coverage/integration borp 'tests/integration/**/*.test.js'",
     "lint": "eslint *.js lib tests",
     "lint:fix": "eslint --fix *.js lib tests",
     "lint:lockfile": "lockfile-lint --path package-lock.json --type npm --allowed-hosts npm --validate-https --validate-integrity",
@@ -58,7 +58,6 @@
     "newrelic": "^11.15.0",
     "prettier": "^2.3.2",
     "sinon": "^11.1.2",
-    "tap": "^16.3.4",
     "tsd": "^0.18.0"
   },
   "peerDependencies": {

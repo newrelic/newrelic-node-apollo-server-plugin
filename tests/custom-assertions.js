@@ -4,6 +4,64 @@
  */
 
 'use strict'
+
+function isSimpleObject(obj) {
+  return Object.prototype.toString.call(obj) === '[object Object]' && obj !== null
+}
+
+/**
+ * @param {Metrics} metrics         metrics under test
+ * @param {Array} expected          Array of metric data where metric data is in this form:
+ *                                  [
+ *                                    {
+ *                                      “name”:”name of metric”,
+ *                                      “scope”:”scope of metric”,
+ *                                    },
+ *                                    [count,
+ *                                      total time,
+ *                                      exclusive time,
+ *                                      min time,
+ *                                      max time,
+ *                                      sum of squares]
+ *                                  ]
+ * @param {boolean} exclusive       When true, found and expected metric lengths should match
+ * @param {boolean} assertValues    When true, metric values must match expected
+ * @param {object} [deps] Injected dependencies.
+ * @param {object} [deps.assert] Assertion library to use.
+ */
+function assertMetrics(
+  metrics,
+  expected,
+  exclusive = false,
+  assertValues = false,
+  { assert = require('node:assert') } = {}
+) {
+  // Assertions about arguments because maybe something returned undefined
+  // unexpectedly and is passed in, or a return type changed. This will
+  // hopefully help catch that and make it obvious.
+  assert.ok(isSimpleObject(metrics), 'first argument required to be an Metrics object')
+  assert.ok(Array.isArray(expected), 'second argument required to be an array of metrics')
+  assert.ok(typeof exclusive === 'boolean', 'third argument required to be a boolean if provided')
+
+  if (assertValues === undefined) {
+    assertValues = true
+  }
+
+  for (let i = 0, len = expected.length; i < len; i++) {
+    const expectedMetric = expected[i]
+    const metric = metrics.getMetric(expectedMetric[0].name, expectedMetric[0].scope)
+    assert.ok(metric, `should find ${expectedMetric[0].name}`)
+    if (assertValues) {
+      assert.deepEqual(metric.toJSON(), expectedMetric[1])
+    }
+  }
+
+  if (exclusive) {
+    const metricsList = metrics.toJSON()
+    assert.equal(metricsList.length, expected.length)
+  }
+}
+
 /**
  * @param {TraceSegment} parent     Parent segment
  * @param {Array} expected          Array of strings that represent segment names.
@@ -81,7 +139,7 @@ function assertSegments(parent, expected, options, { assert = require('node:asse
       if (typeof sequenceItem === 'string') {
         // find corresponding child in parent
         for (let j = 0; j < parent.children.length; j++) {
-          if (parent.children[j].name === sequenceItem) {
+          if (parent.children[j].name.startsWith(sequenceItem) === true) {
             child = parent.children[j]
           }
         }
@@ -94,6 +152,67 @@ function assertSegments(parent, expected, options, { assert = require('node:asse
   }
 }
 
+const TYPE_MAPPINGS = {
+  String: 'string',
+  Number: 'number'
+}
+
+/**
+ * Like `tap.prototype.match`. Verifies that `actual` satisfies the shape
+ * provided by `expected`. This does actual assertions with `node:assert`
+ *
+ * There is limited support for type matching
+ *
+ * @example
+ * match(obj, {
+ *  key: String,
+ *  number: Number
+ * })
+ *
+ * @example
+ * const input = {
+ *   foo: /^foo.+bar$/,
+ *   bar: [1, 2, '3']
+ * }
+ * match(input, {
+ *   foo: 'foo is bar',
+ *   bar: [1, 2, '3']
+ * })
+ * match(input, {
+ *   foo: 'foo is bar',
+ *   bar: [1, 2, '3', 4]
+ * })
+ *
+ * @param {string|object} actual The entity to verify.
+ * @param {string|object} expected What the entity should match against.
+ * @param {object} [deps] Injected dependencies.
+ * @param {object} [deps.assert] Assertion library to use.
+ */
+function match(actual, expected, { assert = require('node:assert') } = {}) {
+  // match substring
+  if (typeof actual === 'string' && typeof expected === 'string') {
+    assert.ok(actual.indexOf(expected) > -1)
+    return
+  }
+
+  for (const key in expected) {
+    if (key in actual) {
+      if (typeof expected[key] === 'function') {
+        const type = expected[key]
+        assert.ok(typeof actual[key] === TYPE_MAPPINGS[type.name])
+      } else if (expected[key] instanceof RegExp) {
+        assert.ok(expected[key].test(actual[key]))
+      } else if (typeof expected[key] === 'object' && expected[key] !== null) {
+        match(actual[key], expected[key], { assert })
+      } else {
+        assert.equal(actual[key], expected[key])
+      }
+    }
+  }
+}
+
 module.exports = {
-  assertSegments
+  assertMetrics,
+  assertSegments,
+  match
 }

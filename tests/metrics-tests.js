@@ -1,75 +1,110 @@
 /*
- * Copyright 2020 New Relic Corporation. All rights reserved.
+ * Copyright 2024 New Relic Corporation. All rights reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
 
 'use strict'
 
-const crypto = require('crypto')
+const assert = require('node:assert')
+const crypto = require('node:crypto')
+
 const { executeQuery, executeQueryBatch, makeRequest } = require('./test-client')
+const { assertMetrics } = require('./custom-assertions')
+const promiseResolvers = require('./promise-resolvers')
 
 const ANON_PLACEHOLDER = '<anonymous>'
 const UNKNOWN_OPERATION = '<unknown>'
-
 const OPERATION_PREFIX = 'GraphQL/operation/ApolloServer'
 const FIELD_PREFIX = 'GraphQL/field/ApolloServer'
 const RESOLVE_PREFIX = 'GraphQL/resolve/ApolloServer'
 const ARG_PREFIX = 'GraphQL/arg/ApolloServer'
 
-module.exports = createMetricsTests
+const tests = []
 
-function createMetricsTests(captureFieldMetrics, t) {
-  t.test('anonymous query, single level metrics', (t) => {
-    const { helper, serverUrl } = t.context
+tests.push({
+  name: 'anonymous query, single level metrics',
+  async fn(t) {
+    const {
+      helper,
+      serverUrl,
+      pluginConfig: { captureFieldMetrics }
+    } = t.nr
+    const { promise, resolve } = promiseResolvers()
 
     const query = `query {
       hello
     }`
 
-    helper.agent.once('transactionFinished', () => {
+    helper.agent.once('transactionFinished', (tx) => {
       const operationPart = `query/${ANON_PLACEHOLDER}/hello`
-      const metrics = [`${OPERATION_PREFIX}/${operationPart}`, `${RESOLVE_PREFIX}/Query.hello`]
+      const expectedMetrics = [
+        [{ name: `${OPERATION_PREFIX}/${operationPart}` }],
+        [{ name: `${RESOLVE_PREFIX}/Query.hello` }]
+      ]
 
       if (captureFieldMetrics) {
-        metrics.push(`${FIELD_PREFIX}/Query.hello`)
+        expectedMetrics.push([{ name: `${FIELD_PREFIX}/Query.hello` }])
       }
 
-      t.metrics(metrics)
+      assertMetrics(tx.metrics, expectedMetrics)
     })
 
     executeQuery(serverUrl, query, (err) => {
-      t.error(err)
-      t.end()
+      assert.ifError(err)
+      resolve()
     })
-  })
 
-  t.test('named query, single level', (t) => {
-    const { helper, serverUrl } = t.context
+    await promise
+  }
+})
+
+tests.push({
+  name: 'named query, single level',
+  async fn(t) {
+    const {
+      helper,
+      serverUrl,
+      pluginConfig: { captureFieldMetrics }
+    } = t.nr
+    const { promise, resolve } = promiseResolvers()
 
     const expectedName = 'HeyThere'
     const query = `query ${expectedName} {
       hello
     }`
 
-    helper.agent.once('transactionFinished', () => {
+    helper.agent.once('transactionFinished', (tx) => {
       const operationPart = `query/${expectedName}/hello`
-      const metrics = [`${OPERATION_PREFIX}/${operationPart}`, `${RESOLVE_PREFIX}/Query.hello`]
+      const expectedMetrics = [
+        [{ name: `${OPERATION_PREFIX}/${operationPart}` }],
+        [{ name: `${RESOLVE_PREFIX}/Query.hello` }]
+      ]
 
       if (captureFieldMetrics) {
-        metrics.push(`${FIELD_PREFIX}/Query.hello`)
+        expectedMetrics.push([{ name: `${FIELD_PREFIX}/Query.hello` }])
       }
 
-      t.metrics(metrics)
+      assertMetrics(tx.metrics, expectedMetrics)
     })
 
     executeQuery(serverUrl, query, (err) => {
-      t.error(err)
-      t.end()
+      assert.ifError(err)
+      resolve()
     })
-  })
 
-  t.test('multi-level, should use field name not path for resolve metrics', (t) => {
-    const { helper, serverUrl } = t.context
+    await promise
+  }
+})
+
+tests.push({
+  name: 'multi-level, should use field name not path for resolve metrics',
+  async fn(t) {
+    const {
+      helper,
+      serverUrl,
+      pluginConfig: { captureFieldMetrics }
+    } = t.nr
+    const { promise, resolve } = promiseResolvers()
 
     const query = `query {
       libraries {
@@ -84,39 +119,49 @@ function createMetricsTests(captureFieldMetrics, t) {
 
     const path = 'libraries.books'
 
-    helper.agent.once('transactionFinished', () => {
+    helper.agent.once('transactionFinished', (tx) => {
       const operationPart = `query/${ANON_PLACEHOLDER}/${path}`
 
-      const metrics = [
-        `${OPERATION_PREFIX}/${operationPart}`,
-        `${RESOLVE_PREFIX}/Query.libraries`,
-        `${RESOLVE_PREFIX}/Library.books`,
-        `${RESOLVE_PREFIX}/Book.author`
+      const expectedMetrics = [
+        [{ name: `${OPERATION_PREFIX}/${operationPart}` }],
+        [{ name: `${RESOLVE_PREFIX}/Query.libraries` }],
+        [{ name: `${RESOLVE_PREFIX}/Library.books` }],
+        [{ name: `${RESOLVE_PREFIX}/Book.author` }]
       ]
 
       if (captureFieldMetrics) {
         const fieldMetrics = [
-          `${FIELD_PREFIX}/Query.libraries`,
-          `${FIELD_PREFIX}/Library.books`,
-          `${FIELD_PREFIX}/Book.title`,
-          `${FIELD_PREFIX}/Book.author`,
-          `${FIELD_PREFIX}/Author.name`
+          [{ name: `${FIELD_PREFIX}/Query.libraries` }],
+          [{ name: `${FIELD_PREFIX}/Library.books` }],
+          [{ name: `${FIELD_PREFIX}/Book.title` }],
+          [{ name: `${FIELD_PREFIX}/Book.author` }],
+          [{ name: `${FIELD_PREFIX}/Author.name` }]
         ]
 
-        metrics.push(...fieldMetrics)
+        expectedMetrics.push(...fieldMetrics)
       }
 
-      t.metrics(metrics)
+      assertMetrics(tx.metrics, expectedMetrics)
     })
 
     executeQuery(serverUrl, query, (err) => {
-      t.error(err)
-      t.end()
+      assert.ifError(err)
+      resolve()
     })
-  })
 
-  t.test('batch query should generate metrics for nested operations', (t) => {
-    const { helper, serverUrl } = t.context
+    await promise
+  }
+})
+
+tests.push({
+  name: 'batch query should generate metrics for nested operations',
+  async fn(t) {
+    const {
+      helper,
+      serverUrl,
+      pluginConfig: { captureFieldMetrics }
+    } = t.nr
+    const { promise, resolve } = promiseResolvers()
 
     const expectedName1 = 'GetBookForLibrary'
     const query1 = `query ${expectedName1} {
@@ -138,50 +183,60 @@ function createMetricsTests(captureFieldMetrics, t) {
 
     const queries = [query1, query2]
 
-    helper.agent.once('transactionFinished', () => {
+    helper.agent.once('transactionFinished', (tx) => {
       const operationPart1 = `query/${expectedName1}/${path1}`
       const operationPart2 = `mutation/${ANON_PLACEHOLDER}/addThing`
 
       const operationMetrics1 = [
-        `${OPERATION_PREFIX}/${operationPart1}`,
-        `${RESOLVE_PREFIX}/Query.library`,
-        `${RESOLVE_PREFIX}/Library.books`,
-        `${RESOLVE_PREFIX}/Book.author`
+        [{ name: `${OPERATION_PREFIX}/${operationPart1}` }],
+        [{ name: `${RESOLVE_PREFIX}/Query.library` }],
+        [{ name: `${RESOLVE_PREFIX}/Library.books` }],
+        [{ name: `${RESOLVE_PREFIX}/Book.author` }]
       ]
 
       const operationMetrics2 = [
-        `${OPERATION_PREFIX}/${operationPart2}`,
-        `${RESOLVE_PREFIX}/Mutation.addThing`
+        [{ name: `${OPERATION_PREFIX}/${operationPart2}` }],
+        [{ name: `${RESOLVE_PREFIX}/Mutation.addThing` }]
       ]
 
       if (captureFieldMetrics) {
         const fieldMetrics1 = [
-          `${FIELD_PREFIX}/Query.library`,
-          `${ARG_PREFIX}/Query.library/branch`,
-          `${FIELD_PREFIX}/Library.books`,
-          `${FIELD_PREFIX}/Book.title`,
-          `${FIELD_PREFIX}/Book.author`,
-          `${FIELD_PREFIX}/Author.name`
+          [{ name: `${FIELD_PREFIX}/Query.library` }],
+          [{ name: `${ARG_PREFIX}/Query.library/branch` }],
+          [{ name: `${FIELD_PREFIX}/Library.books` }],
+          [{ name: `${FIELD_PREFIX}/Book.title` }],
+          [{ name: `${FIELD_PREFIX}/Book.author` }],
+          [{ name: `${FIELD_PREFIX}/Author.name` }]
         ]
 
         operationMetrics1.push(...fieldMetrics1)
 
-        const fieldMetrics2 = [`${ARG_PREFIX}/Mutation.addThing/name`]
+        const fieldMetrics2 = [[{ name: `${ARG_PREFIX}/Mutation.addThing/name` }]]
 
         operationMetrics2.push(...fieldMetrics2)
       }
 
-      t.metrics([...operationMetrics1, ...operationMetrics2])
+      assertMetrics(tx.metrics, [...operationMetrics1, ...operationMetrics2])
     })
 
     executeQueryBatch(serverUrl, queries, (err) => {
-      t.error(err)
-      t.end()
+      assert.ifError(err)
+      resolve()
     })
-  })
 
-  t.test('input type query with multiple fields', (t) => {
-    const { helper, serverUrl } = t.context
+    await promise
+  }
+})
+
+tests.push({
+  name: 'input type query with multiple fields',
+  async fn(t) {
+    const {
+      helper,
+      serverUrl,
+      pluginConfig: { captureFieldMetrics }
+    } = t.nr
+    const { promise, resolve } = promiseResolvers()
     const expectedName = 'FindBooks'
     const path = 'searchByBook'
 
@@ -192,33 +247,43 @@ function createMetricsTests(captureFieldMetrics, t) {
       }
     }`
 
-    helper.agent.once('transactionFinished', () => {
+    helper.agent.once('transactionFinished', (tx) => {
       const operationPart = `query/${expectedName}/${path}`
       const operationMetrics = [
-        `${OPERATION_PREFIX}/${operationPart}`,
-        `${RESOLVE_PREFIX}/Query.${path}`
+        [{ name: `${OPERATION_PREFIX}/${operationPart}` }],
+        [{ name: `${RESOLVE_PREFIX}/Query.${path}` }]
       ]
 
       if (captureFieldMetrics) {
         const fieldMetrics = [
-          `${ARG_PREFIX}/Query.${path}/book.author.name`,
-          `${FIELD_PREFIX}/Book.title`,
-          `${FIELD_PREFIX}/Book.isbn`
+          [{ name: `${ARG_PREFIX}/Query.${path}/book.author.name` }],
+          [{ name: `${FIELD_PREFIX}/Book.title` }],
+          [{ name: `${FIELD_PREFIX}/Book.isbn` }]
         ]
         operationMetrics.push(...fieldMetrics)
       }
 
-      t.metrics(operationMetrics)
+      assertMetrics(tx.metrics, operationMetrics)
     })
 
     executeQuery(serverUrl, query, (err) => {
-      t.error(err)
-      t.end()
+      assert.ifError(err)
+      resolve()
     })
-  })
 
-  t.test('should use the context.source when executing a persisted query', (t) => {
-    const { helper, serverUrl } = t.context
+    await promise
+  }
+})
+
+tests.push({
+  name: 'should use the context.source when executing a persisted query',
+  async fn(t) {
+    const {
+      helper,
+      serverUrl,
+      pluginConfig: { captureFieldMetrics }
+    } = t.nr
+    const { promise, resolve } = promiseResolvers()
 
     const query = '{ libraries { books { title author { name } } } }'
     const path = 'libraries.books'
@@ -228,45 +293,51 @@ function createMetricsTests(captureFieldMetrics, t) {
     const persistedQuery = `${serverUrl}?extensions={"persistedQuery":{"version":1,
       "sha256Hash":"${querySha}"}}`
 
-    helper.agent.once('transactionFinished', () => {
+    helper.agent.once('transactionFinished', (tx) => {
       const operationPart = `query/${ANON_PLACEHOLDER}/${path}`
 
-      const metrics = [
-        `${OPERATION_PREFIX}/${operationPart}`,
-        `${RESOLVE_PREFIX}/Query.libraries`,
-        `${RESOLVE_PREFIX}/Library.books`,
-        `${RESOLVE_PREFIX}/Book.author`
+      const expectedMetrics = [
+        [{ name: `${OPERATION_PREFIX}/${operationPart}` }],
+        [{ name: `${RESOLVE_PREFIX}/Query.libraries` }],
+        [{ name: `${RESOLVE_PREFIX}/Library.books` }],
+        [{ name: `${RESOLVE_PREFIX}/Book.author` }]
       ]
 
       if (captureFieldMetrics) {
         const fieldMetrics = [
-          `${FIELD_PREFIX}/Query.libraries`,
-          `${FIELD_PREFIX}/Library.books`,
-          `${FIELD_PREFIX}/Book.title`,
-          `${FIELD_PREFIX}/Book.author`,
-          `${FIELD_PREFIX}/Author.name`
+          [{ name: `${FIELD_PREFIX}/Query.libraries` }],
+          [{ name: `${FIELD_PREFIX}/Library.books` }],
+          [{ name: `${FIELD_PREFIX}/Book.title` }],
+          [{ name: `${FIELD_PREFIX}/Book.author` }],
+          [{ name: `${FIELD_PREFIX}/Author.name` }]
         ]
-        metrics.push(...fieldMetrics)
+        expectedMetrics.push(...fieldMetrics)
       }
 
-      t.metrics(metrics)
+      assertMetrics(tx.metrics, expectedMetrics)
     })
 
     // first make a request with persistedQuery extension enabled and the query to persist
     makeRequest(withQuery, null, (err) => {
-      t.error(err)
+      assert.ifError(err)
 
       // lastly, make a request with persistedQuery extension enabled
       // and without the query it should properly pull from query cache
       makeRequest(persistedQuery, null, (err) => {
-        t.error(err)
-        t.end()
+        assert.ifError(err)
+        resolve()
       })
     })
-  })
 
-  t.test('when cannot parse, should have unknown placeholder metric', (t) => {
-    const { helper, serverUrl } = t.context
+    await promise
+  }
+})
+
+tests.push({
+  name: 'when cannot parse, should have unknown placeholder metric',
+  async fn(t) {
+    const { helper, serverUrl } = t.nr
+    const { promise, resolve } = promiseResolvers()
 
     const invalidQuery = `query {
       libraries {
@@ -279,19 +350,29 @@ function createMetricsTests(captureFieldMetrics, t) {
       }
     ` // missing closing }
 
-    helper.agent.once('transactionFinished', () => {
-      t.metrics([`${OPERATION_PREFIX}/${UNKNOWN_OPERATION}`])
+    helper.agent.once('transactionFinished', (tx) => {
+      assertMetrics(tx.metrics, [[{ name: `${OPERATION_PREFIX}/${UNKNOWN_OPERATION}` }]])
     })
 
     executeQuery(serverUrl, invalidQuery, (err) => {
-      t.error(err)
+      assert.ifError(err)
 
-      t.end()
+      resolve()
     })
-  })
 
-  t.test('named query with fragment, query first', (t) => {
-    const { helper, serverUrl } = t.context
+    await promise
+  }
+})
+
+tests.push({
+  name: 'named query with fragment, query first',
+  async fn(t) {
+    const {
+      helper,
+      serverUrl,
+      pluginConfig: { captureFieldMetrics }
+    } = t.nr
+    const { promise, resolve } = promiseResolvers()
 
     const expectedName = 'GetBookForLibrary'
     const query = `query ${expectedName} {
@@ -310,40 +391,50 @@ function createMetricsTests(captureFieldMetrics, t) {
 
     const path = 'library.books.LibraryBook'
 
-    helper.agent.once('transactionFinished', () => {
+    helper.agent.once('transactionFinished', (tx) => {
       const operationPart = `query/${expectedName}/${path}`
 
-      const metrics = [
-        `${OPERATION_PREFIX}/${operationPart}`,
-        `${RESOLVE_PREFIX}/Query.library`,
-        `${RESOLVE_PREFIX}/Library.books`,
-        `${RESOLVE_PREFIX}/Book.author`
+      const expectedMetrics = [
+        [{ name: `${OPERATION_PREFIX}/${operationPart}` }],
+        [{ name: `${RESOLVE_PREFIX}/Query.library` }],
+        [{ name: `${RESOLVE_PREFIX}/Library.books` }],
+        [{ name: `${RESOLVE_PREFIX}/Book.author` }]
       ]
 
       if (captureFieldMetrics) {
         const fieldMetrics = [
-          `${FIELD_PREFIX}/Query.library`,
-          `${ARG_PREFIX}/Query.library/branch`,
-          `${FIELD_PREFIX}/Library.books`,
-          `${FIELD_PREFIX}/Book.title`,
-          `${FIELD_PREFIX}/Book.author`,
-          `${FIELD_PREFIX}/Author.name`
+          [{ name: `${FIELD_PREFIX}/Query.library` }],
+          [{ name: `${ARG_PREFIX}/Query.library/branch` }],
+          [{ name: `${FIELD_PREFIX}/Library.books` }],
+          [{ name: `${FIELD_PREFIX}/Book.title` }],
+          [{ name: `${FIELD_PREFIX}/Book.author` }],
+          [{ name: `${FIELD_PREFIX}/Author.name` }]
         ]
 
-        metrics.push(...fieldMetrics)
+        expectedMetrics.push(...fieldMetrics)
       }
 
-      t.metrics(metrics)
+      assertMetrics(tx.metrics, expectedMetrics)
     })
 
     executeQuery(serverUrl, query, (err) => {
-      t.error(err)
-      t.end()
+      assert.ifError(err)
+      resolve()
     })
-  })
 
-  t.test('named query with fragment, fragment first', (t) => {
-    const { helper, serverUrl } = t.context
+    await promise
+  }
+})
+
+tests.push({
+  name: 'named query with fragment, fragment first',
+  async fn(t) {
+    const {
+      helper,
+      serverUrl,
+      pluginConfig: { captureFieldMetrics }
+    } = t.nr
+    const { promise, resolve } = promiseResolvers()
 
     const expectedName = 'GetBookForLibrary'
     const query = `fragment LibraryBook on Book {
@@ -362,35 +453,41 @@ function createMetricsTests(captureFieldMetrics, t) {
 
     const path = 'library.books.LibraryBook'
 
-    helper.agent.once('transactionFinished', () => {
+    helper.agent.once('transactionFinished', (tx) => {
       const operationPart = `query/${expectedName}/${path}`
 
-      const metrics = [
-        `${OPERATION_PREFIX}/${operationPart}`,
-        `${RESOLVE_PREFIX}/Query.library`,
-        `${RESOLVE_PREFIX}/Library.books`,
-        `${RESOLVE_PREFIX}/Book.author`
+      const expectedMetrics = [
+        [{ name: `${OPERATION_PREFIX}/${operationPart}` }],
+        [{ name: `${RESOLVE_PREFIX}/Query.library` }],
+        [{ name: `${RESOLVE_PREFIX}/Library.books` }],
+        [{ name: `${RESOLVE_PREFIX}/Book.author` }]
       ]
 
       if (captureFieldMetrics) {
         const fieldMetrics = [
-          `${FIELD_PREFIX}/Query.library`,
-          `${ARG_PREFIX}/Query.library/branch`,
-          `${FIELD_PREFIX}/Library.books`,
-          `${FIELD_PREFIX}/Book.title`,
-          `${FIELD_PREFIX}/Book.author`,
-          `${FIELD_PREFIX}/Author.name`
+          [{ name: `${FIELD_PREFIX}/Query.library` }],
+          [{ name: `${ARG_PREFIX}/Query.library/branch` }],
+          [{ name: `${FIELD_PREFIX}/Library.books` }],
+          [{ name: `${FIELD_PREFIX}/Book.title` }],
+          [{ name: `${FIELD_PREFIX}/Book.author` }],
+          [{ name: `${FIELD_PREFIX}/Author.name` }]
         ]
 
-        metrics.push(...fieldMetrics)
+        expectedMetrics.push(...fieldMetrics)
       }
 
-      t.metrics(metrics)
+      assertMetrics(tx.metrics, expectedMetrics)
     })
 
     executeQuery(serverUrl, query, (err) => {
-      t.error(err)
-      t.end()
+      assert.ifError(err)
+      resolve()
     })
-  })
+
+    await promise
+  }
+})
+
+module.exports = {
+  tests
 }

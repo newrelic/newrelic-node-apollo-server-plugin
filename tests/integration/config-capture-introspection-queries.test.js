@@ -1,13 +1,17 @@
 /*
- * Copyright 2020 New Relic Corporation. All rights reserved.
+ * Copyright 2024 New Relic Corporation. All rights reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
 
 'use strict'
 
+const test = require('node:test')
+const assert = require('node:assert')
+
 const { executeQuery } = require('../test-client')
-const { setupEnvConfig } = require('../agent-testing')
-const { setupApolloServerTests } = require('./apollo-server-setup')
+const { afterEach, setupCoreTest } = require('../test-tools')
+const promiseResolvers = require('../promise-resolvers')
+
 const queries = [
   `{
     __schema {
@@ -27,75 +31,91 @@ const queries = [
   }`
 ]
 
-setupApolloServerTests({
-  suiteName: 'default',
-  createTests: createCaptureIntrospectionTests.bind(null, true)
-})
+const defaultTests = generateTests(true)
+const captureTrueTests = generateTests(false)
+const captureFalseTests = generateTests(true)
 
-setupApolloServerTests({
-  suiteName: 'captureIntrospectionQueries: true',
-  createTests: createCaptureIntrospectionTests.bind(null, false),
-  pluginConfig: {
-    captureIntrospectionQueries: true
+runTests({ tests: defaultTests })
+  .then(() =>
+    runTests({
+      tests: captureTrueTests,
+      suiteName: 'captureIntrospectionQueries: true',
+      pluginConfig: { captureIntrospectionQueries: true }
+    })
+  )
+  .then(() =>
+    runTests({
+      tests: captureFalseTests,
+      suiteName: 'captureIntrospectionQueries: false',
+      pluginConfig: { captureIntrospectionQueries: false }
+    })
+  )
+
+async function runTests({ tests, suiteName = 'default', pluginConfig = {} } = {}) {
+  for (const tst of tests) {
+    test(`(${suiteName}) ${tst.name}`, async (t) => {
+      await setupCoreTest({ t, pluginConfig, testDir: __dirname })
+      await tst.fn(t)
+      await afterEach({ t, testDir: __dirname })
+    })
   }
-})
+}
 
-setupApolloServerTests({
-  suiteName: 'captureIntrospectionQueries: false',
-  createTests: createCaptureIntrospectionTests.bind(null, true),
-  pluginConfig: {
-    captureIntrospectionQueries: false
-  }
-})
+function generateTests(ignore) {
+  const tests = []
 
-function createCaptureIntrospectionTests(ignore, t) {
-  setupEnvConfig(t)
-
-  queries.forEach((query) => {
-    t.test(
-      `should ${ignore ? '' : 'not '}ignore transaction when
-captureIntrospectionQuery is ${!ignore} and query contains
-introspection types`,
-      (t) => {
-        const { helper, serverUrl } = t.context
+  for (const [qi, query] of queries.entries()) {
+    tests.push({
+      name: `should ${
+        ignore ? '' : 'not '
+      }ignore transaction when captureIntrospectionQuery is ${!ignore} and query contains introspection types (query ${qi})`,
+      async fn(t) {
+        const { helper, serverUrl } = t.nr
+        const { promise, resolve } = promiseResolvers()
 
         helper.agent.once('transactionFinished', (transaction) => {
-          t.equal(transaction.ignore, ignore, `should set transaction.ignore to ${ignore}`)
+          assert.equal(transaction.ignore, ignore, `should set transaction.ignore to ${ignore}`)
         })
 
         executeQuery(serverUrl, query, (err) => {
-          t.error(err)
-          t.end()
+          assert.ifError(err)
+          resolve()
         })
+
+        await promise
       }
-    )
-  })
+    })
 
-  t.test(
-    `should not ignore transaction when
-captureIntrospectionQuery is ${!ignore} and query
-does not contain an introspection type`,
-    (t) => {
-      const { helper, serverUrl } = t.context
+    tests.push({
+      name: `should not ignore transaction when captureIntrospectionQuery is ${!ignore} and query does not contain an introspection type (query ${qi})`,
+      async fn(t) {
+        const { helper, serverUrl } = t.nr
+        const { promise, resolve } = promiseResolvers()
 
-      helper.agent.once('transactionFinished', (transaction) => {
-        t.notOk(
-          transaction.ignore,
-          'should set transaction.ignore to false when not an introspection type'
-        )
-      })
+        helper.agent.once('transactionFinished', (transaction) => {
+          assert.equal(
+            transaction.ignore,
+            false,
+            'should set transaction.ignore to false when not an introspection type'
+          )
+        })
 
-      const query = `query GetAllForLibrary {
+        const query = `query GetAllForLibrary {
         library(branch: "downtown") {
           books {
             title
           }
         }
       }`
-      executeQuery(serverUrl, query, (err) => {
-        t.error(err)
-        t.end()
-      })
-    }
-  )
+        executeQuery(serverUrl, query, (err) => {
+          assert.ifError(err)
+          resolve()
+        })
+
+        await promise
+      }
+    })
+  }
+
+  return tests
 }
