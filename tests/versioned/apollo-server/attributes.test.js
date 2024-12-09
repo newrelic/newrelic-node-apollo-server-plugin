@@ -12,10 +12,13 @@ const { afterEach, setupCoreTest } = require('../../test-tools')
 const attributesTestSuite = require('../attributes-tests')
 const { pluginConfig } = attributesTestSuite
 
+test.afterEach(async (ctx) => {
+  await afterEach({ t: ctx, testDir: __dirname })
+})
+
 for (const attrTest of attributesTestSuite.tests) {
   test(attrTest.name, async (t) => {
     await setupCoreTest({ t, pluginConfig, testDir: __dirname })
     await attrTest.fn(t)
-    await afterEach({ t, testDir: __dirname })
   })
 }

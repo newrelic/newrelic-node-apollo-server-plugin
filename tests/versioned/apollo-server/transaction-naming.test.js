@@ -11,11 +11,14 @@ const { afterEach, setupCoreTest } = require('../../test-tools')
 
 const transactionNamingTests = require('../transaction-naming-tests')
 
+test.afterEach(async (ctx) => {
+  await afterEach({ t: ctx, testDir: __dirname })
+})
+
 for (const txTest of transactionNamingTests.tests) {
   test(txTest.name, async (t) => {
     await setupCoreTest({ t, testDir: __dirname })
     t.nr.EXPECTED_PREFIX = `WebTransaction/Expressjs/POST`
     await txTest.fn(t)
-    await afterEach({ t, testDir: __dirname })
   })
 }

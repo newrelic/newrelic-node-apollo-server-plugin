@@ -15,10 +15,13 @@ const agentConfig = {
   distributed_tracing: { enabled: true } // enable span testing
 }
 
+test.afterEach(async (ctx) => {
+  await afterEach({ t: ctx, testDir: __dirname })
+})
+
 for (const errorTest of errorsTests.tests) {
   test(errorTest.name, async (t) => {
     await setupExpressTest({ t, agentConfig, pluginConfig, testDir: __dirname })
     await errorTest.fn(t)
-    await afterEach({ t, testDir: __dirname })
   })
 }

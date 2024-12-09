@@ -11,24 +11,20 @@ const { afterEach, setupCoreTest } = require('../../test-tools')
 
 const metricsTests = require('../../metrics-tests')
 
-testWithoutCapture(metricsTests.tests).then(() => testWithCapture(metricsTests.tests))
+test.afterEach(async (ctx) => {
+  await afterEach({ t: ctx, testDir: __dirname })
+})
 
-async function testWithoutCapture(tests) {
-  for (const metricTest of tests) {
-    test(metricTest.name, async (t) => {
-      await setupCoreTest({ t, testDir: __dirname })
-      await metricTest.fn(t)
-      await afterEach({ t, testDir: __dirname })
-    })
-  }
+for (const metricTest of metricsTests.tests) {
+  test(metricTest.name, async (t) => {
+    await setupCoreTest({ t, testDir: __dirname })
+    await metricTest.fn(t)
+  })
 }
 
-async function testWithCapture(metricsTests) {
-  for (const metricTest of metricsTests) {
-    test(`capture field metrics: ${metricTest.name}`, async (t) => {
-      await setupCoreTest({ t, pluginConfig: { captureFieldMetrics: true }, testDir: __dirname })
-      await metricTest.fn(t)
-      await afterEach({ t, testDir: __dirname })
-    })
-  }
+for (const metricTest of metricsTests.tests) {
+  test(`capture field metrics: ${metricTest.name}`, async (t) => {
+    await setupCoreTest({ t, pluginConfig: { captureFieldMetrics: true }, testDir: __dirname })
+    await metricTest.fn(t)
+  })
 }

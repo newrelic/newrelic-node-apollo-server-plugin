@@ -99,11 +99,14 @@ tests.push({
   }
 })
 
+test.afterEach(async (ctx) => {
+  await afterEach({ t: ctx, testDir: __dirname })
+})
+
 for (const stateTest of tests) {
   test(stateTest.name, async (t) => {
     await setupCoreTest({ t, testDir: __dirname })
     t.nr.stateLossTester = new PluginStateLossTester()
     await stateTest.fn(t)
-    await afterEach({ t, testDir: __dirname })
   })
 }
