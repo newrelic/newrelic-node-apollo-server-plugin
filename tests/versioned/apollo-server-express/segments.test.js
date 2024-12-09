@@ -20,16 +20,14 @@ for (const defTest of expressSegmentsTests.tests) {
     await setupExpressTest({ t, testDir: __dirname })
     t.nr.TRANSACTION_PREFIX = 'WebTransaction/Expressjs/POST'
     await defTest.fn(t)
-    await afterEach({ t, testDir: __dirname })
   })
 }
 
 const { pluginConfig } = { captureScalars: true }
 for (const scalarTest of expressSegmentsTests.tests) {
   test(`scalar: ${scalarTest.name}`, async (t) => {
-    await setupExpressTest({ t, testDir: __dirname })
+    await setupExpressTest({ t, testDir: __dirname, pluginConfig })
     t.nr.TRANSACTION_PREFIX = 'WebTransaction/Expressjs/POST'
     await scalarTest.fn(t)
-    await afterEach({ t, testDir: __dirname, pluginConfig })
   })
 }
