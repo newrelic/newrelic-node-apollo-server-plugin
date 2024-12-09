@@ -8,10 +8,10 @@
 const test = require('node:test')
 const assert = require('node:assert')
 
-const { executeQuery } = require('../test-client')
-const { assertSegments } = require('../custom-assertions')
-const { afterEach, setupCoreTest } = require('../test-tools')
-const promiseResolvers = require('../promise-resolvers')
+const { executeQuery } = require('../lib/test-client')
+const { assertSegments } = require('../lib/custom-assertions')
+const { afterEach, setupCoreTest } = require('../lib/test-tools')
+const promiseResolvers = require('../lib/promise-resolvers')
 
 const OPERATION_PREFIX = 'GraphQL/operation/ApolloServer'
 const RESOLVE_PREFIX = 'GraphQL/resolve/ApolloServer'

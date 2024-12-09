@@ -6,7 +6,7 @@
 'use strict'
 const test = require('node:test')
 const assert = require('node:assert')
-const { executeQuery, executeQueryBatch } = require('../../test-client')
+const { executeQuery, executeQueryBatch } = require('../../lib/test-client')
 const ANON_PLACEHOLDER = '<anonymous>'
 const { setupFederatedGateway, teardownGateway } = require('./federated-gateway-server-setup')
 const { checkResult, shouldSkipTransaction } = require('../common')

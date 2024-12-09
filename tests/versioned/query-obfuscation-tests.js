@@ -7,9 +7,9 @@
 
 const assert = require('node:assert')
 
-const { executeQuery, executeJson } = require('../test-client')
+const { executeQuery, executeJson } = require('../lib/test-client')
 const { checkResult } = require('./common')
-const promiseReolvers = require('../promise-resolvers')
+const promiseReolvers = require('../lib/promise-resolvers')
 
 const SEGMENT_DESTINATION = 0x20
 const ANON_PLACEHOLDER = '<anonymous>'
