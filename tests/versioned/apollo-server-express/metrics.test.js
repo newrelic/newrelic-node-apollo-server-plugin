@@ -5,16 +5,26 @@
 
 'use strict'
 
-const { setupApolloServerExpressTests } = require('./apollo-server-express-setup')
+const test = require('node:test')
+
+const { afterEach, setupExpressTest } = require('../../test-tools')
+
 const metricsTests = require('../../metrics-tests')
 
-setupApolloServerExpressTests({
-  suiteName: 'metrics',
-  createTests: metricsTests.bind(null, false)
+test.afterEach(async (ctx) => {
+  await afterEach({ t: ctx, testDir: __dirname })
 })
 
-setupApolloServerExpressTests({
-  suiteName: 'capture field metrics',
-  createTests: metricsTests.bind(null, true),
-  pluginConfig: { captureFieldMetrics: true }
-})
+for (const metricTest of metricsTests.tests) {
+  test(metricTest.name, async (t) => {
+    await setupExpressTest({ t, testDir: __dirname })
+    await metricTest.fn(t)
+  })
+}
+
+for (const metricTest of metricsTests.tests) {
+  test(`capture field metrics: ${metricTest.name}`, async (t) => {
+    await setupExpressTest({ t, pluginConfig: { captureFieldMetrics: true }, testDir: __dirname })
+    await metricTest.fn(t)
+  })
+}

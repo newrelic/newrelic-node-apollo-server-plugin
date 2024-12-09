@@ -1,45 +1,29 @@
 /*
- * Copyright 2020 New Relic Corporation. All rights reserved.
+ * Copyright 2024 New Relic Corporation. All rights reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
 
 'use strict'
 
+const test = require('node:test')
+const assert = require('node:assert')
+
 const { executeQuery } = require('../test-client')
-const { setupEnvConfig } = require('../agent-testing')
+const { assertSegments } = require('../custom-assertions')
+const { afterEach, setupCoreTest } = require('../test-tools')
+const promiseResolvers = require('../promise-resolvers')
 
 const OPERATION_PREFIX = 'GraphQL/operation/ApolloServer'
 const RESOLVE_PREFIX = 'GraphQL/resolve/ApolloServer'
 const TRANSACTION_PREFIX = 'WebTransaction/Expressjs/POST'
 
-const { setupApolloServerTests } = require('./apollo-server-setup')
+const tests = []
 
-setupApolloServerTests({
-  suiteName: 'default',
-  createTests: createNoScalarTests
-})
-
-setupApolloServerTests({
-  suiteName: 'captureScalars: false',
-  createTests: createNoScalarTests,
-  pluginConfig: {
-    captureScalars: false
-  }
-})
-
-setupApolloServerTests({
-  suiteName: 'captureScalars: true',
-  createTests: createScalarTests,
-  pluginConfig: {
-    captureScalars: true
-  }
-})
-
-function createNoScalarTests(t) {
-  setupEnvConfig(t)
-
-  t.test('multi-level, should not capture scalar fields', (t) => {
-    const { helper, serverUrl } = t.context
+tests.push({
+  name: 'multi-level, should not capture scalar fields',
+  async fn(t) {
+    const { helper, serverUrl, pluginConfig, isApollo4 } = t.nr
+    const { promise, resolve } = promiseResolvers()
 
     const expectedName = 'GetAllForLibrary'
     const query = `query ${expectedName} {
@@ -61,144 +45,100 @@ function createNoScalarTests(t) {
 
     helper.agent.once('transactionFinished', (transaction) => {
       const operationPart = `query/${expectedName}/${path}`
-      const expectedSegments = [
-        {
-          name: `${TRANSACTION_PREFIX}//${operationPart}`,
-          children: [
-            { name: 'Nodejs/Middleware/Expressjs/query' },
-            { name: 'Nodejs/Middleware/Expressjs/expressInit' },
-            {
-              name: 'Expressjs/Router: /',
-              children: [
-                { name: 'Nodejs/Middleware/Expressjs/corsMiddleware' },
-                { name: 'Nodejs/Middleware/Expressjs/jsonParser' },
-                {
-                  name: 'Nodejs/Middleware/Expressjs/<anonymous>',
-                  children: [
-                    {
-                      name: `${OPERATION_PREFIX}/${operationPart}`,
-                      children: [
-                        {
-                          name: `${RESOLVE_PREFIX}/library`,
-                          children: [
-                            {
-                              name: 'timers.setTimeout',
-                              children: [
-                                {
-                                  name: 'Callback: <anonymous>'
-                                }
-                              ]
-                            }
-                          ]
-                        },
-                        { name: `${RESOLVE_PREFIX}/library.books` },
-                        { name: `${RESOLVE_PREFIX}/library.books.author` },
-                        { name: `${RESOLVE_PREFIX}/library.books.author` },
-                        { name: `${RESOLVE_PREFIX}/library.magazines` }
-                      ]
-                    }
-                  ]
-                }
+
+      const librarySiblings =
+        pluginConfig?.captureScalars !== true
+          ? [
+              `${RESOLVE_PREFIX}/library.books`,
+              `${RESOLVE_PREFIX}/library.books.author`,
+              `${RESOLVE_PREFIX}/library.books.author`,
+              `${RESOLVE_PREFIX}/library.magazines`
+            ]
+          : [
+              `${RESOLVE_PREFIX}/library.books`,
+              `${RESOLVE_PREFIX}/library.books.title`,
+              `${RESOLVE_PREFIX}/library.books.author`,
+              `${RESOLVE_PREFIX}/library.books.author.name`,
+              `${RESOLVE_PREFIX}/library.books.title`,
+              `${RESOLVE_PREFIX}/library.books.author`,
+              `${RESOLVE_PREFIX}/library.books.author.name`,
+              `${RESOLVE_PREFIX}/library.magazines`,
+              `${RESOLVE_PREFIX}/library.magazines.title`,
+              `${RESOLVE_PREFIX}/library.magazines.issue`
+            ]
+
+      let expectedSegments
+      if (isApollo4 === true) {
+        expectedSegments = [
+          `${TRANSACTION_PREFIX}//${operationPart}`,
+          [
+            'Nodejs/Middleware/Expressjs/query',
+            'Nodejs/Middleware/Expressjs/expressInit',
+            'Nodejs/Middleware/Expressjs/corsMiddleware',
+            'Nodejs/Middleware/Expressjs/jsonParser',
+            'Nodejs/Middleware/Expressjs/<anonymous>',
+            [
+              `${OPERATION_PREFIX}/${operationPart}`,
+              [
+                `${RESOLVE_PREFIX}/library`,
+                ['timers.setTimeout', ['Callback: <anonymous>']],
+                ...librarySiblings
               ]
-            }
+            ]
           ]
-        }
-      ]
+        ]
+      } else {
+        // Less than Apollo4 has a different structure.
+        expectedSegments = [
+          `${TRANSACTION_PREFIX}//${operationPart}`,
+          [
+            'Nodejs/Middleware/Expressjs/query',
+            'Nodejs/Middleware/Expressjs/expressInit',
+            'Expressjs/Router: /',
+            [
+              'Nodejs/Middleware/Expressjs/corsMiddleware',
+              'Nodejs/Middleware/Expressjs/jsonParser',
+              'Nodejs/Middleware/Expressjs/<anonymous>',
+              [
+                `${OPERATION_PREFIX}/${operationPart}`,
+                [
+                  `${RESOLVE_PREFIX}/library`,
+                  ['timers.setTimeout', ['Callback: <anonymous>']],
+                  ...librarySiblings
+                ]
+              ]
+            ]
+          ]
+        ]
+      }
 
       // Exact match to ensure no extra fields snuck in
-      t.exactSegments(transaction.trace.root, expectedSegments)
+      assertSegments(transaction.trace.root, expectedSegments, { exact: true })
     })
 
     executeQuery(serverUrl, query, (err) => {
-      t.error(err)
-      t.end()
+      assert.ifError(err)
+      resolve()
     })
+
+    await promise
+  }
+})
+
+test.afterEach(async (ctx) => {
+  await afterEach({ t: ctx, testDir: __dirname })
+})
+
+for (const tst of tests) {
+  test(`(captureScalars: false) ${tst.name})`, async (t) => {
+    await setupCoreTest({ t, pluginConfig: { captureScalars: false }, testDir: __dirname })
+    await tst.fn(t)
   })
 }
 
-function createScalarTests(t) {
-  setupEnvConfig(t)
-
-  t.test('multi-level, should capture scalar fields', (t) => {
-    const { helper, serverUrl } = t.context
-
-    const expectedName = 'GetAllForLibrary'
-    const query = `query ${expectedName} {
-      library(branch: "downtown") {
-        books {
-          title
-          author {
-            name
-          }
-        }
-        magazines {
-          title
-          issue
-        }
-      }
-    }`
-
-    const path = 'library'
-
-    helper.agent.once('transactionFinished', (transaction) => {
-      const operationPart = `query/${expectedName}/${path}`
-      const expectedSegments = [
-        {
-          name: `${TRANSACTION_PREFIX}//${operationPart}`,
-          children: [
-            { name: 'Nodejs/Middleware/Expressjs/query' },
-            { name: 'Nodejs/Middleware/Expressjs/expressInit' },
-            {
-              name: 'Expressjs/Router: /',
-              children: [
-                { name: 'Nodejs/Middleware/Expressjs/corsMiddleware' },
-                { name: 'Nodejs/Middleware/Expressjs/jsonParser' },
-                {
-                  name: 'Nodejs/Middleware/Expressjs/<anonymous>',
-                  children: [
-                    {
-                      name: `${OPERATION_PREFIX}/${operationPart}`,
-                      children: [
-                        {
-                          name: `${RESOLVE_PREFIX}/library`,
-                          children: [
-                            {
-                              name: 'timers.setTimeout',
-                              children: [
-                                {
-                                  name: 'Callback: <anonymous>'
-                                }
-                              ]
-                            }
-                          ]
-                        },
-                        { name: `${RESOLVE_PREFIX}/library.books` },
-                        { name: `${RESOLVE_PREFIX}/library.books.title` },
-                        { name: `${RESOLVE_PREFIX}/library.books.author` },
-                        { name: `${RESOLVE_PREFIX}/library.books.author.name` },
-                        { name: `${RESOLVE_PREFIX}/library.books.title` },
-                        { name: `${RESOLVE_PREFIX}/library.books.author` },
-                        { name: `${RESOLVE_PREFIX}/library.books.author.name` },
-                        { name: `${RESOLVE_PREFIX}/library.magazines` },
-                        { name: `${RESOLVE_PREFIX}/library.magazines.title` },
-                        { name: `${RESOLVE_PREFIX}/library.magazines.issue` }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-
-      // Exact match to ensure no extra fields snuck in
-      t.exactSegments(transaction.trace.root, expectedSegments)
-    })
-
-    executeQuery(serverUrl, query, (err) => {
-      t.error(err)
-      t.end()
-    })
+for (const tst of tests) {
+  test(`(captureScalars: true) ${tst.name})`, async (t) => {
+    await setupCoreTest({ t, pluginConfig: { captureScalars: true }, testDir: __dirname })
+    await tst.fn(t)
   })
 }

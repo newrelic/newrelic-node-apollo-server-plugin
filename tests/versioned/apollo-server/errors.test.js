@@ -5,9 +5,23 @@
 
 'use strict'
 
-const { setupApolloServerTests } = require('./apollo-server-setup')
-const errorsTests = require('../errors-tests')
+const test = require('node:test')
 
-setupApolloServerTests(errorsTests, {
+const { afterEach, setupCoreTest } = require('../../test-tools')
+
+const errorsTests = require('../errors-tests')
+const { pluginConfig } = errorsTests
+const agentConfig = {
   distributed_tracing: { enabled: true } // enable span testing
+}
+
+test.afterEach(async (ctx) => {
+  await afterEach({ t: ctx, testDir: __dirname })
 })
+
+for (const errorTest of errorsTests.tests) {
+  test(errorTest.name, async (t) => {
+    await setupCoreTest({ t, agentConfig, pluginConfig, testDir: __dirname })
+    await errorTest.fn(t)
+  })
+}
