@@ -125,24 +125,20 @@ tests.push({
   }
 })
 
-runTests({ tests })
-  .then(() =>
-    runTests({
-      tests,
-      suiteName: 'captureScalars: false',
-      pluginConfig: { captureScalars: false }
-    })
-  )
-  .then(() =>
-    runTests({ tests, suiteName: 'captureScalars: true', pluginConfig: { captureScalars: true } })
-  )
+test.afterEach(async (ctx) => {
+  await afterEach({ t: ctx, testDir: __dirname })
+})
 
-async function runTests({ tests, suiteName = 'default', pluginConfig = {} } = {}) {
-  for (const tst of tests) {
-    test(`(${suiteName}) ${tst.name})`, async (t) => {
-      await setupCoreTest({ t, pluginConfig, testDir: __dirname })
-      await tst.fn(t)
-      await afterEach({ t, testDir: __dirname })
-    })
-  }
+for (const tst of tests) {
+  test(`(captureScalars: false) ${tst.name})`, async (t) => {
+    await setupCoreTest({ t, pluginConfig: { captureScalars: false }, testDir: __dirname })
+    await tst.fn(t)
+  })
+}
+
+for (const tst of tests) {
+  test(`(captureScalars: true) ${tst.name})`, async (t) => {
+    await setupCoreTest({ t, pluginConfig: { captureScalars: true }, testDir: __dirname })
+    await tst.fn(t)
+  })
 }

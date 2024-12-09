@@ -35,30 +35,37 @@ const defaultTests = generateTests(true)
 const captureTrueTests = generateTests(false)
 const captureFalseTests = generateTests(true)
 
-runTests({ tests: defaultTests })
-  .then(() =>
-    runTests({
-      tests: captureTrueTests,
-      suiteName: 'captureIntrospectionQueries: true',
-      pluginConfig: { captureIntrospectionQueries: true }
-    })
-  )
-  .then(() =>
-    runTests({
-      tests: captureFalseTests,
-      suiteName: 'captureIntrospectionQueries: false',
-      pluginConfig: { captureIntrospectionQueries: false }
-    })
-  )
+test.afterEach(async (ctx) => {
+  await afterEach({ t: ctx, testDir: __dirname })
+})
 
-async function runTests({ tests, suiteName = 'default', pluginConfig = {} } = {}) {
-  for (const tst of tests) {
-    test(`(${suiteName}) ${tst.name}`, async (t) => {
-      await setupCoreTest({ t, pluginConfig, testDir: __dirname })
-      await tst.fn(t)
-      await afterEach({ t, testDir: __dirname })
+for (const tst of defaultTests) {
+  test(`(default) ${tst.name}`, async (t) => {
+    await setupCoreTest({ t, pluginConfig: {}, testDir: __dirname })
+    await tst.fn(t)
+  })
+}
+
+for (const tst of captureTrueTests) {
+  test(`(captureIntrospectionQueries: true) ${tst.name}`, async (t) => {
+    await setupCoreTest({
+      t,
+      pluginConfig: { captureIntrospectionQueries: true },
+      testDir: __dirname
     })
-  }
+    await tst.fn(t)
+  })
+}
+
+for (const tst of captureFalseTests) {
+  test(`(captureIntrospectionQueries: false) ${tst.name}`, async (t) => {
+    await setupCoreTest({
+      t,
+      pluginConfig: { captureIntrospectionQueries: false },
+      testDir: __dirname
+    })
+    await tst.fn(t)
+  })
 }
 
 function generateTests(ignore) {
