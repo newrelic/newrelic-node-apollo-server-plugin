@@ -7,9 +7,9 @@
 
 const test = require('node:test')
 
-const { afterEach, setupExpressTest } = require('../test-tools')
+const { afterEach, setupExpressTest } = require('../lib/test-tools')
 
-const metricsTests = require('../metrics-tests')
+const metricsTests = require('../lib/metrics-tests')
 
 test.afterEach(async (ctx) => {
   await afterEach({ t: ctx, testDir: __dirname })

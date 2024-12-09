@@ -7,7 +7,7 @@
 
 const test = require('node:test')
 
-const { afterEach, setupExpressTest } = require('../../test-tools')
+const { afterEach, setupExpressTest } = require('../../lib/test-tools')
 
 const queryObfuscationTests = require('../query-obfuscation-tests')
 const { pluginConfig } = queryObfuscationTests

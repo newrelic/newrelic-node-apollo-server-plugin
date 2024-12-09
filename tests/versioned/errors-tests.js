@@ -7,8 +7,8 @@
 
 const assert = require('node:assert')
 
-const { executeQuery, makeRequest } = require('../test-client')
-const promiseResolvers = require('../promise-resolvers')
+const { executeQuery, makeRequest } = require('../lib/test-client')
+const promiseResolvers = require('../lib/promise-resolvers')
 
 const ANON_PLACEHOLDER = '<anonymous>'
 const UNKNOWN_OPERATION = '<unknown>'

@@ -7,7 +7,7 @@
 const utils = require('@newrelic/test-utilities')
 
 const federatedData = require('./federated-data-definitions')
-const { unloadModules } = require('../../test-tools')
+const { unloadModules } = require('../../lib/test-tools')
 
 async function setupFederatedGateway({ instrumentSubGraphs, pluginConfig, agentConfig, ctx }) {
   // load default instrumentation. express being critical

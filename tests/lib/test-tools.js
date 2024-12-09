@@ -18,7 +18,7 @@ const fs = require('node:fs')
 const path = require('node:path')
 
 const utils = require('@newrelic/test-utilities')
-const setupErrorSchema = require('./versioned/error-setup')
+const setupErrorSchema = require('./error-setup')
 const { getTypeDefs, resolvers } = require('./data-definitions')
 
 async function afterEach({ t, testDir }) {
@@ -38,7 +38,7 @@ async function afterEach({ t, testDir }) {
 
 async function setupCoreTest({ t, testDir, agentConfig = {}, pluginConfig = {} } = {}) {
   const helper = utils.TestAgent.makeFullyInstrumented(agentConfig)
-  const createPlugin = require('../lib/create-plugin')
+  const createPlugin = require('../../lib/create-plugin')
   const nrApi = helper.getAgentApi()
   const instrumentationPlugin = createPlugin(nrApi, pluginConfig)
 
@@ -71,7 +71,7 @@ async function setupCoreTest({ t, testDir, agentConfig = {}, pluginConfig = {} }
 
 async function setupExpressTest({ t, testDir, agentConfig = {}, pluginConfig = {} } = {}) {
   const helper = utils.TestAgent.makeFullyInstrumented(agentConfig)
-  const createPlugin = require('../lib/create-plugin')
+  const createPlugin = require('../../lib/create-plugin')
   const nrApi = helper.getAgentApi()
   const instrumentationPlugin = createPlugin(nrApi, pluginConfig)
 

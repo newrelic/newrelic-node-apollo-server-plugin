@@ -6,7 +6,7 @@
 'use strict'
 const test = require('node:test')
 const assert = require('node:assert')
-const { executeQuery } = require('../../test-client')
+const { executeQuery } = require('../../lib/test-client')
 const { setupFederatedGateway, teardownGateway } = require('./federated-gateway-server-setup')
 const { checkResult } = require('../common')
 

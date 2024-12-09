@@ -7,7 +7,7 @@
 const test = require('node:test')
 const assert = require('node:assert')
 const { setupFederatedGateway, teardownGateway } = require('./federated-gateway-server-setup')
-const { executeQuery } = require('../../test-client')
+const { executeQuery } = require('../../lib/test-client')
 const { checkResult } = require('../common')
 const SEGMENT_DESTINATION = 0x20
 const ANON_PLACEHOLDER = '<anonymous>'

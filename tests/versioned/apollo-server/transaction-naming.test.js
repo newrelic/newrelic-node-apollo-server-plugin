@@ -7,7 +7,7 @@
 
 const test = require('node:test')
 
-const { afterEach, setupCoreTest } = require('../../test-tools')
+const { afterEach, setupCoreTest } = require('../../lib/test-tools')
 
 const transactionNamingTests = require('../transaction-naming-tests')
 
