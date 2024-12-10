@@ -8,9 +8,9 @@
 const test = require('node:test')
 const assert = require('node:assert')
 
-const { executeQuery } = require('../test-client')
-const { afterEach, setupCoreTest } = require('../test-tools')
-const promiseResolvers = require('../promise-resolvers')
+const { executeQuery } = require('../lib/test-client')
+const { afterEach, setupCoreTest } = require('../lib/test-tools')
+const promiseResolvers = require('../lib/promise-resolvers')
 
 const queries = [
   `{

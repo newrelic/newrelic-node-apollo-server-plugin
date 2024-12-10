@@ -11,8 +11,8 @@
 const test = require('node:test')
 const assert = require('node:assert')
 
-const { getTypeDefs, resolvers } = require('../../data-definitions')
-const { executeQuery } = require('../../test-client')
+const { getTypeDefs, resolvers } = require('../../lib/data-definitions')
+const { executeQuery } = require('../../lib/test-client')
 
 let ApolloServer
 let gql

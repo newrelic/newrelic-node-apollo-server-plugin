@@ -6,8 +6,8 @@
 'use strict'
 const test = require('node:test')
 const { tspl } = require('@matteo.collina/tspl')
-const { executeQuery, executeQueryBatch } = require('../../test-client')
-const { assertSegments } = require('../../custom-assertions')
+const { executeQuery, executeQueryBatch } = require('../../lib/test-client')
+const { assertSegments } = require('../../lib/custom-assertions')
 
 const ANON_PLACEHOLDER = '<anonymous>'
 const OPERATION_PREFIX = 'GraphQL/operation/ApolloServer'
