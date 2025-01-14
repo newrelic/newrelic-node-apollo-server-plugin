@@ -47,7 +47,7 @@ code, the source code can be found at [https://github.com/newrelic/newrelic-node
 
 ### @apollo/server
 
-This product includes source derived from [@apollo/server](https://github.com/apollographql/apollo-server) ([v4.10.3](https://github.com/apollographql/apollo-server/tree/v4.10.3)), distributed under the [MIT License](https://github.com/apollographql/apollo-server/blob/v4.10.3/README.md):
+This product includes source derived from [@apollo/server](https://github.com/apollographql/apollo-server) ([v4.11.2](https://github.com/apollographql/apollo-server/tree/v4.11.2)), distributed under the [MIT License](https://github.com/apollographql/apollo-server/blob/v4.11.2/README.md):
 
 ```
 MIT License
@@ -509,7 +509,7 @@ This product includes source derived from [@newrelic/newrelic-oss-cli](https://g
 
 ### @newrelic/test-utilities
 
-This product includes source derived from [@newrelic/test-utilities](https://github.com/newrelic/node-test-utilities) ([v8.5.0](https://github.com/newrelic/node-test-utilities/tree/v8.5.0)), distributed under the [Apache-2.0 License](https://github.com/newrelic/node-test-utilities/blob/v8.5.0/LICENSE):
+This product includes source derived from [@newrelic/test-utilities](https://github.com/newrelic/node-test-utilities) ([v8.7.0](https://github.com/newrelic/node-test-utilities/tree/v8.7.0)), distributed under the [Apache-2.0 License](https://github.com/newrelic/node-test-utilities/blob/v8.7.0/LICENSE):
 
 ```
                                  Apache License
@@ -905,7 +905,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 ### eslint
 
-This product includes source derived from [eslint](https://github.com/eslint/eslint) ([v8.57.0](https://github.com/eslint/eslint/tree/v8.57.0)), distributed under the [MIT License](https://github.com/eslint/eslint/blob/v8.57.0/LICENSE):
+This product includes source derived from [eslint](https://github.com/eslint/eslint) ([v8.57.1](https://github.com/eslint/eslint/tree/v8.57.1)), distributed under the [MIT License](https://github.com/eslint/eslint/blob/v8.57.1/LICENSE):
 
 ```
 Copyright OpenJS Foundation and other contributors, <www.openjsf.org>
@@ -932,7 +932,7 @@ THE SOFTWARE.
 
 ### graphql
 
-This product includes source derived from [graphql](https://github.com/graphql/graphql-js) ([v16.8.1](https://github.com/graphql/graphql-js/tree/v16.8.1)), distributed under the [MIT License](https://github.com/graphql/graphql-js/blob/v16.8.1/LICENSE):
+This product includes source derived from [graphql](https://github.com/graphql/graphql-js) ([v16.9.0](https://github.com/graphql/graphql-js/tree/v16.9.0)), distributed under the [MIT License](https://github.com/graphql/graphql-js/blob/v16.9.0/LICENSE):
 
 ```
 MIT License
@@ -1019,7 +1019,7 @@ SOFTWARE.
 
 ### lockfile-lint
 
-This product includes source derived from [lockfile-lint](https://github.com/lirantal/lockfile-lint) ([v4.13.2](https://github.com/lirantal/lockfile-lint/tree/v4.13.2)), distributed under the [Apache-2.0 License](https://github.com/lirantal/lockfile-lint/blob/v4.13.2/LICENSE):
+This product includes source derived from [lockfile-lint](https://github.com/lirantal/lockfile-lint) ([v4.14.0](https://github.com/lirantal/lockfile-lint/tree/v4.14.0)), distributed under the [Apache-2.0 License](https://github.com/lirantal/lockfile-lint/blob/v4.14.0/LICENSE):
 
 ```
 
@@ -1217,7 +1217,7 @@ This product includes source derived from [lockfile-lint](https://github.com/lir
 
 ### newrelic
 
-This product includes source derived from [newrelic](https://github.com/newrelic/node-newrelic) ([v11.15.0](https://github.com/newrelic/node-newrelic/tree/v11.15.0)), distributed under the [Apache-2.0 License](https://github.com/newrelic/node-newrelic/blob/v11.15.0/LICENSE):
+This product includes source derived from [newrelic](https://github.com/newrelic/node-newrelic) ([v11.23.2](https://github.com/newrelic/node-newrelic/tree/v11.23.2)), distributed under the [Apache-2.0 License](https://github.com/newrelic/node-newrelic/blob/v11.23.2/LICENSE):
 
 ```
                                  Apache License
