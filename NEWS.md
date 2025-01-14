@@ -1,3 +1,33 @@
+### v7.0.0 (2025-01-14)
+#### ⚠ BREAKING CHANGES
+
+* Updated the minimum agent version to `12.11.0`.
+
+#### Features
+
+* Updated the minimum agent version to `12.11.0` ([#337](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/337)) ([6a115c4](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/6a115c4fe21abc50f5c4fffcbca7d70074f7269e))
+  * In `12.11.0` of the agent, the transaction was removed from the segment and stored separately on the context manager. 
+  * The signature for recording time slice metrics also changed by passing in the active transaction.
+  * If you cannot upgrade the agent to `12.11.0`, simply pin the `@newrelic/apollo-server-plugin` to `6.0.0`.
+
+#### Miscellaneous chores
+
+* Limit dependencies ([#321](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/321)) ([66e9008](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/66e900817dcbce41d9887f290b3f6da1e2971511))
+
+#### Tests
+
+* Migrated `apollo-federation` versioned tests to `node:test` ([#333](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/333)) ([86b883e](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/86b883e58290b4b097c762d9bd1ed9409ae0b0df))
+* Updated remaining versioned tests to `node:test` ([#334](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/334)) ([4f86a27](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/4f86a27f813d3a376a0bd027e4628a7cc0dbfecd))
+* Updated unit tests to node:test ([#331](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/331)) ([1292619](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/1292619588ccd37cddade0d23f858de8490a7131))
+* Moved all common files into `tests/lib` ([#336](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/336)) ([58b1e59](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/58b1e596a4050e6a9d9f2c661c7ac26936bf948f))
+* Restored `graphql-tag` as it was not a transitive dep but instead a test dep ([#325](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/325)) ([d6ac39a](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/d6ac39a57d90736ff4df7882154b01824cc8ecfd))
+* Updated `apollo-federation` tests to use `@apollo/server` ([#335](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/335)) ([37e89fa](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/37e89faf15044c36652c4bd05aef8224e47a0024))
+* Updated versioned tests to remove transitive deps ([#323](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/323)) ([5c2b889](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/5c2b8893ec6f5c6e4e72f385b4fd44002aa800a1))
+
+#### Continuous integration
+
+* Updated codecov version and moved codecov reporting until after all tests are run ([#319](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/319)) ([4becfe1](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/4becfe11f538a04c29368b1e85cf6a618a9cf0a4))
+
 ### v6.0.0 (2024-07-31)
 #### ⚠ BREAKING CHANGES
 
