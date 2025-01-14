@@ -72,7 +72,7 @@ test('apollo-federation: federated segments', async (t) => {
         ]
       ]
 
-      assertSegments(tx.trace.root, expectedSegments, { exact: false }, { assert: plan })
+      assertSegments(tx.trace, tx.trace.root, expectedSegments, { exact: false }, { assert: plan })
       checkResult(plan, result, () => {})
     })
     await plan.completed
@@ -141,7 +141,7 @@ test('apollo-federation: federated segments', async (t) => {
         ]
       ]
 
-      assertSegments(tx.trace.root, expectedSegments, { exact: false }, { assert: plan })
+      assertSegments(tx.trace, tx.trace.root, expectedSegments, { exact: false }, { assert: plan })
       checkResult(plan, result, () => {
         plan.equal(result.length, 2)
       })

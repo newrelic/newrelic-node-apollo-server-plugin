@@ -9,6 +9,7 @@ const assert = require('node:assert')
 const { setupFederatedGateway, teardownGateway } = require('./federated-gateway-server-setup')
 const { executeQuery } = require('../../lib/test-client')
 const { checkResult } = require('../common')
+const findSegmentByName = require('../../lib/find-segment')
 const SEGMENT_DESTINATION = 0x20
 const ANON_PLACEHOLDER = '<anonymous>'
 const QUERY_ATTRIBUTE_NAME = 'graphql.operation.query'
@@ -45,7 +46,7 @@ test('apollo-federation: query obfuscation', async (t) => {
     executeQuery(serverUrl, query, (err, result) => {
       assert.ok(!err)
       const operationName = `${OPERATION_PREFIX}/${ANON_PLACEHOLDER}/${path}`
-      const operationSegment = findSegmentByName(tx.trace.root, operationName)
+      const operationSegment = findSegmentByName(tx.trace, tx.trace.root, operationName)
 
       // only test one operation segment of three federated server transactions
       if (operationSegment) {
@@ -59,19 +60,3 @@ test('apollo-federation: query obfuscation', async (t) => {
     })
   })
 })
-
-function findSegmentByName(root, name) {
-  if (root.name === name) {
-    return root
-  } else if (root.children && root.children.length) {
-    for (let i = 0; i < root.children.length; i++) {
-      const child = root.children[i]
-      const found = findSegmentByName(child, name)
-      if (found) {
-        return found
-      }
-    }
-  }
-
-  return null
-}

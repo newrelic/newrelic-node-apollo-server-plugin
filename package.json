@@ -55,13 +55,13 @@
     "husky": "^6.0.0",
     "lint-staged": "^11.0.0",
     "lockfile-lint": "^4.9.6",
-    "newrelic": "^11.15.0",
+    "newrelic": "^12.11.0",
     "prettier": "^2.3.2",
     "sinon": "^11.1.2",
     "tsd": "^0.18.0"
   },
   "peerDependencies": {
-    "newrelic": ">=6.13.0"
+    "newrelic": ">=12.11.0"
   },
   "tsd": {
     "directory": "./tests/types",

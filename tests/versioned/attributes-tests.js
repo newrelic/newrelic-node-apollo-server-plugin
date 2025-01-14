@@ -10,6 +10,7 @@ const assert = require('node:assert')
 const { executeQuery, executeJson } = require('../lib/test-client')
 const { match } = require('../lib/custom-assertions')
 const promiseResolvers = require('../lib/promise-resolvers')
+const findSegmentByName = require('../lib/find-segment')
 
 const SEGMENT_DESTINATION = 0x20
 const SPAN_DESTINATION = 0x10
@@ -19,22 +20,6 @@ const OPERATION_PREFIX = 'GraphQL/operation/ApolloServer'
 function assertCustomAttributes(segment, expected) {
   const customResolveAttributes = segment.getSpanContext().customAttributes.get(SPAN_DESTINATION)
   match(customResolveAttributes, expected)
-}
-
-function findSegmentByName(root, name) {
-  if (root.name === name) {
-    return root
-  } else if (root.children && root.children.length) {
-    for (let i = 0; i < root.children.length; i++) {
-      const child = root.children[i]
-      const found = findSegmentByName(child, name)
-      if (found) {
-        return found
-      }
-    }
-  }
-
-  return null
 }
 
 const tests = []
@@ -51,7 +36,11 @@ tests.push({
 
     helper.agent.once('transactionFinished', (transaction) => {
       const operationName = `${OPERATION_PREFIX}/query/${ANON_PLACEHOLDER}/hello`
-      const operationSegment = findSegmentByName(transaction.trace.root, operationName)
+      const operationSegment = findSegmentByName(
+        transaction.trace,
+        transaction.trace.root,
+        operationName
+      )
 
       assertCustomAttributes(operationSegment, { clientName: 'ApolloTestClient' })
 
@@ -65,7 +54,7 @@ tests.push({
       const hasAttribute = Object.hasOwnProperty.bind(operationAttributes)
       assert.equal(hasAttribute('graphql.operation.name'), false)
 
-      const resolveHelloSegment = operationSegment.children[0]
+      const [resolveHelloSegment] = transaction.trace.getChildren(operationSegment.id)
 
       const expectedResolveAttributes = {
         'graphql.field.name': 'hello',
@@ -102,7 +91,11 @@ tests.push({
 
     helper.agent.once('transactionFinished', (transaction) => {
       const operationName = `${OPERATION_PREFIX}/query/${expectedName}/hello`
-      const operationSegment = findSegmentByName(transaction.trace.root, operationName)
+      const operationSegment = findSegmentByName(
+        transaction.trace,
+        transaction.trace.root,
+        operationName
+      )
 
       const expectedOperationAttributes = {
         'graphql.operation.type': 'query',
@@ -112,7 +105,7 @@ tests.push({
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
       match(operationAttributes, expectedOperationAttributes)
 
-      const resolveHelloSegment = operationSegment.children[0]
+      const [resolveHelloSegment] = transaction.trace.getChildren(operationSegment.id)
 
       const expectedResolveAttributes = {
         'graphql.field.name': 'hello',
@@ -156,7 +149,11 @@ tests.push({
 
     helper.agent.once('transactionFinished', (transaction) => {
       const operationName = `${OPERATION_PREFIX}/query/${expectedName}/${deepestPath}`
-      const operationSegment = findSegmentByName(transaction.trace.root, operationName)
+      const operationSegment = findSegmentByName(
+        transaction.trace,
+        transaction.trace.root,
+        operationName
+      )
 
       const expectedOperationAttributes = {
         'graphql.operation.type': 'query',
@@ -166,7 +163,9 @@ tests.push({
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
       match(operationAttributes, expectedOperationAttributes)
 
-      const [resolveLibrariesSegment, resolveBooksSegment] = operationSegment.children
+      const [resolveLibrariesSegment, resolveBooksSegment] = transaction.trace.getChildren(
+        operationSegment.id
+      )
 
       const expectedLibrariesAttributes = {
         'graphql.field.name': 'libraries',
@@ -213,7 +212,11 @@ tests.push({
     helper.agent.once('transactionFinished', (transaction) => {
       const operationName = `${OPERATION_PREFIX}/mutation/${expectedName}/addThing`
 
-      const operationSegment = findSegmentByName(transaction.trace.root, operationName)
+      const operationSegment = findSegmentByName(
+        transaction.trace,
+        transaction.trace.root,
+        operationName
+      )
 
       const expectedOperationAttributes = {
         'graphql.operation.type': 'mutation',
@@ -223,7 +226,7 @@ tests.push({
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
       match(operationAttributes, expectedOperationAttributes)
 
-      const resolveHelloSegment = operationSegment.children[0]
+      const [resolveHelloSegment] = transaction.trace.getChildren(operationSegment.id)
 
       const expectedResolveAttributes = {
         'graphql.field.name': 'addThing',
@@ -259,8 +262,12 @@ tests.push({
     helper.agent.once('transactionFinished', (transaction) => {
       const operationName = `${OPERATION_PREFIX}/mutation/${expectedName}/addThing`
 
-      const operationSegment = findSegmentByName(transaction.trace.root, operationName)
-      const resolveHelloSegment = operationSegment.children[0]
+      const operationSegment = findSegmentByName(
+        transaction.trace,
+        transaction.trace.root,
+        operationName
+      )
+      const [resolveHelloSegment] = transaction.trace.getChildren(operationSegment.id)
 
       const resolveAttributes = resolveHelloSegment.attributes.get(SEGMENT_DESTINATION)
 
@@ -294,8 +301,12 @@ tests.push({
     helper.agent.once('transactionFinished', (transaction) => {
       const operationName = `${OPERATION_PREFIX}/mutation/${expectedName}/addThing`
 
-      const operationSegment = findSegmentByName(transaction.trace.root, operationName)
-      const resolveHelloSegment = operationSegment.children[0]
+      const operationSegment = findSegmentByName(
+        transaction.trace,
+        transaction.trace.root,
+        operationName
+      )
+      const [resolveHelloSegment] = transaction.trace.getChildren(operationSegment.id)
 
       const resolveAttributes = resolveHelloSegment.attributes.get(SEGMENT_DESTINATION)
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
@@ -329,8 +340,12 @@ tests.push({
     helper.agent.once('transactionFinished', (transaction) => {
       const operationName = `${OPERATION_PREFIX}/query/${expectedName}/paramQuery`
 
-      const operationSegment = findSegmentByName(transaction.trace.root, operationName)
-      const resolveHelloSegment = operationSegment.children[0]
+      const operationSegment = findSegmentByName(
+        transaction.trace,
+        transaction.trace.root,
+        operationName
+      )
+      const [resolveHelloSegment] = transaction.trace.getChildren(operationSegment.id)
 
       const expectedArgAttributes = {
         'graphql.field.args.blah': 'first',
@@ -371,8 +386,12 @@ tests.push({
     helper.agent.once('transactionFinished', (transaction) => {
       const operationName = `${OPERATION_PREFIX}/query/${expectedName}/searchByBook`
 
-      const operationSegment = findSegmentByName(transaction.trace.root, operationName)
-      const resolveHelloSegment = operationSegment.children[0]
+      const operationSegment = findSegmentByName(
+        transaction.trace,
+        transaction.trace.root,
+        operationName
+      )
+      const [resolveHelloSegment] = transaction.trace.getChildren(operationSegment.id)
 
       const expectedArgAttributes = {
         'graphql.field.args.book.author.name': '10x Developer',
@@ -419,8 +438,12 @@ tests.push({
     helper.agent.once('transactionFinished', (transaction) => {
       const operationName = `${OPERATION_PREFIX}/query/${expectedName}/paramQuery`
 
-      const operationSegment = findSegmentByName(transaction.trace.root, operationName)
-      const resolveHelloSegment = operationSegment.children[0]
+      const operationSegment = findSegmentByName(
+        transaction.trace,
+        transaction.trace.root,
+        operationName
+      )
+      const [resolveHelloSegment] = transaction.trace.getChildren(operationSegment.id)
 
       const expectedArgAttributes = {
         'graphql.field.args.blah': 'first',
@@ -455,7 +478,11 @@ tests.push({
     helper.agent.once('transactionFinished', (transaction) => {
       const operationName = `${OPERATION_PREFIX}/query/${expectedName}/ciao`
 
-      const operationSegment = findSegmentByName(transaction.trace.root, operationName)
+      const operationSegment = findSegmentByName(
+        transaction.trace,
+        transaction.trace.root,
+        operationName
+      )
 
       const expectedOperationAttributes = {
         'graphql.operation.query': query
@@ -495,7 +522,11 @@ tests.push({
 
     helper.agent.once('transactionFinished', (transaction) => {
       const operationName = `${OPERATION_PREFIX}/query/${expectedName}/${deepestPath}`
-      const operationSegment = findSegmentByName(transaction.trace.root, operationName)
+      const operationSegment = findSegmentByName(
+        transaction.trace,
+        transaction.trace.root,
+        operationName
+      )
       const expectedOperationAttributes = {
         'graphql.operation.type': 'query',
         'graphql.operation.name': expectedName,
@@ -505,7 +536,7 @@ tests.push({
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
       match(operationAttributes, expectedOperationAttributes)
 
-      const resolveHelloSegment = operationSegment.children[0]
+      const [resolveHelloSegment] = transaction.trace.getChildren(operationSegment.id)
 
       const expectedResolveAttributes = {
         'graphql.field.name': 'search',
@@ -550,7 +581,11 @@ tests.push({
 
     helper.agent.once('transactionFinished', (transaction) => {
       const operationName = `${OPERATION_PREFIX}/query/${expectedName}/${deepestPath}`
-      const operationSegment = findSegmentByName(transaction.trace.root, operationName)
+      const operationSegment = findSegmentByName(
+        transaction.trace,
+        transaction.trace.root,
+        operationName
+      )
       const expectedOperationAttributes = {
         'graphql.operation.type': 'query',
         'graphql.operation.name': expectedName,
@@ -560,7 +595,7 @@ tests.push({
       const operationAttributes = operationSegment.attributes.get(SEGMENT_DESTINATION)
       match(operationAttributes, expectedOperationAttributes)
 
-      const resolveHelloSegment = operationSegment.children[0]
+      const [resolveHelloSegment] = transaction.trace.getChildren(operationSegment.id)
 
       const expectedResolveAttributes = {
         'graphql.field.name': 'search',
@@ -598,7 +633,11 @@ tests.push({
     const transactionHandler = (transaction) => {
       const operationName = `${OPERATION_PREFIX}/query/${expectedName}/hello`
 
-      const operationSegment = findSegmentByName(transaction.trace.root, operationName)
+      const operationSegment = findSegmentByName(
+        transaction.trace,
+        transaction.trace.root,
+        operationName
+      )
       if (!operationSegment) {
         const err = new Error(`Cannot find operation segment with name ${operationName}`)
         reject(err)
