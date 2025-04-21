@@ -1,3 +1,9 @@
+### v7.0.1 (2025-04-21)
+
+#### Bug fixes
+
+* Fixed issue where querying with directives crashed checking if query was an introspection query ([#341](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/341)) ([110704f](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/110704f8fda497d2716999e2c0aa0ebcf8484e0d))
+
 ### v7.0.0 (2025-01-14)
 #### ⚠ BREAKING CHANGES
 
