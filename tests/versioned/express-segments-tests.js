@@ -115,6 +115,46 @@ tests.push({
 })
 
 tests.push({
+  name: 'named query, @include directive',
+  async fn(t) {
+    const {
+      helper,
+      serverUrl,
+      apolloServerPkg: { isApollo4 },
+      TRANSACTION_PREFIX
+    } = t.nr
+    const { promise, resolve } = promiseResolvers()
+
+    const expectedName = 'HeyThere'
+    const query = `query ${expectedName} {
+      ... @include(if: true) {
+        hello
+      }
+    }`
+
+    helper.agent.once('transactionFinished', (transaction) => {
+      const operationPart = `query/${expectedName}/hello`
+      const firstSegmentName = baseSegment(operationPart, TRANSACTION_PREFIX)
+      const operationSegments = [
+        'Nodejs/Middleware/Expressjs/<anonymous>',
+        [`${OPERATION_PREFIX}/${operationPart}`, [`${RESOLVE_PREFIX}/hello`]]
+      ]
+      const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
+      assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
+    })
+
+    executeQuery(serverUrl, query, (err, result) => {
+      assert.ifError(err)
+      checkResult(assert, result, () => {
+        resolve()
+      })
+    })
+
+    await promise
+  }
+})
+
+tests.push({
   name: 'anonymous query, multi-level',
   async fn(t) {
     const {
