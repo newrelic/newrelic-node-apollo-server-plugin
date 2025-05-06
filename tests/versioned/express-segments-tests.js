@@ -8,7 +8,7 @@
 const assert = require('node:assert')
 
 const { executeQuery, executeQueryBatch } = require('../lib/test-client')
-const { checkResult } = require('./common')
+const { checkResult, baseSegment, constructSegments } = require('./common')
 const { assertSegments } = require('../lib/custom-assertions')
 const promiseResolvers = require('../lib/promise-resolvers')
 
@@ -16,25 +16,6 @@ const ANON_PLACEHOLDER = '<anonymous>'
 const UNKNOWN_OPERATION = '<unknown>'
 const OPERATION_PREFIX = 'GraphQL/operation/ApolloServer'
 const RESOLVE_PREFIX = 'GraphQL/resolve/ApolloServer'
-
-/**
- * Creates the root segment based on a prefix and operation part
- */
-function baseSegment(operationPart, prefix) {
-  return `${prefix}//${operationPart}`
-}
-
-/**
- * Creates the appropriate sibling hierarchy of segments
- * In apollo 4 they tweaked how the apollo server express instance is constructed.
- * It lacks a / router and routes everything through a global middleware
- */
-function constructSegments(firstSegmentName, operationSegments, isApollo4) {
-  if (isApollo4) {
-    return [firstSegmentName, [...operationSegments]]
-  }
-  return [firstSegmentName, ['Expressjs/Router: /', [...operationSegments]]]
-}
 
 const tests = []
 
