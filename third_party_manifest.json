@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "Tue Jan 14 2025 15:09:50 GMT-0500 (Eastern Standard Time)",
+  "lastUpdated": "Tue May 06 2025 13:18:28 GMT-0400 (Eastern Daylight Time)",
   "projectName": "New Relic Node Apollo Server Plugin",
   "projectUrl": "https://github.com/newrelic/newrelic-node-apollo-server-plugin/",
   "includeOptDeps": false,
@@ -222,15 +222,15 @@
       "email": "liran.tal@gmail.com",
       "url": "https://github.com/lirantal"
     },
-    "newrelic@11.23.2": {
+    "newrelic@12.18.2": {
       "name": "newrelic",
-      "version": "11.23.2",
-      "range": "^12.11.0",
+      "version": "12.18.2",
+      "range": "^12.18.2",
       "licenses": "Apache-2.0",
       "repoUrl": "https://github.com/newrelic/node-newrelic",
-      "versionedRepoUrl": "https://github.com/newrelic/node-newrelic/tree/v11.23.2",
+      "versionedRepoUrl": "https://github.com/newrelic/node-newrelic/tree/v12.18.2",
       "licenseFile": "node_modules/newrelic/LICENSE",
-      "licenseUrl": "https://github.com/newrelic/node-newrelic/blob/v11.23.2/LICENSE",
+      "licenseUrl": "https://github.com/newrelic/node-newrelic/blob/v12.18.2/LICENSE",
       "licenseTextSource": "file",
       "publisher": "New Relic Node.js agent team",
       "email": "nodejs@newrelic.com"

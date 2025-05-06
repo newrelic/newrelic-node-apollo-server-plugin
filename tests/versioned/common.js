@@ -29,3 +29,26 @@ common.checkResult = function checkResult(assert, result, callback) {
 common.shouldSkipTransaction = function shouldSkipTransaction(transaction) {
   return !!transaction.forceIgnore
 }
+
+/**
+ * Creates the root segment based on a prefix and operation part
+ */
+common.baseSegment = function baseSegment(operationPart, prefix) {
+  return `${prefix}//${operationPart}`
+}
+
+/**
+ * Creates the appropriate sibling hierarchy of segments
+ * In apollo 4 they tweaked how the apollo server express instance is constructed.
+ * It lacks a / router and routes everything through a global middleware
+ */
+common.constructSegments = function constructSegments(
+  firstSegmentName,
+  operationSegments,
+  isApollo4
+) {
+  if (isApollo4) {
+    return [firstSegmentName, [...operationSegments]]
+  }
+  return [firstSegmentName, ['Expressjs/Router: /', [...operationSegments]]]
+}
