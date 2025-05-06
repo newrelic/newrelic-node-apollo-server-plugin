@@ -1,3 +1,9 @@
+### v7.0.2 (2025-05-06)
+
+#### Bug fixes
+
+* Updated plugin to pass in transaction trace to properly calculate the exclusive time of operation and resolver segments ([#345](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/345)) ([a528992](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/a528992cf47381952b9439f9102589c9a28537fc))
+
 ### v7.0.1 (2025-04-21)
 
 #### Bug fixes
