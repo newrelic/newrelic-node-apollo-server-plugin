@@ -4,10 +4,6 @@
 
 * Add testing against Node 24 ([#351](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/351)) ([3fcfde3](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/3fcfde3760d4fd8a2e8a3cc004017b4ada301cb7))
 
-#### Continuous integration
-
-* Added `reopened` to `validate-pr` workflow to allow it to run when you close/reopen a release PR ([#347](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/347)) ([e5e9d8f](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/e5e9d8f8d406ca5933833253583b9b37e6a5ddf7))
-
 ### v7.0.2 (2025-05-06)
 
 #### Bug fixes
