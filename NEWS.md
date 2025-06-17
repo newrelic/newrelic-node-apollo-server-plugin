@@ -1,3 +1,9 @@
+### v7.1.0 (2025-06-17)
+
+#### Miscellaneous chores
+
+* Add testing against Node 24 ([#351](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/351)) ([3fcfde3](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/3fcfde3760d4fd8a2e8a3cc004017b4ada301cb7))
+
 ### v7.0.2 (2025-05-06)
 
 #### Bug fixes
