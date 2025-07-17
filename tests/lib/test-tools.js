@@ -16,6 +16,7 @@ module.exports = {
 
 const fs = require('node:fs')
 const path = require('node:path')
+const semver = require('semver')
 
 const utils = require('@newrelic/test-utilities')
 const setupErrorSchema = require('./error-setup')
@@ -92,8 +93,12 @@ async function setupExpressTest({ t, testDir, agentConfig = {}, pluginConfig = {
   await server.start()
 
   if (isApollo4 === true) {
-    const { bodyParser, expressMiddleware } = apolloServerPkg
-    app.use('/graphql', bodyParser.json(), expressMiddleware(server))
+    const { bodyParser, expressMiddleware, cors } = apolloServerPkg
+    if (cors) {
+      app.use('/graphql', cors(), bodyParser.json(), expressMiddleware(server))
+    } else {
+      app.use('/graphql', bodyParser.json(), expressMiddleware(server))
+    }
   } else {
     server.applyMiddleware({ app })
   }
@@ -140,29 +145,36 @@ function requireApolloServer(testDir, express = false) {
   const isApollo4 = fs.existsSync(path.join(testDir, 'node_modules/@apollo/server'))
 
   if (isApollo4 === false) {
-    const apolloServer =
+    const { pkg: apolloServer, version } =
       express === false
-        ? loadModule('apollo-server', testDir)
-        : loadModule('apollo-server-express', testDir)
+        ? loadModule('apollo-server', testDir, true)
+        : loadModule('apollo-server-express', testDir, true)
     return {
       isApollo4,
+      apolloVersion: version,
       ...apolloServer
     }
   }
 
   const gql = loadModule('graphql-tag', testDir)
-  const apolloServer = loadModule('@apollo/server', testDir)
+  const { pkg: apolloServer, version } = loadModule('@apollo/server', testDir, true)
   const graphql = loadModule('graphql', testDir)
 
   if (express === true) {
     const bodyParser = loadModule('body-parser', testDir)
-    const { expressMiddleware } = loadModule('@apollo/server/express4', testDir)
+    const { expressMiddleware } = loadModule('@as-integrations/express4', testDir)
+    let cors
+    if (semver.gte(version, '5.0.0')) {
+      cors = loadModule('cors', testDir)
+    }
     return {
       isApollo4,
       ApolloServer: apolloServer.ApolloServer,
+      apolloVersion: version,
       gql,
       graphql,
       bodyParser,
+      cors,
       expressMiddleware
     }
   }
@@ -171,6 +183,7 @@ function requireApolloServer(testDir, express = false) {
   return {
     isApollo4,
     ApolloServer: apolloServer.ApolloServer,
+    apolloVersion: version,
     gql,
     startStandaloneServer,
     graphql
@@ -183,10 +196,17 @@ function requireApolloServer(testDir, express = false) {
  * @param {string} name The module to load.
  * @param {string} rootDir The path to the versioned test directory, e.g.
  * the path to the `apollo-server` tests.
+ * @param {boolean} [getPkgVersion=false] If true, the version of the package will be obtained
  *
  * @returns {*}
  */
-function loadModule(name, rootDir) {
+function loadModule(name, rootDir, getPkgVersion) {
+  if (getPkgVersion === true) {
+    const modulePath = path.join(rootDir, 'node_modules', name, 'package.json')
+    const { version } = JSON.parse(fs.readFileSync(modulePath, 'utf8'))
+    const pkg = require(require.resolve(name, { paths: [rootDir] }))
+    return { pkg, version }
+  }
   return require(require.resolve(name, { paths: [rootDir] }))
 }
 

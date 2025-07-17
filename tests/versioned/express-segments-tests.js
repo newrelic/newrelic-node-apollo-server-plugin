@@ -8,7 +8,12 @@
 const assert = require('node:assert')
 
 const { executeQuery, executeQueryBatch } = require('../lib/test-client')
-const { checkResult, baseSegment, constructSegments } = require('./common')
+const {
+  checkResult,
+  baseSegment,
+  constructSegments,
+  constructOperationSegments
+} = require('./common')
 const { assertSegments } = require('../lib/custom-assertions')
 const promiseResolvers = require('../lib/promise-resolvers')
 
@@ -37,10 +42,10 @@ tests.push({
     helper.agent.once('transactionFinished', (transaction) => {
       const operationPart = `query/${ANON_PLACEHOLDER}/hello`
       const firstSegmentName = baseSegment(operationPart, TRANSACTION_PREFIX)
-      const operationSegments = [
-        'Nodejs/Middleware/Expressjs/<anonymous>',
-        [`${OPERATION_PREFIX}/${operationPart}`, [`${RESOLVE_PREFIX}/hello`]]
-      ]
+      const operationSegments = constructOperationSegments(TRANSACTION_PREFIX, [
+        `${OPERATION_PREFIX}/${operationPart}`,
+        [`${RESOLVE_PREFIX}/hello`]
+      ])
       const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
 
       assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
@@ -76,10 +81,10 @@ tests.push({
     helper.agent.once('transactionFinished', (transaction) => {
       const operationPart = `query/${expectedName}/hello`
       const firstSegmentName = baseSegment(operationPart, TRANSACTION_PREFIX)
-      const operationSegments = [
-        'Nodejs/Middleware/Expressjs/<anonymous>',
-        [`${OPERATION_PREFIX}/${operationPart}`, [`${RESOLVE_PREFIX}/hello`]]
-      ]
+      const operationSegments = constructOperationSegments(TRANSACTION_PREFIX, [
+        `${OPERATION_PREFIX}/${operationPart}`,
+        [`${RESOLVE_PREFIX}/hello`]
+      ])
       const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
       assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
     })
@@ -116,10 +121,10 @@ tests.push({
     helper.agent.once('transactionFinished', (transaction) => {
       const operationPart = `query/${expectedName}/hello`
       const firstSegmentName = baseSegment(operationPart, TRANSACTION_PREFIX)
-      const operationSegments = [
-        'Nodejs/Middleware/Expressjs/<anonymous>',
-        [`${OPERATION_PREFIX}/${operationPart}`, [`${RESOLVE_PREFIX}/hello`]]
-      ]
+      const operationSegments = constructOperationSegments(TRANSACTION_PREFIX, [
+        `${OPERATION_PREFIX}/${operationPart}`,
+        [`${RESOLVE_PREFIX}/hello`]
+      ])
       const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
       assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
     })
@@ -162,18 +167,15 @@ tests.push({
     helper.agent.once('transactionFinished', (transaction) => {
       const operationPart = `query/${ANON_PLACEHOLDER}/${path}`
       const firstSegmentName = baseSegment(operationPart, TRANSACTION_PREFIX)
-      const operationSegments = [
-        'Nodejs/Middleware/Expressjs/<anonymous>',
+      const operationSegments = constructOperationSegments(TRANSACTION_PREFIX, [
+        `${OPERATION_PREFIX}/${operationPart}`,
         [
-          `${OPERATION_PREFIX}/${operationPart}`,
-          [
-            `${RESOLVE_PREFIX}/libraries`,
-            `${RESOLVE_PREFIX}/libraries.books`,
-            `${RESOLVE_PREFIX}/libraries.books.author`,
-            `${RESOLVE_PREFIX}/libraries.books.author.name`
-          ]
+          `${RESOLVE_PREFIX}/libraries`,
+          `${RESOLVE_PREFIX}/libraries.books`,
+          `${RESOLVE_PREFIX}/libraries.books.author`,
+          `${RESOLVE_PREFIX}/libraries.books.author.name`
         ]
-      ]
+      ])
 
       const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
 
@@ -219,19 +221,16 @@ tests.push({
     helper.agent.once('transactionFinished', (transaction) => {
       const operationPart = `query/${expectedName}/${path}`
       const firstSegmentName = baseSegment(operationPart, TRANSACTION_PREFIX)
-      const operationSegments = [
-        'Nodejs/Middleware/Expressjs/<anonymous>',
+      const operationSegments = constructOperationSegments(TRANSACTION_PREFIX, [
+        `${OPERATION_PREFIX}/${operationPart}`,
         [
-          `${OPERATION_PREFIX}/${operationPart}`,
-          [
-            `${RESOLVE_PREFIX}/libraries`,
-            `${RESOLVE_PREFIX}/libraries.books`,
-            `${RESOLVE_PREFIX}/libraries.books.title`,
-            `${RESOLVE_PREFIX}/libraries.books.author`,
-            `${RESOLVE_PREFIX}/libraries.books.author.name`
-          ]
+          `${RESOLVE_PREFIX}/libraries`,
+          `${RESOLVE_PREFIX}/libraries.books`,
+          `${RESOLVE_PREFIX}/libraries.books.title`,
+          `${RESOLVE_PREFIX}/libraries.books.author`,
+          `${RESOLVE_PREFIX}/libraries.books.author.name`
         ]
-      ]
+      ])
       const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
 
       assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
@@ -276,17 +275,14 @@ tests.push({
     helper.agent.once('transactionFinished', (transaction) => {
       const operationPart = `query/${expectedName}/${path}`
       const firstSegmentName = baseSegment(operationPart, TRANSACTION_PREFIX)
-      const operationSegments = [
-        'Nodejs/Middleware/Expressjs/<anonymous>',
+      const operationSegments = constructOperationSegments(TRANSACTION_PREFIX, [
+        `${OPERATION_PREFIX}/${operationPart}`,
         [
-          `${OPERATION_PREFIX}/${operationPart}`,
-          [
-            `${RESOLVE_PREFIX}/alias`,
-            `${RESOLVE_PREFIX}/alias.books`,
-            `${RESOLVE_PREFIX}/alias.books.author`
-          ]
+          `${RESOLVE_PREFIX}/alias`,
+          `${RESOLVE_PREFIX}/alias.books`,
+          `${RESOLVE_PREFIX}/alias.books.author`
         ]
-      ]
+      ])
       const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
 
       assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
@@ -321,13 +317,10 @@ tests.push({
     helper.agent.once('transactionFinished', (transaction) => {
       const operationPart = `mutation/${ANON_PLACEHOLDER}/addThing`
       const firstSegmentName = baseSegment(operationPart, TRANSACTION_PREFIX)
-      const operationSegments = [
-        'Nodejs/Middleware/Expressjs/<anonymous>',
-        [
-          `${OPERATION_PREFIX}/${operationPart}`,
-          [`${RESOLVE_PREFIX}/addThing`, ['timers.setTimeout', ['Callback: namedCallback']]]
-        ]
-      ]
+      const operationSegments = constructOperationSegments(TRANSACTION_PREFIX, [
+        `${OPERATION_PREFIX}/${operationPart}`,
+        [`${RESOLVE_PREFIX}/addThing`, ['timers.setTimeout', ['Callback: namedCallback']]]
+      ])
       const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
 
       assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
@@ -363,13 +356,10 @@ tests.push({
     helper.agent.once('transactionFinished', (transaction) => {
       const operationPart = `mutation/${expectedName}/addThing`
       const firstSegmentName = baseSegment(operationPart, TRANSACTION_PREFIX)
-      const operationSegments = [
-        'Nodejs/Middleware/Expressjs/<anonymous>',
-        [
-          `${OPERATION_PREFIX}/${operationPart}`,
-          [`${RESOLVE_PREFIX}/addThing`, ['timers.setTimeout', ['Callback: namedCallback']]]
-        ]
-      ]
+      const operationSegments = constructOperationSegments(TRANSACTION_PREFIX, [
+        `${OPERATION_PREFIX}/${operationPart}`,
+        [`${RESOLVE_PREFIX}/addThing`, ['timers.setTimeout', ['Callback: namedCallback']]]
+      ])
       const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
 
       assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
@@ -404,10 +394,10 @@ tests.push({
     helper.agent.once('transactionFinished', (transaction) => {
       const operationPart = `query/${ANON_PLACEHOLDER}/paramQuery`
       const firstSegmentName = baseSegment(operationPart, TRANSACTION_PREFIX)
-      const operationSegments = [
-        'Nodejs/Middleware/Expressjs/<anonymous>',
-        [`${OPERATION_PREFIX}/${operationPart}`, [`${RESOLVE_PREFIX}/paramQuery`]]
-      ]
+      const operationSegments = constructOperationSegments(TRANSACTION_PREFIX, [
+        `${OPERATION_PREFIX}/${operationPart}`,
+        [`${RESOLVE_PREFIX}/paramQuery`]
+      ])
       const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
 
       assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
@@ -443,10 +433,10 @@ tests.push({
     helper.agent.once('transactionFinished', (transaction) => {
       const operationPart = `query/${expectedName}/paramQuery`
       const firstSegmentName = baseSegment(operationPart, TRANSACTION_PREFIX)
-      const operationSegments = [
-        'Nodejs/Middleware/Expressjs/<anonymous>',
-        [`${OPERATION_PREFIX}/${operationPart}`, [`${RESOLVE_PREFIX}/paramQuery`]]
-      ]
+      const operationSegments = constructOperationSegments(TRANSACTION_PREFIX, [
+        `${OPERATION_PREFIX}/${operationPart}`,
+        [`${RESOLVE_PREFIX}/paramQuery`]
+      ])
       const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
 
       assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
@@ -491,19 +481,16 @@ tests.push({
     helper.agent.once('transactionFinished', (transaction) => {
       const operationPart = `query/${expectedName}/${path}`
       const firstSegmentName = baseSegment(operationPart, TRANSACTION_PREFIX)
-      const operationSegments = [
-        'Nodejs/Middleware/Expressjs/<anonymous>',
+      const operationSegments = constructOperationSegments(TRANSACTION_PREFIX, [
+        `${OPERATION_PREFIX}/${operationPart}`,
         [
-          `${OPERATION_PREFIX}/${operationPart}`,
-          [
-            [`${RESOLVE_PREFIX}/library`, ['timers.setTimeout', ['Callback: <anonymous>']]],
-            `${RESOLVE_PREFIX}/library.books`,
-            `${RESOLVE_PREFIX}/library.books.title`,
-            `${RESOLVE_PREFIX}/library.books.author`,
-            `${RESOLVE_PREFIX}/library.books.author.name`
-          ]
+          [`${RESOLVE_PREFIX}/library`, ['timers.setTimeout', ['Callback: <anonymous>']]],
+          `${RESOLVE_PREFIX}/library.books`,
+          `${RESOLVE_PREFIX}/library.books.title`,
+          `${RESOLVE_PREFIX}/library.books.author`,
+          `${RESOLVE_PREFIX}/library.books.author.name`
         ]
-      ]
+      ])
       const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
 
       assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
@@ -551,19 +538,16 @@ tests.push({
     helper.agent.once('transactionFinished', (transaction) => {
       const operationPart = `query/${expectedName}/${path}`
       const firstSegmentName = baseSegment(operationPart, TRANSACTION_PREFIX)
-      const operationSegments = [
-        'Nodejs/Middleware/Expressjs/<anonymous>',
+      const operationSegments = constructOperationSegments(TRANSACTION_PREFIX, [
+        `${OPERATION_PREFIX}/${operationPart}`,
         [
-          `${OPERATION_PREFIX}/${operationPart}`,
-          [
-            [`${RESOLVE_PREFIX}/library`, ['timers.setTimeout', ['Callback: <anonymous>']]],
-            `${RESOLVE_PREFIX}/library.books`,
-            `${RESOLVE_PREFIX}/library.books.title`,
-            `${RESOLVE_PREFIX}/library.books.author`,
-            `${RESOLVE_PREFIX}/library.books.author.name`
-          ]
+          [`${RESOLVE_PREFIX}/library`, ['timers.setTimeout', ['Callback: <anonymous>']]],
+          `${RESOLVE_PREFIX}/library.books`,
+          `${RESOLVE_PREFIX}/library.books.title`,
+          `${RESOLVE_PREFIX}/library.books.author`,
+          `${RESOLVE_PREFIX}/library.books.author.name`
         ]
-      ]
+      ])
       const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
 
       assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
@@ -609,19 +593,16 @@ tests.push({
     helper.agent.once('transactionFinished', (transaction) => {
       const operationPart = `query/${expectedName}/${path}`
       const firstSegmentName = baseSegment(operationPart, TRANSACTION_PREFIX)
-      const operationSegments = [
-        'Nodejs/Middleware/Expressjs/<anonymous>',
+      const operationSegments = constructOperationSegments(TRANSACTION_PREFIX, [
+        `${OPERATION_PREFIX}/${operationPart}`,
         [
-          `${OPERATION_PREFIX}/${operationPart}`,
-          [
-            [`${RESOLVE_PREFIX}/library`, ['timers.setTimeout', ['Callback: <anonymous>']]],
-            `${RESOLVE_PREFIX}/library.books`,
-            `${RESOLVE_PREFIX}/library.books.title`,
-            `${RESOLVE_PREFIX}/library.books.author`,
-            `${RESOLVE_PREFIX}/library.books.author.name`
-          ]
+          [`${RESOLVE_PREFIX}/library`, ['timers.setTimeout', ['Callback: <anonymous>']]],
+          `${RESOLVE_PREFIX}/library.books`,
+          `${RESOLVE_PREFIX}/library.books.title`,
+          `${RESOLVE_PREFIX}/library.books.author`,
+          `${RESOLVE_PREFIX}/library.books.author.name`
         ]
-      ]
+      ])
       const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
 
       assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
@@ -679,25 +660,22 @@ tests.push({
         'batch//',
         'batch/'
       )
-      const operationSegments = [
-        'Nodejs/Middleware/Expressjs/<anonymous>',
+      const operationSegments = constructOperationSegments(TRANSACTION_PREFIX, [
         [
+          `${OPERATION_PREFIX}/${operationPart1}`,
           [
-            `${OPERATION_PREFIX}/${operationPart1}`,
-            [
-              [`${RESOLVE_PREFIX}/library`, ['timers.setTimeout', ['Callback: <anonymous>']]],
-              `${RESOLVE_PREFIX}/library.books`,
-              `${RESOLVE_PREFIX}/library.books.title`,
-              `${RESOLVE_PREFIX}/library.books.author`,
-              `${RESOLVE_PREFIX}/library.books.author.name`
-            ]
-          ],
-          [
-            `${OPERATION_PREFIX}/${operationPart2}`,
-            [`${RESOLVE_PREFIX}/addThing`, ['timers.setTimeout', ['Callback: namedCallback']]]
+            [`${RESOLVE_PREFIX}/library`, ['timers.setTimeout', ['Callback: <anonymous>']]],
+            `${RESOLVE_PREFIX}/library.books`,
+            `${RESOLVE_PREFIX}/library.books.title`,
+            `${RESOLVE_PREFIX}/library.books.author`,
+            `${RESOLVE_PREFIX}/library.books.author.name`
           ]
+        ],
+        [
+          `${OPERATION_PREFIX}/${operationPart2}`,
+          [`${RESOLVE_PREFIX}/addThing`, ['timers.setTimeout', ['Callback: namedCallback']]]
         ]
-      ]
+      ])
       const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
 
       assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
@@ -742,10 +720,10 @@ tests.push({
     helper.agent.once('transactionFinished', (transaction) => {
       const operationPart = `query/${expectedName}/${deepestPath}`
       const firstSegmentName = baseSegment(operationPart, TRANSACTION_PREFIX)
-      const operationSegments = [
-        'Nodejs/Middleware/Expressjs/<anonymous>',
-        [`${OPERATION_PREFIX}/${operationPart}`, [`${RESOLVE_PREFIX}/search`]]
-      ]
+      const operationSegments = constructOperationSegments(TRANSACTION_PREFIX, [
+        `${OPERATION_PREFIX}/${operationPart}`,
+        [`${RESOLVE_PREFIX}/search`]
+      ])
       const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
       assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
     })
@@ -790,10 +768,10 @@ tests.push({
     helper.agent.once('transactionFinished', (transaction) => {
       const operationPart = `query/${expectedName}/${deepestPath}`
       const firstSegmentName = baseSegment(operationPart, TRANSACTION_PREFIX)
-      const operationSegments = [
-        'Nodejs/Middleware/Expressjs/<anonymous>',
-        [`${OPERATION_PREFIX}/${operationPart}`, [`${RESOLVE_PREFIX}/search`]]
-      ]
+      const operationSegments = constructOperationSegments(TRANSACTION_PREFIX, [
+        `${OPERATION_PREFIX}/${operationPart}`,
+        [`${RESOLVE_PREFIX}/search`]
+      ])
       const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
       assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
     })
@@ -834,10 +812,9 @@ tests.push({
 
     helper.agent.once('transactionFinished', (transaction) => {
       const firstSegmentName = baseSegment('*', TRANSACTION_PREFIX)
-      const operationSegments = [
-        'Nodejs/Middleware/Expressjs/<anonymous>',
-        [`${OPERATION_PREFIX}/${UNKNOWN_OPERATION}`]
-      ]
+      const operationSegments = constructOperationSegments(TRANSACTION_PREFIX, [
+        `${OPERATION_PREFIX}/${UNKNOWN_OPERATION}`
+      ])
       const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
 
       assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
@@ -888,10 +865,9 @@ tests.push({
     helper.agent.once('transactionFinished', (transaction) => {
       const operationPart = `query/${ANON_PLACEHOLDER}/${path}`
       const firstSegmentName = baseSegment(operationPart, TRANSACTION_PREFIX)
-      const operationSegments = [
-        'Nodejs/Middleware/Expressjs/<anonymous>',
-        [`${OPERATION_PREFIX}/${operationPart}`]
-      ]
+      const operationSegments = constructOperationSegments(TRANSACTION_PREFIX, [
+        `${OPERATION_PREFIX}/${operationPart}`
+      ])
       const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
 
       assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })

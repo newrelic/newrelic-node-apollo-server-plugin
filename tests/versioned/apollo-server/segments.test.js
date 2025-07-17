@@ -11,6 +11,7 @@ const { executeQuery } = require('../../lib/test-client')
 const { afterEach, setupCoreTest } = require('../../lib/test-tools')
 const { checkResult, baseSegment } = require('../common')
 const assert = require('node:assert')
+const semver = require('semver')
 
 const expressSegmentsTests = require('../express-segments-tests')
 const { assertSegments, assertMetrics } = require('../../lib/custom-assertions')
@@ -24,7 +25,10 @@ test.afterEach(async (ctx) => {
 for (const defTest of expressSegmentsTests.tests) {
   test(`non-scalar: ${defTest.name}`, async (t) => {
     await setupCoreTest({ t, testDir: __dirname })
-    t.nr.TRANSACTION_PREFIX = 'WebTransaction/Expressjs/POST'
+    const prefix = semver.gte(t.nr.apolloServerPkg.apolloVersion, '5.0.0')
+      ? 'WebTransaction/Nodejs/POST'
+      : 'WebTransaction/Expressjs/POST'
+    t.nr.TRANSACTION_PREFIX = prefix
     await defTest.fn(t)
   })
 }
@@ -33,7 +37,10 @@ const { pluginConfig } = { captureScalars: true }
 for (const scalarTest of expressSegmentsTests.tests) {
   test(`scalar: ${scalarTest.name}`, async (t) => {
     await setupCoreTest({ t, testDir: __dirname, pluginConfig })
-    t.nr.TRANSACTION_PREFIX = 'WebTransaction/Expressjs/POST'
+    const prefix = semver.gte(t.nr.apolloServerPkg.apolloVersion, '5.0.0')
+      ? 'WebTransaction/Nodejs/POST'
+      : 'WebTransaction/Expressjs/POST'
+    t.nr.TRANSACTION_PREFIX = prefix
     await scalarTest.fn(t)
   })
 }
@@ -64,10 +71,15 @@ test('fragmented trace does not add segments to trace but still records metrics 
 
   helper.agent.once('transactionFinished', (transaction) => {
     const operationPart = `query/${expectedName}/${path}`
-    const firstSegmentName = baseSegment(operationPart, 'WebTransaction/Expressjs/POST')
+    const prefix = semver.gte(t.nr.apolloServerPkg.apolloVersion, '5.0.0')
+      ? 'WebTransaction/Nodejs/POST'
+      : 'WebTransaction/Expressjs/POST'
+    const firstSegmentName = baseSegment(operationPart, prefix)
     const expectedSegments = [firstSegmentName]
-    if (isApollo4) {
+    if (isApollo4 && prefix.includes('Express')) {
       expectedSegments.push(['Nodejs/Middleware/Expressjs/<anonymous>'])
+    } else if (prefix.includes('Nodejs')) {
+      // do nothing
     } else {
       expectedSegments.push(['Expressjs/Router: /'])
     }

@@ -16,13 +16,14 @@ const promiseResolvers = require('../lib/promise-resolvers')
 const OPERATION_PREFIX = 'GraphQL/operation/ApolloServer'
 const RESOLVE_PREFIX = 'GraphQL/resolve/ApolloServer'
 const TRANSACTION_PREFIX = 'WebTransaction/Expressjs/POST'
+const testDir = `${__dirname}/../../`
 
 const tests = []
 
 tests.push({
   name: 'multi-level, should not capture scalar fields',
   async fn(t) {
-    const { helper, serverUrl, pluginConfig, isApollo4 } = t.nr
+    const { helper, serverUrl, pluginConfig } = t.nr
     const { promise, resolve } = promiseResolvers()
 
     const expectedName = 'GetAllForLibrary'
@@ -67,50 +68,24 @@ tests.push({
               `${RESOLVE_PREFIX}/library.magazines.issue`
             ]
 
-      let expectedSegments
-      if (isApollo4 === true) {
-        expectedSegments = [
-          `${TRANSACTION_PREFIX}//${operationPart}`,
+      const expectedSegments = [
+        `${TRANSACTION_PREFIX}//${operationPart}`,
+        [
+          'Nodejs/Middleware/Expressjs/query',
+          'Nodejs/Middleware/Expressjs/expressInit',
+          'Nodejs/Middleware/Expressjs/corsMiddleware',
+          'Nodejs/Middleware/Expressjs/jsonParser',
+          'Nodejs/Middleware/Expressjs/<anonymous>',
           [
-            'Nodejs/Middleware/Expressjs/query',
-            'Nodejs/Middleware/Expressjs/expressInit',
-            'Nodejs/Middleware/Expressjs/corsMiddleware',
-            'Nodejs/Middleware/Expressjs/jsonParser',
-            'Nodejs/Middleware/Expressjs/<anonymous>',
+            `${OPERATION_PREFIX}/${operationPart}`,
             [
-              `${OPERATION_PREFIX}/${operationPart}`,
-              [
-                `${RESOLVE_PREFIX}/library`,
-                ['timers.setTimeout', ['Callback: <anonymous>']],
-                ...librarySiblings
-              ]
+              `${RESOLVE_PREFIX}/library`,
+              ['timers.setTimeout', ['Callback: <anonymous>']],
+              ...librarySiblings
             ]
           ]
         ]
-      } else {
-        // Less than Apollo4 has a different structure.
-        expectedSegments = [
-          `${TRANSACTION_PREFIX}//${operationPart}`,
-          [
-            'Nodejs/Middleware/Expressjs/query',
-            'Nodejs/Middleware/Expressjs/expressInit',
-            'Expressjs/Router: /',
-            [
-              'Nodejs/Middleware/Expressjs/corsMiddleware',
-              'Nodejs/Middleware/Expressjs/jsonParser',
-              'Nodejs/Middleware/Expressjs/<anonymous>',
-              [
-                `${OPERATION_PREFIX}/${operationPart}`,
-                [
-                  `${RESOLVE_PREFIX}/library`,
-                  ['timers.setTimeout', ['Callback: <anonymous>']],
-                  ...librarySiblings
-                ]
-              ]
-            ]
-          ]
-        ]
-      }
+      ]
 
       // Exact match to ensure no extra fields snuck in
       assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: true })
@@ -126,19 +101,19 @@ tests.push({
 })
 
 test.afterEach(async (ctx) => {
-  await afterEach({ t: ctx, testDir: __dirname })
+  await afterEach({ t: ctx, testDir })
 })
 
 for (const tst of tests) {
   test(`(captureScalars: false) ${tst.name})`, async (t) => {
-    await setupCoreTest({ t, pluginConfig: { captureScalars: false }, testDir: __dirname })
+    await setupCoreTest({ t, pluginConfig: { captureScalars: false }, testDir })
     await tst.fn(t)
   })
 }
 
 for (const tst of tests) {
   test(`(captureScalars: true) ${tst.name})`, async (t) => {
-    await setupCoreTest({ t, pluginConfig: { captureScalars: true }, testDir: __dirname })
+    await setupCoreTest({ t, pluginConfig: { captureScalars: true }, testDir })
     await tst.fn(t)
   })
 }

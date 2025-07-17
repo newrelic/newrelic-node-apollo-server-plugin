@@ -57,6 +57,7 @@
     "lockfile-lint": "^4.9.6",
     "newrelic": "^12.18.2",
     "prettier": "^2.3.2",
+    "semver": "^7.7.2",
     "sinon": "^11.1.2",
     "tsd": "^0.18.0"
   },

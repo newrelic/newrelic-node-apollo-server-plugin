@@ -11,6 +11,7 @@ const assert = require('node:assert')
 const { executeQuery } = require('../lib/test-client')
 const { afterEach, setupCoreTest } = require('../lib/test-tools')
 const promiseResolvers = require('../lib/promise-resolvers')
+const testDir = `${__dirname}/../../`
 
 const queries = [
   `{
@@ -36,12 +37,12 @@ const captureTrueTests = generateTests(false)
 const captureFalseTests = generateTests(true)
 
 test.afterEach(async (ctx) => {
-  await afterEach({ t: ctx, testDir: __dirname })
+  await afterEach({ t: ctx, testDir })
 })
 
 for (const tst of defaultTests) {
   test(`(default) ${tst.name}`, async (t) => {
-    await setupCoreTest({ t, pluginConfig: {}, testDir: __dirname })
+    await setupCoreTest({ t, pluginConfig: {}, testDir })
     await tst.fn(t)
   })
 }
@@ -51,7 +52,7 @@ for (const tst of captureTrueTests) {
     await setupCoreTest({
       t,
       pluginConfig: { captureIntrospectionQueries: true },
-      testDir: __dirname
+      testDir
     })
     await tst.fn(t)
   })
@@ -62,7 +63,7 @@ for (const tst of captureFalseTests) {
     await setupCoreTest({
       t,
       pluginConfig: { captureIntrospectionQueries: false },
-      testDir: __dirname
+      testDir
     })
     await tst.fn(t)
   })

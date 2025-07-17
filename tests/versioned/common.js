@@ -52,3 +52,17 @@ common.constructSegments = function constructSegments(
   }
   return [firstSegmentName, ['Expressjs/Router: /', [...operationSegments]]]
 }
+
+/**
+ * Creates the tree of operation segments. If this is using apollo-express or apollo server < 5
+ * it adds an express middleware handler
+ * @param {string} prefix transaction prefix
+ * @param {array} operationSegments operation segments
+ * @returns {array} array of segments
+ */
+common.constructOperationSegments = function constructOperationSegments(prefix, operationSegments) {
+  if (prefix.includes('Nodejs')) {
+    return operationSegments
+  }
+  return ['Nodejs/Middleware/Expressjs/<anonymous>', operationSegments]
+}

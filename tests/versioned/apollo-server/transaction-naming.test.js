@@ -6,6 +6,7 @@
 'use strict'
 
 const test = require('node:test')
+const semver = require('semver')
 
 const { afterEach, setupCoreTest } = require('../../lib/test-tools')
 
@@ -18,7 +19,10 @@ test.afterEach(async (ctx) => {
 for (const txTest of transactionNamingTests.tests) {
   test(txTest.name, async (t) => {
     await setupCoreTest({ t, testDir: __dirname })
-    t.nr.EXPECTED_PREFIX = `WebTransaction/Expressjs/POST`
+    const prefix = semver.gte(t.nr.apolloServerPkg.apolloVersion, '5.0.0')
+      ? 'WebTransaction/Nodejs/POST'
+      : 'WebTransaction/Expressjs/POST'
+    t.nr.EXPECTED_PREFIX = prefix
     await txTest.fn(t)
   })
 }
