@@ -32,6 +32,7 @@
       },
       "dependencies": {
         "@apollo/server": ">=4.0.0",
+        "@as-integrations/express4": "latest",
         "graphql-tag": "latest"
       },
       "files": [

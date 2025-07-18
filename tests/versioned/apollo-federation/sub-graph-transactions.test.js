@@ -67,11 +67,11 @@ test('apollo-federation: sub graph transaction naming ', async (t) => {
 
     const transactions = []
     const expectedTransactions = [
-      /WebTransaction\/Expressjs\/POST\/\/query\/SubGraphs__Library__[\d]+\/libraries.branch/,
-      /WebTransaction\/Expressjs\/POST\/\/query\/SubGraphs__Book__[\d]+\/_entities<Library>.booksInStock/,
+      /WebTransaction\/Nodejs\/POST\/\/query\/SubGraphs__Library__[\d]+\/libraries.branch/,
+      /WebTransaction\/Nodejs\/POST\/\/query\/SubGraphs__Book__[\d]+\/_entities<Library>.booksInStock/,
       // eslint-disable-next-line max-len
-      /WebTransaction\/Expressjs\/POST\/\/query\/SubGraphs__Magazine__[\d]+\/_entities<Library>.magazinesInStock/,
-      /WebTransaction\/Expressjs\/POST\/\/query\/SubGraphs\/libraries/
+      /WebTransaction\/Nodejs\/POST\/\/query\/SubGraphs__Magazine__[\d]+\/_entities<Library>.magazinesInStock/,
+      /WebTransaction\/Nodejs\/POST\/\/query\/SubGraphs\/libraries/
     ]
 
     helper.agent.on('transactionFinished', (transaction) => {
@@ -128,7 +128,7 @@ test('apollo-federation: sub graph transaction naming ', async (t) => {
 
     const transactions = []
     const expectedPath = 'libraries.branch'
-    const expectedTransaction = `WebTransaction/Expressjs/POST//query/SubGraphs__Library__0/${expectedPath}`
+    const expectedTransaction = `WebTransaction/Nodejs/POST//query/SubGraphs__Library__0/${expectedPath}`
 
     helper.agent.on('transactionFinished', (transaction) => {
       transactions.push(transaction.name)

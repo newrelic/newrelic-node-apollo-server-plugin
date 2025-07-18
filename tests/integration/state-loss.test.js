@@ -12,6 +12,7 @@ const { executeQuery } = require('../lib/test-client')
 const { afterEach, setupCoreTest } = require('../lib/test-tools')
 const promiseResolvers = require('../lib/promise-resolvers')
 const PluginStateLossTester = require('./plugin-state-loss-tester')
+const testDir = `${__dirname}/../../`
 
 const tests = []
 
@@ -105,7 +106,7 @@ test.afterEach(async (ctx) => {
 
 for (const stateTest of tests) {
   test(stateTest.name, async (t) => {
-    await setupCoreTest({ t, testDir: __dirname })
+    await setupCoreTest({ t, testDir })
     t.nr.stateLossTester = new PluginStateLossTester()
     await stateTest.fn(t)
   })
