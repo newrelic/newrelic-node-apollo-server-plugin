@@ -12,7 +12,7 @@ const { assertSegments } = require('../../lib/custom-assertions')
 const ANON_PLACEHOLDER = '<anonymous>'
 const OPERATION_PREFIX = 'GraphQL/operation/ApolloServer'
 const EXTERNAL_PREFIX = 'External'
-const TRANSACTION_PREFIX = `WebTransaction/Expressjs/POST`
+const TRANSACTION_PREFIX = `WebTransaction/Nodejs/POST`
 
 const { setupFederatedGateway, teardownGateway } = require('./federated-gateway-server-setup')
 const { checkResult, shouldSkipTransaction } = require('../common')
@@ -27,7 +27,7 @@ test('apollo-federation: federated segments', async (t) => {
   })
 
   await t.test('should nest sub graphs under operation', async (t) => {
-    const plan = tspl(t, { plan: 8 })
+    const plan = tspl(t, { plan: 7 })
     const { helper, gatewayService, libraryService, magazineService, bookService } = t.nr
     const serverUrl = gatewayService.url
 
@@ -63,13 +63,7 @@ test('apollo-federation: federated segments', async (t) => {
 
       const expectedSegments = [
         `${TRANSACTION_PREFIX}//${operationPart}`,
-        [
-          'Nodejs/Middleware/Expressjs/<anonymous>',
-          [
-            `${OPERATION_PREFIX}/${operationPart}`,
-            [libraryExternal, bookExternal, magazineExternal]
-          ]
-        ]
+        [`${OPERATION_PREFIX}/${operationPart}`, [libraryExternal, bookExternal, magazineExternal]]
       ]
 
       assertSegments(tx.trace, tx.trace.root, expectedSegments, { exact: false }, { assert: plan })
@@ -79,7 +73,7 @@ test('apollo-federation: federated segments', async (t) => {
   })
 
   await t.test('batch query should nest sub graphs under appropriate operations', async (t) => {
-    const plan = tspl(t, { plan: 11 })
+    const plan = tspl(t, { plan: 10 })
     const { helper, gatewayService, libraryService, bookService, magazineService } = t.nr
     const serverUrl = gatewayService.url
 
@@ -131,13 +125,10 @@ test('apollo-federation: federated segments', async (t) => {
       const expectedSegments = [
         `${batchTransactionPrefix}/${expectedQuery1Name}/${expectedQuery2Name}`,
         [
-          'Nodejs/Middleware/Expressjs/<anonymous>',
-          [
-            `${OPERATION_PREFIX}/${operationPart1}`,
-            [libraryExternal, bookExternal],
-            `${OPERATION_PREFIX}/${operationPart2}`,
-            [libraryExternal, magazineExternal]
-          ]
+          `${OPERATION_PREFIX}/${operationPart1}`,
+          [libraryExternal, bookExternal],
+          `${OPERATION_PREFIX}/${operationPart2}`,
+          [libraryExternal, magazineExternal]
         ]
       ]
 
