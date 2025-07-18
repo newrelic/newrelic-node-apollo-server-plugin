@@ -76,13 +76,14 @@ test('fragmented trace does not add segments to trace but still records metrics 
       : 'WebTransaction/Expressjs/POST'
     const firstSegmentName = baseSegment(operationPart, prefix)
     const expectedSegments = [firstSegmentName]
+    // apollo 4.x includes a handler for the express middleware
     if (isApollo4 && prefix.includes('Express')) {
       expectedSegments.push(['Nodejs/Middleware/Expressjs/<anonymous>'])
-    } else if (prefix.includes('Nodejs')) {
-      // do nothing
-    } else {
+      // apollo < 4.x does not include a handler for the express middleware but instead a router
+    } else if (prefix.includes('Express')) {
       expectedSegments.push(['Expressjs/Router: /'])
     }
+    // for apollo 5+ there are no express related segments because it doesn't use express
     assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
 
     const expectedMetrics = [
