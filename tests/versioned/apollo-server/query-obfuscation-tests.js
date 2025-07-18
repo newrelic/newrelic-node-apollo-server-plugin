@@ -7,10 +7,10 @@
 
 const assert = require('node:assert')
 
-const { executeQuery, executeJson } = require('../lib/test-client')
+const { executeQuery, executeJson } = require('../../lib/test-client')
 const { checkResult } = require('./common')
-const promiseReolvers = require('../lib/promise-resolvers')
-const findSegmentByName = require('../lib/find-segment')
+const promiseReolvers = require('../../lib/promise-resolvers')
+const findSegmentByName = require('../../lib/find-segment')
 const SEGMENT_DESTINATION = 0x20
 const ANON_PLACEHOLDER = '<anonymous>'
 const QUERY_ATTRIBUTE_NAME = 'graphql.operation.query'

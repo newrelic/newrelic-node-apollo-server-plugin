@@ -7,15 +7,15 @@
 
 const assert = require('node:assert')
 
-const { executeQuery, executeQueryBatch } = require('../lib/test-client')
+const { executeQuery, executeQueryBatch } = require('../../lib/test-client')
 const {
   checkResult,
   baseSegment,
   constructSegments,
   constructOperationSegments
 } = require('./common')
-const { assertSegments } = require('../lib/custom-assertions')
-const promiseResolvers = require('../lib/promise-resolvers')
+const { assertSegments } = require('../../lib/custom-assertions')
+const promiseResolvers = require('../../lib/promise-resolvers')
 
 const ANON_PLACEHOLDER = '<anonymous>'
 const UNKNOWN_OPERATION = '<unknown>'

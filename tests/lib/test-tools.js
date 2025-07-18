@@ -221,8 +221,6 @@ function unloadModules(testDir) {
   const modules = [
     'express',
     'body-parser',
-    'apollo-server',
-    'apollo-server-express',
     '@apollo/gateway',
     '@apollo/server',
     '@apollo/server/express4',

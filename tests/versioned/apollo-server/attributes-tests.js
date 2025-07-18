@@ -7,10 +7,10 @@
 
 const assert = require('node:assert')
 
-const { executeQuery, executeJson } = require('../lib/test-client')
-const { match } = require('../lib/custom-assertions')
-const promiseResolvers = require('../lib/promise-resolvers')
-const findSegmentByName = require('../lib/find-segment')
+const { executeQuery, executeJson } = require('../../lib/test-client')
+const { match } = require('../../lib/custom-assertions')
+const promiseResolvers = require('../../lib/promise-resolvers')
+const findSegmentByName = require('../../lib/find-segment')
 
 const SEGMENT_DESTINATION = 0x20
 const SPAN_DESTINATION = 0x10
