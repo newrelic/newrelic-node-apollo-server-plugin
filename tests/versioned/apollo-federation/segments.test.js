@@ -12,7 +12,7 @@ const { assertSegments } = require('../../lib/custom-assertions')
 const ANON_PLACEHOLDER = '<anonymous>'
 const OPERATION_PREFIX = 'GraphQL/operation/ApolloServer'
 const EXTERNAL_PREFIX = 'External'
-const TRANSACTION_PREFIX = `WebTransaction/Nodejs/POST`
+const TRANSACTION_PREFIX = 'WebTransaction/Nodejs/POST'
 
 const { setupFederatedGateway, teardownGateway } = require('./federated-gateway-server-setup')
 const { checkResult, shouldSkipTransaction } = require('../common')
@@ -141,6 +141,10 @@ test('apollo-federation: federated segments', async (t) => {
   })
 })
 
+/**
+ *
+ * @param url
+ */
 function formatExternalSegment(url) {
   const hostAndPort = url.replace('http://', '')
   return `${EXTERNAL_PREFIX}/${hostAndPort}`

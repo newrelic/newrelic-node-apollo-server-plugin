@@ -7,6 +7,7 @@
 
 const test = require('node:test')
 const assert = require('node:assert')
+const path = require('node:path')
 
 const { executeQuery } = require('../lib/test-client')
 const { assertSegments } = require('../lib/custom-assertions')
@@ -16,7 +17,7 @@ const promiseResolvers = require('../lib/promise-resolvers')
 const OPERATION_PREFIX = 'GraphQL/operation/ApolloServer'
 const RESOLVE_PREFIX = 'GraphQL/resolve/ApolloServer'
 const TRANSACTION_PREFIX = 'WebTransaction/Expressjs/POST'
-const testDir = `${__dirname}/../../`
+const testDir = path.join(__dirname, '..', '..')
 
 const tests = []
 

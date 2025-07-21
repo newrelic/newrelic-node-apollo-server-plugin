@@ -119,7 +119,7 @@ tests.push({
 
     const queryJson = {
       operationName: expectedName,
-      query: query,
+      query,
       variables: {
         branch: 'riverside'
       }

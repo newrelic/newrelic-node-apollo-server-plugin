@@ -17,6 +17,11 @@ const SPAN_DESTINATION = 0x10
 const ANON_PLACEHOLDER = '<anonymous>'
 const OPERATION_PREFIX = 'GraphQL/operation/ApolloServer'
 
+/**
+ *
+ * @param segment
+ * @param expected
+ */
 function assertCustomAttributes(segment, expected) {
   const customResolveAttributes = segment.getSpanContext().customAttributes.get(SPAN_DESTINATION)
   match(customResolveAttributes, expected)
@@ -428,7 +433,7 @@ tests.push({
 
     const queryJson = {
       operationName: expectedName,
-      query: query,
+      query,
       variables: {
         arg1: 'first',
         arg2: 'second'

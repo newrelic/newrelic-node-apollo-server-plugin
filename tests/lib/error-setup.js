@@ -5,6 +5,10 @@
 
 'use strict'
 
+/**
+ *
+ * @param serverPkgExport
+ */
 function createErrorClasses(serverPkgExport) {
   const { GraphQLError } = serverPkgExport.graphql
 
@@ -71,13 +75,14 @@ function createErrorClasses(serverPkgExport) {
  *
  * @param {Object} serverPkgExport an apollo server pkg export
  * @param {Object} resolvers gql resolver definition
+ * @param isApollo4
  * @returns {Object} graphql schema
  */
 module.exports = function setupErrorResolvers(serverPkgExport, resolvers, isApollo4) {
   const {
     CustomError,
     ForbiddenError,
-    SyntaxError,
+    SyntaxError, // eslint-disable-line sonarjs/no-globals-shadowing
     UserInputError,
     ValidationError,
     AuthenticationError

@@ -7,12 +7,13 @@
 
 const test = require('node:test')
 const assert = require('node:assert')
+const path = require('node:path')
 
 const { executeQuery } = require('../lib/test-client')
 const { afterEach, setupCoreTest } = require('../lib/test-tools')
 const promiseResolvers = require('../lib/promise-resolvers')
 const PluginStateLossTester = require('./plugin-state-loss-tester')
-const testDir = `${__dirname}/../../`
+const testDir = path.join(__dirname, '..', '..')
 
 const tests = []
 
