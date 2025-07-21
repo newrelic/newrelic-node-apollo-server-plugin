@@ -6,11 +6,12 @@
 'use strict'
 
 const test = require('node:test')
+const path = require('node:path')
 
 const { afterEach, setupCoreTest } = require('../lib/test-tools')
 
 const metricsTests = require('../lib/metrics-tests')
-const testDir = `${__dirname}/../../`
+const testDir = path.join(__dirname, '..', '..')
 
 test.afterEach(async (ctx) => {
   await afterEach({ t: ctx, testDir })

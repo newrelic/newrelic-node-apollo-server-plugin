@@ -67,10 +67,9 @@ test('apollo-federation: sub graph transaction naming ', async (t) => {
 
     const transactions = []
     const expectedTransactions = [
-      /WebTransaction\/Nodejs\/POST\/\/query\/SubGraphs__Library__[\d]+\/libraries.branch/,
-      /WebTransaction\/Nodejs\/POST\/\/query\/SubGraphs__Book__[\d]+\/_entities<Library>.booksInStock/,
-      // eslint-disable-next-line max-len
-      /WebTransaction\/Nodejs\/POST\/\/query\/SubGraphs__Magazine__[\d]+\/_entities<Library>.magazinesInStock/,
+      /WebTransaction\/Nodejs\/POST\/\/query\/SubGraphs__Library__\d+\/libraries.branch/,
+      /WebTransaction\/Nodejs\/POST\/\/query\/SubGraphs__Book__\d+\/_entities<Library>.booksInStock/,
+      /WebTransaction\/Nodejs\/POST\/\/query\/SubGraphs__Magazine__\d+\/_entities<Library>.magazinesInStock/,
       /WebTransaction\/Nodejs\/POST\/\/query\/SubGraphs\/libraries/
     ]
 

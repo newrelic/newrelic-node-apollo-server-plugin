@@ -18,7 +18,7 @@ test.afterEach(async (ctx) => {
 for (const txTest of transactionNamingTests.tests) {
   test(txTest.name, async (t) => {
     await setupExpressTest({ t, testDir: __dirname })
-    t.nr.EXPECTED_PREFIX = `WebTransaction/Expressjs/POST`
+    t.nr.EXPECTED_PREFIX = 'WebTransaction/Expressjs/POST'
     await txTest.fn(t)
   })
 }
