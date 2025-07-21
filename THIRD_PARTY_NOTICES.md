@@ -27,7 +27,6 @@ code, the source code can be found at [https://github.com/newrelic/newrelic-node
 * [eslint-plugin-jsdoc](#eslint-plugin-jsdoc)
 * [eslint](#eslint)
 * [graphql-tag](#graphql-tag)
-* [graphql](#graphql)
 * [husky](#husky)
 * [lint-staged](#lint-staged)
 * [lockfile-lint](#lockfile-lint)
@@ -44,18 +43,27 @@ code, the source code can be found at [https://github.com/newrelic/newrelic-node
 
 ### @apollo/server
 
-This product includes source derived from [@apollo/server](https://github.com/apollographql/apollo-server) ([v4.11.2](https://github.com/apollographql/apollo-server/tree/v4.11.2)), distributed under the [MIT License](https://github.com/apollographql/apollo-server/blob/v4.11.2/README.md):
+This product includes source derived from [@apollo/server](https://github.com/apollographql/apollo-server) ([v4.12.2](https://github.com/apollographql/apollo-server/tree/v4.12.2)), distributed under the [MIT License](https://github.com/apollographql/apollo-server/blob/v4.12.2/README.md):
 
 ```
 MIT License
 
 Copyright (c) <year> <copyright holders>
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and 
+associated documentation files (the "Software"), to deal in the Software without restriction, including 
+without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell 
+copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the 
+following conditions:
 
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+The above copyright notice and this permission notice shall be included in all copies or substantial 
+portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT 
+LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO 
+EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER 
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE 
+USE OR OTHER DEALINGS IN THE SOFTWARE.
 ```
 
 ### @matteo.collina/tspl
@@ -852,35 +860,6 @@ SOFTWARE.
 
 ```
 
-### graphql
-
-This product includes source derived from [graphql](https://github.com/graphql/graphql-js) ([v16.9.0](https://github.com/graphql/graphql-js/tree/v16.9.0)), distributed under the [MIT License](https://github.com/graphql/graphql-js/blob/v16.9.0/LICENSE):
-
-```
-MIT License
-
-Copyright (c) GraphQL Contributors
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
-```
-
 ### husky
 
 This product includes source derived from [husky](https://github.com/typicode/husky) ([v6.0.0](https://github.com/typicode/husky/tree/v6.0.0)), distributed under the [MIT License](https://github.com/typicode/husky/blob/v6.0.0/LICENSE):
@@ -941,7 +920,7 @@ SOFTWARE.
 
 ### lockfile-lint
 
-This product includes source derived from [lockfile-lint](https://github.com/lirantal/lockfile-lint) ([v4.14.0](https://github.com/lirantal/lockfile-lint/tree/v4.14.0)), distributed under the [Apache-2.0 License](https://github.com/lirantal/lockfile-lint/blob/v4.14.0/LICENSE):
+This product includes source derived from [lockfile-lint](https://github.com/lirantal/lockfile-lint) ([v4.14.1](https://github.com/lirantal/lockfile-lint/tree/v4.14.1)), distributed under the [Apache-2.0 License](https://github.com/lirantal/lockfile-lint/blob/v4.14.1/LICENSE):
 
 ```
 
@@ -1139,7 +1118,7 @@ This product includes source derived from [lockfile-lint](https://github.com/lir
 
 ### newrelic
 
-This product includes source derived from [newrelic](https://github.com/newrelic/node-newrelic) ([v12.23.0](https://github.com/newrelic/node-newrelic/tree/v12.23.0)), distributed under the [Apache-2.0 License](https://github.com/newrelic/node-newrelic/blob/v12.23.0/LICENSE):
+This product includes source derived from [newrelic](https://github.com/newrelic/node-newrelic) ([v12.25.0](https://github.com/newrelic/node-newrelic/tree/v12.25.0)), distributed under the [Apache-2.0 License](https://github.com/newrelic/node-newrelic/blob/v12.25.0/LICENSE):
 
 ```
                                  Apache License
