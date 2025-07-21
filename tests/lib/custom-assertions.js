@@ -215,12 +215,7 @@ function assertSegments(
       const sequenceItem = expected[i]
 
       if (typeof sequenceItem === 'string') {
-        // find corresponding child in parent
-        for (let j = 0; j < children.length; j++) {
-          if (children[j].name.startsWith(sequenceItem) === true) {
-            child = children[j]
-          }
-        }
+        const child = children.find((segment) => segment.name === sequenceItem)
         assert.ok(child, 'segment "' + parent.name + '" should have child "' + sequenceItem + '"')
         if (typeof expected[i + 1] === 'object') {
           assertSegments(trace, child, expected[i + 1], { exact }, { assert })
