@@ -33,7 +33,7 @@ for (const defTest of expressSegmentsTests.tests) {
   })
 }
 
-const { pluginConfig } = { captureScalars: true }
+const pluginConfig = { captureScalars: true }
 for (const scalarTest of expressSegmentsTests.tests) {
   test(`scalar: ${scalarTest.name}`, async (t) => {
     await setupCoreTest({ t, testDir: __dirname, pluginConfig })

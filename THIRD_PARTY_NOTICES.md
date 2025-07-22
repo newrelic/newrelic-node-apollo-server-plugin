@@ -22,12 +22,11 @@ code, the source code can be found at [https://github.com/newrelic/newrelic-node
 * [@newrelic/eslint-config](#newreliceslint-config)
 * [@newrelic/newrelic-oss-cli](#newrelicnewrelic-oss-cli)
 * [@newrelic/test-utilities](#newrelictest-utilities)
-* [apollo-server](#apollo-server)
 * [borp](#borp)
 * [c8](#c8)
 * [eslint-plugin-jsdoc](#eslint-plugin-jsdoc)
 * [eslint](#eslint)
-* [graphql](#graphql)
+* [graphql-tag](#graphql-tag)
 * [husky](#husky)
 * [lint-staged](#lint-staged)
 * [lockfile-lint](#lockfile-lint)
@@ -44,18 +43,27 @@ code, the source code can be found at [https://github.com/newrelic/newrelic-node
 
 ### @apollo/server
 
-This product includes source derived from [@apollo/server](https://github.com/apollographql/apollo-server) ([v4.10.3](https://github.com/apollographql/apollo-server/tree/v4.10.3)), distributed under the [MIT License](https://github.com/apollographql/apollo-server/blob/v4.10.3/README.md):
+This product includes source derived from [@apollo/server](https://github.com/apollographql/apollo-server) ([v4.12.2](https://github.com/apollographql/apollo-server/tree/v4.12.2)), distributed under the [MIT License](https://github.com/apollographql/apollo-server/blob/v4.12.2/README.md):
 
 ```
 MIT License
 
 Copyright (c) <year> <copyright holders>
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and 
+associated documentation files (the "Software"), to deal in the Software without restriction, including 
+without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell 
+copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the 
+following conditions:
 
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+The above copyright notice and this permission notice shall be included in all copies or substantial 
+portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT 
+LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO 
+EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER 
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE 
+USE OR OTHER DEALINGS IN THE SOFTWARE.
 ```
 
 ### @matteo.collina/tspl
@@ -506,7 +514,7 @@ This product includes source derived from [@newrelic/newrelic-oss-cli](https://g
 
 ### @newrelic/test-utilities
 
-This product includes source derived from [@newrelic/test-utilities](https://github.com/newrelic/node-test-utilities) ([v8.5.0](https://github.com/newrelic/node-test-utilities/tree/v8.5.0)), distributed under the [Apache-2.0 License](https://github.com/newrelic/node-test-utilities/blob/v8.5.0/LICENSE):
+This product includes source derived from [@newrelic/test-utilities](https://github.com/newrelic/node-test-utilities) ([v8.7.0](https://github.com/newrelic/node-test-utilities/tree/v8.7.0)), distributed under the [Apache-2.0 License](https://github.com/newrelic/node-test-utilities/blob/v8.7.0/LICENSE):
 
 ```
                                  Apache License
@@ -713,35 +721,6 @@ This product includes source derived from [@newrelic/test-utilities](https://git
 
 ```
 
-### apollo-server
-
-This product includes source derived from [apollo-server](https://github.com/apollographql/apollo-server) ([v3.13.0](https://github.com/apollographql/apollo-server/tree/v3.13.0)), distributed under the [MIT License](https://github.com/apollographql/apollo-server/blob/v3.13.0/LICENSE):
-
-```
-The MIT License (MIT)
-
-Copyright (c) 2016-2020 Apollo Graph, Inc. (Formerly Meteor Development Group, Inc.)
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
-```
-
 ### borp
 
 This product includes source derived from [borp](https://github.com/mcollina/borp) ([v0.19.0](https://github.com/mcollina/borp/tree/v0.19.0)), distributed under the [MIT License](https://github.com/mcollina/borp/blob/v0.19.0/LICENSE):
@@ -852,14 +831,14 @@ THE SOFTWARE.
 
 ```
 
-### graphql
+### graphql-tag
 
-This product includes source derived from [graphql](https://github.com/graphql/graphql-js) ([v16.8.1](https://github.com/graphql/graphql-js/tree/v16.8.1)), distributed under the [MIT License](https://github.com/graphql/graphql-js/blob/v16.8.1/LICENSE):
+This product includes source derived from [graphql-tag](https://github.com/apollographql/graphql-tag) ([v2.12.6](https://github.com/apollographql/graphql-tag/tree/v2.12.6)), distributed under the [MIT License](https://github.com/apollographql/graphql-tag/blob/v2.12.6/LICENSE):
 
 ```
-MIT License
+The MIT License (MIT)
 
-Copyright (c) GraphQL Contributors
+Copyright (c) 2021 Apollo Graph, Inc. (Formerly Meteor Development Group, Inc.)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -941,7 +920,7 @@ SOFTWARE.
 
 ### lockfile-lint
 
-This product includes source derived from [lockfile-lint](https://github.com/lirantal/lockfile-lint) ([v4.13.2](https://github.com/lirantal/lockfile-lint/tree/v4.13.2)), distributed under the [Apache-2.0 License](https://github.com/lirantal/lockfile-lint/blob/v4.13.2/LICENSE):
+This product includes source derived from [lockfile-lint](https://github.com/lirantal/lockfile-lint) ([v4.14.1](https://github.com/lirantal/lockfile-lint/tree/v4.14.1)), distributed under the [Apache-2.0 License](https://github.com/lirantal/lockfile-lint/blob/v4.14.1/LICENSE):
 
 ```
 
@@ -1139,7 +1118,7 @@ This product includes source derived from [lockfile-lint](https://github.com/lir
 
 ### newrelic
 
-This product includes source derived from [newrelic](https://github.com/newrelic/node-newrelic) ([v12.21.0](https://github.com/newrelic/node-newrelic/tree/v12.21.0)), distributed under the [Apache-2.0 License](https://github.com/newrelic/node-newrelic/blob/v12.21.0/LICENSE):
+This product includes source derived from [newrelic](https://github.com/newrelic/node-newrelic) ([v12.25.0](https://github.com/newrelic/node-newrelic/tree/v12.25.0)), distributed under the [Apache-2.0 License](https://github.com/newrelic/node-newrelic/blob/v12.25.0/LICENSE):
 
 ```
                                  Apache License
