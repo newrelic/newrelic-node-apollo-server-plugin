@@ -1,3 +1,23 @@
+### v8.0.0 (2025-07-22)
+#### ⚠ BREAKING CHANGES
+
+This version of the Node.js agent is a SemVer MAJOR update and contains the following breaking changes. MAJOR versions may drop support for language runtimes that have reached End-of-Life according to the maintainer. Additionally, MAJOR versions may drop support for and remove certain instrumentation. For more details on these changes please see the [migration guide](https://docs.newrelic.com/docs/apm/agents/nodejs-agent/installation-configuration/update-nodejs-agent/).
+
+* Removed Node.js 18 support
+
+#### Features
+
+* Removed Node.js 18 support ([#349](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/349)) ([6ff874a](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/6ff874a21c859d0074b51f5385a0cd1bc0a338f7))
+
+#### Miscellaneous chores
+
+* Updated to latest eslint-config ([#357](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/357)) ([78081e5](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/78081e5c821c4e8950ec0cd267dfcb50c29ef751))
+
+#### Tests
+
+* Fixed `assertSegments` to properly assert all expected segments ([#358](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/358)) ([14ad8d6](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/14ad8d610e9d901c5c3e407615a2b85554152045))
+* Fixed tests to work with apollo 5 ([#355](https://github.com/newrelic/newrelic-node-apollo-server-plugin/pull/355)) ([eea52e8](https://github.com/newrelic/newrelic-node-apollo-server-plugin/commit/eea52e81a2308598b74fe74f85d37d8c63958ff5))
+
 ### v7.1.0 (2025-06-17)
 
 #### Miscellaneous chores
