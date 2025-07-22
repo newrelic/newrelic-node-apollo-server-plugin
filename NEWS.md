@@ -1,8 +1,6 @@
 ### v8.0.0 (2025-07-22)
 #### ⚠ BREAKING CHANGES
 
-This version of the Node.js agent is a SemVer MAJOR update and contains the following breaking changes. MAJOR versions may drop support for language runtimes that have reached End-of-Life according to the maintainer. Additionally, MAJOR versions may drop support for and remove certain instrumentation. For more details on these changes please see the [migration guide](https://docs.newrelic.com/docs/apm/agents/nodejs-agent/installation-configuration/update-nodejs-agent/).
-
 * Removed Node.js 18 support
 
 #### Features
