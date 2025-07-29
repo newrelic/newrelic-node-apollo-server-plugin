@@ -14,16 +14,9 @@ const assert = require('node:assert')
 const { getTypeDefs, resolvers } = require('../../lib/data-definitions')
 const { executeQuery } = require('../../lib/test-client')
 
-let ApolloServer
-let gql
-let startStandaloneServer
-try {
-  ;({ ApolloServer } = require('@apollo/server'))
-  gql = require('graphql-tag')
-  ;({ startStandaloneServer } = require('@apollo/server/standalone'))
-} catch {
-  ;({ ApolloServer, gql } = require('apollo-server'))
-}
+const { ApolloServer } = require('@apollo/server')
+const gql = require('graphql-tag')
+const { startStandaloneServer } = require('@apollo/server/standalone')
 
 test.beforeEach(async (ctx) => {
   const createPlugin = require('../../../lib/create-plugin')

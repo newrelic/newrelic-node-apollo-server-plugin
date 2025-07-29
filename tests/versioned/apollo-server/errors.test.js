@@ -9,7 +9,7 @@ const test = require('node:test')
 
 const { afterEach, setupCoreTest } = require('../../lib/test-tools')
 
-const errorsTests = require('../errors-tests')
+const errorsTests = require('./errors-tests')
 const { pluginConfig } = errorsTests
 const agentConfig = {
   distributed_tracing: { enabled: true } // enable span testing

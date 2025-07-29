@@ -10,7 +10,7 @@ const semver = require('semver')
 
 const { afterEach, setupCoreTest } = require('../../lib/test-tools')
 
-const transactionNamingTests = require('../transaction-naming-tests')
+const transactionNamingTests = require('./transaction-naming-tests')
 
 test.afterEach(async (ctx) => {
   await afterEach({ t: ctx, testDir: __dirname })

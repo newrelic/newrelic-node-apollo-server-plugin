@@ -9,7 +9,7 @@ const test = require('node:test')
 
 const { afterEach, setupCoreTest } = require('../../lib/test-tools')
 
-const queryObfuscationTests = require('../query-obfuscation-tests')
+const queryObfuscationTests = require('./query-obfuscation-tests')
 const { pluginConfig } = queryObfuscationTests
 
 test.afterEach(async (ctx) => {

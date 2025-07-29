@@ -8,7 +8,7 @@
 const assert = require('node:assert')
 
 const { executeQuery, executeQueryBatch } = require('../../lib/test-client')
-const { checkResult } = require('./common')
+const { checkResult } = require('../common')
 const promiseResolvers = require('../../lib/promise-resolvers')
 
 const ANON_PLACEHOLDER = '<anonymous>'

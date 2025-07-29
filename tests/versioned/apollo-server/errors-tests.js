@@ -286,11 +286,7 @@ for (const errorTest of errorTests) {
 tests.push({
   name: 'Invalid operation name should not crash server',
   async fn(t) {
-    const {
-      helper,
-      serverUrl,
-      apolloServerPkg: { isApollo4 }
-    } = t.nr
+    const { helper, serverUrl } = t.nr
     const { promise, resolve } = promiseResolvers()
     const query = 'query Hello { hello }'
     const expectedErrorMessage = 'Unknown operation named "testMe".'
@@ -325,7 +321,7 @@ tests.push({
       assert.equal(result.errors.length, 1) // should have one parsing error
       const [resolverError] = result.errors
       // in apollo 4 they added a first class code for invalid operation names
-      const expectedCode = isApollo4 ? 'OPERATION_RESOLUTION_FAILURE' : 'INTERNAL_SERVER_ERROR'
+      const expectedCode = 'OPERATION_RESOLUTION_FAILURE'
       assert.equal(resolverError.extensions.code, expectedCode)
       assert.equal(resolverError.message, expectedErrorMessage)
       resolve()

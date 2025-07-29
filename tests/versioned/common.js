@@ -42,15 +42,8 @@ common.baseSegment = function baseSegment(operationPart, prefix) {
  * In apollo 4 they tweaked how the apollo server express instance is constructed.
  * It lacks a / router and routes everything through a global middleware
  */
-common.constructSegments = function constructSegments(
-  firstSegmentName,
-  operationSegments,
-  isApollo4
-) {
-  if (isApollo4) {
-    return [firstSegmentName, [...operationSegments]]
-  }
-  return [firstSegmentName, ['Expressjs/Router: /', [...operationSegments]]]
+common.constructSegments = function constructSegments(firstSegmentName, operationSegments) {
+  return [firstSegmentName, [...operationSegments]]
 }
 
 /**

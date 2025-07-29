@@ -8,7 +8,7 @@
 const assert = require('node:assert')
 
 const { executeQuery, executeJson } = require('../../lib/test-client')
-const { checkResult } = require('./common')
+const { checkResult } = require('../common')
 const promiseReolvers = require('../../lib/promise-resolvers')
 const findSegmentByName = require('../../lib/find-segment')
 const SEGMENT_DESTINATION = 0x20

@@ -9,7 +9,7 @@ const test = require('node:test')
 
 const { afterEach, setupCoreTest } = require('../../lib/test-tools')
 
-const attributesTestSuite = require('../attributes-tests')
+const attributesTestSuite = require('./attributes-tests')
 const { pluginConfig } = attributesTestSuite
 
 test.afterEach(async (ctx) => {

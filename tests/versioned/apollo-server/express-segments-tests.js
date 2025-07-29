@@ -13,7 +13,7 @@ const {
   baseSegment,
   constructSegments,
   constructOperationSegments
-} = require('./common')
+} = require('../common')
 const { assertSegments } = require('../../lib/custom-assertions')
 const promiseResolvers = require('../../lib/promise-resolvers')
 
@@ -27,12 +27,7 @@ const tests = []
 tests.push({
   name: 'anonymous query, single level',
   async fn(t) {
-    const {
-      helper,
-      serverUrl,
-      apolloServerPkg: { isApollo4 },
-      TRANSACTION_PREFIX
-    } = t.nr
+    const { helper, serverUrl, TRANSACTION_PREFIX } = t.nr
     const { promise, resolve } = promiseResolvers()
 
     const query = `query {
@@ -46,7 +41,7 @@ tests.push({
         `${OPERATION_PREFIX}/${operationPart}`,
         [`${RESOLVE_PREFIX}/hello`]
       ])
-      const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
+      const expectedSegments = constructSegments(firstSegmentName, operationSegments)
 
       assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
     })
@@ -65,12 +60,7 @@ tests.push({
 tests.push({
   name: 'named query, single level',
   async fn(t) {
-    const {
-      helper,
-      serverUrl,
-      apolloServerPkg: { isApollo4 },
-      TRANSACTION_PREFIX
-    } = t.nr
+    const { helper, serverUrl, TRANSACTION_PREFIX } = t.nr
     const { promise, resolve } = promiseResolvers()
 
     const expectedName = 'HeyThere'
@@ -85,7 +75,7 @@ tests.push({
         `${OPERATION_PREFIX}/${operationPart}`,
         [`${RESOLVE_PREFIX}/hello`]
       ])
-      const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
+      const expectedSegments = constructSegments(firstSegmentName, operationSegments)
       assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
     })
 
@@ -103,12 +93,7 @@ tests.push({
 tests.push({
   name: 'named query, @include directive',
   async fn(t) {
-    const {
-      helper,
-      serverUrl,
-      apolloServerPkg: { isApollo4 },
-      TRANSACTION_PREFIX
-    } = t.nr
+    const { helper, serverUrl, TRANSACTION_PREFIX } = t.nr
     const { promise, resolve } = promiseResolvers()
 
     const expectedName = 'HeyThere'
@@ -125,7 +110,7 @@ tests.push({
         `${OPERATION_PREFIX}/${operationPart}`,
         [`${RESOLVE_PREFIX}/hello`]
       ])
-      const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
+      const expectedSegments = constructSegments(firstSegmentName, operationSegments)
       assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
     })
 
@@ -143,12 +128,7 @@ tests.push({
 tests.push({
   name: 'anonymous query, multi-level',
   async fn(t) {
-    const {
-      helper,
-      serverUrl,
-      apolloServerPkg: { isApollo4 },
-      TRANSACTION_PREFIX
-    } = t.nr
+    const { helper, serverUrl, TRANSACTION_PREFIX } = t.nr
     const { promise, resolve } = promiseResolvers()
 
     const query = `query {
@@ -177,7 +157,7 @@ tests.push({
         ]
       ])
 
-      const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
+      const expectedSegments = constructSegments(firstSegmentName, operationSegments)
 
       assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
     })
@@ -196,12 +176,7 @@ tests.push({
 tests.push({
   name: 'named query, multi-level should return deepest unique path',
   async fn(t) {
-    const {
-      helper,
-      serverUrl,
-      apolloServerPkg: { isApollo4 },
-      TRANSACTION_PREFIX
-    } = t.nr
+    const { helper, serverUrl, TRANSACTION_PREFIX } = t.nr
     const { promise, resolve } = promiseResolvers()
 
     const expectedName = 'GetBooksByLibrary'
@@ -231,7 +206,7 @@ tests.push({
           `${RESOLVE_PREFIX}/libraries.books.author.name`
         ]
       ])
-      const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
+      const expectedSegments = constructSegments(firstSegmentName, operationSegments)
 
       assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
     })
@@ -250,12 +225,7 @@ tests.push({
 tests.push({
   name: 'named query with aliases should use alias in segment naming',
   async fn(t) {
-    const {
-      helper,
-      serverUrl,
-      apolloServerPkg: { isApollo4 },
-      TRANSACTION_PREFIX
-    } = t.nr
+    const { helper, serverUrl, TRANSACTION_PREFIX } = t.nr
     const { promise, resolve } = promiseResolvers()
 
     const expectedName = 'GetBooksByLibrary'
@@ -283,7 +253,7 @@ tests.push({
           `${RESOLVE_PREFIX}/alias.books.author`
         ]
       ])
-      const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
+      const expectedSegments = constructSegments(firstSegmentName, operationSegments)
 
       assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
     })
@@ -302,12 +272,7 @@ tests.push({
 tests.push({
   name: 'anonymous mutation, single level',
   async fn(t) {
-    const {
-      helper,
-      serverUrl,
-      apolloServerPkg: { isApollo4 },
-      TRANSACTION_PREFIX
-    } = t.nr
+    const { helper, serverUrl, TRANSACTION_PREFIX } = t.nr
     const { promise, resolve } = promiseResolvers()
 
     const query = `mutation {
@@ -321,7 +286,7 @@ tests.push({
         `${OPERATION_PREFIX}/${operationPart}`,
         [`${RESOLVE_PREFIX}/addThing`, ['timers.setTimeout', ['Callback: namedCallback']]]
       ])
-      const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
+      const expectedSegments = constructSegments(firstSegmentName, operationSegments)
 
       assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
     })
@@ -340,12 +305,7 @@ tests.push({
 tests.push({
   name: 'named mutation, single level, should use mutation name',
   async fn(t) {
-    const {
-      helper,
-      serverUrl,
-      apolloServerPkg: { isApollo4 },
-      TRANSACTION_PREFIX
-    } = t.nr
+    const { helper, serverUrl, TRANSACTION_PREFIX } = t.nr
     const { promise, resolve } = promiseResolvers()
 
     const expectedName = 'AddThing'
@@ -360,7 +320,7 @@ tests.push({
         `${OPERATION_PREFIX}/${operationPart}`,
         [`${RESOLVE_PREFIX}/addThing`, ['timers.setTimeout', ['Callback: namedCallback']]]
       ])
-      const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
+      const expectedSegments = constructSegments(firstSegmentName, operationSegments)
 
       assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
     })
@@ -379,12 +339,7 @@ tests.push({
 tests.push({
   name: 'anonymous query, with params',
   async fn(t) {
-    const {
-      helper,
-      serverUrl,
-      apolloServerPkg: { isApollo4 },
-      TRANSACTION_PREFIX
-    } = t.nr
+    const { helper, serverUrl, TRANSACTION_PREFIX } = t.nr
     const { promise, resolve } = promiseResolvers()
 
     const query = `query {
@@ -398,7 +353,7 @@ tests.push({
         `${OPERATION_PREFIX}/${operationPart}`,
         [`${RESOLVE_PREFIX}/paramQuery`]
       ])
-      const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
+      const expectedSegments = constructSegments(firstSegmentName, operationSegments)
 
       assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
     })
@@ -417,12 +372,7 @@ tests.push({
 tests.push({
   name: 'named query, with params',
   async fn(t) {
-    const {
-      helper,
-      serverUrl,
-      apolloServerPkg: { isApollo4 },
-      TRANSACTION_PREFIX
-    } = t.nr
+    const { helper, serverUrl, TRANSACTION_PREFIX } = t.nr
     const { promise, resolve } = promiseResolvers()
 
     const expectedName = 'BlahQuery'
@@ -437,7 +387,7 @@ tests.push({
         `${OPERATION_PREFIX}/${operationPart}`,
         [`${RESOLVE_PREFIX}/paramQuery`]
       ])
-      const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
+      const expectedSegments = constructSegments(firstSegmentName, operationSegments)
 
       assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
     })
@@ -456,12 +406,7 @@ tests.push({
 tests.push({
   name: 'named query, with params, multi-level',
   async fn(t) {
-    const {
-      helper,
-      serverUrl,
-      apolloServerPkg: { isApollo4 },
-      TRANSACTION_PREFIX
-    } = t.nr
+    const { helper, serverUrl, TRANSACTION_PREFIX } = t.nr
     const { promise, resolve } = promiseResolvers()
 
     const expectedName = 'GetBookForLibrary'
@@ -491,7 +436,7 @@ tests.push({
           `${RESOLVE_PREFIX}/library.books.author.name`
         ]
       ])
-      const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
+      const expectedSegments = constructSegments(firstSegmentName, operationSegments)
 
       assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
     })
@@ -510,12 +455,7 @@ tests.push({
 tests.push({
   name: 'named query with fragment, query first',
   async fn(t) {
-    const {
-      helper,
-      serverUrl,
-      apolloServerPkg: { isApollo4 },
-      TRANSACTION_PREFIX
-    } = t.nr
+    const { helper, serverUrl, TRANSACTION_PREFIX } = t.nr
     const { promise, resolve } = promiseResolvers()
 
     const expectedName = 'GetBookForLibrary'
@@ -548,7 +488,7 @@ tests.push({
           `${RESOLVE_PREFIX}/library.books.author.name`
         ]
       ])
-      const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
+      const expectedSegments = constructSegments(firstSegmentName, operationSegments)
 
       assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
     })
@@ -565,12 +505,7 @@ tests.push({
 tests.push({
   name: 'named query with fragment, fragment first',
   async fn(t) {
-    const {
-      helper,
-      serverUrl,
-      apolloServerPkg: { isApollo4 },
-      TRANSACTION_PREFIX
-    } = t.nr
+    const { helper, serverUrl, TRANSACTION_PREFIX } = t.nr
     const { promise, resolve } = promiseResolvers()
 
     const expectedName = 'GetBookForLibrary'
@@ -603,7 +538,7 @@ tests.push({
           `${RESOLVE_PREFIX}/library.books.author.name`
         ]
       ])
-      const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
+      const expectedSegments = constructSegments(firstSegmentName, operationSegments)
 
       assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
     })
@@ -620,12 +555,7 @@ tests.push({
 tests.push({
   name: 'batch query should include segments for nested queries',
   async fn(t) {
-    const {
-      helper,
-      serverUrl,
-      apolloServerPkg: { isApollo4 },
-      TRANSACTION_PREFIX
-    } = t.nr
+    const { helper, serverUrl, TRANSACTION_PREFIX } = t.nr
     const { promise, resolve } = promiseResolvers()
 
     const expectedName1 = 'GetBookForLibrary'
@@ -676,7 +606,7 @@ tests.push({
           [`${RESOLVE_PREFIX}/addThing`, ['timers.setTimeout', ['Callback: namedCallback']]]
         ]
       ])
-      const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
+      const expectedSegments = constructSegments(firstSegmentName, operationSegments)
 
       assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
     })
@@ -697,12 +627,7 @@ tests.push({
 tests.push({
   name: 'union, single level',
   async fn(t) {
-    const {
-      helper,
-      serverUrl,
-      apolloServerPkg: { isApollo4 },
-      TRANSACTION_PREFIX
-    } = t.nr
+    const { helper, serverUrl, TRANSACTION_PREFIX } = t.nr
     const { promise, resolve } = promiseResolvers()
 
     const expectedName = 'GetSearchResult'
@@ -724,7 +649,7 @@ tests.push({
         `${OPERATION_PREFIX}/${operationPart}`,
         [`${RESOLVE_PREFIX}/search`]
       ])
-      const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
+      const expectedSegments = constructSegments(firstSegmentName, operationSegments)
       assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
     })
 
@@ -742,12 +667,7 @@ tests.push({
 tests.push({
   name: 'union, multiple inline fragments, single level',
   async fn(t) {
-    const {
-      helper,
-      serverUrl,
-      apolloServerPkg: { isApollo4 },
-      TRANSACTION_PREFIX
-    } = t.nr
+    const { helper, serverUrl, TRANSACTION_PREFIX } = t.nr
     const { promise, resolve } = promiseResolvers()
 
     const expectedName = 'GetSearchResult'
@@ -772,7 +692,7 @@ tests.push({
         `${OPERATION_PREFIX}/${operationPart}`,
         [`${RESOLVE_PREFIX}/search`]
       ])
-      const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
+      const expectedSegments = constructSegments(firstSegmentName, operationSegments)
       assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
     })
 
@@ -791,12 +711,7 @@ tests.push({
   name: 'when the query cannot be parsed, should have operation placeholder',
   async fn(t) {
     // there will be no document/AST nor resolved operation
-    const {
-      helper,
-      serverUrl,
-      apolloServerPkg: { isApollo4 },
-      TRANSACTION_PREFIX
-    } = t.nr
+    const { helper, serverUrl, TRANSACTION_PREFIX } = t.nr
     const { promise, resolve } = promiseResolvers()
 
     const invalidQuery = `query {
@@ -815,7 +730,7 @@ tests.push({
       const operationSegments = constructOperationSegments(TRANSACTION_PREFIX, [
         `${OPERATION_PREFIX}/${UNKNOWN_OPERATION}`
       ])
-      const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
+      const expectedSegments = constructSegments(firstSegmentName, operationSegments)
 
       assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
     })
@@ -842,12 +757,7 @@ tests.push({
   async fn(t) {
     // if parse succeeds but validation fails, there will not be a resolved operation
     // but the document/AST can still be leveraged for what was intended.
-    const {
-      helper,
-      serverUrl,
-      apolloServerPkg: { isApollo4 },
-      TRANSACTION_PREFIX
-    } = t.nr
+    const { helper, serverUrl, TRANSACTION_PREFIX } = t.nr
     const { promise, resolve } = promiseResolvers()
 
     const invalidQuery = `query {
@@ -868,7 +778,7 @@ tests.push({
       const operationSegments = constructOperationSegments(TRANSACTION_PREFIX, [
         `${OPERATION_PREFIX}/${operationPart}`
       ])
-      const expectedSegments = constructSegments(firstSegmentName, operationSegments, isApollo4)
+      const expectedSegments = constructSegments(firstSegmentName, operationSegments)
 
       assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
     })

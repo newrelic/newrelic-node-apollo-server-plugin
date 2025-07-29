@@ -13,7 +13,7 @@ const { checkResult, baseSegment } = require('../common')
 const assert = require('node:assert')
 const semver = require('semver')
 
-const expressSegmentsTests = require('../express-segments-tests')
+const expressSegmentsTests = require('./express-segments-tests')
 const { assertSegments, assertMetrics } = require('../../lib/custom-assertions')
 const OPERATION_PREFIX = 'GraphQL/operation/ApolloServer'
 const RESOLVE_PREFIX = 'GraphQL/resolve/ApolloServer'
@@ -49,11 +49,7 @@ test('fragmented trace does not add segments to trace but still records metrics 
   // set the max_trace_segments to 7 to exclude capturing the operation and resolver segments as part of tx trace
   // see: https://github.com/newrelic/newrelic-node-apollo-server-plugin/issues/344
   await setupCoreTest({ t, testDir: __dirname, agentConfig: { max_trace_segments: 7 } })
-  const {
-    helper,
-    serverUrl,
-    apolloServerPkg: { isApollo4 }
-  } = t.nr
+  const { helper, serverUrl } = t.nr
   const { promise, resolve } = promiseResolvers()
   const expectedName = 'testQuery'
   const query = `query ${expectedName} {
@@ -77,11 +73,8 @@ test('fragmented trace does not add segments to trace but still records metrics 
     const firstSegmentName = baseSegment(operationPart, prefix)
     const expectedSegments = [firstSegmentName]
     // apollo 4.x includes a handler for the express middleware
-    if (isApollo4 && prefix.includes('Express')) {
+    if (prefix.includes('Express')) {
       expectedSegments.push(['Nodejs/Middleware/Expressjs/<anonymous>'])
-      // apollo < 4.x does not include a handler for the express middleware but instead a router
-    } else if (prefix.includes('Express')) {
-      expectedSegments.push(['Expressjs/Router: /'])
     }
     // for apollo 5+ there are no express related segments because it doesn't use express
     assertSegments(transaction.trace, transaction.trace.root, expectedSegments, { exact: false })
