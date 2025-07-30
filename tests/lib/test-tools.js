@@ -20,12 +20,6 @@ const utils = require('@newrelic/test-utilities')
 const setupErrorSchema = require('./error-setup')
 const { getTypeDefs, resolvers } = require('./data-definitions')
 
-/**
- *
- * @param root0
- * @param root0.t
- * @param root0.testDir
- */
 async function afterEach({ t, testDir }) {
   const { helper, expressServer, server } = t.nr
 
@@ -41,14 +35,6 @@ async function afterEach({ t, testDir }) {
   unloadModules(testDir)
 }
 
-/**
- *
- * @param root0
- * @param root0.t
- * @param root0.testDir
- * @param root0.agentConfig
- * @param root0.pluginConfig
- */
 async function setupCoreTest({ t, testDir, agentConfig = {}, pluginConfig = {} } = {}) {
   const helper = utils.TestAgent.makeFullyInstrumented(agentConfig)
   const createPlugin = require('../../lib/create-plugin')
