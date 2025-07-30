@@ -49,13 +49,21 @@ common.constructSegments = function constructSegments(firstSegmentName, operatio
 /**
  * Creates the tree of operation segments. If this is using apollo-express or apollo server < 5
  * it adds an express middleware handler
- * @param {string} prefix transaction prefix
+ * @param {object} testContext context for test
  * @param {array} operationSegments operation segments
  * @returns {array} array of segments
  */
-common.constructOperationSegments = function constructOperationSegments(prefix, operationSegments) {
+common.constructOperationSegments = function constructOperationSegments(
+  testContext,
+  operationSegments
+) {
+  const { TRANSACTION_PREFIX: prefix, expressServer } = testContext
   if (prefix.includes('Nodejs')) {
     return operationSegments
+  }
+
+  if (expressServer) {
+    return ['Nodejs/Middleware/Expressjs/<anonymous>//graphql', operationSegments]
   }
   return ['Nodejs/Middleware/Expressjs/<anonymous>', operationSegments]
 }

@@ -20,7 +20,7 @@ test('apollo-federation: transaction names', async (t) => {
     await teardownGateway({ ctx })
   })
 
-  const TRANSACTION_PREFIX = `WebTransaction/Nodejs/POST`
+  const TRANSACTION_PREFIX = 'WebTransaction/Nodejs/POST'
 
   await t.test('anonymous query, multi selections should return deepest unique path', (t, end) => {
     const { helper, gatewayService } = t.nr
@@ -51,7 +51,7 @@ test('apollo-federation: transaction names', async (t) => {
       tx = transaction
     })
 
-    executeQuery(serverUrl, query, (err, result) => {
+    executeQuery(serverUrl, query, (_, result) => {
       assert.equal(tx.name, `${TRANSACTION_PREFIX}//${operationPart}`)
       checkResult(assert, result, () => {
         end()

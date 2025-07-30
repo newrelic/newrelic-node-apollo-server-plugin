@@ -5,6 +5,10 @@
 
 'use strict'
 
+/**
+ *
+ * @param obj
+ */
 function isSimpleObject(obj) {
   return Object.prototype.toString.call(obj) === '[object Object]' && obj !== null
 }
@@ -62,6 +66,7 @@ function assertMetrics(
   }
 }
 
+/* eslint-disable sonarjs/cognitive-complexity */
 /**
  * This function is used to verify that a tree of trace segments matches an
  * expected tree of segment names. For example, if the trace looks like (i.e
@@ -135,6 +140,10 @@ function assertMetrics(
  *                                  directly under test.  Only used when `exact` is true.
  * @param {object} [deps] Injected dependencies.
  * @param {object} [deps.assert] Assertion library to use.
+ * @param options
+ * @param root0
+ * @param root0.assert
+ * @param options.assert
  */
 function assertSegments(
   trace,
@@ -154,6 +163,10 @@ function assertSegments(
     exact = false
   }
 
+  /**
+   *
+   * @param _parent
+   */
   function getChildren(_parent) {
     const children = trace.getChildren(_parent.id)
     return children.filter(function (item) {
@@ -202,12 +215,7 @@ function assertSegments(
       const sequenceItem = expected[i]
 
       if (typeof sequenceItem === 'string') {
-        // find corresponding child in parent
-        for (let j = 0; j < children.length; j++) {
-          if (children[j].name.startsWith(sequenceItem) === true) {
-            child = children[j]
-          }
-        }
+        const child = children.find((segment) => segment.name === sequenceItem)
         assert.ok(child, 'segment "' + parent.name + '" should have child "' + sequenceItem + '"')
         if (typeof expected[i + 1] === 'object') {
           assertSegments(trace, child, expected[i + 1], { exact }, { assert })
@@ -216,6 +224,7 @@ function assertSegments(
     }
   }
 }
+/* eslint-enable sonarjs/cognitive-complexity */
 
 const TYPE_MAPPINGS = {
   String: 'string',
@@ -264,6 +273,7 @@ function match(actual, expected, { assert = require('node:assert') } = {}) {
     if (key in actual) {
       if (typeof expected[key] === 'function') {
         const type = expected[key]
+        // eslint-disable-next-line valid-typeof
         assert.ok(typeof actual[key] === TYPE_MAPPINGS[type.name])
       } else if (expected[key] instanceof RegExp) {
         assert.ok(expected[key].test(actual[key]))

@@ -6,12 +6,12 @@
   "version": "0.0.0",
   "private": true,
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "tests": [
     {
       "engines": {
-        "node": ">=18"
+        "node": ">=20"
       },
       "dependencies": {
         "@apollo/server": ">=4.0.0",

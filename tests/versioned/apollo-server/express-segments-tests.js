@@ -37,7 +37,7 @@ tests.push({
     helper.agent.once('transactionFinished', (transaction) => {
       const operationPart = `query/${ANON_PLACEHOLDER}/hello`
       const firstSegmentName = baseSegment(operationPart, TRANSACTION_PREFIX)
-      const operationSegments = constructOperationSegments(TRANSACTION_PREFIX, [
+      const operationSegments = constructOperationSegments(t.nr, [
         `${OPERATION_PREFIX}/${operationPart}`,
         [`${RESOLVE_PREFIX}/hello`]
       ])
@@ -71,7 +71,7 @@ tests.push({
     helper.agent.once('transactionFinished', (transaction) => {
       const operationPart = `query/${expectedName}/hello`
       const firstSegmentName = baseSegment(operationPart, TRANSACTION_PREFIX)
-      const operationSegments = constructOperationSegments(TRANSACTION_PREFIX, [
+      const operationSegments = constructOperationSegments(t.nr, [
         `${OPERATION_PREFIX}/${operationPart}`,
         [`${RESOLVE_PREFIX}/hello`]
       ])
@@ -106,7 +106,7 @@ tests.push({
     helper.agent.once('transactionFinished', (transaction) => {
       const operationPart = `query/${expectedName}/hello`
       const firstSegmentName = baseSegment(operationPart, TRANSACTION_PREFIX)
-      const operationSegments = constructOperationSegments(TRANSACTION_PREFIX, [
+      const operationSegments = constructOperationSegments(t.nr, [
         `${OPERATION_PREFIX}/${operationPart}`,
         [`${RESOLVE_PREFIX}/hello`]
       ])
@@ -128,7 +128,12 @@ tests.push({
 tests.push({
   name: 'anonymous query, multi-level',
   async fn(t) {
-    const { helper, serverUrl, TRANSACTION_PREFIX } = t.nr
+    const {
+      helper,
+      serverUrl,
+      pluginConfig,
+      TRANSACTION_PREFIX
+    } = t.nr
     const { promise, resolve } = promiseResolvers()
 
     const query = `query {
@@ -147,14 +152,19 @@ tests.push({
     helper.agent.once('transactionFinished', (transaction) => {
       const operationPart = `query/${ANON_PLACEHOLDER}/${path}`
       const firstSegmentName = baseSegment(operationPart, TRANSACTION_PREFIX)
-      const operationSegments = constructOperationSegments(TRANSACTION_PREFIX, [
+
+      const resolveSegments = [
+        `${RESOLVE_PREFIX}/libraries`,
+        `${RESOLVE_PREFIX}/libraries.books`,
+        `${RESOLVE_PREFIX}/libraries.books.author`
+      ]
+
+      if (pluginConfig.captureScalars) {
+        resolveSegments.push(`${RESOLVE_PREFIX}/libraries.books.author.name`)
+      }
+      const operationSegments = constructOperationSegments(t.nr, [
         `${OPERATION_PREFIX}/${operationPart}`,
-        [
-          `${RESOLVE_PREFIX}/libraries`,
-          `${RESOLVE_PREFIX}/libraries.books`,
-          `${RESOLVE_PREFIX}/libraries.books.author`,
-          `${RESOLVE_PREFIX}/libraries.books.author.name`
-        ]
+        resolveSegments
       ])
 
       const expectedSegments = constructSegments(firstSegmentName, operationSegments)
@@ -176,7 +186,12 @@ tests.push({
 tests.push({
   name: 'named query, multi-level should return deepest unique path',
   async fn(t) {
-    const { helper, serverUrl, TRANSACTION_PREFIX } = t.nr
+    const {
+      helper,
+      pluginConfig,
+      serverUrl,
+      TRANSACTION_PREFIX
+    } = t.nr
     const { promise, resolve } = promiseResolvers()
 
     const expectedName = 'GetBooksByLibrary'
@@ -196,15 +211,25 @@ tests.push({
     helper.agent.once('transactionFinished', (transaction) => {
       const operationPart = `query/${expectedName}/${path}`
       const firstSegmentName = baseSegment(operationPart, TRANSACTION_PREFIX)
-      const operationSegments = constructOperationSegments(TRANSACTION_PREFIX, [
-        `${OPERATION_PREFIX}/${operationPart}`,
-        [
+      let resolveSegments
+      if (pluginConfig.captureScalars) {
+        resolveSegments = [
           `${RESOLVE_PREFIX}/libraries`,
           `${RESOLVE_PREFIX}/libraries.books`,
           `${RESOLVE_PREFIX}/libraries.books.title`,
           `${RESOLVE_PREFIX}/libraries.books.author`,
           `${RESOLVE_PREFIX}/libraries.books.author.name`
         ]
+      } else {
+        resolveSegments = [
+          `${RESOLVE_PREFIX}/libraries`,
+          `${RESOLVE_PREFIX}/libraries.books`,
+          `${RESOLVE_PREFIX}/libraries.books.author`
+        ]
+      }
+      const operationSegments = constructOperationSegments(t.nr, [
+        `${OPERATION_PREFIX}/${operationPart}`,
+        resolveSegments
       ])
       const expectedSegments = constructSegments(firstSegmentName, operationSegments)
 
@@ -245,7 +270,7 @@ tests.push({
     helper.agent.once('transactionFinished', (transaction) => {
       const operationPart = `query/${expectedName}/${path}`
       const firstSegmentName = baseSegment(operationPart, TRANSACTION_PREFIX)
-      const operationSegments = constructOperationSegments(TRANSACTION_PREFIX, [
+      const operationSegments = constructOperationSegments(t.nr, [
         `${OPERATION_PREFIX}/${operationPart}`,
         [
           `${RESOLVE_PREFIX}/alias`,
@@ -282,7 +307,7 @@ tests.push({
     helper.agent.once('transactionFinished', (transaction) => {
       const operationPart = `mutation/${ANON_PLACEHOLDER}/addThing`
       const firstSegmentName = baseSegment(operationPart, TRANSACTION_PREFIX)
-      const operationSegments = constructOperationSegments(TRANSACTION_PREFIX, [
+      const operationSegments = constructOperationSegments(t.nr, [
         `${OPERATION_PREFIX}/${operationPart}`,
         [`${RESOLVE_PREFIX}/addThing`, ['timers.setTimeout', ['Callback: namedCallback']]]
       ])
@@ -316,7 +341,7 @@ tests.push({
     helper.agent.once('transactionFinished', (transaction) => {
       const operationPart = `mutation/${expectedName}/addThing`
       const firstSegmentName = baseSegment(operationPart, TRANSACTION_PREFIX)
-      const operationSegments = constructOperationSegments(TRANSACTION_PREFIX, [
+      const operationSegments = constructOperationSegments(t.nr, [
         `${OPERATION_PREFIX}/${operationPart}`,
         [`${RESOLVE_PREFIX}/addThing`, ['timers.setTimeout', ['Callback: namedCallback']]]
       ])
@@ -349,7 +374,7 @@ tests.push({
     helper.agent.once('transactionFinished', (transaction) => {
       const operationPart = `query/${ANON_PLACEHOLDER}/paramQuery`
       const firstSegmentName = baseSegment(operationPart, TRANSACTION_PREFIX)
-      const operationSegments = constructOperationSegments(TRANSACTION_PREFIX, [
+      const operationSegments = constructOperationSegments(t.nr, [
         `${OPERATION_PREFIX}/${operationPart}`,
         [`${RESOLVE_PREFIX}/paramQuery`]
       ])
@@ -383,7 +408,7 @@ tests.push({
     helper.agent.once('transactionFinished', (transaction) => {
       const operationPart = `query/${expectedName}/paramQuery`
       const firstSegmentName = baseSegment(operationPart, TRANSACTION_PREFIX)
-      const operationSegments = constructOperationSegments(TRANSACTION_PREFIX, [
+      const operationSegments = constructOperationSegments(t.nr, [
         `${OPERATION_PREFIX}/${operationPart}`,
         [`${RESOLVE_PREFIX}/paramQuery`]
       ])
@@ -406,7 +431,12 @@ tests.push({
 tests.push({
   name: 'named query, with params, multi-level',
   async fn(t) {
-    const { helper, serverUrl, TRANSACTION_PREFIX } = t.nr
+    const {
+      helper,
+      pluginConfig,
+      serverUrl,
+      TRANSACTION_PREFIX
+    } = t.nr
     const { promise, resolve } = promiseResolvers()
 
     const expectedName = 'GetBookForLibrary'
@@ -426,15 +456,26 @@ tests.push({
     helper.agent.once('transactionFinished', (transaction) => {
       const operationPart = `query/${expectedName}/${path}`
       const firstSegmentName = baseSegment(operationPart, TRANSACTION_PREFIX)
-      const operationSegments = constructOperationSegments(TRANSACTION_PREFIX, [
-        `${OPERATION_PREFIX}/${operationPart}`,
-        [
+      let resolveSegments
+      if (pluginConfig.captureScalars) {
+        resolveSegments = [
           [`${RESOLVE_PREFIX}/library`, ['timers.setTimeout', ['Callback: <anonymous>']]],
           `${RESOLVE_PREFIX}/library.books`,
           `${RESOLVE_PREFIX}/library.books.title`,
           `${RESOLVE_PREFIX}/library.books.author`,
           `${RESOLVE_PREFIX}/library.books.author.name`
         ]
+      } else {
+        resolveSegments = [
+          [`${RESOLVE_PREFIX}/library`, ['timers.setTimeout', ['Callback: <anonymous>']]],
+          `${RESOLVE_PREFIX}/library.books`,
+          `${RESOLVE_PREFIX}/library.books.author`
+        ]
+      }
+
+      const operationSegments = constructOperationSegments(t.nr, [
+        `${OPERATION_PREFIX}/${operationPart}`,
+        resolveSegments
       ])
       const expectedSegments = constructSegments(firstSegmentName, operationSegments)
 
@@ -455,7 +496,12 @@ tests.push({
 tests.push({
   name: 'named query with fragment, query first',
   async fn(t) {
-    const { helper, serverUrl, TRANSACTION_PREFIX } = t.nr
+    const {
+      helper,
+      pluginConfig,
+      serverUrl,
+      TRANSACTION_PREFIX
+    } = t.nr
     const { promise, resolve } = promiseResolvers()
 
     const expectedName = 'GetBookForLibrary'
@@ -478,15 +524,26 @@ tests.push({
     helper.agent.once('transactionFinished', (transaction) => {
       const operationPart = `query/${expectedName}/${path}`
       const firstSegmentName = baseSegment(operationPart, TRANSACTION_PREFIX)
-      const operationSegments = constructOperationSegments(TRANSACTION_PREFIX, [
-        `${OPERATION_PREFIX}/${operationPart}`,
-        [
+      let resolveSegments
+      if (pluginConfig.captureScalars) {
+        resolveSegments = [
           [`${RESOLVE_PREFIX}/library`, ['timers.setTimeout', ['Callback: <anonymous>']]],
           `${RESOLVE_PREFIX}/library.books`,
           `${RESOLVE_PREFIX}/library.books.title`,
           `${RESOLVE_PREFIX}/library.books.author`,
           `${RESOLVE_PREFIX}/library.books.author.name`
         ]
+      } else {
+        resolveSegments = [
+          [`${RESOLVE_PREFIX}/library`, ['timers.setTimeout', ['Callback: <anonymous>']]],
+          `${RESOLVE_PREFIX}/library.books`,
+          `${RESOLVE_PREFIX}/library.books.author`
+        ]
+      }
+
+      const operationSegments = constructOperationSegments(t.nr, [
+        `${OPERATION_PREFIX}/${operationPart}`,
+        resolveSegments
       ])
       const expectedSegments = constructSegments(firstSegmentName, operationSegments)
 
@@ -505,7 +562,12 @@ tests.push({
 tests.push({
   name: 'named query with fragment, fragment first',
   async fn(t) {
-    const { helper, serverUrl, TRANSACTION_PREFIX } = t.nr
+    const {
+      helper,
+      pluginConfig,
+      serverUrl,
+      TRANSACTION_PREFIX
+    } = t.nr
     const { promise, resolve } = promiseResolvers()
 
     const expectedName = 'GetBookForLibrary'
@@ -528,15 +590,25 @@ tests.push({
     helper.agent.once('transactionFinished', (transaction) => {
       const operationPart = `query/${expectedName}/${path}`
       const firstSegmentName = baseSegment(operationPart, TRANSACTION_PREFIX)
-      const operationSegments = constructOperationSegments(TRANSACTION_PREFIX, [
-        `${OPERATION_PREFIX}/${operationPart}`,
-        [
+      let resolveSegments
+      if (pluginConfig.captureScalars) {
+        resolveSegments = [
           [`${RESOLVE_PREFIX}/library`, ['timers.setTimeout', ['Callback: <anonymous>']]],
           `${RESOLVE_PREFIX}/library.books`,
           `${RESOLVE_PREFIX}/library.books.title`,
           `${RESOLVE_PREFIX}/library.books.author`,
           `${RESOLVE_PREFIX}/library.books.author.name`
         ]
+      } else {
+        resolveSegments = [
+          [`${RESOLVE_PREFIX}/library`, ['timers.setTimeout', ['Callback: <anonymous>']]],
+          `${RESOLVE_PREFIX}/library.books`,
+          `${RESOLVE_PREFIX}/library.books.author`
+        ]
+      }
+      const operationSegments = constructOperationSegments(t.nr, [
+        `${OPERATION_PREFIX}/${operationPart}`,
+        resolveSegments
       ])
       const expectedSegments = constructSegments(firstSegmentName, operationSegments)
 
@@ -590,7 +662,7 @@ tests.push({
         'batch//',
         'batch/'
       )
-      const operationSegments = constructOperationSegments(TRANSACTION_PREFIX, [
+      const operationSegments = constructOperationSegments(t.nr, [
         [
           `${OPERATION_PREFIX}/${operationPart1}`,
           [
@@ -645,7 +717,7 @@ tests.push({
     helper.agent.once('transactionFinished', (transaction) => {
       const operationPart = `query/${expectedName}/${deepestPath}`
       const firstSegmentName = baseSegment(operationPart, TRANSACTION_PREFIX)
-      const operationSegments = constructOperationSegments(TRANSACTION_PREFIX, [
+      const operationSegments = constructOperationSegments(t.nr, [
         `${OPERATION_PREFIX}/${operationPart}`,
         [`${RESOLVE_PREFIX}/search`]
       ])
@@ -688,7 +760,7 @@ tests.push({
     helper.agent.once('transactionFinished', (transaction) => {
       const operationPart = `query/${expectedName}/${deepestPath}`
       const firstSegmentName = baseSegment(operationPart, TRANSACTION_PREFIX)
-      const operationSegments = constructOperationSegments(TRANSACTION_PREFIX, [
+      const operationSegments = constructOperationSegments(t.nr, [
         `${OPERATION_PREFIX}/${operationPart}`,
         [`${RESOLVE_PREFIX}/search`]
       ])
@@ -727,7 +799,7 @@ tests.push({
 
     helper.agent.once('transactionFinished', (transaction) => {
       const firstSegmentName = baseSegment('*', TRANSACTION_PREFIX)
-      const operationSegments = constructOperationSegments(TRANSACTION_PREFIX, [
+      const operationSegments = constructOperationSegments(t.nr, [
         `${OPERATION_PREFIX}/${UNKNOWN_OPERATION}`
       ])
       const expectedSegments = constructSegments(firstSegmentName, operationSegments)
@@ -775,7 +847,7 @@ tests.push({
     helper.agent.once('transactionFinished', (transaction) => {
       const operationPart = `query/${ANON_PLACEHOLDER}/${path}`
       const firstSegmentName = baseSegment(operationPart, TRANSACTION_PREFIX)
-      const operationSegments = constructOperationSegments(TRANSACTION_PREFIX, [
+      const operationSegments = constructOperationSegments(t.nr, [
         `${OPERATION_PREFIX}/${operationPart}`
       ])
       const expectedSegments = constructSegments(firstSegmentName, operationSegments)

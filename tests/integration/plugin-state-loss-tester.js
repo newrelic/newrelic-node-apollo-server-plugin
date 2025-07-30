@@ -5,22 +5,29 @@
 
 'use strict'
 
+/**
+ *
+ * @param stateLossConfig
+ * @param api
+ */
 function createStateLossPlugin(stateLossConfig, api) {
   const instrumentationApi = api.shim
   return {
     requestDidStart() {
       triggerStateLoss(stateLossConfig.onRequestDidStart)
 
-      return new Promise((resolve) => {
-        resolve({
-          willSendResponse() {
-            triggerStateLoss(stateLossConfig.onWillSendResponse)
-          }
-        })
+      return Promise.resolve({
+        willSendResponse() {
+          triggerStateLoss(stateLossConfig.onWillSendResponse)
+        }
       })
     }
   }
 
+  /**
+   *
+   * @param shouldTrigger
+   */
   function triggerStateLoss(shouldTrigger) {
     if (shouldTrigger) {
       // Setting active segment to null to mimic state loss
