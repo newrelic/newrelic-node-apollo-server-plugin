@@ -15,7 +15,6 @@ module.exports = {
 
 const fs = require('node:fs')
 const path = require('node:path')
-const semver = require('semver')
 
 const utils = require('@newrelic/test-utilities')
 const setupErrorSchema = require('./error-setup')
@@ -87,34 +86,13 @@ async function setupCoreTest({ t, testDir, agentConfig = {}, pluginConfig = {} }
  *
  * @param {string} testDir The path to the versioned test directory, e.g.
  * the path to the `apollo-server` tests.
- * @param {boolean} [express] Indicates if the in-built server should be
- * used (`express = false`), or if the "external" `express` module should be
- * used.
  *
  * @returns {{ ApolloServer, gql, startStandaloneServer, graphql}}
  */
-function requireApolloServer(testDir, express = false) {
+function requireApolloServer(testDir) {
   const gql = loadModule('graphql-tag', testDir)
   const { pkg: apolloServer, version } = loadModule('@apollo/server', testDir, true)
   const graphql = loadModule('graphql', testDir)
-
-  if (express === true) {
-    const bodyParser = loadModule('body-parser', testDir)
-    const { expressMiddleware } = loadModule('@as-integrations/express4', testDir)
-    let cors
-    if (semver.gte(version, '5.0.0')) {
-      cors = loadModule('cors', testDir)
-    }
-    return {
-      ApolloServer: apolloServer.ApolloServer,
-      apolloVersion: version,
-      gql,
-      graphql,
-      bodyParser,
-      cors,
-      expressMiddleware
-    }
-  }
 
   const { startStandaloneServer } = loadModule('@apollo/server/standalone', testDir)
   return {
