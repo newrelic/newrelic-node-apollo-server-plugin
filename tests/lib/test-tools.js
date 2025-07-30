@@ -21,6 +21,12 @@ const utils = require('@newrelic/test-utilities')
 const setupErrorSchema = require('./error-setup')
 const { getTypeDefs, resolvers } = require('./data-definitions')
 
+/**
+ *
+ * @param root0
+ * @param root0.t
+ * @param root0.testDir
+ */
 async function afterEach({ t, testDir }) {
   const { helper, expressServer, server } = t.nr
 
@@ -36,6 +42,14 @@ async function afterEach({ t, testDir }) {
   unloadModules(testDir)
 }
 
+/**
+ *
+ * @param root0
+ * @param root0.t
+ * @param root0.testDir
+ * @param root0.agentConfig
+ * @param root0.pluginConfig
+ */
 async function setupCoreTest({ t, testDir, agentConfig = {}, pluginConfig = {} } = {}) {
   const helper = utils.TestAgent.makeFullyInstrumented(agentConfig)
   const createPlugin = require('../../lib/create-plugin')
@@ -73,7 +87,7 @@ async function setupCoreTest({ t, testDir, agentConfig = {}, pluginConfig = {} }
  *
  * @param {string} testDir The path to the versioned test directory, e.g.
  * the path to the `apollo-server` tests.
- * @param {boolean} [express=false] Indicates if the in-built server should be
+ * @param {boolean} [express] Indicates if the in-built server should be
  * used (`express = false`), or if the "external" `express` module should be
  * used.
  *
@@ -84,7 +98,6 @@ function requireApolloServer(testDir, express = false) {
   const { pkg: apolloServer, version } = loadModule('@apollo/server', testDir, true)
   const graphql = loadModule('graphql', testDir)
 
-  // TODO: do we need this check here?
   if (express === true) {
     const bodyParser = loadModule('body-parser', testDir)
     const { expressMiddleware } = loadModule('@as-integrations/express4', testDir)
@@ -119,7 +132,7 @@ function requireApolloServer(testDir, express = false) {
  * @param {string} name The module to load.
  * @param {string} rootDir The path to the versioned test directory, e.g.
  * the path to the `apollo-server` tests.
- * @param {boolean} [getPkgVersion=false] If true, the version of the package will be obtained
+ * @param {boolean} [getPkgVersion] If true, the version of the package will be obtained
  *
  * @returns {*}
  */

@@ -75,7 +75,6 @@ function createErrorClasses(serverPkgExport) {
  *
  * @param {Object} serverPkgExport an apollo server pkg export
  * @param {Object} resolvers gql resolver definition
- * @param isApollo4
  * @returns {Object} graphql schema
  */
 module.exports = function setupErrorResolvers(serverPkgExport, resolvers) {
