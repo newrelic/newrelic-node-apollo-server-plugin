@@ -75,10 +75,9 @@ function createErrorClasses(serverPkgExport) {
  *
  * @param {Object} serverPkgExport an apollo server pkg export
  * @param {Object} resolvers gql resolver definition
- * @param isApollo4
  * @returns {Object} graphql schema
  */
-module.exports = function setupErrorResolvers(serverPkgExport, resolvers, isApollo4) {
+module.exports = function setupErrorResolvers(serverPkgExport, resolvers) {
   const {
     CustomError,
     ForbiddenError,
@@ -86,7 +85,7 @@ module.exports = function setupErrorResolvers(serverPkgExport, resolvers, isApol
     UserInputError,
     ValidationError,
     AuthenticationError
-  } = isApollo4 ? createErrorClasses(serverPkgExport) : serverPkgExport
+  } = createErrorClasses(serverPkgExport)
 
   resolvers.Query.boom = () => {
     throw new Error('Boom goes the dynamite!')

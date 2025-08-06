@@ -63,22 +63,6 @@ const server = new ApolloServer({
 });
 ```
 
-**Using Apollo V3**
-```ts
-// index.ts
-
-import { ApolloServer } from 'apollo-server';
-import { ApolloServerPlugin } from 'apollo-server-plugin-base';
-import createNewRelicPlugin from '@newrelic/apollo-server-plugin';
-
-const newRelicPlugin = createNewRelicPlugin<ApolloServerPlugin>({})
-const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-  plugins: [
-    newRelicPlugin,
-  ],
-});
 ```
 
 ## Usage
@@ -88,12 +72,6 @@ The New Relic plugin is known to work with the following Apollo Server modules:
 * `@apollo/server`
 * `@apollo/gateway`
 * `@apollo/subgraph`
-* `apollo-server` (>= 2.14)
-* `apollo-server-express`
-* `apollo-server-hapi`
-* `apollo-server-koa`
-* `apollo-server-fastify`
-* `apollo-server-lambda`
 
 Other plugins may work, depending on their underlying implementation, but have not been verified.
 

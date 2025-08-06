@@ -1,8 +1,7 @@
 {
   "name": "apollo-server-tests",
   "targets": [
-    {"name":"@apollo/server","minAgentVersion":"@newrelic/apollo-server-plugin@2.1.0"},
-    {"name":"apollo-server","minAgentVersion":"@newrelic/apollo-server-plugin@1.0.0"}
+    {"name":"@apollo/server","minAgentVersion":"@newrelic/apollo-server-plugin@2.1.0"}
   ],
   "version": "0.0.0",
   "private": true,
@@ -10,26 +9,6 @@
     "node": ">=20"
   },
   "tests": [
-    {
-      "engines": {
-        "node": ">=20"
-      },
-      "dependencies": {
-        "apollo-server": {
-          "versions": ">=3.0.0",
-          "samples": 3 
-        }
-      },
-      "files": [
-        "transaction-naming.test.js",
-        "segments.test.js",
-        "agent-disabled.test.js",
-        "errors.test.js",
-        "attributes.test.js",
-        "query-obfuscation.test.js",
-        "metrics.test.js"
-      ]
-    },
     {
       "engines": {
         "node": ">=20"
