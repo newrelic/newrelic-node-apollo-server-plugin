@@ -63,8 +63,6 @@ const server = new ApolloServer({
 });
 ```
 
-```
-
 ## Usage
 
 The New Relic plugin is known to work with the following Apollo Server modules:
