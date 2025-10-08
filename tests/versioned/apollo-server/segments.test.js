@@ -315,7 +315,7 @@ segmentsTests.push({
       const firstSegmentName = baseSegment(operationPart, TRANSACTION_PREFIX)
       const operationSegments = constructOperationSegments(t.nr, [
         `${OPERATION_PREFIX}/${operationPart}`,
-        [`${RESOLVE_PREFIX}/addThing`, ['timers.setTimeout', ['Callback: namedCallback']]]
+        [`${RESOLVE_PREFIX}/addThing`]
       ])
       const expectedSegments = constructSegments(firstSegmentName, operationSegments)
 
@@ -349,7 +349,7 @@ segmentsTests.push({
       const firstSegmentName = baseSegment(operationPart, TRANSACTION_PREFIX)
       const operationSegments = constructOperationSegments(t.nr, [
         `${OPERATION_PREFIX}/${operationPart}`,
-        [`${RESOLVE_PREFIX}/addThing`, ['timers.setTimeout', ['Callback: namedCallback']]]
+        [`${RESOLVE_PREFIX}/addThing`]
       ])
       const expectedSegments = constructSegments(firstSegmentName, operationSegments)
 
@@ -465,7 +465,7 @@ segmentsTests.push({
       let resolveSegments
       if (pluginConfig.captureScalars) {
         resolveSegments = [
-          [`${RESOLVE_PREFIX}/library`, ['timers.setTimeout', ['Callback: <anonymous>']]],
+          [`${RESOLVE_PREFIX}/library`],
           `${RESOLVE_PREFIX}/library.books`,
           `${RESOLVE_PREFIX}/library.books.title`,
           `${RESOLVE_PREFIX}/library.books.author`,
@@ -473,7 +473,7 @@ segmentsTests.push({
         ]
       } else {
         resolveSegments = [
-          [`${RESOLVE_PREFIX}/library`, ['timers.setTimeout', ['Callback: <anonymous>']]],
+          [`${RESOLVE_PREFIX}/library`],
           `${RESOLVE_PREFIX}/library.books`,
           `${RESOLVE_PREFIX}/library.books.author`
         ]
@@ -533,7 +533,7 @@ segmentsTests.push({
       let resolveSegments
       if (pluginConfig.captureScalars) {
         resolveSegments = [
-          [`${RESOLVE_PREFIX}/library`, ['timers.setTimeout', ['Callback: <anonymous>']]],
+          [`${RESOLVE_PREFIX}/library`],
           `${RESOLVE_PREFIX}/library.books`,
           `${RESOLVE_PREFIX}/library.books.title`,
           `${RESOLVE_PREFIX}/library.books.author`,
@@ -541,7 +541,7 @@ segmentsTests.push({
         ]
       } else {
         resolveSegments = [
-          [`${RESOLVE_PREFIX}/library`, ['timers.setTimeout', ['Callback: <anonymous>']]],
+          [`${RESOLVE_PREFIX}/library`],
           `${RESOLVE_PREFIX}/library.books`,
           `${RESOLVE_PREFIX}/library.books.author`
         ]
@@ -599,7 +599,7 @@ segmentsTests.push({
       let resolveSegments
       if (pluginConfig.captureScalars) {
         resolveSegments = [
-          [`${RESOLVE_PREFIX}/library`, ['timers.setTimeout', ['Callback: <anonymous>']]],
+          [`${RESOLVE_PREFIX}/library`],
           `${RESOLVE_PREFIX}/library.books`,
           `${RESOLVE_PREFIX}/library.books.title`,
           `${RESOLVE_PREFIX}/library.books.author`,
@@ -607,7 +607,7 @@ segmentsTests.push({
         ]
       } else {
         resolveSegments = [
-          [`${RESOLVE_PREFIX}/library`, ['timers.setTimeout', ['Callback: <anonymous>']]],
+          [`${RESOLVE_PREFIX}/library`],
           `${RESOLVE_PREFIX}/library.books`,
           `${RESOLVE_PREFIX}/library.books.author`
         ]
@@ -672,7 +672,7 @@ segmentsTests.push({
         [
           `${OPERATION_PREFIX}/${operationPart1}`,
           [
-            [`${RESOLVE_PREFIX}/library`, ['timers.setTimeout', ['Callback: <anonymous>']]],
+            [`${RESOLVE_PREFIX}/library`],
             `${RESOLVE_PREFIX}/library.books`,
             `${RESOLVE_PREFIX}/library.books.title`,
             `${RESOLVE_PREFIX}/library.books.author`,
@@ -681,7 +681,7 @@ segmentsTests.push({
         ],
         [
           `${OPERATION_PREFIX}/${operationPart2}`,
-          [`${RESOLVE_PREFIX}/addThing`, ['timers.setTimeout', ['Callback: namedCallback']]]
+          [`${RESOLVE_PREFIX}/addThing`]
         ]
       ])
       const expectedSegments = constructSegments(firstSegmentName, operationSegments)
