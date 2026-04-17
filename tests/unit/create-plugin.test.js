@@ -15,6 +15,7 @@ test('createPlugin edge cases', async (t) => {
   t.beforeEach((ctx) => {
     ctx.nr = {}
     ctx.nr.operationSegment = {
+      name: 'GraphQL/operation/ApolloServer/<unknown>',
       start: sinon.stub(),
       addAttribute: sinon.stub(),
       end: sinon.stub()
@@ -32,14 +33,9 @@ test('createPlugin edge cases', async (t) => {
             getOrCreateMetric: sinon.stub().returns({ incrementCallCount: sinon.stub() })
           }
         },
-        getActiveSegment: sinon.stub().returns({}),
         tracer: {
-          getTransaction: sinon.stub().returns({ nameState: { setName: sinon.stub() } })
+          getContext: sinon.stub().returns({ transaction: { nameState: { setName: sinon.stub() } }, segment: ctx.nr.operationSegment })
         },
-        createSegment: sinon.stub().callsFake((name) => {
-          ctx.nr.operationSegment.name = name
-          return ctx.nr.operationSegment
-        }),
         setActiveSegment: sinon.stub(),
         isFunction: () => false
       },
