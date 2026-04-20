@@ -43,26 +43,26 @@ code, the source code can be found at [https://github.com/newrelic/newrelic-node
 
 ### @apollo/server
 
-This product includes source derived from [@apollo/server](https://github.com/apollographql/apollo-server) ([v4.12.2](https://github.com/apollographql/apollo-server/tree/v4.12.2)), distributed under the [MIT License](https://github.com/apollographql/apollo-server/blob/v4.12.2/README.md):
+This product includes source derived from [@apollo/server](https://github.com/apollographql/apollo-server) ([v4.13.0](https://github.com/apollographql/apollo-server/tree/v4.13.0)), distributed under the [MIT License](https://github.com/apollographql/apollo-server/blob/v4.13.0/README.md):
 
 ```
 MIT License
 
 Copyright (c) <year> <copyright holders>
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and 
-associated documentation files (the "Software"), to deal in the Software without restriction, including 
-without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell 
-copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the 
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
+associated documentation files (the "Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the
 following conditions:
 
-The above copyright notice and this permission notice shall be included in all copies or substantial 
+The above copyright notice and this permission notice shall be included in all copies or substantial
 portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT 
-LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO 
-EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER 
-IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE 
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT
+LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO
+EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 USE OR OTHER DEALINGS IN THE SOFTWARE.
 ```
 
@@ -806,7 +806,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ### eslint
 
-This product includes source derived from [eslint](https://github.com/eslint/eslint) ([v9.31.0](https://github.com/eslint/eslint/tree/v9.31.0)), distributed under the [MIT License](https://github.com/eslint/eslint/blob/v9.31.0/LICENSE):
+This product includes source derived from [eslint](https://github.com/eslint/eslint) ([v9.39.4](https://github.com/eslint/eslint/tree/v9.39.4)), distributed under the [MIT License](https://github.com/eslint/eslint/blob/v9.39.4/LICENSE):
 
 ```
 Copyright OpenJS Foundation and other contributors, <www.openjsf.org>
@@ -1118,7 +1118,7 @@ This product includes source derived from [lockfile-lint](https://github.com/lir
 
 ### newrelic
 
-This product includes source derived from [newrelic](https://github.com/newrelic/node-newrelic) ([v12.25.0](https://github.com/newrelic/node-newrelic/tree/v12.25.0)), distributed under the [Apache-2.0 License](https://github.com/newrelic/node-newrelic/blob/v12.25.0/LICENSE):
+This product includes source derived from [newrelic](https://github.com/newrelic/node-newrelic) ([v13.19.2](https://github.com/newrelic/node-newrelic/tree/v13.19.2)), distributed under the [Apache-2.0 License](https://github.com/newrelic/node-newrelic/blob/v13.19.2/LICENSE):
 
 ```
                                  Apache License
@@ -1326,7 +1326,7 @@ This product includes source derived from [newrelic](https://github.com/newrelic
 
 ### semver
 
-This product includes source derived from [semver](https://github.com/npm/node-semver) ([v7.7.2](https://github.com/npm/node-semver/tree/v7.7.2)), distributed under the [ISC License](https://github.com/npm/node-semver/blob/v7.7.2/LICENSE):
+This product includes source derived from [semver](https://github.com/npm/node-semver) ([v7.7.4](https://github.com/npm/node-semver/tree/v7.7.4)), distributed under the [ISC License](https://github.com/npm/node-semver/blob/v7.7.4/LICENSE):
 
 ```
 The ISC License

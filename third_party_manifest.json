@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "Mon Jul 21 2025 16:04:18 GMT-0400 (Eastern Daylight Time)",
+  "lastUpdated": "Mon Apr 20 2026 14:38:39 GMT-0400 (Eastern Daylight Time)",
   "projectName": "New Relic Node Apollo Server Plugin",
   "projectUrl": "https://github.com/newrelic/newrelic-node-apollo-server-plugin/",
   "includeOptDeps": false,
@@ -7,15 +7,15 @@
   "includeDev": true,
   "dependencies": {},
   "devDependencies": {
-    "@apollo/server@4.12.2": {
+    "@apollo/server@4.13.0": {
       "name": "@apollo/server",
-      "version": "4.12.2",
+      "version": "4.13.0",
       "range": "^4.1.1",
       "licenses": "MIT",
       "repoUrl": "https://github.com/apollographql/apollo-server",
-      "versionedRepoUrl": "https://github.com/apollographql/apollo-server/tree/v4.12.2",
+      "versionedRepoUrl": "https://github.com/apollographql/apollo-server/tree/v4.13.0",
       "licenseFile": "node_modules/@apollo/server/README.md",
-      "licenseUrl": "https://github.com/apollographql/apollo-server/blob/v4.12.2/README.md",
+      "licenseUrl": "https://github.com/apollographql/apollo-server/blob/v4.13.0/README.md",
       "licenseTextSource": "spdx",
       "publisher": "Apollo",
       "email": "packages@apollographql.com"
@@ -111,15 +111,15 @@
       "email": "gajus@gajus.com",
       "url": "http://gajus.com"
     },
-    "eslint@9.31.0": {
+    "eslint@9.39.4": {
       "name": "eslint",
-      "version": "9.31.0",
+      "version": "9.39.4",
       "range": "^9.31.0",
       "licenses": "MIT",
       "repoUrl": "https://github.com/eslint/eslint",
-      "versionedRepoUrl": "https://github.com/eslint/eslint/tree/v9.31.0",
+      "versionedRepoUrl": "https://github.com/eslint/eslint/tree/v9.39.4",
       "licenseFile": "node_modules/eslint/LICENSE",
-      "licenseUrl": "https://github.com/eslint/eslint/blob/v9.31.0/LICENSE",
+      "licenseUrl": "https://github.com/eslint/eslint/blob/v9.39.4/LICENSE",
       "licenseTextSource": "file",
       "publisher": "Nicholas C. Zakas",
       "email": "nicholas+npm@nczconsulting.com"
@@ -175,28 +175,28 @@
       "email": "liran.tal@gmail.com",
       "url": "https://github.com/lirantal"
     },
-    "newrelic@12.25.0": {
+    "newrelic@13.19.2": {
       "name": "newrelic",
-      "version": "12.25.0",
-      "range": "^12.18.2",
+      "version": "13.19.2",
+      "range": "^13.9.2",
       "licenses": "Apache-2.0",
       "repoUrl": "https://github.com/newrelic/node-newrelic",
-      "versionedRepoUrl": "https://github.com/newrelic/node-newrelic/tree/v12.25.0",
+      "versionedRepoUrl": "https://github.com/newrelic/node-newrelic/tree/v13.19.2",
       "licenseFile": "node_modules/newrelic/LICENSE",
-      "licenseUrl": "https://github.com/newrelic/node-newrelic/blob/v12.25.0/LICENSE",
+      "licenseUrl": "https://github.com/newrelic/node-newrelic/blob/v13.19.2/LICENSE",
       "licenseTextSource": "file",
       "publisher": "New Relic Node.js agent team",
       "email": "nodejs@newrelic.com"
     },
-    "semver@7.7.2": {
+    "semver@7.7.4": {
       "name": "semver",
-      "version": "7.7.2",
+      "version": "7.7.4",
       "range": "^7.7.2",
       "licenses": "ISC",
       "repoUrl": "https://github.com/npm/node-semver",
-      "versionedRepoUrl": "https://github.com/npm/node-semver/tree/v7.7.2",
+      "versionedRepoUrl": "https://github.com/npm/node-semver/tree/v7.7.4",
       "licenseFile": "node_modules/semver/LICENSE",
-      "licenseUrl": "https://github.com/npm/node-semver/blob/v7.7.2/LICENSE",
+      "licenseUrl": "https://github.com/npm/node-semver/blob/v7.7.4/LICENSE",
       "licenseTextSource": "file",
       "publisher": "GitHub Inc."
     },
