@@ -20,6 +20,13 @@ const utils = require('@newrelic/test-utilities')
 const setupErrorSchema = require('./error-setup')
 const { getTypeDefs, resolvers } = require('./data-definitions')
 
+/**
+ * Reusable `afterEach function`
+ *
+ * @param {object} params to function
+ * @param {object} params.t test instance
+ * @param {string} params.testDir path to apollo server
+ */
 async function afterEach({ t, testDir }) {
   const { helper, expressServer, server } = t.nr
 
@@ -35,7 +42,16 @@ async function afterEach({ t, testDir }) {
   unloadModules(testDir)
 }
 
+/**
+ * Utility to setup an apollo server with new relic plugin + agent
+ * @param {object} params to function
+ * @param {object} params.t test instance
+ * @param {string} params.testDir path to apollo server
+ * @param {object} params.agentConfig agent configuration
+ * @param {object} params.pluginConfig plugin configuration
+ */
 async function setupCoreTest({ t, testDir, agentConfig = {}, pluginConfig = {} } = {}) {
+  agentConfig.instrumentation = { timers: { enabled: true } }
   const helper = utils.TestAgent.makeFullyInstrumented(agentConfig)
   const createPlugin = require('../../lib/create-plugin')
   const nrApi = helper.getAgentApi()
