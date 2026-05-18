@@ -1,3 +1,6 @@
+⚠️  This package has been deprecated. The functionality has been merged into the core [`newrelic`](https://github.com/newrelic/node-newrelic) module.
+For more information read our [migration guide](https://docs.newrelic.com/docs/apm/agents/nodejs-agent/installation-configuration/update-nodejs-agent/#node-agent-v14).
+
 <a href="https://opensource.newrelic.com/oss-category/#community-plus"><picture><source media="(prefers-color-scheme: dark)" srcset="https://github.com/newrelic/opensource-website/raw/main/src/images/categories/dark/Community_Plus.png"><source media="(prefers-color-scheme: light)" srcset="https://github.com/newrelic/opensource-website/raw/main/src/images/categories/Community_Plus.png"><img alt="New Relic Open Source community plus project banner." src="https://github.com/newrelic/opensource-website/raw/main/src/images/categories/Community_Plus.png"></picture></a>
 
 # New Relic Apollo Server plugin 
